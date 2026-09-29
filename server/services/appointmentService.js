@@ -6,7 +6,7 @@
 import { getDb, saveDb } from '../models/storage.js';
 import { generateAppointmentId } from '../utils/idGenerator.js';
 import { calculateReportingTime, calculateNextWeekDates } from '../utils/dateUtils.js';
-import { generateWhatsAppLink, notifyStaffOfAppointment } from './whatsappService.js';
+import { generateWhatsAppLink } from './whatsappService.js';
 
 /**
  * Create a new Advance Slot Appointment
@@ -104,9 +104,6 @@ export function createAppointment(data) {
   // Save to database
   db.appointments.unshift(newAppointment);
   saveDb(db);
-
-  // Tell staff on WhatsApp — runs in the background, never delays or fails the booking
-  notifyStaffOfAppointment(newAppointment);
 
   return {
     status: 201,

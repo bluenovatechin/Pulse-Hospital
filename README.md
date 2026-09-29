@@ -191,7 +191,7 @@ Icons come from [lucide.dev](https://lucide.dev/icons). Import the icon and add 
 Update all of these:
 
 - `HOSPITAL_INFO.appointmentNumber`, `phoneHref` and `whatsappNumber` in `hospitalContent.js`
-- `HOSPITAL_WHATSAPP_NUMBER` on the server (or its default in `server/services/whatsappService.js`)
+- `ACTIVE_WHATSAPP_NUMBER` in `server/services/whatsappService.js`
 - The WhatsApp link in `client/src/components/AppointmentSlipModal.jsx`
 
 ---
@@ -255,7 +255,6 @@ On a free GitHub account, GitHub Pages requires the repository to be **public**.
 2. When asked, set:
    - `ADMIN_KEY`: a long random value, e.g. `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`
    - `CORS_ORIGIN`: `https://bluenovatechin.github.io`
-   - `META_WA_TOKEN`, `META_WA_PHONE_NUMBER_ID`, `WHATSAPP_NOTIFY_TO`: see [WhatsApp booking alerts](#whatsapp-booking-alerts)
 3. Wait for the deploy, then open `https://<name>.onrender.com/api/health` to check it's running.
 
 > **Storage warning.** On Render's free plan the server's files are reset on every restart. Free instances also sleep after 15 minutes idle, and the first request then takes about a minute. For real patients, use a paid instance with the persistent disk shown (commented out) in `render.yaml`, or move bookings to a database.
@@ -268,45 +267,6 @@ On a free GitHub account, GitHub Pages requires the repository to be **public**.
 4. The site is live at `https://bluenovatechin.github.io/Pulse-Hospital/`.
 
 URLs use `#/` (e.g. `#/doctors/4`), so page refreshes work on GitHub Pages without extra setup. A custom domain can be added under **Settings → Pages**. If you add one, update `CORS_ORIGIN` on Render to match.
-
----
-
-## WhatsApp booking alerts
-
-Every new booking sends a WhatsApp message to hospital staff with the token ID, patient, phone, doctor, date, slot and reason. The message is sent after the booking is saved. If sending fails, the booking still succeeds and the error appears in the server log.
-
-Choose a provider with `WHATSAPP_PROVIDER` on the server. See `server/.env.example` for every setting.
-
-### Option A: CallMeBot (third-party, not used by default)
-
-Best for alerting a few staff phones. Each phone that should receive alerts activates it once:
-
-1. Go to [callmebot.com → WhatsApp API](https://www.callmebot.com/blog/free-api-whatsapp-messages/) and follow the steps: save their number in the phone's contacts and send them the activation message from WhatsApp.
-2. CallMeBot replies with an **API key** for that phone.
-3. On the server set:
-   ```
-   WHATSAPP_PROVIDER=callmebot
-   CALLMEBOT_RECIPIENTS=916353344875:<apikey>
-   ```
-   Separate several phones with commas: `916353344875:111111,919512045641:222222`.
-
-CallMeBot is a free third-party service for personal use and handles the message contents (patient names and phones). For an official business setup, use option B.
-
-### Option B: Meta WhatsApp Cloud API (official)
-
-1. Create an app at [developers.facebook.com](https://developers.facebook.com) → add the **WhatsApp** product, and register a business phone number.
-2. Create a message template, e.g. `new_appointment`, whose body has five variables: `{{1}}` token ID, `{{2}}` patient, `{{3}}` phone, `{{4}}` doctor, `{{5}}` date & slot. Wait for approval.
-3. On the server set `WHATSAPP_PROVIDER=meta`, `META_WA_TOKEN` (a permanent system-user token), `META_WA_PHONE_NUMBER_ID`, `WHATSAPP_NOTIFY_TO` (staff numbers) and `META_WA_TEMPLATE=new_appointment`.
-
-### Test it
-
-Locally: copy `server/.env.example` to `server/.env`, fill in your values, then:
-
-```bash
-npm --prefix server run test:whatsapp
-```
-
-You should receive a "Test Patient" message. On Render, make a test booking on the live site and check the service's **Logs** for a `📲 [WHATSAPP]` line.
 
 ---
 

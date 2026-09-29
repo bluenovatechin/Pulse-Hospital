@@ -16,20 +16,6 @@ services:
         sync: false
       - key: CORS_ORIGIN
         sync: false
-      # WhatsApp alert to staff on every new booking, via Meta's official
-      # WhatsApp Cloud API (see README → WhatsApp booking alerts)
-      - key: WHATSAPP_PROVIDER
-        value: meta
-      - key: META_WA_TOKEN
-        sync: false
-      - key: META_WA_PHONE_NUMBER_ID
-        sync: false
-      - key: WHATSAPP_NOTIFY_TO
-        sync: false
-      - key: META_WA_TEMPLATE
-        value: new_appointment
-      - key: META_WA_TEMPLATE_LANG
-        value: en
     # IMPORTANT: bookings are saved to server/data/pulse_hospital_db.json.
     # On Render's free plan that file is wiped on every restart/redeploy.
     # For real patients, use a paid instance with a persistent disk:
