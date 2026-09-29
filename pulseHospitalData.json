@@ -1,0 +1,528 @@
+{
+  "hospitalInfo": {
+    "nameEnglish": "PULSE HOSPITAL & I.C.U",
+    "nameGujarati": "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
+    "tagline": "CARING FOR LIFE",
+    "emergencyBadge": "24x7 EMERGENCY & TRUMA CARE",
+    "appointmentNumbers": [
+      "95120 456 41",
+      "95120 456 42"
+    ],
+    "appointmentTextEnglish": "FOR APPOINTMENT 95120 456 41 / 95120 456 42",
+    "appointmentTextGujarati": "એપોઇન્ટમેન્ટ : ૯૫૧૨૦ ૪૫૬ ૪૧ / ૯૫૧૨૦ ૪૫૬ ૪૨",
+    "visitNoticeEnglish": "Please bring this file on next visit.",
+    "addressEnglish": {
+      "line1": "4th Floor, A-block, City Centre, Shamlaji Road,",
+      "city": "Modasa",
+      "district": "Arvalli",
+      "pincode": "383315",
+      "fullAddress": "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli-383315"
+    },
+    "addressGujarati": {
+      "line1": "ચોથો માળ, એ-બ્લોક, સીટી સેન્ટર, શામળાજી રોડ,",
+      "city": "મોડાસા",
+      "district": "અરવલ્લી",
+      "pincode": "૩૮૩૩૧૫",
+      "fullAddress": "ચોથો માળ, એ-બ્લોક, સીટી સેન્ટર, શામળાજી રોડ, મોડાસા, અરવલ્લી-૩૮૩૩૧૫"
+    }
+  },
+  "doctors": [
+    {
+      "id": 1,
+      "name": "Dr Dipesh S. Patel",
+      "qualification": "MD Medicine",
+      "hospital": "Deep Hospital"
+    },
+    {
+      "id": 2,
+      "name": "Dr. Naimuddin N. Kazi",
+      "qualification": "MD (Medicine)",
+      "hospital": "Hayat Hospital"
+    },
+    {
+      "id": 3,
+      "name": "Dr Paras H Patel",
+      "qualification": "MD (Medicine)",
+      "hospital": "Vedant Hospital, Modasa"
+    },
+    {
+      "id": 4,
+      "name": "Dr Santosh J Prajapati",
+      "qualification": "MBBS, DTCD, FICCM",
+      "designation": "Chest Physician & Critical Care Specialist",
+      "hospital": "Medicare Hospital & ICU"
+    },
+    {
+      "id": 5,
+      "name": "Dr. Mohammad Salim Mansuri",
+      "designation": "Medical Officer",
+      "specialization": "Critical Care Specialist"
+    },
+    {
+      "id": 6,
+      "name": "Dr. Pulkit Pandya",
+      "designation": "Medical Officer",
+      "specialization": "Critical Care Specialist"
+    }
+  ],
+  "affiliatedHospitals": [
+    {
+      "doctorNameGujarati": "ડૉ. દિપેશ પટેલ",
+      "hospitalNameGujarati": "દીપ હોસ્પિટલ, મોડાસા",
+      "mobileGujarati": "મો.: ૭૫૬૭૪ ૦૭૨૭૨",
+      "mobileNumber": "75674 07272"
+    },
+    {
+      "doctorNameGujarati": "ડૉ. નઈમુદ્દીન કાઝી",
+      "hospitalNameGujarati": "હયાત હોસ્પિટલ, મોડાસા",
+      "mobileGujarati": "મો.: ૯૫૧૨૦ ૪૫૬૪૬",
+      "mobileNumber": "95120 45646"
+    },
+    {
+      "doctorNameGujarati": "ડૉ. સંતોષ પ્રજાપતિ",
+      "hospitalNameGujarati": "મેડીકેર હોસ્પિટલ & આઈ.સી.યુ., મોડાસા",
+      "mobileGujarati": "મો.: ૮૨૦૦૨ ૪૦૨૮૭",
+      "mobileNumber": "82002 40287"
+    },
+    {
+      "doctorNameGujarati": "ડૉ. પારસ પટેલ",
+      "hospitalNameGujarati": "વેદાંત હોસ્પિટલ, મોડાસા",
+      "mobileGujarati": "મો.: ૮૧૬૦૮ ૧૦૦૧૩",
+      "mobileNumber": "81608 10013"
+    }
+  ],
+  "departments": {
+    "icu": {
+      "categoryGujarati": "આઈ.સી.યુ.",
+      "services": [
+        "આઈ.સી.સી.યુ.",
+        "મેડીકલ આઈ.સી.સી.યુ.",
+        "સર્જીકલ આઈ.સી.યુ.",
+        "આઈસોલેશન આઈ.સી.યુ.",
+        "સોનોગ્રાફી",
+        "ડાયાલીસીસ",
+        "વેન્ટીલેટર",
+        "ડીફીબ્રીલેટર",
+        "2D Echo"
+      ]
+    },
+    "indoorDepartment": {
+      "categoryGujarati": "ઈનડોર વિભાગ",
+      "services": [
+        "ડીલક્ષ રૂમ",
+        "ટ્વીન રૂમ",
+        "સ્પેશ્યલ રૂમ"
+      ]
+    },
+    "outdoorDepartment": {
+      "categoryGujarati": "આઉટડોર વિભાગ",
+      "services": [
+        "ઓ.પી.ડી.",
+        "24x7 ફાર્મસી",
+        "સુપર સ્પેશ્યાલીસ્ટ કન્સલ્ટેશન",
+        "રેડિયોલોજી",
+        "પેથોલોજી"
+      ]
+    },
+    "lungsDepartment": {
+      "categoryGujarati": "ફેફસા વિભાગ",
+      "services": [
+        "બ્રોન્કોસ્કોપી (દુરબીન દ્વારા ફેફસાની તપાસ)",
+        "શ્વાસના રોગો (અસ્થમા, COPD)",
+        "ફેફસામાં ભરાયેલ પાણીનો ઈલાજ",
+        "પી.એફ.ટી. (ફુક દ્વારા ફેફસાની તપાસ)",
+        "સ્લીપ સ્ટડી"
+      ]
+    },
+    "operationDepartment": {
+      "categoryGujarati": "ઓપરેશન",
+      "services": [
+        "લેમેલર મોડ્યુલર ઓપરેશન થીયેટર",
+        "હાઈ રીસ્ક સર્જરી",
+        "ગેસ્ટ્રો અને લેપ્રોસ્કોપી સર્જરી",
+        "ન્યુરો સર્જરી",
+        "સ્પાઈન સર્જરી",
+        "પ્લાસ્ટીક સર્જરી"
+      ]
+    }
+  },
+  "availableTreatmentsList": {
+    "titleGujarati": "ઉપલબ્ધ સારવાર",
+    "treatments": [
+      "બ્રેઈન હેમરેજ, લકવાની સારવાર",
+      "ઝેરી મલેરીયા, ડેન્ગ્યુમાં પ્લેટલેટ ઘટી જવા",
+      "કોમા, મગજનો તાવ અને ખેંચ",
+      "દાઝેલાની સારવાર, ઝેરી કમળાની સારવાર",
+      "લીવર અને કીડની રોગોની સારવાર",
+      "શ્વાસ અને હૃદય ની બિમારીની સારવાર",
+      "હીટ સ્ટ્રોક, ઇલેક્ટ્રીક શોક, હડીલો તાવ",
+      "ઝેરી દવા અને સર્પદંશ સારવાર",
+      "કોઈપણ જાતની ગંભીર બિમારી",
+      "અકસ્માતને લગતી ઈજાની સારવાર"
+    ]
+  },
+  "hospitalFacilitiesList": {
+    "titleGujarati": "હોસ્પિટલમાં ઉપલબ્ધ સુવિધાઓ",
+    "facilities": [
+      "24x7 એમ.ડી. I.C.U. સ્પેશ્યાલીસ્ટ ડોક્ટર ઉપલબ્ધ",
+      "24x7 કલાક ડાયાલિસીસની સુવિધા ઉપલબ્ધ",
+      "24x7 લેબોરેટરી કાર્યરત",
+      "24x7 કલાક મેડિકલ સુવિધા ઉપલબ્ધ",
+      "ક્વોલિફાઇડ સ્ટાફ દ્વારા I.C.U. ની દેખરેખ",
+      "અનુભવી નર્સીંગ સ્ટાફ",
+      "અત્ય અધતન સુસજ્જ મોડ્યુલર ઓપરેશન થીયેટર",
+      "ઓર્થોપેડીક સર્જરી માટે IITV ની સુવિધા",
+      "લેપ્રોસ્કોપીક તેમજ એન્ડોસ્કોપી સુવિધા",
+      "ગેસ્ટ્રોલોજી અને હેપેટોલોજી સુવિધા",
+      "ન્યુરો / મણકાની સર્જરી વિભાગ",
+      "મેક્સિલો ફેશિયલ (ડેન્ટલ) સર્જન વિભાગ",
+      "કાર્ડિયોલોજી સુવિધા",
+      "ઇન્ફેક્શન રોગ સારવાર",
+      "24x7 ક્રિટીકલ કેર સુવિધા",
+      "હૃદયની સોનોગ્રાફી 2D Echo",
+      "જનરલ સર્જરી",
+      "પ્મોલોજી",
+      "ફીઝીયોથેરાપી વિભાગ",
+      "ઈન-હાઉસ સીટી સ્કેનની સુવિધા",
+      "પાર્કિંગની સુવિધા"
+    ]
+  },
+  "featuredFacilities": {
+    "titleGujarati": "ઉપલબ્ધ સુવિધાઓ",
+    "items": [
+      {
+        "title": "અદ્યતન I.C.C.U., M.I.C.U., S.I.C.U",
+        "description": "વેન્ટીલેટર, સેન્ટ્રલ ઓક્સિજન, સેન્ટ્રલ મોનિટરિંગ, સેન્ટ્રલ સક્સન, ડીફેબ્રીલેટર, ઈ.સી.જી., મોબાઇલ એક્સ-રે, ટ્રોમા સેન્ટર"
+      },
+      {
+        "title": "અદ્યતન સાધનોથી સજ્જ મોડ્યુલર ઓપરેશન થીયેટર",
+        "description": ""
+      },
+      {
+        "title": "સુપર ડીલક્ષ અને સેમી. સ્પેશીયલ રૂમની સુવિધા",
+        "description": ""
+      },
+      {
+        "title": "ડાયાલીસીસ યુનિટ 24 X 7 ઈમરજન્સી ડાયાલીસીસ સુવિધા",
+        "description": ""
+      },
+      {
+        "title": "2D Echo અને સોનોગ્રાફી (USG) સુવિધા (24 X 7 ઈમરજન્સી)",
+        "description": ""
+      },
+      {
+        "title": "ઈન-હાઉસ સીટી સ્કેન (મોડાસા CT સ્કેન સેન્ટર)",
+        "description": ""
+      },
+      {
+        "title": "ડીજીટલ એક્સ-રે તથા મોબાઇલ એક્સ-રે",
+        "description": ""
+      },
+      {
+        "title": "ઈન હાઉસ લેબોરેટરી તથા ફાર્મસીની સુવિધા",
+        "description": ""
+      }
+    ]
+  },
+  "treatmentCategories": {
+    "titleGujarati": "ઉપલબ્ધ સારવાર",
+    "categories": [
+      {
+        "categoryName": "હૃદય રોગો / એન્ડોક્રાઇન",
+        "conditions": "હાર્ટ એટેક, બી.પી., થાઇરોઇડ, ડાયાબીટીસ"
+      },
+      {
+        "categoryName": "ફેફસાના રોગો",
+        "conditions": "શ્વાસ ચડવો, ન્યુમોનીયા, ફેફસામા પાણી ભરાવુ."
+      },
+      {
+        "categoryName": "સર્પદંશ / પોઇઝનીંગ",
+        "conditions": "ઝેરી જીવજંતુના દંશ અને પોઇઝનીંગની સારવાર"
+      },
+      {
+        "categoryName": "કીડનીને લગતા રોગો",
+        "conditions": "પથરી, કીડની પર સોજો પેશાબમાં રસી થવી"
+      },
+      {
+        "categoryName": "લીવર / પેટના રોગો",
+        "conditions": "કમળો, ઝાડા ઉલ્ટી આંતરડાનો સોજો"
+      },
+      {
+        "categoryName": "મગજના રોગો",
+        "conditions": "લકવો, મગજનું હેમરેજ, ખેંચ, મગજનો તાવ"
+      },
+      {
+        "categoryName": "તાવ",
+        "conditions": "મેલેરીયા, ડેન્ગ્યુ, ટાઇફોઇડ, ચિકનગુનીયા"
+      },
+      {
+        "categoryName": "ટ્રોમા / ઈમરજન્સી",
+        "conditions": "અકસ્માત, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક"
+      }
+    ]
+  },
+  "extractedByImage": {
+    "1.jpeg": {
+      "hospitalName": "PULSE HOSPITAL & I.C.U",
+      "tagline": "CARING FOR LIFE",
+      "emergencyBadge": "24x7 EMERGENCY & TRUMA CARE",
+      "doctors": [
+        {
+          "name": "Dr Dipesh S. Patel",
+          "qualification": "MD Medicine",
+          "hospital": "Deep Hospital"
+        },
+        {
+          "name": "Dr. Naimuddin N. Kazi",
+          "qualification": "MD (Medicine)",
+          "hospital": "Hayat Hospital"
+        },
+        {
+          "name": "Dr Paras H Patel",
+          "qualification": "MD (Medicine)",
+          "hospital": "Vedant Hospital, Modasa"
+        },
+        {
+          "name": "Dr Santosh J Prajapati",
+          "qualification": "MBBS, DTCD, FICCM",
+          "designation": "Chest Physician & Critical Care Specialist",
+          "hospital": "Medicare Hospital & ICU"
+        },
+        {
+          "name": "Dr. Mohammad Salim Mansuri",
+          "designation": "Medical Officer",
+          "specialization": "Critical Care Specialist"
+        },
+        {
+          "name": "Dr. Pulkit Pandya",
+          "designation": "Medical Officer",
+          "specialization": "Critical Care Specialist"
+        }
+      ],
+      "appointmentHeader": "FOR APPOINTMENT",
+      "appointmentPhones": "95120 456 41 / 95120 456 42",
+      "appointmentNote": "Please bring this file on next visit.",
+      "hospitalNameFooter": "PULSE HOSPITAL & ICU",
+      "addressFooter": "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli-383315"
+    },
+    "2.jpeg": {
+      "hospitalName": "PULSE HOSPITAL & I.C.U",
+      "tagline": "CARING FOR LIFE",
+      "appointmentHeader": "For Appointment",
+      "appointmentPhones": [
+        "M : 95120 456 41",
+        "M : 95120 456 42"
+      ],
+      "sections": [
+        {
+          "sectionName": "આઈ.સી.યુ.",
+          "items": [
+            "આઈ.સી.સી.યુ.",
+            "મેડીકલ આઈ.સી.સી.યુ.",
+            "સર્જીકલ આઈ.સી.યુ.",
+            "આઈસોલેશન આઈ.સી.યુ.",
+            "સોનોગ્રાફી",
+            "ડાયાલીસીસ",
+            "વેન્ટીલેટર",
+            "ડીફીબ્રીલેટર",
+            "2D Echo"
+          ]
+        },
+        {
+          "sectionName": "ઈનડોર વિભાગ",
+          "items": [
+            "ડીલક્ષ રૂમ",
+            "ટ્વીન રૂમ",
+            "સ્પેશ્યલ રૂમ"
+          ]
+        },
+        {
+          "sectionName": "આઉટડોર વિભાગ",
+          "items": [
+            "ઓ.પી.ડી.",
+            "24x7 ફાર્મસી",
+            "સુપર સ્પેશ્યાલીસ્ટ કન્સલ્ટેશન",
+            "રેડિયોલોજી",
+            "પેથોલોજી"
+          ]
+        },
+        {
+          "sectionName": "ફેફસા વિભાગ",
+          "items": [
+            "બ્રોન્કોસ્કોપી (દુરબીન દ્વારા ફેફસાની તપાસ)",
+            "શ્વાસના રોગો (અસ્થમા, COPD)",
+            "ફેફસામાં ભરાયેલ પાણીનો ઈલાજ",
+            "પી.એફ.ટી. (ફુક દ્વારા ફેફસાની તપાસ)",
+            "સ્લીપ સ્ટડી"
+          ]
+        },
+        {
+          "sectionName": "ઓપરેશન",
+          "items": [
+            "લેમેલર મોડ્યુલર ઓપરેશન થીયેટર",
+            "હાઈ રીસ્ક સર્જરી",
+            "ગેસ્ટ્રો અને લેપ્રોસ્કોપી સર્જરી",
+            "ન્યુરો સર્જરી",
+            "સ્પાઈન સર્જરી",
+            "પ્લાસ્ટીક સર્જરી"
+          ]
+        },
+        {
+          "sectionName": "સંલગ્ન હોસ્પિટલ",
+          "items": [
+            {
+              "doctor": "ડૉ. દિપેશ પટેલ",
+              "hospital": "દીપ હોસ્પિટલ, મોડાસા",
+              "contact": "મો.: ૭૫૬૭૪ ૦૧૨૭૨"
+            },
+            {
+              "doctor": "ડૉ. નઈમુદ્દીન કાઝી",
+              "hospital": "હયાત હોસ્પિટલ, મોડાસા",
+              "contact": "મો.: ૯૫૧૨૦ ૪૫૬૪૬"
+            },
+            {
+              "doctor": "ડૉ. સંતોષ પ્રજાપતિ",
+              "hospital": "મેડીકેર હોસ્પિટલ & આઈ.સી.યુ., મોડાસા",
+              "contact": "મો.: ૮૨૦૦૨ ૪૦૨૮૭"
+            },
+            {
+              "doctor": "ડૉ. પારસ પટેલ",
+              "hospital": "વેદાંત હોસ્પિટલ, મોડાસા",
+              "contact": "મો.: ૮૧૬૦૮૧૦૦૧૩"
+            }
+          ]
+        }
+      ]
+    },
+    "3.jpeg": {
+      "hospitalName": "PULSE HOSPITAL & I.C.U",
+      "tagline": "CARING FOR LIFE",
+      "section1": {
+        "title": "ઉપલબ્ધ સારવાર",
+        "column1": [
+          "બ્રેઈન હેમરેજ, લકવાની સારવાર",
+          "ઝેરી મલેરીયા, ડેન્ગ્યુમાં પ્લેટલેટ ઘટી જવા",
+          "કોમા, મગજનો તાવ અને ખેંચ",
+          "દાઝેલાની સારવાર, ઝેરી કમળાની સારવાર",
+          "લીવર અને કીડની રોગોની સારવાર"
+        ],
+        "column2": [
+          "શ્વાસ અને હૃદય ની બિમારીની સારવાર",
+          "હીટ સ્ટ્રોક, ઇલેક્ટ્રીક શોક, હડીલો તાવ",
+          "ઝેરી દવા અને સર્પદંશ સારવાર",
+          "કોઈપણ જાતની ગંભીર બિમારી",
+          "અકસ્માતને લગતી ઈજાની સારવાર"
+        ]
+      },
+      "section2": {
+        "title": "હોસ્પિટલમાં ઉપલબ્ધ સુવિધાઓ",
+        "column1": [
+          "24x7 એમ.ડી. I.C.U. સ્પેશ્યાલીસ્ટ ડોક્ટર ઉપલબ્ધ",
+          "24x7 કલાક ડાયાલિસીસની સુવિધા ઉપલબ્ધ",
+          "24x7 લેબોરેટરી કાર્યરત",
+          "24x7 કલાક મેડિકલ સુવિધા ઉપલબ્ધ",
+          "ક્વોલિફાઇડ સ્ટાફ દ્વારા I.C.U. ની દેખરેખ",
+          "અનુભવી નર્સીંગ સ્ટાફ",
+          "અત્ય અધતન સુસજ્જ મોડ્યુલર ઓપરેશન થીયેટર",
+          "ઓર્થોપેડીક સર્જરી માટે IITV ની સુવિધા",
+          "લેપ્રોસ્કોપીક તેમજ એન્ડોસ્કોપી સુવિધા",
+          "ગેસ્ટ્રોલોજી અને હેપેટોલોજી સુવિધા",
+          "ન્યુરો / મણકાની સર્જરી વિભાગ"
+        ],
+        "column2": [
+          "મેક્સિલો ફેશિયલ (ડેન્ટલ) સર્જન વિભાગ",
+          "કાર્ડિયોલોજી સુવિધા",
+          "ઇન્ફેક્શન રોગ સારવાર",
+          "24x7 ક્રિટીકલ કેર સુવિધા",
+          "હૃદયની સોનોગ્રાફી 2D Echo",
+          "જનરલ સર્જરી",
+          "પ્મોલોજી",
+          "ફીઝીયોથેરાપી વિભાગ",
+          "ઈન-હાઉસ સીટી સ્કેનની સુવિધા",
+          "પાર્કિંગની સુવિધા"
+        ]
+      }
+    },
+    "4.jpeg": {
+      "section1": {
+        "title": "ઉપલબ્ધ સુવિધાઓ",
+        "items": [
+          {
+            "title": "અદ્યતન I.C.C.U., M.I.C.U., S.I.C.U",
+            "details": "વેન્ટીલેટર, સેન્ટ્રલ ઓક્સિજન, સેન્ટ્રલ મોનિટરિંગ, સેન્ટ્રલ સક્સન, ડીફેબ્રીલેટર, ઈ.સી.જી., મોબાઇલ એક્સ-રે, ટ્રોમા સેન્ટર"
+          },
+          {
+            "title": "અદ્યતન સાધનોથી સજ્જ મોડ્યુલર ઓપરેશન થીયેટર",
+            "details": ""
+          },
+          {
+            "title": "સુપર ડીલક્ષ અને સેમી. સ્પેશીયલ રૂમની સુવિધા",
+            "details": ""
+          },
+          {
+            "title": "ડાયાલીસીસ યુનિટ 24 X 7 ઈમરજન્સી ડાયાલીસીસ સુવિધા",
+            "details": ""
+          },
+          {
+            "title": "2D Echo અને સોનોગ્રાફી (USG) સુવિધા (24 X 7 ઈમરજન્સી)",
+            "details": ""
+          },
+          {
+            "title": "ઈન-હાઉસ સીટી સ્કેન (મોડાસા CT સ્કેન સેન્ટર)",
+            "details": ""
+          },
+          {
+            "title": "ડીજીટલ એક્સ-રે તથા મોબાઇલ એક્સ-રે",
+            "details": ""
+          },
+          {
+            "title": "ઈન હાઉસ લેબોરેટરી તથા ફાર્મસીની સુવિધા",
+            "details": ""
+          }
+        ]
+      },
+      "section2": {
+        "title": "ઉપલબ્ધ સારવાર",
+        "items": [
+          {
+            "category": "હૃદય રોગો / એન્ડોક્રાઇન",
+            "details": "હાર્ટ એટેક, બી.પી., થાઇરોઇડ, ડાયાબીટીસ"
+          },
+          {
+            "category": "ફેફસાના રોગો",
+            "details": "શ્વાસ ચડવો, ન્યુમોનીયા, ફેફસામા પાણી ભરાવુ."
+          },
+          {
+            "category": "સર્પદંશ / પોઇઝનીંગ",
+            "details": "ઝેરી જીવજંતુના દંશ અને પોઇઝનીંગની સારવાર"
+          },
+          {
+            "category": "કીડનીને લગતા રોગો",
+            "details": "પથરી, કીડની પર સોજો પેશાબમાં રસી થવી"
+          },
+          {
+            "category": "લીવર / પેટના રોગો",
+            "details": "કમળો, ઝાડા ઉલ્ટી આંતરડાનો સોજો"
+          },
+          {
+            "category": "મગજના રોગો",
+            "details": "લકવો, મગજનું હેમરેજ, ખેંચ, મગજનો તાવ"
+          },
+          {
+            "category": "તાવ",
+            "details": "મેલેરીયા, ડેન્ગ્યુ, ટાઇફોઇડ, ચિકનગુનીયા"
+          },
+          {
+            "category": "ટ્રોમા / ઈમરજન્સી",
+            "details": "અકસ્માત, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક"
+          }
+        ]
+      },
+      "footer": {
+        "hospitalNameGujarati": "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
+        "addressGujarati": "ચોથો માળ, એ-બ્લોક, સીટી સેન્ટર, શામળાજી રોડ, મોડાસા, અરવલ્લી-૩૮૩૩૧૫",
+        "appointmentGujarati": "એપોઇન્ટમેન્ટ : ૯૫૧૨૦ ૪૫૬ ૪૧ / ૯૫૧૨૦ ૪૫૬ ૪૨"
+      }
+    }
+  }
+}

@@ -1,0 +1,295 @@
+import React from 'react';
+import { 
+  CheckCircle, 
+  Printer, 
+  Share2, 
+  X, 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  User, 
+  FileText, 
+  ShieldCheck, 
+  Phone,
+  Building2
+} from 'lucide-react';
+import { HOSPITAL_INFO } from '../data/hospitalContent';
+
+export default function AppointmentSlipModal({ appointment, onClose, lang = 'en' }) {
+  if (!appointment) return null;
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleWhatsAppShare = () => {
+    const message = encodeURIComponent(
+      `🏥 *Pulse Hospital & I.C.U - Appointment Confirmation*\n` +
+      `-----------------------------------------\n` +
+      `🆔 *Token ID:* ${appointment.id}\n` +
+      `👤 *Patient:* ${appointment.patientName}\n` +
+      `👨‍⚕️ *Doctor:* ${appointment.doctorName}\n` +
+      `📅 *Date:* ${appointment.date}\n` +
+      `⏰ *Slot:* ${appointment.timeSlot}\n` +
+      `🏢 *Room:* ${appointment.room}\n` +
+      `📍 *Location:* 4th Floor, City Centre, Shamlaji Road, Modasa\n` +
+      `📞 *Appointment / WhatsApp Desk:* +91 63533 44875\n` +
+      `-----------------------------------------\n` +
+      `⚠️ *Important:* Please bring this file and previous medical reports on your visit.`
+    );
+    // Directly targeted to user test WhatsApp number: 63533 44875
+    window.open(`https://api.whatsapp.com/send?phone=916353344875&text=${message}`, '_blank');
+  };
+
+  return (
+    <div className="modal-overlay">
+      {/* Header and action bar stay put; the slip between them scrolls */}
+      <div className="modal-content slip-modal" style={{ maxWidth: '640px', padding: '0' }} role="dialog" aria-modal="true" aria-label="Appointment confirmed">
+        
+        {/* Modal Top Bar */}
+        <div className="no-print" style={{ 
+          flexShrink: 0,
+          background: 'linear-gradient(135deg, var(--brand-navy) 0%, var(--primary) 100%)',
+          color: '#ffffff',
+          padding: '20px 24px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <CheckCircle size={22} color="#ffffff" />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
+                {lang === 'en' ? 'Appointment Confirmed!' : 'એપોઇન્ટમેન્ટ કન્ફર્મ થઈ ગઈ!'}
+              </h3>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)' }}>
+                Official Advance Booking Receipt & Slip
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              background: 'rgba(255,255,255,0.15)',
+              border: 'none',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
+              cursor: 'pointer'
+            }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Printable Hospital Receipt Content */}
+        <div className="printable-appointment-slip slip-scroll" style={{ padding: '28px' }}>
+          
+          {/* Hospital Header */}
+          <div style={{ borderBottom: '2px solid var(--brand-navy)', paddingBottom: '16px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+            <div>
+              <h2 style={{ fontSize: '22px', fontWeight: 900, color: 'var(--brand-navy)', letterSpacing: '-0.02em' }}>
+                PULSE HOSPITAL & I.C.U
+              </h2>
+              <div style={{ fontSize: '13px', color: 'var(--primary)', fontWeight: 700 }}>
+                પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ. • CARING FOR LIFE
+              </div>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '4px', maxWidth: '340px' }}>
+                4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315
+              </div>
+              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
+                Helpline & WhatsApp: +91 63533 44875 • 24x7 Emergency Care
+              </div>
+            </div>
+
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ display: 'inline-block', border: '2px dashed var(--primary)', borderRadius: '10px', padding: '8px 16px', background: '#f0f9ff' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
+                  Booking Reference
+                </span>
+                <span style={{ fontSize: '20px', fontWeight: 900, color: 'var(--primary)', letterSpacing: '0.05em' }}>
+                  {appointment.id}
+                </span>
+              </div>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                Status: <span style={{ color: 'var(--success)', fontWeight: 700 }}>CONFIRMED</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Appointment Schedule Box */}
+          <div style={{ background: '#f8fafc', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-lg)', padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
+                Date of Visit (Next Week)
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '16px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
+                <Calendar size={18} color="var(--primary)" />
+                <span>{appointment.date}</span>
+              </div>
+            </div>
+
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
+                Scheduled Slot Time
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '16px', fontWeight: 800, color: 'var(--primary)', marginTop: '2px' }}>
+                <Clock size={18} />
+                <span>{appointment.timeSlot}</span>
+              </div>
+            </div>
+
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
+                Consulting Doctor
+              </span>
+              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
+                {appointment.doctorName}
+              </div>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                {appointment.doctorSpecialty}
+              </span>
+            </div>
+
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
+                Assigned Consultation Room
+              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
+                <Building2 size={16} color="var(--accent)" />
+                <span>{appointment.room}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Patient Details Table */}
+          <div style={{ marginBottom: '20px' }}>
+            <h4 style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.05em', marginBottom: '8px' }}>
+              Patient Record
+            </h4>
+            <div style={{ border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Patient Name:</span>
+                <span style={{ fontWeight: 700, color: 'var(--brand-navy)' }}>{appointment.patientName}</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px', background: '#f8fafc' }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Booking Origin:</span>
+                <span style={{ fontWeight: 700, color: appointment.bookedBy === 'Staff' ? '#7c3aed' : appointment.bookedBy === 'Doctor' ? '#059669' : 'var(--primary)' }}>
+                  {appointment.bookedBy === 'Staff' ? '🏥 Hospital Reception Desk' : appointment.bookedBy === 'Doctor' ? '🩺 Doctor / OPD Follow-up' : '👤 Patient Self-Booking (Online)'}
+                  {appointment.bookedByName && appointment.bookedByName !== 'Self (Online)' ? ` • ${appointment.bookedByName}` : ''}
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Mobile Number:</span>
+                <span style={{ fontWeight: 700 }}>+91 {appointment.patientPhone}</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Age / Gender:</span>
+                <span>{appointment.patientAge ? `${appointment.patientAge} Years` : 'N/A'} • {appointment.patientGender}</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>City / Area:</span>
+                <span>{appointment.city || 'Modasa'}</span>
+              </div>
+              {appointment.previousFileNo && (
+                <div style={{ display: 'grid', gridTemplateColumns: '140px 1fr', padding: '8px 12px', fontSize: '13.5px', background: '#fefce8' }}>
+                  <span style={{ color: '#854d0e', fontWeight: 600 }}>Hospital File No:</span>
+                  <span style={{ fontWeight: 800, color: '#854d0e' }}>{appointment.previousFileNo}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Mandatory Brochure Notice Highlight */}
+          <div style={{ 
+            background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%)',
+            borderLeft: '4px solid var(--primary)',
+            padding: '12px 16px',
+            borderRadius: '0 8px 8px 0',
+            marginBottom: '20px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+              <ShieldCheck size={18} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <p style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--brand-navy)' }}>
+                  Important Instructions (સૂચના):
+                </p>
+                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  • Please arrive 15 minutes prior to your allocated slot at the 4th Floor reception.
+                </p>
+                <p style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 700, marginTop: '2px' }}>
+                  • "Please bring this file and previous medical reports on your next visit."
+                </p>
+                <p style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 700 }} className="gujarati-text">
+                  • કૃપા કરીને આગલી મુલાકાતે આ ફાઇલ અને જુના રિપોર્ટ્સ સાથે લાવવા.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Modal Action Footer */}
+        <div className="no-print" style={{ 
+          flexShrink: 0,
+          background: '#f8fafc',
+          borderTop: '1px solid var(--border-color)',
+          padding: '16px 24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              onClick={handlePrint}
+              className="btn-outline"
+              style={{ padding: '8px 16px', fontSize: '13px' }}
+            >
+              <Printer size={15} />
+              <span>Print Slip</span>
+            </button>
+
+            <button
+              onClick={handleWhatsAppShare}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: '#25D366',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: 'var(--radius-md)',
+                padding: '8px 16px',
+                fontSize: '13px',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              <Share2 size={15} />
+              <span>Share to WhatsApp</span>
+            </button>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="btn-primary"
+            style={{ padding: '8px 24px', fontSize: '13px' }}
+          >
+            Done
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
