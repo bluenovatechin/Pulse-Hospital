@@ -255,7 +255,7 @@ On a free GitHub account, GitHub Pages requires the repository to be **public**.
 2. When asked, set:
    - `ADMIN_KEY`: a long random value, e.g. `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`
    - `CORS_ORIGIN`: `https://bluenovatechin.github.io`
-   - `CALLMEBOT_RECIPIENTS`: see [WhatsApp booking alerts](#whatsapp-booking-alerts)
+   - `META_WA_TOKEN`, `META_WA_PHONE_NUMBER_ID`, `WHATSAPP_NOTIFY_TO`: see [WhatsApp booking alerts](#whatsapp-booking-alerts)
 3. Wait for the deploy, then open `https://<name>.onrender.com/api/health` to check it's running.
 
 > **Storage warning.** On Render's free plan the server's files are reset on every restart. Free instances also sleep after 15 minutes idle, and the first request then takes about a minute. For real patients, use a paid instance with the persistent disk shown (commented out) in `render.yaml`, or move bookings to a database.
@@ -277,7 +277,7 @@ Every new booking sends a WhatsApp message to hospital staff with the token ID, 
 
 Choose a provider with `WHATSAPP_PROVIDER` on the server. See `server/.env.example` for every setting.
 
-### Option A: CallMeBot (free, about 2 minutes)
+### Option A: CallMeBot (third-party, not used by default)
 
 Best for alerting a few staff phones. Each phone that should receive alerts activates it once:
 
