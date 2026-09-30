@@ -1,13 +1,12 @@
 {
-  "name": "pulse-hospital-root",
+  "name": "pulse-hospital",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node run-all.js",
-    "dev": "node run-all.js",
-    "server": "node server/server.js",
-    "client": "npm --prefix client run dev",
-    "build": "npm --prefix client run build"
+    "dev": "npm --prefix client run dev",
+    "start": "npm --prefix client run dev",
+    "build": "npm --prefix client run build",
+    "preview": "npm --prefix client run preview"
   }
 }

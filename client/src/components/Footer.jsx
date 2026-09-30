@@ -4,7 +4,7 @@ import { HOSPITAL_INFO, FACILITIES } from '../data/hospitalContent';
 import { NAV_LINKS } from './Navbar';
 import PulseLogo from './PulseLogo';
 
-export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpenAdmin, lang = 'en' }) {
+export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const topFacilities = FACILITIES.filter((f) => f.is24x7).slice(0, 6);
 

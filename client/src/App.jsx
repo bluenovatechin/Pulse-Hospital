@@ -14,7 +14,6 @@ import TermsPage from './pages/TermsPage';
 import NextWeekBooking from './components/NextWeekBooking';
 import AppointmentSlipModal from './components/AppointmentSlipModal';
 import AppointmentLookupModal from './components/AppointmentLookupModal';
-import AdminPortal from './components/AdminPortal';
 import { FacilityDrawer, DoctorDrawer } from './components/DetailDrawers';
 import { useRoute } from './router';
 import { lockScroll, unlockScroll } from './components/ui';
@@ -31,10 +30,9 @@ export default function App() {
   const [preselectedDoctorId, setPreselectedDoctorId] = useState(null);
   const [confirmedAppointment, setConfirmedAppointment] = useState(null);
   const [lookupModalOpen, setLookupModalOpen] = useState(false);
-  const [adminModalOpen, setAdminModalOpen] = useState(false);
 
   const { page, param } = route;
-  const anyModalOpen = bookingModalOpen || lookupModalOpen || adminModalOpen || !!confirmedAppointment;
+  const anyModalOpen = bookingModalOpen || lookupModalOpen || !!confirmedAppointment;
 
   // Jump to top when the page changes (opening a panel keeps the scroll position)
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [page]);
@@ -56,8 +54,7 @@ export default function App() {
     if (!anyModalOpen) return;
     const onKey = (e) => {
       if (e.key !== 'Escape') return;
-      if (adminModalOpen) setAdminModalOpen(false);
-      else if (confirmedAppointment) setConfirmedAppointment(null);
+      if (confirmedAppointment) setConfirmedAppointment(null);
       else if (lookupModalOpen) setLookupModalOpen(false);
       else setBookingModalOpen(false);
     };
@@ -67,7 +64,7 @@ export default function App() {
       document.removeEventListener('keydown', onKey);
       unlockScroll();
     };
-  }, [anyModalOpen, adminModalOpen, confirmedAppointment, lookupModalOpen]);
+  }, [anyModalOpen, confirmedAppointment, lookupModalOpen]);
 
   const openBooking = useCallback((docId = null) => {
     setPreselectedDoctorId(docId);
@@ -96,7 +93,6 @@ export default function App() {
         onNavigate={navigate}
         onOpenBooking={() => openBooking(null)}
         onOpenLookup={() => setLookupModalOpen(true)}
-        onOpenAdmin={() => setAdminModalOpen(true)}
         lang={lang}
         setLang={setLang}
       />
@@ -117,7 +113,6 @@ export default function App() {
         onNavigate={navigate}
         onOpenBooking={() => openBooking(null)}
         onOpenLookup={() => setLookupModalOpen(true)}
-        onOpenAdmin={() => setAdminModalOpen(true)}
         lang={lang}
       />
 
@@ -193,8 +188,6 @@ export default function App() {
           lang={lang}
         />
       )}
-
-      {adminModalOpen && <AdminPortal onClose={() => setAdminModalOpen(false)} />}
     </div>
   );
 }

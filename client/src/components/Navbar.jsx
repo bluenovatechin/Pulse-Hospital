@@ -17,7 +17,7 @@ export const NAV_LINKS = [
   { id: 'contact', en: 'Contact', gu: 'સંપર્ક', icon: Mail }
 ];
 
-export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLookup, onOpenAdmin, lang, setLang }) {
+export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLookup, lang, setLang }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const t = (en, gu) => (lang === 'en' ? en : gu);

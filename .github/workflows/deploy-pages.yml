@@ -1,10 +1,8 @@
-# Builds the website (client/) and publishes it to GitHub Pages
-# on every push to main. The API (server/) is hosted separately.
+# Builds the website (client/) and publishes it directly to GitHub Pages
+# on every push to main. No backend or secret variables required.
 #
 # One-time setup on GitHub:
 #   Settings → Pages → Source: "GitHub Actions"
-#   Settings → Secrets and variables → Actions → Variables tab →
-#     New variable  VITE_API_URL = https://<your-api-host>   (e.g. Render URL)
 name: Deploy website to GitHub Pages
 
 on:
@@ -41,8 +39,6 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: client
-        env:
-          VITE_API_URL: ${{ vars.VITE_API_URL }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

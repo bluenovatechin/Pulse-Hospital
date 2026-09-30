@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle, Navigation, MessageCircle, Siren } from 'lucide-react';
 import { PageHero } from '../components/ui';
 import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
-import { API } from '../api';
 
 const EMPTY_FORM = { name: '', phone: '', email: '', subject: 'General Consultation Inquiry', message: '' };
 
@@ -15,7 +14,7 @@ export default function ContactPage({ onNavigate, lang = 'en' }) {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setSuccessMsg('');
     setErrorMsg('');
@@ -23,22 +22,25 @@ export default function ContactPage({ onNavigate, lang = 'en' }) {
       setErrorMsg(t('Please complete all required fields.', 'કૃપા કરીને જરૂરી તમામ વિગતો ભરો.'));
       return;
     }
-    setSubmitting(true);
-    try {
-      const res = await fetch(API + '/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || t('Failed to send message.', 'સંદેશ મોકલવામાં નિષ્ફળતા.'));
-      setSuccessMsg(data.message || t('Your inquiry has been submitted. Our receptionist will call you shortly.', 'તમારી પૂછપરછ નોંધાઈ ગઈ છે. અમારો સ્ટાફ ટૂંક સમયમાં તમને સંપર્ક કરશે.'));
-      setForm(EMPTY_FORM);
-    } catch (err) {
-      setErrorMsg(err.message || t('Error submitting message. Please call our helpline directly.', 'સંદેશ મોકલવામાં ક્ષતિ થઈ. કૃપા કરીને સીધા હેલ્પલાઈન પર કૉલ કરો.'));
-    } finally {
-      setSubmitting(false);
-    }
+
+    const cleanPhone = form.phone.replace(/\D/g, '');
+    const waText = 
+`🏥 *PULSE HOSPITAL & I.C.U — PATIENT INQUIRY*
+───────────────────────────────
+👤 *Name:* ${form.name.trim()}
+📞 *Phone:* ${cleanPhone}
+${form.email ? `✉️ *Email:* ${form.email.trim()}\n` : ''}📌 *Subject:* ${form.subject || 'General Consultation Inquiry'}
+───────────────────────────────
+📝 *Message:*
+${form.message.trim()}
+───────────────────────────────
+_Sent via Pulse Hospital Website_`;
+
+    const whatsappUrl = `https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(waText)}`;
+    window.open(whatsappUrl, '_blank');
+
+    setSuccessMsg(t('Your inquiry is opening in WhatsApp to send directly to Pulse Hospital reception desk.', 'તમારી પૂછપરછ સીધી પલ્સ હોસ્પિટલ રિસેપ્શન વોટ્સએપ પર મોકલવા માટે ખુલી રહી છે.'));
+    setForm(EMPTY_FORM);
   };
 
   const cards = [

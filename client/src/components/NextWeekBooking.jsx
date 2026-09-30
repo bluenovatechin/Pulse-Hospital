@@ -10,25 +10,93 @@ import {
   AlertCircle, 
   Building2, 
   Sparkles, 
-  ChevronRight,
-  Info,
-  CalendarCheck,
-  Stethoscope,
-  ShieldCheck,
-  MapPin
+  ChevronRight, 
+  Info, 
+  CalendarCheck, 
+  Stethoscope, 
+  ShieldCheck, 
+  MapPin,
+  MessageCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { DOCTORS } from '../data/hospitalContent';
+import { DOCTORS, HOSPITAL_INFO } from '../data/hospitalContent';
 import { Avatar } from './ui';
-import { API } from '../api';
 
 const GUJARATI_MONTHS_SHORT = ["જાન્યુ", "ફેબ્રુ", "માર્ચ", "એપ્રિલ", "મે", "જૂન", "જુલાઈ", "ઑગસ્ટ", "સપ્ટે", "ઑક્ટો", "નવે", "ડિસે"];
 
+// Client-side schedule generator for coming week (Monday - Sunday)
+function generateUpcomingSchedule(lang = 'en') {
+  const today = new Date();
+  const currentDay = today.getDay();
+  const daysUntilNextMonday = (8 - currentDay) % 7 || 7;
+  const nextMonday = new Date(today);
+  nextMonday.setDate(today.getDate() + daysUntilNextMonday);
+
+  const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const dayNamesGujarati = ["સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર", "રવિવાર"];
+  const days = [];
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(nextMonday);
+    d.setDate(nextMonday.getDate() + i);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
+    const monthName = d.toLocaleString('en-US', { month: 'short' });
+    days.push({
+      date: dateStr,
+      dayName: dayNames[i],
+      dayNameGujarati: dayNamesGujarati[i],
+      formatted: `${dayNames[i].slice(0, 3)}, ${monthName} ${d.getDate()}`,
+      isWeekend: i === 5 || i === 6,
+      isSunday: i === 6,
+      displayBadge: i === 0 ? (lang === 'en' ? "Next Week Start" : "નવા સપ્તાહની શરૂઆત") : null,
+      availableSlots: 45
+    });
+  }
+  return days;
+}
+
+// Generate slots based on doctor's available shifts
+function generateDoctorSlots(docId, date) {
+  const morningSlots = [
+    "09:00 AM - 09:30 AM", "09:30 AM - 10:00 AM", "10:00 AM - 10:30 AM",
+    "10:30 AM - 11:00 AM", "11:00 AM - 11:30 AM", "11:30 AM - 12:00 PM",
+    "12:00 PM - 12:30 PM", "12:30 PM - 01:00 PM"
+  ].map((slot) => ({
+    time: slot,
+    session: "Morning",
+    isAvailable: true
+  }));
+
+  const eveningSlots = [
+    "04:30 PM - 05:00 PM", "05:00 PM - 05:30 PM", "05:30 PM - 06:00 PM",
+    "06:00 PM - 06:30 PM", "06:30 PM - 07:00 PM", "07:00 PM - 07:30 PM",
+    "07:30 PM - 08:00 PM"
+  ].map((slot) => ({
+    time: slot,
+    session: "Evening",
+    isAvailable: true
+  }));
+
+  return {
+    doctorId: docId,
+    date,
+    isDoctorAvailable: true,
+    morningSlots,
+    eveningSlots
+  };
+}
+
 export default function NextWeekBooking({ preselectedDoctorId = null, onBookingSuccess, lang = 'en' }) {
-  const [scheduleDays, setScheduleDays] = useState([]);
-  const [selectedDate, setSelectedDate] = useState('');
+  const [scheduleDays, setScheduleDays] = useState(() => generateUpcomingSchedule(lang));
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const days = generateUpcomingSchedule(lang);
+    return days.length > 0 ? days[0].date : '';
+  });
   const [selectedDoctorId, setSelectedDoctorId] = useState(preselectedDoctorId || 1);
-  const [slotsData, setSlotsData] = useState({ morningSlots: [], eveningSlots: [], isDoctorAvailable: true });
+  const [slotsData, setSlotsData] = useState(() => generateDoctorSlots(preselectedDoctorId || 1, selectedDate));
   const [selectedSlot, setSelectedSlot] = useState('');
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -43,32 +111,17 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     patientGender: 'Male',
     city: 'Modasa',
     previousFileNo: '',
-    symptoms: '',
-    bookedBy: 'Patient', // 'Patient' | 'Staff' | 'Doctor'
-    bookedByName: ''
+    symptoms: ''
   });
 
-  // Load Next Week Days from API or Fallback
+  // Re-generate schedule when language changes
   useEffect(() => {
-    async function fetchNextWeek() {
-      try {
-        const res = await fetch(API + '/api/next-week-schedule');
-        if (res.ok) {
-          const days = await res.json();
-          setScheduleDays(days);
-          if (days.length > 0 && !selectedDate) {
-            setSelectedDate(days[0].date); // Default to Next Monday
-          }
-        } else {
-          generateFallbackSchedule();
-        }
-      } catch (err) {
-        console.warn("Using client-side schedule generator", err);
-        generateFallbackSchedule();
-      }
+    const days = generateUpcomingSchedule(lang);
+    setScheduleDays(days);
+    if (!selectedDate && days.length > 0) {
+      setSelectedDate(days[0].date);
     }
-    fetchNextWeek();
-  }, []);
+  }, [lang]);
 
   // Update selected doctor if preselectedDoctorId changes
   useEffect(() => {
@@ -77,108 +130,20 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     }
   }, [preselectedDoctorId]);
 
-  // Client-side fallback schedule generator for next week
-  function generateFallbackSchedule() {
-    const today = new Date();
-    const currentDay = today.getDay();
-    const daysUntilNextMonday = (8 - currentDay) % 7 || 7;
-    const nextMonday = new Date(today);
-    nextMonday.setDate(today.getDate() + daysUntilNextMonday);
-
-    const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    const dayNamesGujarati = ["સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર", "રવિવાર"];
-    const days = [];
-
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(nextMonday);
-      d.setDate(nextMonday.getDate() + i);
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      const dateStr = `${year}-${month}-${day}`;
-      const monthName = d.toLocaleString('en-US', { month: 'short' });
-      days.push({
-        date: dateStr,
-        dayName: dayNames[i],
-        dayNameGujarati: dayNamesGujarati[i],
-        formatted: `${dayNames[i].slice(0, 3)}, ${monthName} ${d.getDate()}`,
-        isWeekend: i === 5 || i === 6,
-        isSunday: i === 6,
-        displayBadge: i === 0 ? "Next Week Start" : null,
-        availableSlots: 45
-      });
-    }
-    setScheduleDays(days);
-    if (!selectedDate && days.length > 0) {
-      setSelectedDate(days[0].date);
-    }
-  }
-
-  // Fetch slots whenever selectedDoctorId or selectedDate changes
+  // Update slots when doctor or date changes
   useEffect(() => {
     if (!selectedDoctorId || !selectedDate) return;
-
-    let isMounted = true;
     setLoadingSlots(true);
-    setErrorMsg('');
     setSelectedSlot('');
+    setErrorMsg('');
 
-    async function loadSlots() {
-      try {
-        const res = await fetch(`${API}/api/slots?doctorId=${selectedDoctorId}&date=${selectedDate}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (isMounted) {
-            setSlotsData(data);
-          }
-        } else {
-          if (isMounted) {
-            setSlotsData(generateLocalSlots(selectedDoctorId, selectedDate));
-          }
-        }
-      } catch (err) {
-        if (isMounted) {
-          setSlotsData(generateLocalSlots(selectedDoctorId, selectedDate));
-        }
-      } finally {
-        if (isMounted) setLoadingSlots(false);
-      }
-    }
+    const timer = setTimeout(() => {
+      setSlotsData(generateDoctorSlots(selectedDoctorId, selectedDate));
+      setLoadingSlots(false);
+    }, 150);
 
-    loadSlots();
-    return () => { isMounted = false; };
+    return () => clearTimeout(timer);
   }, [selectedDoctorId, selectedDate]);
-
-  // Local fallback slots
-  function generateLocalSlots(docId, date) {
-    const morningSlots = [
-      "09:00 AM - 09:30 AM", "09:30 AM - 10:00 AM", "10:00 AM - 10:30 AM",
-      "10:30 AM - 11:00 AM", "11:00 AM - 11:30 AM", "11:30 AM - 12:00 PM",
-      "12:00 PM - 12:30 PM", "12:30 PM - 01:00 PM"
-    ].map((slot, index) => ({
-      time: slot,
-      session: "Morning",
-      isAvailable: index !== 2
-    }));
-
-    const eveningSlots = [
-      "04:30 PM - 05:00 PM", "05:00 PM - 05:30 PM", "05:30 PM - 06:00 PM",
-      "06:00 PM - 06:30 PM", "06:30 PM - 07:00 PM", "07:00 PM - 07:30 PM",
-      "07:30 PM - 08:00 PM"
-    ].map((slot) => ({
-      time: slot,
-      session: "Evening",
-      isAvailable: true
-    }));
-
-    return {
-      doctorId: docId,
-      date,
-      isDoctorAvailable: true,
-      morningSlots,
-      eveningSlots
-    };
-  }
 
   const selectedDoctor = DOCTORS.find(d => d.id === parseInt(selectedDoctorId)) || DOCTORS[0];
 
@@ -186,7 +151,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMsg('');
 
@@ -208,70 +173,90 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 
     setSubmitting(true);
 
+    const apptId = `PLS-${Math.floor(100000 + Math.random() * 900000)}`;
+    const selectedDayObj = scheduleDays.find(d => d.date === selectedDate);
+    const dayLabel = selectedDayObj ? `${selectedDayObj.dayName}, ${selectedDayObj.formatted}` : selectedDate;
+
+    const appointment = {
+      id: apptId,
+      doctorId: selectedDoctor.id,
+      doctorName: selectedDoctor.name,
+      doctorNameGujarati: selectedDoctor.nameGujarati,
+      specialties: selectedDoctor.specialties,
+      room: selectedDoctor.room,
+      date: selectedDate,
+      dayFormatted: dayLabel,
+      timeSlot: selectedSlot,
+      patientName: formData.patientName.trim(),
+      patientPhone: cleanPhone,
+      patientEmail: formData.patientEmail ? formData.patientEmail.trim() : '',
+      patientAge: formData.patientAge || 'N/A',
+      patientGender: formData.patientGender || 'Male',
+      city: formData.city || 'Modasa',
+      previousFileNo: formData.previousFileNo || '',
+      symptoms: formData.symptoms || '',
+      bookedAt: new Date().toISOString(),
+      status: 'Confirmed'
+    };
+
+    // Save to localStorage for instant reference & retrieval in My Booking
     try {
-      const payload = {
-        doctorId: selectedDoctor.id,
-        date: selectedDate,
-        timeSlot: selectedSlot,
-        patientName: formData.patientName,
-        patientPhone: cleanPhone,
-        patientEmail: formData.patientEmail,
-        patientAge: formData.patientAge,
-        patientGender: formData.patientGender,
-        city: formData.city,
-        previousFileNo: formData.previousFileNo,
-        symptoms: formData.symptoms,
-        department: selectedDoctor.specialties[0],
-        bookedBy: formData.bookedBy || 'Patient',
-        bookingChannel: formData.bookedBy === 'Staff' ? 'Hospital Reception Counter' : formData.bookedBy === 'Doctor' ? 'Doctor OPD Consultation' : 'Online Website',
-        bookedByName: formData.bookedByName ? formData.bookedByName.trim() : (formData.bookedBy === 'Staff' ? 'Reception Desk' : formData.bookedBy === 'Doctor' ? 'OPD Desk' : 'Patient (Self)')
-      };
-
-      const res = await fetch(API + '/api/appointments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || data.error || 'Failed to book slot.');
-      }
-
-      // Trigger Celebration Confetti
-      try {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-      } catch (e) {
-        // ignore
-      }
-
-      if (onBookingSuccess) {
-        onBookingSuccess(data.appointment);
-      }
-
-      // Reset form
-      setFormData({
-        patientName: '',
-        patientPhone: '',
-        patientEmail: '',
-        patientAge: '',
-        patientGender: 'Male',
-        city: 'Modasa',
-        previousFileNo: '',
-        symptoms: ''
-      });
-      setSelectedSlot('');
-
+      const existing = JSON.parse(localStorage.getItem('pulse_hospital_appointments') || '[]');
+      localStorage.setItem('pulse_hospital_appointments', JSON.stringify([appointment, ...existing]));
     } catch (err) {
-      setErrorMsg(err.message || (lang === 'en' ? 'Error booking appointment. Please try another slot.' : 'એપોઇન્ટમેન્ટ બુક કરવામાં સમસ્યા આવી. કૃપા કરીને અન્ય સ્લોટ અજમાવો.'));
-    } finally {
-      setSubmitting(false);
+      console.warn('LocalStorage save error', err);
     }
+
+    // Build structured WhatsApp message to hospital reception
+    const waText = 
+`🏥 *PULSE HOSPITAL & I.C.U — MODASA*
+*Appointment Booking Request*
+───────────────────────────────
+📋 *Reference ID:* ${apptId}
+👨‍⚕️ *Doctor:* ${selectedDoctor.name} (${selectedDoctor.degrees})
+🏢 *Room:* ${selectedDoctor.room}
+📅 *Date:* ${dayLabel}
+⏰ *Time Slot:* ${selectedSlot}
+───────────────────────────────
+👤 *Patient Name:* ${formData.patientName.trim()}
+📞 *Phone Number:* ${cleanPhone}
+🎂 *Age / Gender:* ${formData.patientAge ? formData.patientAge + ' yrs' : 'N/A'}, ${formData.patientGender}
+📍 *City / Area:* ${formData.city || 'Modasa'}
+${formData.previousFileNo ? `📁 *Past File No:* ${formData.previousFileNo}\n` : ''}${formData.symptoms ? `📝 *Symptoms / Problem:* ${formData.symptoms}\n` : ''}───────────────────────────────
+_Sent via Pulse Hospital Online Booking Portal_`;
+
+    const whatsappUrl = `https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(waText)}`;
+    
+    // Open WhatsApp directly in new tab/window
+    window.open(whatsappUrl, '_blank');
+
+    // Confetti celebration
+    try {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    } catch (e) {}
+
+    // Show appointment slip modal
+    if (onBookingSuccess) {
+      onBookingSuccess(appointment);
+    }
+
+    // Reset form
+    setFormData({
+      patientName: '',
+      patientPhone: '',
+      patientEmail: '',
+      patientAge: '',
+      patientGender: 'Male',
+      city: 'Modasa',
+      previousFileNo: '',
+      symptoms: ''
+    });
+    setSelectedSlot('');
+    setSubmitting(false);
   };
 
   return (
@@ -789,6 +774,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
               disabled={submitting || !selectedSlot}
               className="btn-primary booking-submit-btn"
               style={{
+                background: '#16a34a',
+                borderColor: '#15803d',
+                color: '#ffffff',
                 opacity: (!selectedSlot || submitting) ? 0.6 : 1,
                 cursor: (!selectedSlot || submitting) ? 'not-allowed' : 'pointer'
               }}
@@ -796,15 +784,23 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
               {submitting ? (
                 <>
                   <Clock size={18} className="animate-spin" />
-                  <span>{lang === 'en' ? 'Reserving Slot...' : 'સ્લોટ બુક થઈ રહ્યો છે...'}</span>
+                  <span>{lang === 'en' ? 'Preparing WhatsApp Booking...' : 'વોટ્સએપ બુકિંગ તૈયાર થઈ રહ્યું છે...'}</span>
                 </>
               ) : (
                 <>
-                  <CalendarCheck size={18} />
-                  <span>{lang === 'en' ? 'Confirm Advance Slot Booking' : 'એપોઇન્ટમેન્ટ સ્લોટ કન્ફર્મ કરો'}</span>
+                  <MessageCircle size={19} />
+                  <span>{lang === 'en' ? 'Book Slot via WhatsApp' : 'વોટ્સએપ દ્વારા સ્લોટ બુક કરો'}</span>
                 </>
               )}
             </button>
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '12px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+              {lang === 'en'
+                ? '⚡ Generates your official printable appointment slip and forwards booking directly to hospital reception WhatsApp.'
+                : '⚡ તમારી સત્તાવાર એપોઇન્ટમેન્ટ સ્લિપ જનરેટ થશે અને વિગતો સીધી હોસ્પિટલ રિસેપ્શન વોટ્સએપ પર જશે.'}
+            </span>
           </div>
 
         </form>
