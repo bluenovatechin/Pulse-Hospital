@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin, Clock, FileText, Lock } from 'lucide-react';
+import { Phone, MapPin, Clock, FileText } from 'lucide-react';
 import { HOSPITAL_INFO, FACILITIES } from '../data/hospitalContent';
 import { NAV_LINKS } from './Navbar';
 import PulseLogo from './PulseLogo';
@@ -92,9 +92,6 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, lang =
               {t('Terms & Conditions', 'નિયમો અને શરતો')}
             </button>
           </div>
-          <button onClick={onOpenAdmin} style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-            <Lock size={12} /> {t('Staff portal', 'સ્ટાફ પોર્ટલ')}
-          </button>
         </div>
       </div>
     </footer>

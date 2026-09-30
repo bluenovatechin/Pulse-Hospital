@@ -111,7 +111,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     patientGender: 'Male',
     city: 'Modasa',
     previousFileNo: '',
-    symptoms: ''
+    symptoms: '',
+    bookedBy: 'Patient',
+    bookedByName: ''
   });
 
   // Re-generate schedule when language changes
@@ -175,7 +177,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 
     const apptId = `PLS-${Math.floor(100000 + Math.random() * 900000)}`;
     const selectedDayObj = scheduleDays.find(d => d.date === selectedDate);
-    const dayLabel = selectedDayObj ? `${selectedDayObj.dayName}, ${selectedDayObj.formatted}` : selectedDate;
+    const dayLabel = selectedDayObj ? `${selectedDayObj.dayName}, ${selectedDayObj.formatted.split(', ')[1]}` : selectedDate;
 
     const appointment = {
       id: apptId,
@@ -213,7 +215,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 *Appointment Booking Request*
 ───────────────────────────────
 📋 *Reference ID:* ${apptId}
-👨‍⚕️ *Doctor:* ${selectedDoctor.name} (${selectedDoctor.degrees})
+👨‍⚕️ *Doctor:* ${selectedDoctor.name} (${selectedDoctor.qualification})
 🏢 *Room:* ${selectedDoctor.room}
 📅 *Date:* ${dayLabel}
 ⏰ *Time Slot:* ${selectedSlot}
@@ -222,7 +224,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 📞 *Phone Number:* ${cleanPhone}
 🎂 *Age / Gender:* ${formData.patientAge ? formData.patientAge + ' yrs' : 'N/A'}, ${formData.patientGender}
 📍 *City / Area:* ${formData.city || 'Modasa'}
-${formData.previousFileNo ? `📁 *Past File No:* ${formData.previousFileNo}\n` : ''}${formData.symptoms ? `📝 *Symptoms / Problem:* ${formData.symptoms}\n` : ''}───────────────────────────────
+${formData.bookedBy !== 'Patient' ? `🧾 *Booked By:* ${formData.bookedBy}${formData.bookedByName ? ` — ${formData.bookedByName}` : ''}\n` : ''}${formData.previousFileNo ? `📁 *Past File No:* ${formData.previousFileNo}\n` : ''}${formData.symptoms ? `📝 *Symptoms / Problem:* ${formData.symptoms}\n` : ''}───────────────────────────────
 _Sent via Pulse Hospital Online Booking Portal_`;
 
     const whatsappUrl = `https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(waText)}`;
@@ -253,7 +255,9 @@ _Sent via Pulse Hospital Online Booking Portal_`;
       patientGender: 'Male',
       city: 'Modasa',
       previousFileNo: '',
-      symptoms: ''
+      symptoms: '',
+      bookedBy: 'Patient',
+      bookedByName: ''
     });
     setSelectedSlot('');
     setSubmitting(false);

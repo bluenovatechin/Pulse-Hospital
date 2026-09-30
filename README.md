@@ -2,59 +2,109 @@
 
 Modern, mobile-first website and WhatsApp appointment booking system for **Pulse Hospital & I.C.U**, 4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli – 383315, Gujarat.
 
-Patients can explore the hospital's facilities, departments and doctors, schedule advance 30-minute OPD slots for the coming week, generate an instant printable booking slip, and automatically forward their appointment request directly to the hospital's WhatsApp reception desk.
+Patients can explore the hospital's facilities, departments and doctors, pick an advance 30-minute OPD slot for the coming week, get an instant printable booking slip, and send the appointment request straight to the hospital's WhatsApp reception desk.
 
-Built as a **100% serverless, zero-maintenance static web application**, ready for instant free hosting on **GitHub Pages**, **Vercel**, or any static host.
+It is a **static React web app with no backend, database or server**, so it can be hosted for free on **GitHub Pages**, **Vercel**, or any static host.
+
+**Live site:** https://bluenovatechin.github.io/Pulse-Hospital/
 
 ---
 
 ## Quick Start
 
-Requires **Node.js 18+**.
+Requires **Node.js 20.19+** (needed by Vite 8).
 
 ```bash
-# 1. Install dependencies (client only)
-npm --prefix client install
+# 1. Install dependencies
+npm install
 
-# 2. Start local development server
+# 2. Start the local development server
 npm run dev
 ```
 
-Visit: **http://localhost:5173**
+Open **http://localhost:5173**
 
 ### Commands
 
 | Command | Purpose |
 |---|---|
-| `npm run dev` / `npm start` | Starts Vite local dev server (`http://localhost:5173`) |
-| `npm run build` | Builds optimized production bundle to `client/dist/` |
-| `npm run preview` | Previews the production build locally |
+| `npm run dev` / `npm start` | Starts the Vite dev server at `http://localhost:5173` |
+| `npm run build` | Builds the production site into `dist/` (served from `/`, e.g. for Vercel) |
+| `npm run preview` | Serves the `dist/` build locally to check it |
+| `npm run lint` | Checks the code with Oxlint |
+| `npm run deploy` | Builds for GitHub Pages and publishes it (see below) |
 
 ---
 
-## Key Features
+## How Booking Works
 
-- **WhatsApp-Powered OPD Booking**: Choose a doctor, select any date from next Monday to Sunday, pick an available 30-minute morning or evening slot, and confirm. The app formats an official booking message and opens WhatsApp directly to the hospital desk (`+91 63533 44875`).
-- **Instant Printable Appointment Slip**: Generates an official hospital receipt with a unique Reference Token (`PLS-XXXXXX`), doctor room, appointment timing, and hospital address. Patients can print or save as PDF.
-- **Device-Local Booking History**: Automatically saves bookings to the patient's browser storage (`localStorage`), allowing them to track past bookings or view slips without requiring any backend database or login.
-- **Direct Hospital Inquiries**: Contact page form sends structured patient queries directly to the hospital WhatsApp line.
-- **Gujarati & English**: Instant toggle in the top bar for both languages.
-- **Emergency Priority**: Direct dial buttons (`tel:+916353344875`) prominently visible on desktop and mobile action bars for 24x7 trauma & emergency care.
-- **Hospital Photo Tour**: High-resolution gallery of ICU, modular OTs, CT scan, and private wards.
+1. The patient chooses a doctor, a date from next Monday to Sunday, and a free 30-minute morning or evening slot.
+2. They fill in their name, mobile number and (optionally) age, city, previous file number and symptoms.
+3. On **Book Slot via WhatsApp**, the app:
+   - opens WhatsApp with a ready-made booking message addressed to the hospital desk (`+91 63533 44875`),
+   - shows a printable appointment slip with a reference ID (`PLS-XXXXXX`),
+   - saves the booking in the patient's own browser (`localStorage`) so they can see it again under **My booking**.
+
+Nothing is stored on a server. The hospital receives bookings only as WhatsApp messages, and slot availability is not checked against other patients' bookings — reception confirms each booking on WhatsApp.
+
+The Contact page form works the same way: it opens a WhatsApp message to the hospital.
+
+### Changing hospital details
+
+All content lives in **[`src/data/hospitalContent.js`](src/data/hospitalContent.js)**: doctors, facilities, departments, photos, phone numbers, the WhatsApp number (`whatsappNumber`) and the address. Edit it there and redeploy.
 
 ---
 
-## Deployment (GitHub Pages)
+## Features
 
-This project is pre-configured for automated continuous deployment to **GitHub Pages** via GitHub Actions ([`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)).
+- **WhatsApp OPD booking** — slot-wise advance booking for the coming week, sent directly to the hospital desk.
+- **Printable appointment slip** — print or save as PDF.
+- **My booking** — patients can look up, view or cancel bookings made on the same device; cancelling also prepares a WhatsApp cancellation message.
+- **Gujarati & English** — one-tap language switch.
+- **Emergency first** — call buttons always visible on desktop and in the mobile bottom bar.
+- **Photo tour** — ICU, operation theatres, CT scan, rooms and more.
 
-### One-Time Setup on GitHub:
-1. In your GitHub repository ([`bluenovatechin/Pulse-Hospital`](https://github.com/bluenovatechin/Pulse-Hospital)), go to **Settings** → **Pages**.
-2. Under **Build and deployment > Source**, select **GitHub Actions**.
-3. Push to `main`: every push automatically builds and deploys your site to:
-   **`https://bluenovatechin.github.io/Pulse-Hospital/`**
+---
 
-Direct page refreshes and subpath routing work out-of-the-box thanks to Vite's automatic base resolution and the built-in `404.html` SPA fallback.
+## Hosting on GitHub Pages
+
+The site is published with the [`gh-pages`](https://www.npmjs.com/package/gh-pages) package. `npm run deploy` builds the site for the `/Pulse-Hospital/` sub-path and pushes the `dist/` folder to a **`gh-pages`** branch, which GitHub Pages serves.
+
+### First-time setup
+
+1. Push your code to GitHub:
+   ```bash
+   git add -A
+   git commit -m "Move app to repo root and add GitHub Pages deploy"
+   git push origin main
+   ```
+2. Publish the site:
+   ```bash
+   npm run deploy
+   ```
+3. On GitHub, open the repository → **Settings** → **Pages**:
+   - **Source:** *Deploy from a branch*
+   - **Branch:** `gh-pages`, folder `/ (root)` → **Save**
+4. After a minute or two the site is live at **https://bluenovatechin.github.io/Pulse-Hospital/**
+
+### Updating the live site
+
+After making changes:
+
+```bash
+git add -A
+git commit -m "Describe your change"
+git push origin main
+npm run deploy
+```
+
+`git push` saves your source code; `npm run deploy` updates the live website. Always run both.
+
+### Notes
+
+- The sub-path `/Pulse-Hospital/` must match the repository name. If the repository is renamed, update `--base=/Pulse-Hospital/` in the `predeploy` script in [`package.json`](package.json).
+- Refreshing any page (e.g. `/Pulse-Hospital/doctors`) works because the build also writes a `404.html` copy of the app.
+- Never edit the `gh-pages` branch by hand; it is overwritten on every deploy.
 
 ---
 
@@ -62,42 +112,44 @@ Direct page refreshes and subpath routing work out-of-the-box thanks to Vite's a
 
 ```
 Pulse Hospital/
-├── client/                      React 19 + Vite website
-│   ├── public/
-│   │   ├── rendered.png         Official Pulse Hospital cross logo
-│   │   ├── favicon.svg          Browser tab icon
-│   │   └── assets/              Hospital photos and gallery images
-│   └── src/
-│       ├── data/
-│       │   └── hospitalContent.js   ← Single source of truth: doctors, facilities,
-│       │                              departments, photos, FAQs, phone numbers, address
-│       ├── pages/               One component per page (Home, Facilities, Departments,
-│       │                        Doctors, Gallery, About, Contact, Privacy, Terms)
-│       ├── components/
-│       │   ├── Navbar.jsx, Footer.jsx
-│       │   ├── PulseLogo.jsx    Official rendered logo component
-│       │   ├── DoctorCard.jsx, FacilityCard.jsx
-│       │   ├── DetailDrawers.jsx Slide-in facility / doctor panels
-│       │   ├── ui.jsx           Shared UI components: Avatar, PageHero, Icon...
-│       │   ├── NextWeekBooking.jsx Direct WhatsApp slot booking engine
-│       │   ├── AppointmentSlipModal.jsx Printable hospital slip
-│       │   └── AppointmentLookupModal.jsx Local storage appointment tracker
-│       ├── hooks/useReveal.js   Scroll-in reveal animations
-│       ├── router.js            Clean HTML5 path routing with GitHub Pages subpath support
-│       ├── App.jsx              Root application shell
-│       └── index.css            Design system: typography, tokens, responsive styles
-├── .github/workflows/
-│   └── deploy-pages.yml         GitHub Actions auto-deployment to GitHub Pages
-└── package.json                 Root development scripts
+├── public/                      Copied as-is into the build
+│   ├── rendered.png             Official Pulse Hospital logo
+│   ├── favicon.svg              Browser tab icon
+│   └── assets/                  Hospital photos used on the site
+├── src/
+│   ├── data/
+│   │   └── hospitalContent.js   Single source of truth: doctors, facilities,
+│   │                            departments, photos, phone numbers, address
+│   ├── pages/                   One component per page (Home, Facilities, Departments,
+│   │                            Doctors, Gallery, About, Contact, Privacy, Terms)
+│   ├── components/
+│   │   ├── Navbar.jsx, Footer.jsx
+│   │   ├── PulseLogo.jsx              Logo component
+│   │   ├── DoctorCard.jsx, FacilityCard.jsx
+│   │   ├── DetailDrawers.jsx          Slide-in facility / doctor panels
+│   │   ├── ui.jsx                     Shared UI: Avatar, PageHero, Icon...
+│   │   ├── NextWeekBooking.jsx        WhatsApp slot booking form
+│   │   ├── AppointmentSlipModal.jsx   Printable appointment slip
+│   │   └── AppointmentLookupModal.jsx "My booking" (browser-stored bookings)
+│   ├── hooks/useReveal.js       Scroll-in animations
+│   ├── router.js                Clean URL routing, supports the GitHub Pages sub-path
+│   ├── App.jsx                  App shell, modals and navigation
+│   ├── main.jsx                 React entry point
+│   └── index.css                Design system: typography, colours, responsive styles
+├── assets/                      Original photo files (not used by the build)
+├── index.html                   HTML entry page
+├── vite.config.js               Vite configuration (+ 404.html fallback for GitHub Pages)
+└── package.json                 Dependencies and scripts
 ```
 
 ---
 
 ## Tech Stack
 
-- **Framework**: React 19, Vite 8
-- **Icons**: Lucide React
-- **Confetti**: Canvas-confetti
-- **Typography**: Outfit, Plus Jakarta Sans, Noto Sans Gujarati (Google Fonts)
-- **Styling**: Vanilla CSS design system with custom CSS variables, responsive mobile-first layouts, and dark mode accents
-- **Storage**: Browser `localStorage` for patient receipts + WhatsApp Web / WhatsApp Mobile API for instant reception handoff
+- **Framework:** React 19, Vite 8
+- **Icons:** Lucide React
+- **Confetti:** canvas-confetti
+- **Fonts:** Outfit, Plus Jakarta Sans, Noto Sans Gujarati (Google Fonts)
+- **Styling:** Plain CSS with custom properties, mobile-first
+- **Storage:** Browser `localStorage` only; bookings reach the hospital through WhatsApp
+- **Hosting:** GitHub Pages via `gh-pages`

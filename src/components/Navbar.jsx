@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Phone, MapPin, Calendar, Menu, X, Siren, UserCheck, Globe, Lock,
+  Phone, MapPin, Calendar, Menu, X, Siren, UserCheck, Globe,
   Home, Building2, Stethoscope, Users, Images, Info, Mail
 } from 'lucide-react';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
@@ -127,14 +127,6 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
             <a className="btn btn-emergency" style={{ marginTop: 8 }} href={HOSPITAL_INFO.phoneHref}>
               <Phone size={17} /> {t('Call Emergency', 'ઇમરજન્સી કૉલ')}
             </a>
-
-            <button
-              className="nav-link"
-              style={{ marginTop: 'auto', fontSize: 13, color: 'var(--text-muted)' }}
-              onClick={() => { setMenuOpen(false); onOpenAdmin(); }}
-            >
-              <Lock size={15} /> {t('Staff & Reception Portal', 'સ્ટાફ & રિસેપ્શન પોર્ટલ')}
-            </button>
           </div>
         </div>
       )}

@@ -17,13 +17,12 @@ function githubPagesSpaFallback() {
   }
 }
 
-const isGitHubActions = process.env.GITHUB_ACTIONS === 'true'
-
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), githubPagesSpaFallback()],
-  // Automatically use /Pulse-Hospital/ on GitHub Actions, and / locally or on Vercel
-  base: isGitHubActions ? '/Pulse-Hospital/' : '/',
+  // Served from / locally or on Vercel. `npm run deploy` builds with
+  // --base=/Pulse-Hospital/ for https://bluenovatechin.github.io/Pulse-Hospital/
+  base: '/',
   server: {
     port: 5173,
   },

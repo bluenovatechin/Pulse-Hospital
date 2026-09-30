@@ -2,17 +2,14 @@
 node_modules/
 
 # Build output (GitHub Actions rebuilds it)
-client/dist/
 dist/
+dist-ssr/
 
-# Environment files — real passwords and URLs live here, never on GitHub
+# Environment files
 .env
 .env.*
 !.env.example
-
-# Live hospital data: patient names, phone numbers, symptoms.
-# The server recreates this file with sample data when it is missing.
-server/data/
+*.local
 
 # Logs
 *.log
