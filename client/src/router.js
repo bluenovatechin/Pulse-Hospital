@@ -31,6 +31,8 @@ const ALIASES = {
   services: 'facilities'
 };
 
+const ROUTE_BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+
 /**
  * Parse the current path and optional param from window.location.pathname
  * If an old hash link (e.g. #/terms) is present, it extracts it and cleans up the URL.
@@ -55,8 +57,14 @@ export function parsePath(pathname = window.location.pathname, hash = window.loc
     }
   }
 
+  // Strip base prefix if hosted on GitHub Pages subfolder (e.g. /Pulse-Hospital)
+  let effectivePath = pathname;
+  if (ROUTE_BASE && effectivePath.startsWith(ROUTE_BASE)) {
+    effectivePath = effectivePath.slice(ROUTE_BASE.length);
+  }
+
   // Parse path segments: /facilities/icu -> ['facilities', 'icu']
-  const cleanPath = pathname.replace(/^\/+|\/+$/g, '');
+  const cleanPath = effectivePath.replace(/^\/+|\/+$/g, '');
   if (!cleanPath) {
     return { page: 'home', param: null };
   }
@@ -78,10 +86,13 @@ export function parsePath(pathname = window.location.pathname, hash = window.loc
  * Build a clean URL path without '#'
  */
 export function buildPath(page, param) {
+  let sub = '/';
   if (!page || page === 'home') {
-    return param ? `/${encodeURIComponent(param)}` : '/';
+    sub = param ? `/${encodeURIComponent(param)}` : '/';
+  } else {
+    sub = `/${page}${param ? `/${encodeURIComponent(param)}` : ''}`;
   }
-  return `/${page}${param ? `/${encodeURIComponent(param)}` : ''}`;
+  return ROUTE_BASE ? `${ROUTE_BASE}${sub}` : sub;
 }
 
 // Custom event to sync route state across components
