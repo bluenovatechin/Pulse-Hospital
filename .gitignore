@@ -1,0 +1,23 @@
+# Dependencies (reinstalled with npm install)
+node_modules/
+
+# Build output (GitHub Actions rebuilds it)
+dist/
+dist-ssr/
+
+# Environment files
+.env
+.env.*
+!.env.example
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
