@@ -1,24 +1,45 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { Phone, Calendar, X, ArrowUp, UserCheck } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
-import FacilitiesPage from './pages/FacilitiesPage';
-import DepartmentsPage from './pages/DepartmentsPage';
-import DoctorsPage from './pages/DoctorsPage';
-import GalleryPage from './pages/GalleryPage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import TermsPage from './pages/TermsPage';
-import NextWeekBooking from './components/NextWeekBooking';
-import AppointmentSlipModal from './components/AppointmentSlipModal';
-import AppointmentLookupModal from './components/AppointmentLookupModal';
-import { FacilityDrawer, DoctorDrawer } from './components/DetailDrawers';
 import { useRoute } from './router';
 import { lockScroll, unlockScroll } from './components/ui';
 import useReveal from './hooks/useReveal';
 import { HOSPITAL_INFO, getDoctor, getFacility } from './data/hospitalContent';
+import { SITE_URL, getPageMeta, pagePath } from './data/seo';
+
+// Everything except the home page loads on demand, keeping the first download small
+const FacilitiesPage = lazy(() => import('./pages/FacilitiesPage'));
+const DepartmentsPage = lazy(() => import('./pages/DepartmentsPage'));
+const DoctorsPage = lazy(() => import('./pages/DoctorsPage'));
+const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const NextWeekBooking = lazy(() => import('./components/NextWeekBooking'));
+const AppointmentSlipModal = lazy(() => import('./components/AppointmentSlipModal'));
+const AppointmentLookupModal = lazy(() => import('./components/AppointmentLookupModal'));
+const FacilityDrawer = lazy(() => import('./components/DetailDrawers').then((m) => ({ default: m.FacilityDrawer })));
+const DoctorDrawer = lazy(() => import('./components/DetailDrawers').then((m) => ({ default: m.DoctorDrawer })));
+
+// Keep <head> in step with the current page (title, description, canonical, share tags)
+function useDocumentMeta(page, param) {
+  useEffect(() => {
+    const { title, description } = getPageMeta(page, param);
+    const url = SITE_URL + pagePath(page, param);
+    document.title = title;
+    const set = (selector, attr, value) => document.querySelector(selector)?.setAttribute(attr, value);
+    set('meta[name="description"]', 'content', description);
+    set('link[rel="canonical"]', 'href', url);
+    set('meta[property="og:title"]', 'content', title);
+    set('meta[property="og:description"]', 'content', description);
+    set('meta[property="og:url"]', 'content', url);
+    set('meta[name="twitter:title"]', 'content', title);
+    set('meta[name="twitter:description"]', 'content', description);
+  }, [page, param]);
+}
 
 export default function App() {
   const [route, navigate] = useRoute();
@@ -37,7 +58,8 @@ export default function App() {
   // Jump to top when the page changes (opening a panel keeps the scroll position)
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [page]);
 
-  useReveal(`${page}-${lang}`);
+  useReveal();
+  useDocumentMeta(page, param);
 
   useEffect(() => {
     document.documentElement.lang = lang === 'gu' ? 'gu' : 'en';
@@ -98,6 +120,7 @@ export default function App() {
       />
 
       <main style={{ flex: 1 }} key={page} className="page-enter">
+        <Suspense fallback={<div className="page-loading" aria-busy="true" />}>
         {page === 'home' && <HomePage {...pageProps} onOpenLookup={() => setLookupModalOpen(true)} />}
         {page === 'facilities' && <FacilitiesPage {...pageProps} onOpenFacility={openFacility} />}
         {page === 'departments' && <DepartmentsPage {...pageProps} onOpenFacility={openFacility} />}
@@ -107,6 +130,7 @@ export default function App() {
         {page === 'contact' && <ContactPage {...pageProps} />}
         {page === 'privacy' && <PrivacyPolicyPage {...pageProps} />}
         {page === 'terms' && <TermsPage {...pageProps} />}
+        </Suspense>
       </main>
 
       <Footer
@@ -116,6 +140,7 @@ export default function App() {
         lang={lang}
       />
 
+      <Suspense fallback={null}>
       {/* Detail panels */}
       {facility && (
         <FacilityDrawer facility={facility} lang={lang} onClose={closePanel} onBook={openBooking} onOpenDoctor={openDoctor} />
@@ -123,6 +148,7 @@ export default function App() {
       {doctor && (
         <DoctorDrawer doctor={doctor} lang={lang} onClose={closePanel} onBook={openBooking} onOpenFacility={openFacility} />
       )}
+      </Suspense>
 
       {/* Desktop floating buttons */}
       <div className="fab-stack">
@@ -164,16 +190,19 @@ export default function App() {
 
             {/* Scrollable appointment content with luxury scroller */}
             <div className="booking-modal-scroll">
-              <NextWeekBooking
-                preselectedDoctorId={preselectedDoctorId}
-                onBookingSuccess={handleBookingSuccess}
-                lang={lang}
-              />
+              <Suspense fallback={<div className="page-loading" aria-busy="true" />}>
+                <NextWeekBooking
+                  preselectedDoctorId={preselectedDoctorId}
+                  onBookingSuccess={handleBookingSuccess}
+                  lang={lang}
+                />
+              </Suspense>
             </div>
           </div>
         </div>
       )}
 
+      <Suspense fallback={null}>
       {confirmedAppointment && (
         <AppointmentSlipModal appointment={confirmedAppointment} onClose={() => setConfirmedAppointment(null)} lang={lang} />
       )}
@@ -188,6 +217,7 @@ export default function App() {
           lang={lang}
         />
       )}
+      </Suspense>
     </div>
   );
 }

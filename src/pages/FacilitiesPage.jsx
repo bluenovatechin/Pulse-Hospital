@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { CheckCircle2, LayoutGrid, Calendar, Phone, Building2, ShieldCheck, Eye } from 'lucide-react';
+import { CheckCircle2, LayoutGrid, Calendar, Phone, Scan, Eye } from 'lucide-react';
 import FacilityCard from '../components/FacilityCard';
 import { PageHero, SectionHead, Icon, delay } from '../components/ui';
 import {
@@ -23,36 +23,32 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
     <div>
       <PageHero
         photo={PHOTOS.ot1}
+        photoAlt={t('Modular operation theatre at Pulse Hospital', 'પલ્સ હોસ્પિટલનું મોડ્યુલર ઓપરેશન થીયેટર')}
         crumbs={t('Facilities', 'સુવિધાઓ')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Hospital Facilities & Infrastructure', 'હોસ્પિટલ સુવિધાઓ અને ઇન્ફ્રાસ્ટ્રક્ચર')}
-        eyebrowIcon={<Building2 size={14} />}
+        eyebrow={t('Facilities', 'સુવિધાઓ')}
         title={t('What we have, and what it means for you', 'અમારી સુવિધાઓ અને તમારા માટે તેનો અર્થ')}
         text={t(
-          'From a ventilator ICU and in-house CT scan to modular theatres and private rooms: each facility below explains what it includes and who it is for.',
-          'વેન્ટીલેટર ICU, ઈન-હાઉસ CT સ્કેનથી લઈને મોડ્યુલર OT અને પ્રાઇવેટ રૂમ સુધી: દરેક સુવિધાની વિગત નીચે.'
+          'From a ventilator ICU and in-house CT scan to modular theatres, physiotherapy and private rooms: each facility below explains what it includes and who it is for.',
+          'વેન્ટીલેટર ICU, ઈન-હાઉસ CT સ્કેનથી લઈને મોડ્યુલર OT, ફીઝીયોથેરાપી અને પ્રાઇવેટ રૂમ સુધી: દરેક સુવિધાની વિગત નીચે.'
         )}
-        cardTitle={t('Infrastructure & Diagnostic Arsenal', 'તબીબી સાધન અને ઇન્ફ્રાસ્ટ્રક્ચર')}
-        cardBadge={t('Zero External Transfer', 'અમદાવાદ જવાની જરૂર નથી')}
-        cardIcon={<ShieldCheck size={18} />}
-        stats={[
-          { value: `${FACILITIES.length}`, label: t('Integrated Facilities', 'સંકલિત સુવિધાઓ'), sub: t('All on 4th Floor', '૪થા માળે એક સાથે') },
-          { value: `${open24}`, label: t('Open 24 Hours', '૨૪ કલાક કાર્યરત'), sub: t('ICU, CT, Dialysis, Lab', 'ICU, CT, ડાયાલીસીસ, લેબ') },
-          { value: '32 Slice', label: t('Advanced CT Scan', 'અદ્યતન CT સ્કેન'), sub: t('In-House Fast Imaging', 'ઝડપી ચોક્કસ રિપોર્ટ') },
-          { value: '100+ km', label: t('Travel Saved', 'મુસાફરીનો બચાવ'), sub: t('Avoid emergency journey', 'અમદાવાદ જવાનો અંત') }
+        facts={[
+          { value: `${FACILITIES.length}`, label: t('Facilities', 'સુવિધાઓ') },
+          { value: `${open24}`, label: t('Open 24 hours', '૨૪ કલાક કાર્યરત') },
+          { value: t('1 floor', '૧ માળ'), label: t('4th floor, City Centre', '૪થો માળ, સીટી સેન્ટર') }
         ]}
-        highlights={[
-          t('In-house 32-slice CT scan operational 24 hours with immediate reporting', 'તાત્કાલિક રિપોર્ટ સાથે ૨૪ કલાક કાર્યરત ૩૨-સ્લાઇસ CT સ્કેન'),
-          t('Modular laminar airflow operation theatre with HEPA filtration', 'HEPA ફિલ્ટરેશન સાથે મોડ્યુલર લેમિનર એરફ્લો ઓપરેશન થીયેટર'),
-          t('24x7 in-house pathology lab, blood gas analysis & digital pharmacy', '૨૪ કલાક ઇન-હાઉસ પેથોલોજી લેબ, બ્લડ ગેસ અને ફાર્મસી')
-        ]}
+        note={{
+          icon: <Scan size={20} />,
+          title: t('In-house CT scan', 'ઈન-હાઉસ સીટી સ્કેન'),
+          text: t('Modasa CT Scan Centre, on the same premises', 'મોડાસા CT સ્કેન સેન્ટર, એ જ પરિસરમાં')
+        }}
         actions={
           <>
-            <button className="btn btn-primary" onClick={() => onNavigate('contact')}>
-              <Phone size={17} /> {t('Emergency Admission', 'ઇમરજન્સી એડમિશન')}
+            <button className="btn-primary" onClick={() => onBook(null)}>
+              <Calendar size={17} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
             </button>
-            <button className="btn btn-ghost-light" onClick={() => onNavigate('gallery')}>
-              <Eye size={17} /> {t('View Photo Tour', 'ફોટો ટૂર જુઓ')}
+            <button className="btn-secondary" onClick={() => onNavigate('gallery')}>
+              <Eye size={17} /> {t('See the photo tour', 'ફોટો ટૂર જુઓ')}
             </button>
           </>
         }

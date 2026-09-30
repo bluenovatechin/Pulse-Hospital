@@ -6,7 +6,6 @@ import {
   Clock, 
   User, 
   AlertCircle, 
-  CheckCircle, 
   Building2, 
   Trash2,
   FileText,
@@ -90,7 +89,7 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
     }
   };
 
-  const logoSrc = `${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/rendered.png`;
+  const logoSrc = `${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/logo.webp`;
 
   return (
     <div className="modal-overlay">

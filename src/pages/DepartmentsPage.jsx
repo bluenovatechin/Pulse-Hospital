@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, Phone, ArrowRight, HeartPulse, Activity } from 'lucide-react';
+import { Calendar, Phone, ArrowRight, HeartPulse } from 'lucide-react';
 import { PageHero, Icon, Avatar } from '../components/ui';
 import { DEPARTMENTS, HOSPITAL_INFO, PHOTOS, getDoctor, getFacility } from '../data/hospitalContent';
 
@@ -39,36 +39,32 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
     <div>
       <PageHero
         photo={PHOTOS.icuBeds}
+        photoAlt={t('ICU beds with bedside monitors', 'આઈ.સી.યુ. બેડ અને મોનિટર')}
         crumbs={t('Departments', 'વિભાગો')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Clinical Departments', 'તબીબી વિભાગો')}
-        eyebrowIcon={<HeartPulse size={14} />}
+        eyebrow={t('Departments', 'વિભાગો')}
         title={t('Find the right department for your condition', 'તમારી તકલીફ માટે યોગ્ય વિભાગ')}
         text={t(
           'Each department lists the conditions it treats, the services it offers, the facilities it relies on and the doctors you will meet.',
           'દરેક વિભાગમાં કઈ બીમારીની સારવાર થાય છે, કઈ સેવાઓ છે અને કયા ડૉક્ટરો છે તે જુઓ.'
         )}
-        cardTitle={t('Clinical Wings & ICU Capacity', 'વિભાગીય ક્ષમતા અને વિહંગાવલોકન')}
-        cardBadge={t('7 Active Departments', '૭ કાર્યરત વિભાગો')}
-        cardIcon={<Activity size={18} />}
-        stats={[
-          { value: `${DEPARTMENTS.length}`, label: t('Specialized Wings', 'વિશિષ્ટ શાખાઓ'), sub: t('All vital systems', 'તમામ મહત્વના અંગો') },
-          { value: '16 Beds', label: t('ICU Capacity', 'આઈ.સી.યુ. ક્ષમતા'), sub: t('Ventilator equipped', 'વેન્ટિલેટર સજ્જ') },
-          { value: '15+', label: t('Key Procedures', 'અદ્યતન સારવારો'), sub: t('Bronchoscopy & Dialysis', 'બ્રોન્કોસ્કોપી & ડાયાલીસીસ') },
-          { value: '4th Floor', label: t('Single Location', 'એક જ ફ્લોર પર'), sub: t('City Centre, Modasa', 'સિટી સેન્ટર, મોડાસા') }
+        facts={[
+          { value: `${DEPARTMENTS.length}`, label: t('Clinical departments', 'તબીબી વિભાગો') },
+          { value: '24x7', label: t('Emergency & ICU', 'ઇમરજન્સી & ICU') },
+          { value: 'OPD', label: t('Mon – Sat, 2 sessions', 'સોમ – શનિ, ૨ સત્ર') }
         ]}
-        highlights={[
-          t('Full emergency resuscitation and multi-parameter critical care', 'તાત્કાલિક ઇમરજન્સી રિસસિટેશન અને મલ્ટિ-પેરામીટર આઈ.સી.યુ.'),
-          t('Pulmonology wing with fiberoptic bronchoscopy & sleep studies', 'બ્રોન્કોસ્કોપી અને સ્લીપ સ્ટડી સુવિધા સાથે ફેફસાં વિભાગ'),
-          t('In-house dialysis unit & CT scan without hazardous external transfer', 'દર્દીને બહાર મોકલ્યા વગર ઈન-હાઉસ ડાયાલીસીસ અને CT સ્કેન')
-        ]}
+        note={{
+          icon: <HeartPulse size={20} />,
+          title: t('Not sure which department?', 'કયો વિભાગ ખબર નથી?'),
+          text: t('Book an OPD visit and the doctor will guide you', 'OPD બુક કરો, ડૉક્ટર માર્ગદર્શન આપશે')
+        }}
         actions={
           <>
-            <button className="btn btn-primary" onClick={() => onBook(null)}>
-              <Calendar size={17} /> {t('Book Department OPD', 'OPD સ્લોટ બુક કરો')}
+            <button className="btn-primary" onClick={() => onBook(null)}>
+              <Calendar size={17} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
             </button>
-            <a className="btn btn-ghost-light" href={HOSPITAL_INFO.phoneHref}>
-              <Phone size={17} /> {t('ICU Admission Line', 'ICU એડમિશન હેલ્પલાઇન')}
+            <a className="btn btn-secondary" href={HOSPITAL_INFO.phoneHref}>
+              <Phone size={17} /> {t('Call the hospital', 'હોસ્પિટલને કૉલ કરો')}
             </a>
           </>
         }

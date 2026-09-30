@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Calendar, Siren, Users, Stethoscope, UserCheck, Clock } from 'lucide-react';
+import { Search, Calendar, Siren, Users } from 'lucide-react';
 import DoctorCard from '../components/DoctorCard';
 import { PageHero, SectionHead, Avatar, Icon } from '../components/ui';
 import { DOCTORS, DEPARTMENTS, HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
@@ -27,39 +27,32 @@ export default function DoctorsPage({ onNavigate, onOpenDoctor, onBook, lang = '
     <div>
       <PageHero
         photo={PHOTOS.consult1}
+        photoAlt={t('Doctor consultation room at Pulse Hospital', 'પલ્સ હોસ્પિટલનો કન્સલ્ટિંગ રૂમ')}
         crumbs={t('Doctors', 'ડૉક્ટરો')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Our Specialist Doctors', 'અમારા નિષ્ણાત ડૉક્ટરો')}
-        eyebrowIcon={<Stethoscope size={14} />}
+        eyebrow={t('Our doctors', 'અમારા ડૉક્ટરો')}
         title={t('Meet the doctors, and what each one does', 'ડૉક્ટરોને મળો: કોણ શું કરે છે')}
         text={t(
-          'Senior MD consultants see patients in the OPD and lead ICU care. Resident medical officers are on duty in Emergency and ICU 24x7.',
-          'એમ.ડી. કન્સલ્ટન્ટ OPD અને ICU સંભાળે છે. રેસિડેન્ટ ડૉક્ટરો ૨૪ કલાક ઇમરજન્સી અને ICUમાં હાજર હોય છે.'
+          'Senior consultants see patients in the OPD and lead ICU care. A medical officer is on duty in Emergency and the ICU around the clock.',
+          'કન્સલ્ટન્ટ ડૉક્ટરો OPD અને ICU સંભાળે છે. મેડિકલ ઓફિસર ૨૪ કલાક ઇમરજન્સી અને ICUમાં હાજર હોય છે.'
         )}
-        cardTitle={t('Clinical Faculty Telemetry', 'તબીબી પેનલ અને OPD ટેલિમેટ્રી')}
-        cardBadge={t('Slots Open For Next Week', 'આગામી સપ્તાહનું બુકિંગ ચાલુ')}
-        cardIcon={<UserCheck size={18} />}
-        stats={[
-          { value: `${DOCTORS.length}`, label: t('Specialist Doctors', 'નિષ્ણાત તબીબો'), sub: t('MD & Chest Specialists', 'MD અને ફેફસાંના તબીબ') },
-          { value: '24x7', label: t('ICU Cover', 'ICU કવરેજ'), sub: t('Resident Doctors On Duty', 'રેસિડેન્ટ ડૉક્ટર્સ હાજર') },
-          { value: '30 min', label: t('Slot Windows', 'સ્લોટ સમય'), sub: t('Dedicated Consultation', 'વ્યક્તિગત તપાસ') },
-          { value: '4 Suites', label: t('OPD Floor (4th)', 'OPD ફ્લોર (૪થો)'), sub: t('Suites 401 to 404', 'સુઇટ ૪૦૧ થી ૪૦૪') }
+        facts={[
+          { value: `${DOCTORS.length}`, label: t('Doctors on our panel', 'અમારા ડૉક્ટરો') },
+          { value: `${DOCTORS.filter((d) => d.type === 'visiting').length}`, label: t('Visiting consultants', 'વિઝિટિંગ કન્સલ્ટન્ટ') },
+          { value: '24x7', label: t('Emergency & ICU doctor', 'ઇમરજન્સી & ICU ડૉક્ટર') }
         ]}
-        highlights={[
-          t('Book 30-min consultation slots online for next week (Mon - Sat)', 'આગામી સપ્તાહ (સોમ - શનિ) માટે ૩૦ મિનિટનો સ્લોટ ઓનલાઇન બુક કરો'),
-          t('Consultation hours: 09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM', 'તપાસ સમય: સવારે ૦૯:૦૦ - ૦૧:૦૦ અને સાંજે ૦૪:૩૦ - ૦૭:૩૦'),
-          t('Emergency trauma cases admitted immediately without prior appointment', 'ઇમરજન્સી અકસ્માત કેસોમાં એપોઇન્ટમેન્ટ વગર ૨૪ કલાક તાત્કાલિક સારવાર')
-        ]}
+        note={{
+          icon: <Calendar size={20} />,
+          title: t('Book a 30-minute OPD slot', '૩૦ મિનિટનો OPD સ્લોટ બુક કરો'),
+          text: t('Monday to Saturday, morning or evening', 'સોમ થી શનિ, સવાર કે સાંજ')
+        }}
         actions={
           <>
-            <button className="btn btn-primary" onClick={() => onBook(null)}>
-              <Calendar size={17} /> {t('Book Doctor Slot', 'સ્લોટ બુક કરો')}
+            <button className="btn-primary" onClick={() => onBook(null)}>
+              <Calendar size={17} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
             </button>
-            <button 
-              className="btn btn-ghost-light" 
-              onClick={() => document.querySelector('input[type="search"]')?.focus()}
-            >
-              <Search size={17} /> {t('Search by Condition', 'બીમારી મુજબ શોધો')}
+            <button className="btn-secondary" onClick={() => document.querySelector('input[type="search"]')?.focus()}>
+              <Search size={17} /> {t('Search by condition', 'બીમારી મુજબ શોધો')}
             </button>
           </>
         }
@@ -100,14 +93,14 @@ export default function DoctorsPage({ onNavigate, onOpenDoctor, onBook, lang = '
 
           {groups.map((g) => (
             <div key={g.type} style={{ marginBottom: 40 }}>
-              <h3 style={{ fontSize: 15, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontFamily: 'var(--font-body)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h2 style={{ fontSize: 15, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontFamily: 'var(--font-body)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
                 {g.type === 'resident' ? <Siren size={16} color="var(--pulse-red)" /> : <Calendar size={16} color="var(--primary)" />}
                 {g.type === 'resident'
                   ? t('24x7 Emergency & ICU doctors', '૨૪x૭ ઇમરજન્સી & ICU ડૉક્ટરો')
                   : t('Consultants: book an OPD slot', 'કન્સલ્ટન્ટ: OPD સ્લોટ બુક કરો')}
                 <span className="chip" style={{ fontSize: 11 }}>{g.doctors.length}</span>
-              </h3>
-              <div className="grid grid-3">
+              </h2>
+              <div className="grid grid-4">
                 {g.doctors.map((d, i) => (
                   <div key={d.id} className="page-enter" style={{ animationDelay: `${i * 50}ms` }}>
                     <DoctorCard doctor={d} lang={lang} onBook={onBook} onOpenProfile={onOpenDoctor} />
@@ -135,7 +128,7 @@ export default function DoctorsPage({ onNavigate, onOpenDoctor, onBook, lang = '
                   <th>{t('Focus', 'વિશેષતા')}</th>
                   <th>{t('Where', 'ક્યાં')}</th>
                   <th>{t('Hours', 'સમય')}</th>
-                  <th style={{ textAlign: 'right' }}></th>
+                  <th style={{ textAlign: 'right' }}><span className="sr-only">{t('Book', 'બુક')}</span></th>
                 </tr>
               </thead>
               <tbody>

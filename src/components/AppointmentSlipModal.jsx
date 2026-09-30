@@ -1,19 +1,5 @@
 import React from 'react';
-import { 
-  CheckCircle, 
-  Printer, 
-  Share2, 
-  X, 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  User, 
-  FileText, 
-  ShieldCheck, 
-  Phone,
-  Building2
-} from 'lucide-react';
-import { HOSPITAL_INFO } from '../data/hospitalContent';
+import { CheckCircle, Printer, Share2, X, Calendar, Clock, ShieldCheck, Building2 } from 'lucide-react';
 import PulseLogo from './PulseLogo';
 
 export default function AppointmentSlipModal({ appointment, onClose, lang = 'en' }) {
@@ -109,7 +95,7 @@ export default function AppointmentSlipModal({ appointment, onClose, lang = 'en'
             </div>
 
             <div style={{ textAlign: 'right' }}>
-              <div style={{ display: 'inline-block', border: '2px dashed var(--primary)', borderRadius: '10px', padding: '8px 16px', background: '#f0f9ff' }}>
+              <div style={{ display: 'inline-block', border: '2px dashed var(--primary)', borderRadius: '10px', padding: '8px 16px', background: '#f1f8f4' }}>
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
                   {lang === 'en' ? 'Booking Reference' : 'બુકિંગ સંદર્ભ નંબર'}
                 </span>
@@ -226,7 +212,7 @@ export default function AppointmentSlipModal({ appointment, onClose, lang = 'en'
 
           {/* Mandatory Brochure Notice Highlight */}
           <div style={{ 
-            background: 'linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%)',
+            background: 'linear-gradient(135deg, rgba(14, 101, 92, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%)',
             borderLeft: '4px solid var(--primary)',
             padding: '12px 16px',
             borderRadius: '0 8px 8px 0',

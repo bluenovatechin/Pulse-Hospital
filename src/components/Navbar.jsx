@@ -53,7 +53,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
           <div className="topbar-left">
             <span className="er"><Siren size={14} /> {t('24x7 Emergency & ICU', '૨૪ કલાક ઇમરજન્સી & ICU')}</span>
             <a href={HOSPITAL_INFO.phoneHref} className="hide-sm"><Phone size={13} /> {HOSPITAL_INFO.appointmentNumber}</a>
-            <span className="hide-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <span className="hide-sm topbar-addr">
               <MapPin size={13} /> {t('City Centre, Shamlaji Road, Modasa', 'સીટી સેન્ટર, શામળાજી રોડ, મોડાસા')}
             </span>
           </div>
@@ -69,7 +69,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
       {/* Sticky header */}
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="container-wide header-inner">
-          <button className="brand" onClick={() => go('home')} aria-label="Pulse Hospital home">
+          <button className="brand" onClick={() => go('home')} title="Home">
             <PulseLogo size={42} lang={lang} />
           </button>
 

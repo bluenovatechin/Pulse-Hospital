@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  Phone, 
-  Mail, 
-  FileText, 
-  CheckCircle2, 
-  AlertCircle, 
-  Building2, 
-  Sparkles, 
-  ChevronRight, 
-  Info, 
-  CalendarCheck, 
-  Stethoscope, 
-  ShieldCheck, 
-  MapPin,
+import {
+  Clock,
+  User,
+  CheckCircle2,
+  AlertCircle,
+  Building2,
+  Sparkles,
+  Info,
+  CalendarCheck,
+  Stethoscope,
   MessageCircle
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { DOCTORS, HOSPITAL_INFO } from '../data/hospitalContent';
 import { Avatar } from './ui';
 
@@ -232,14 +224,10 @@ _Sent via Pulse Hospital Online Booking Portal_`;
     // Open WhatsApp directly in new tab/window
     window.open(whatsappUrl, '_blank');
 
-    // Confetti celebration
-    try {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    } catch (e) {}
+    // Confetti celebration (loaded only when someone actually books)
+    import('canvas-confetti')
+      .then(({ default: confetti }) => confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }))
+      .catch(() => {});
 
     // Show appointment slip modal
     if (onBookingSuccess) {
@@ -274,7 +262,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
           <div className="booking-header-main">
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px', flexWrap: 'wrap' }}>
               <img 
-                src={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/rendered.png`} 
+                src={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/logo.webp`} 
                 alt="Pulse Hospital" 
                 style={{ width: 46, height: 46, objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.35))' }} 
               />
@@ -339,8 +327,8 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                     className="booking-doctor-card"
                     style={{
                       border: isSelected ? '2px solid var(--primary)' : '1.5px solid var(--border-color)',
-                      background: isSelected ? 'linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%)' : '#ffffff',
-                      boxShadow: isSelected ? '0 6px 18px rgba(2, 132, 199, 0.14)' : 'none'
+                      background: isSelected ? 'linear-gradient(180deg, #f1f8f4 0%, #ffffff 100%)' : '#ffffff',
+                      boxShadow: isSelected ? '0 6px 18px rgba(14, 101, 92, 0.14)' : 'none'
                     }}
                   >
                     <Avatar doctor={doc} />
@@ -386,7 +374,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                 </div>
               </div>
 
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(2, 132, 199, 0.08)', color: 'var(--primary)', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 600 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(14, 101, 92, 0.08)', color: 'var(--primary)', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 600 }}>
                 <CalendarCheck size={14} />
                 <span>{lang === 'en' ? 'Advance Calendar (Mon – Sun)' : 'એડવાન્સ કેલેન્ડર (સોમ – રવિ)'}</span>
               </div>
@@ -612,7 +600,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                       style={{
                         fontWeight: isSelected ? 800 : 600,
                         border: isSelected ? '2px solid var(--primary)' : '1px solid var(--border-color)',
-                        background: isSelected ? '#eff6ff' : '#ffffff',
+                        background: isSelected ? '#eef7f2' : '#ffffff',
                         color: isSelected ? 'var(--primary)' : 'var(--text-main)'
                       }}
                     >

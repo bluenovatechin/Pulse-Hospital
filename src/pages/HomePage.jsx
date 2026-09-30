@@ -1,12 +1,10 @@
 import React from 'react';
 import {
-  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Building2,
-  ShieldCheck, Clock, FileText
+  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText
 } from 'lucide-react';
-import DoctorCard from '../components/DoctorCard';
-import { SectionHead, Media, Icon, delay } from '../components/ui';
+import { SectionHead, Media, Icon, Photo, Avatar, delay } from '../components/ui';
 import {
-  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, FAQS, PHOTOS, getFacility
+  HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, getFacility
 } from '../data/hospitalContent';
 
 // Facilities featured in the home-page bento grid, in display order
@@ -15,73 +13,57 @@ const FEATURED = ['icu', 'ot', 'ct', 'twin', 'dialysis', 'isolation'];
 export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const featured = FEATURED.map(getFacility).filter(Boolean);
-  const consultants = DOCTORS.filter((d) => d.type === 'visiting');
 
   return (
     <div>
       {/* ---------- Hero ---------- */}
       <section className="home-hero">
-        <div className="home-hero-bg" aria-hidden="true">
-          <img src={PHOTOS.icuHall} alt="" />
-        </div>
-        <div className="container-wide">
-          <div className="home-hero-grid">
-            <div className="page-enter">
-              <div className="page-hero-eyebrow-pill" style={{ color: '#fda4af', background: 'rgba(225, 29, 72, 0.16)', borderColor: 'rgba(225, 29, 72, 0.35)' }}>
-                <span className="hero-pulse-dot" style={{ backgroundColor: '#fb7185', boxShadow: '0 0 0 0 rgba(251, 113, 133, 0.7)' }} />
-                <span>{t('Emergency & ICU Open Now · 24x7', 'ઇમરજન્સી & ICU હમણાં ખુલ્લું · ૨૪x૭')}</span>
-              </div>
-              <h1>
-                {lang === 'en' ? (
-                  <>24x7 Critical Care & Multi-Specialty Hospital in Modasa</>
-                ) : (
-                  <>મોડાસામાં ૨૪ કલાક અદ્યતન ICU અને ઇમરજન્સી સારવાર</>
-                )}
-              </h1>
-              <p className="lead">
-                {t(
-                  'ICU with ventilators, in-house CT scan, 24x7 dialysis, modular operation theatres and senior MD physicians: all on one floor, so no one has to rush to Ahmedabad.',
-                  'વેન્ટીલેટર ICU, ઈન-હાઉસ સીટી સ્કેન, ૨૪ કલાક ડાયાલીસીસ, મોડ્યુલર ઓપરેશન થીયેટર અને અનુભવી એમ.ડી. ડોક્ટરો: બધું એક જ જગ્યાએ.'
-                )}
-              </p>
-              <div className="hero-ctas">
-                <button className="btn-primary btn-lg" onClick={() => onBook(null)}>
-                  <Calendar size={18} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-                </button>
-                <button className="btn btn-lg btn-ghost-light" onClick={() => onNavigate('facilities')}>
-                  <Building2 size={18} /> {t('Explore facilities', 'સુવિધાઓ જુઓ')}
-                </button>
-              </div>
-              <div className="hero-ticks">
-                <span><CheckCircle2 size={16} /> {t('In-house CT scan', 'ઈન-હાઉસ સીટી સ્કેન')}</span>
-                <span><CheckCircle2 size={16} /> {t('24x7 dialysis & lab', '૨૪ કલાક ડાયાલીસીસ & લેબ')}</span>
-                <span><CheckCircle2 size={16} /> {t('Laminar-flow OT', 'મોડ્યુલર OT')}</span>
-              </div>
+        <div className="container-wide home-hero-grid">
+          <div className="page-enter">
+            <span className="status-pill">
+              <span className="live-beacon" aria-hidden="true" />
+              {t('Emergency & ICU open now · 24x7', 'ઇમરજન્સી & ICU હમણાં ખુલ્લું · ૨૪x૭')}
+            </span>
+            <h1>
+              {lang === 'en'
+                ? <>Critical care, <em>close to home</em> in Modasa</>
+                : <>મોડાસામાં જ, <em>ઘરની નજીક</em> ગંભીર સારવાર</>}
+            </h1>
+            <p className="lead">
+              {t(
+                'Pulse Hospital & I.C.U brings a ventilator ICU, in-house CT scan, 24x7 dialysis, modular operation theatres and senior MD physicians together on one floor at City Centre, Shamlaji Road.',
+                'વેન્ટીલેટર ICU, ઈન-હાઉસ સીટી સ્કેન, ૨૪ કલાક ડાયાલીસીસ, મોડ્યુલર ઓપરેશન થીયેટર અને અનુભવી એમ.ડી. ડોક્ટરો: બધું સીટી સેન્ટર, શામળાજી રોડ પર એક જ માળે.'
+              )}
+            </p>
+            <div className="hero-ctas">
+              <button className="btn-primary btn-lg" onClick={() => onBook(null)}>
+                <Calendar size={18} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
+              </button>
+              <button className="btn-secondary btn-lg" onClick={() => onNavigate('facilities')}>
+                {t('Explore facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={18} />
+              </button>
             </div>
+            <dl className="hero-facts">
+              <div><dt>24x7</dt><dd>{t('Emergency, ICU & dialysis', 'ઇમરજન્સી, ICU & ડાયાલીસીસ')}</dd></div>
+              <div><dt>{DOCTORS.length}</dt><dd>{t('Doctors on our panel', 'અમારા ડૉક્ટરો')}</dd></div>
+              <div><dt>CT</dt><dd>{t('Scan centre in-house', 'ઈન-હાઉસ સીટી સ્કેન')}</dd></div>
+            </dl>
+          </div>
 
-            <aside className="er-card page-enter" style={{ animationDelay: '120ms' }} aria-label="Emergency contact">
-              <div className="er-top">
-                <span className="er-icon"><Siren size={22} /></span>
-                <div>
-                  <h3>{t('Emergency? Call us now', 'ઇમરજન્સી? હમણાં કૉલ કરો')}</h3>
-                  <small style={{ color: 'rgba(255,255,255,0.7)' }}>{t('Doctor on the floor, day and night', 'ડૉક્ટર ૨૪ કલાક હાજર')}</small>
-                </div>
-              </div>
-              <div className="er-num">{HOSPITAL_INFO.appointmentNumber}</div>
-              <small style={{ color: 'rgba(255,255,255,0.65)' }}>{t('Helpline & WhatsApp', 'હેલ્પલાઇન & વોટ્સએપ')}</small>
-              <a className="btn btn-emergency btn-block" style={{ marginTop: 16 }} href={HOSPITAL_INFO.phoneHref}>
-                <Phone size={17} /> {t('Call emergency desk', 'ઇમરજન્સી કૉલ')}
+          <div className="hero-collage page-enter" style={{ animationDelay: '90ms' }}>
+            <div className="hero-frame">
+              <Photo src={PHOTOS.icuHall} alt={t('ICU hall with ventilators at Pulse Hospital, Modasa', 'પલ્સ હોસ્પિટલ, મોડાસાનું વેન્ટીલેટર ICU')} eager sizes="(max-width: 1023px) 100vw, 45vw" />
+            </div>
+            <div className="hero-collage-inset">
+              <Photo src={PHOTOS.ot1} alt={t('Modular operation theatre', 'મોડ્યુલર ઓપરેશન થીયેટર')} sizes="20vw" />
+            </div>
+            <aside className="er-card" aria-label={t('Emergency contact', 'ઇમરજન્સી સંપર્ક')}>
+              <span className="er-top"><Siren size={16} /> {t('Emergency · 24x7', 'ઇમરજન્સી · ૨૪x૭')}</span>
+              <span className="er-num">{HOSPITAL_INFO.appointmentNumber}</span>
+              <small>{t('A doctor is on the floor day and night. No appointment needed.', 'ડૉક્ટર ૨૪ કલાક હાજર. એપોઇન્ટમેન્ટની જરૂર નથી.')}</small>
+              <a className="btn btn-emergency btn-block" href={HOSPITAL_INFO.phoneHref}>
+                <Phone size={17} /> {t('Call now', 'હમણાં કૉલ કરો')}
               </a>
-              <div className="er-list">
-                {[
-                  { en: 'Accidents & trauma', gu: 'અકસ્માત અને ઇજા' },
-                  { en: 'Snakebite & poisoning', gu: 'ઝેરી જીવજંતુ અને પોઇઝનિંગ' },
-                  { en: 'Stroke & chest pain', gu: 'લકવો અને છાતીમાં દુખાવો' },
-                  { en: 'Breathlessness', gu: 'શ્વાસ ચઢવો અને દમ' }
-                ].map((x) => (
-                  <span key={x.en}><Plus size={13} /> {t(x.en, x.gu)}</span>
-                ))}
-              </div>
             </aside>
           </div>
         </div>
@@ -108,24 +90,6 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
           </a>
         </div>
       </div>
-
-      {/* ---------- Stats ---------- */}
-      <section className="section--tight" style={{ paddingTop: 56 }}>
-        <div className="container-wide">
-          <div className="stats">
-            {[
-              ['24x7', t('Emergency, ICU, lab & pharmacy', 'ઇમરજન્સી, ICU, લેબ & ફાર્મસી')],
-              [`${FACILITIES.length}`, t('Facilities on one floor', 'સુવિધાઓ એક જ જગ્યાએ')],
-              [`${DOCTORS.length}`, t('Doctors, incl. 24x7 residents', 'ડૉક્ટરો')],
-              [`${DEPARTMENTS.length}`, t('Clinical departments', 'વિભાગો')]
-            ].map(([n, l], i) => (
-              <div className="stat" key={l} data-reveal style={delay(i)}>
-                <strong>{n}</strong><span>{l}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ---------- Facilities bento ---------- */}
       <section className="section">
@@ -164,17 +128,32 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             <SectionHead
               eyebrow={t('Our doctors', 'અમારા ડૉક્ટરો')}
               title={t('Know who is treating you', 'તમારી સારવાર કોણ કરે છે')}
-              text={t('Senior MD consultants for OPD and ICU, backed by resident doctors in Emergency and ICU around the clock.', 'OPD અને ICU માટે એમ.ડી. કન્સલ્ટન્ટ, અને ૨૪ કલાક રેસિડેન્ટ ડૉક્ટરો.')}
+              text={t('Senior consultants for OPD and ICU, backed by a medical officer in Emergency and the ICU around the clock.', 'OPD અને ICU માટે એમ.ડી. કન્સલ્ટન્ટ, અને ૨૪ કલાક રેસિડેન્ટ ડૉક્ટરો.')}
             />
             <button className="btn-outline" onClick={() => onNavigate('doctors')} data-reveal>
               {t('All doctors & timetable', 'બધા ડૉક્ટરો')} <ArrowRight size={16} />
             </button>
           </div>
-          <div className="grid grid-4">
-            {consultants.map((d, i) => (
-              <div key={d.id} data-reveal style={delay(i)}>
-                <DoctorCard doctor={d} lang={lang} compact onBook={onBook} onOpenProfile={(id) => onNavigate('doctors', id)} />
-              </div>
+          <div className="doc-row">
+            {DOCTORS.map((d, i) => (
+              <article key={d.id} className="doc-mini" data-reveal style={delay(i)}>
+                <button className="doc-mini-main" onClick={() => onNavigate('doctors', d.id)} aria-label={`${d.name}: ${t('view profile', 'પ્રોફાઇલ જુઓ')}`}>
+                  <Avatar doctor={d} />
+                  <span className={`type-tag ${d.type}`}>{t(DOCTOR_TYPES[d.type].label, DOCTOR_TYPES[d.type].labelGu)}</span>
+                  <h3>{lang === 'en' ? d.name : d.nameGujarati}</h3>
+                  <span className="qual">{d.qualification}</span>
+                  <span className="role">{t(d.designation, d.designationGujarati || d.designation)}</span>
+                </button>
+                {d.type === 'resident' ? (
+                  <a className="btn btn-sm btn-emergency btn-block" href={HOSPITAL_INFO.phoneHref}>
+                    <Siren size={15} /> {t('Emergency 24x7', 'ઇમરજન્સી ૨૪x૭')}
+                  </a>
+                ) : (
+                  <button className="btn-primary btn-sm btn-block" onClick={() => onBook(d.id)}>
+                    <Calendar size={15} /> {t('Book slot', 'સ્લોટ બુક કરો')}
+                  </button>
+                )}
+              </article>
             ))}
           </div>
         </div>
@@ -192,12 +171,12 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             {[
               [t('Choose a doctor', 'ડૉક્ટર પસંદ કરો'), t('Pick the specialist you need, or start from a doctor’s profile.', 'તમને જરૂરી નિષ્ણાંત પસંદ કરો.')],
               [t('Pick a day', 'દિવસ પસંદ કરો'), t('Any day in the coming week, Monday to Sunday.', 'આવતા અઠવાડિયાનો કોઈ પણ દિવસ.')],
-              [t('Select a 30-min slot', 'સમય સ્લોટ પસંદ કરો'), t('Morning or evening: booked slots are shown struck-through.', 'સવાર કે સાંજ: ૩૦ મિનિટનો સ્લોટ.')],
-              [t('Get your slip', 'સ્લિપ મેળવો'), t('Receive a booking ID; print it or share it on WhatsApp.', 'બુકિંગ ID મેળવો, પ્રિન્ટ કે વોટ્સએપ કરો.')]
+              [t('Select a 30-min slot', 'સમય સ્લોટ પસંદ કરો'), t('Morning or evening, whichever suits you.', 'સવાર કે સાંજ: ૩૦ મિનિટનો સ્લોટ.')],
+              [t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો'), t('Your request goes to reception, who confirm the slot. Keep the booking slip.', 'વિનંતી રિસેપ્શનને જશે અને તેઓ સ્લોટ કન્ફર્મ કરશે. બુકિંગ સ્લિપ સાચવો.')]
             ].map(([h, p], i) => (
               <div className="step" key={h} data-reveal style={delay(i)}>
                 <span className="num">{i + 1}</span>
-                <h4>{h}</h4>
+                <h3>{h}</h3>
                 <p>{p}</p>
               </div>
             ))}
@@ -219,7 +198,7 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             title={t('Conditions treated at Pulse Hospital', 'હોસ્પિટલમાં ઉપલબ્ધ મુખ્ય સારવારો')}
             text={t('Grouped by department. Tap one to see the doctors and facilities behind it.', 'વિભાગ પ્રમાણે. વિગત માટે ક્લિક કરો.')}
           />
-          <div className="grid grid-4">
+          <div className="grid grid-3">
             {DEPARTMENTS.map((d, i) => (
               <button
                 key={d.id}
@@ -228,11 +207,20 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
                 onClick={() => onNavigate('departments', d.id)}
                 data-reveal
               >
-                <h4><span className="icon-tile dark" style={{ width: 36, height: 36 }}><Icon name={d.icon} size={18} /></span>{d.title}</h4>
+                <h3><span className="icon-tile dark" style={{ width: 36, height: 36 }}><Icon name={d.icon} size={18} /></span>{d.title}</h3>
                 <div className="gu gujarati-text">{d.titleGujarati}</div>
                 <p>{d.conditions.slice(0, 4).join(' · ')}</p>
               </button>
             ))}
+          </div>
+
+          <div className="treatments" data-reveal>
+            <h3>{t('Also treated here', 'ઉપલબ્ધ સારવાર')}</h3>
+            <ul>
+              {TREATMENTS.map((x) => (
+                <li key={x.en}><CheckCircle2 size={16} /> {lang === 'en' ? x.en : <span className="gujarati-text">{x.gu}</span>}</li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -247,7 +235,7 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             text={t('Clear clinical protocols designed to save critical minutes and ensure seamless medical care.', 'ઇમરજન્સી અને ઓપીડી દરમિયાન દર્દીઓની સુવિધા માટેના નિયમો.')}
           />
           <div className="grid grid-3">
-            <div className="card" style={{ padding: 26 }} data-reveal style={delay(0)}>
+            <div className="card" style={{ padding: 26, ...delay(0) }} data-reveal>
               <span className="icon-tile red" style={{ width: 42, height: 42, marginBottom: 16 }}>
                 <Siren size={20} />
               </span>
@@ -261,11 +249,11 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
                 )}
               </p>
               <div style={{ fontSize: 13, color: 'var(--pulse-red)', fontWeight: 700 }}>
-                {t('24x7 Doctor on floor · Direct ambulance drop', '૨૪ કલાક ડૉક્ટર હાજર · એમ્બ્યુલન્સ સુવિધા')}
+                {t('24x7 doctor on the floor', '૨૪ કલાક ડૉક્ટર હાજર')}
               </div>
             </div>
 
-            <div className="card" style={{ padding: 26 }} data-reveal style={delay(1)}>
+            <div className="card" style={{ padding: 26, ...delay(1) }} data-reveal>
               <span className="icon-tile" style={{ width: 42, height: 42, marginBottom: 16 }}>
                 <Clock size={20} />
               </span>
@@ -283,7 +271,7 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
               </div>
             </div>
 
-            <div className="card" style={{ padding: 26 }} data-reveal style={delay(2)}>
+            <div className="card" style={{ padding: 26, ...delay(2) }} data-reveal>
               <span className="icon-tile mint" style={{ width: 42, height: 42, marginBottom: 16 }}>
                 <FileText size={20} />
               </span>

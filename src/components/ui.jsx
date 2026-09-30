@@ -5,14 +5,16 @@ import React, { useEffect, useRef } from 'react';
 import {
   X, ChevronRight, Activity, HeartPulse, Scan, Scissors, BedDouble, BedSingle, HandHeart,
   ShieldPlus, Siren, MonitorDot, Droplets, Microscope, Wind, Stethoscope, ClipboardPlus,
-  Pill, Armchair, Soup, Brain, CheckCircle2
+  Pill, Armchair, Soup, Brain, CheckCircle2, Accessibility, Bone
 } from 'lucide-react';
+import { photoSrcSet } from '../data/hospitalContent';
 
 // Icons referenced by name from data/hospitalContent.js.
 // Using a new icon name in the data? Import it above and add it here.
 const ICONS = {
   Activity, HeartPulse, Scan, Scissors, BedDouble, BedSingle, HandHeart, ShieldPlus, Siren,
-  MonitorDot, Droplets, Microscope, Wind, Stethoscope, ClipboardPlus, Pill, Armchair, Soup, Brain, CheckCircle2
+  MonitorDot, Droplets, Microscope, Wind, Stethoscope, ClipboardPlus, Pill, Armchair, Soup, Brain, CheckCircle2,
+  Accessibility, Bone
 };
 
 // Render a lucide icon by name (names are stored in the data file)
@@ -36,7 +38,7 @@ export function Media({ photo, icon, alt = '', className = '', iconSize = 56, sh
   if (photo) {
     return (
       <div className={`photo ${shade ? 'photo-shade' : ''} ${className}`}>
-        <img src={photo} alt={alt} loading="lazy" />
+        <Photo src={photo} alt={alt} sizes="(max-width: 720px) 100vw, 33vw" />
         {children}
       </div>
     );
@@ -49,116 +51,73 @@ export function Media({ photo, icon, alt = '', className = '', iconSize = 56, sh
   );
 }
 
-export function PageHero({
-  eyebrow,
-  eyebrowIcon,
-  title,
-  text,
-  photo,
-  crumbs,
-  onHome,
-  actions,
-  stats,
-  cardTitle,
-  cardBadge,
-  cardIcon,
-  highlights,
-  aside,
-  children
-}) {
-  const hasAside = aside || (stats && stats.length > 0) || (highlights && highlights.length > 0);
+// Responsive <img> for the hospital photos (phones get the 640px file)
+export function Photo({ src, alt = '', sizes = '(max-width: 720px) 100vw, 50vw', eager = false, ...rest }) {
+  return (
+    <img
+      src={src}
+      srcSet={photoSrcSet(src)}
+      sizes={sizes}
+      alt={alt}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchPriority={eager ? 'high' : undefined}
+      decoding="async"
+      {...rest}
+    />
+  );
+}
 
+/**
+ * Inner-page hero: a calm, light split layout.
+ * Left: breadcrumb, eyebrow, title, intro, actions and up to three short facts.
+ * Right: one framed hospital photo with an optional floating note.
+ */
+export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, onHome, actions, facts = [], note }) {
   return (
     <section className="page-hero">
-      {photo && (
-        <div className="page-hero-bg" aria-hidden="true">
-          <img src={photo} alt="" />
-        </div>
-      )}
-      <div className="page-hero-pattern" aria-hidden="true" />
-      <div className="container-wide page-enter">
-        <div className="page-hero-grid">
-          {/* Main info column */}
-          <div className="page-hero-main">
-            {crumbs && (
-              <nav className="crumbs" aria-label="Breadcrumb">
-                <button onClick={onHome} className="crumb-home-btn">
-                  <span>Home</span>
-                </button>
-                <ChevronRight size={13} className="crumb-sep" />
-                <span className="crumb-active">{crumbs}</span>
-              </nav>
-            )}
+      <div className="container-wide page-hero-grid">
+        <div className="page-hero-main page-enter">
+          {crumbs && (
+            <nav className="crumbs" aria-label="Breadcrumb">
+              <button onClick={onHome}>Home</button>
+              <ChevronRight size={13} aria-hidden="true" />
+              <span aria-current="page">{crumbs}</span>
+            </nav>
+          )}
 
-            {eyebrow && (
-              <div className="page-hero-eyebrow-pill">
-                <span className="hero-pulse-dot" aria-hidden="true" />
-                {eyebrowIcon && <span className="hero-eyebrow-icon">{eyebrowIcon}</span>}
-                <span>{eyebrow}</span>
-              </div>
-            )}
+          {eyebrow && <span className="hero-eyebrow">{eyebrow}</span>}
+          <h1 className="page-hero-title">{title}</h1>
+          {text && <p className="page-hero-desc">{text}</p>}
+          {actions && <div className="page-hero-actions">{actions}</div>}
 
-            <h1 className="page-hero-title">{title}</h1>
-            {text && <p className="page-hero-desc">{text}</p>}
-
-            {actions && <div className="page-hero-actions">{actions}</div>}
-
-            {children}
-          </div>
-
-          {/* Right-side high-tech telemetry data card */}
-          {hasAside && (
-            <div className="page-hero-aside">
-              {aside ? (
-                aside
-              ) : (
-                <div className="hero-data-card">
-                  {(cardTitle || cardBadge) && (
-                    <div className="hero-data-card-header">
-                      <div className="hero-data-card-title-wrap">
-                        <span className="hero-data-card-icon">
-                          {cardIcon || <Activity size={18} />}
-                        </span>
-                        <h4>{cardTitle || 'Hospital Telemetry'}</h4>
-                      </div>
-                      {cardBadge && (
-                        <span className="hero-data-card-badge">
-                          <span className="badge-live-dot" />
-                          {cardBadge}
-                        </span>
-                      )}
-                    </div>
-                  )}
-
-                  {stats && stats.length > 0 && (
-                    <div className="hero-data-stats-grid">
-                      {stats.map((s, idx) => (
-                        <div key={idx} className="hero-data-stat-box">
-                          <div className="hero-data-stat-num">{s.value}</div>
-                          <div className="hero-data-stat-label">{s.label}</div>
-                          {s.sub && <div className="hero-data-stat-sub">{s.sub}</div>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {highlights && highlights.length > 0 && (
-                    <div className="hero-data-highlights">
-                      {highlights.map((h, idx) => (
-                        <div key={idx} className="hero-data-highlight-item">
-                          <span className="hero-highlight-bullet">
-                            <CheckCircle2 size={15} />
-                          </span>
-                          <span>{h}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+          {facts.length > 0 && (
+            <dl className="hero-facts">
+              {facts.map((f) => (
+                <div key={f.label}>
+                  <dt>{f.value}</dt>
+                  <dd>{f.label}</dd>
                 </div>
-              )}
-            </div>
+              ))}
+            </dl>
           )}
         </div>
+
+        {photo && (
+          <div className="page-hero-media page-enter" style={{ animationDelay: '90ms' }}>
+            <div className="hero-frame">
+              <Photo src={photo} alt={photoAlt} eager sizes="(max-width: 1023px) 100vw, 45vw" />
+            </div>
+            {note && (
+              <div className="hero-note">
+                <span className="hero-note-icon">{note.icon}</span>
+                <span>
+                  <strong>{note.title}</strong>
+                  <small>{note.text}</small>
+                </span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

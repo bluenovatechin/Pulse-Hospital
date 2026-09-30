@@ -2,19 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/rendered.png" />
-    <link rel="apple-touch-icon" href="/rendered.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pulse Hospital & I.C.U | Caring For Life | Modasa, Gujarat</title>
-    <meta name="description" content="Pulse Hospital & I.C.U - Modasa's premier 24x7 multi-specialty emergency & critical care center. Book appointments slot-wise in advance for next week. In-house CT scan, dialysis, modular OT, and senior MD physicians." />
-    
-    <!-- Google Fonts Preconnect & Premium Typography (English + Gujarati) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@400;500;600;700;800&family=Hind+Vadodara:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <!-- Title, description, canonical and per-page share tags are filled in by vite.config.js -->
+    <!--seo-->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#093437" />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="geo.region" content="IN-GJ" />
+    <meta name="geo.placename" content="Modasa, Arvalli" />
+
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pulse Hospital & I.C.U" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:locale:alternate" content="gu_IN" />
+    <meta property="og:image" content="%SITE_URL%og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Pulse Hospital & I.C.U, Modasa: 24x7 emergency and critical care" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="%SITE_URL%og-image.jpg" />
+
+    <!-- Fonts: Outfit (headings), Plus Jakarta Sans (body), Noto Sans / Anek Gujarati.
+         Gujarati files only download when Gujarati text is on screen (unicode-range). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Loaded without blocking the first paint; system fonts show until they arrive -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" /></noscript>
+
+    <!--jsonld-->
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      Pulse Hospital &amp; I.C.U, 4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315.
+      24x7 emergency: +91 63533 44875. Appointments: 95120 45641 / 95120 45642.
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertCircle, Calendar, Phone, CheckCircle2, FileText, Scale, MapPin } from 'lucide-react';
 import { PageHero } from '../components/ui';
-import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
+import { HOSPITAL_INFO } from '../data/hospitalContent';
 
 export default function TermsPage({ onNavigate, onBook, lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -9,30 +9,14 @@ export default function TermsPage({ onNavigate, onBook, lang = 'en' }) {
   return (
     <div>
       <PageHero
-        photo={PHOTOS.reception}
         crumbs={t('Terms & Conditions', 'નિયમો અને શરતો')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Hospital Guidelines & Policies', 'હોસ્પિટલ માર્ગદર્શિકા અને નીતિ')}
-        eyebrowIcon={<Scale size={14} />}
-        title={t('Terms & Conditions of Service', 'સેવાના નિયમો અને શરતો')}
+        eyebrow={t('Terms', 'નિયમો')}
+        title={t('Terms & Conditions', 'નિયમો અને શરતો')}
         text={t(
-          'Operating terms, appointment guidelines, emergency protocols, and patient responsibilities at Pulse Hospital & I.C.U.',
+          'Appointment guidelines, emergency protocols and patient responsibilities at Pulse Hospital & I.C.U.',
           'પલ્સ હોસ્પિટલના એપોઇન્ટમેન્ટ નિયમો, ઇમરજન્સી પ્રોટોકોલ અને દર્દી માર્ગદર્શિકા.'
         )}
-        cardTitle={t('Clinical Governance & Terms', 'હોસ્પિટલ નિયમાવલી અને શરતો')}
-        cardBadge={t('Transparent Guidelines', 'પારદર્શક નિયમો')}
-        cardIcon={<FileText size={18} />}
-        stats={[
-          { value: '24x7', label: t('Emergency Triage', 'ઇમરજન્સી ટ્રાયજ'), sub: t('Priority medical care', 'પ્રાથમિકતા સારવાર') },
-          { value: '30 min', label: t('OPD Window', 'OPD સ્લોટ સમય'), sub: t('Reporting 10m before', '૧૦ મિનિટ પહેલાં આવવું') },
-          { value: '0 Fee', label: t('Online Booking', 'ઓનલાઇન બુકિંગ'), sub: t('Pay at hospital desk', 'હોસ્પિટલ કાઉન્ટરે ચુકવણી') },
-          { value: '100%', label: t('Accountability', 'જવાબદારી'), sub: t('Clear printed slips', 'પ્રિન્ટેડ સ્લિપ સાથે') }
-        ]}
-        highlights={[
-          t('Slot bookings can be verified or cancelled online at zero charge', 'સ્લોટ બુકિંગ કોઈપણ ચાર્જ વગર ઓનલાઇન રદ કે તપાસી શકાય છે'),
-          t('Critical trauma & emergency patients receive immediate triage priority', 'ગંભીર ઇમરજન્સી દર્દીઓને તાત્કાલિક પ્રથમ પ્રાથમિકતા મળે છે'),
-          t('Official hospital slips generated with tamper-proof booking references', 'સુરક્ષિત બુકિંગ રેફરન્સ સાથે માન્ય હોસ્પિટલ સ્લિપ ઉપલબ્ધ')
-        ]}
       />
 
       <section className="section">
@@ -133,7 +117,7 @@ export default function TermsPage({ onNavigate, onBook, lang = 'en' }) {
               </h4>
               <p style={{ color: 'var(--text-body)', fontSize: 14.5, lineHeight: 1.7 }}>
                 {t(
-                  'If you are unable to attend your appointment, please use the “My Booking” lookup tool on this website or inform reception via phone. Cancelling your slot instantly releases the consultation capacity for another patient in need. There are no cancellation penalties.',
+                  'If you are unable to attend your appointment, please use “My Booking” on this website (it prepares a cancellation message for reception on WhatsApp) or inform reception by phone, so the slot can be given to another patient. There are no cancellation penalties.',
                   'જો તમે આવી શકો તેમ ન હો તો કૃપા કરીને “મારી એપોઇન્ટમેન્ટ” પેનલ અથવા ફોન દ્વારા સ્લોટ રદ કરો જેથી બીજા દર્દીને સારવાર મળી શકે.'
                 )}
               </p>

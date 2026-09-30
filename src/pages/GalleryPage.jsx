@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { X, ChevronLeft, ChevronRight, Camera, Image, Eye, Sparkles } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Camera, Eye } from 'lucide-react';
 import { PageHero, delay, lockScroll, unlockScroll } from '../components/ui';
 import { GALLERY_IMAGES, GALLERY_CATEGORIES, PHOTOS } from '../data/hospitalContent';
 
@@ -41,36 +41,32 @@ export default function GalleryPage({ onNavigate, lang = 'en' }) {
     <div>
       <PageHero
         photo={PHOTOS.waiting}
+        photoAlt={t('Patient waiting lounge', 'વેઇટિંગ લાઉન્જ')}
         crumbs={t('Hospital tour', 'ગેલેરી')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Hospital Tour & Visuals', 'હોસ્પિટલ ટૂર અને ફોટોગ્રાફ્સ')}
-        eyebrowIcon={<Camera size={14} />}
+        eyebrow={t('Hospital tour', 'હોસ્પિટલ ટૂર')}
         title={t('See the hospital before you visit', 'મુલાકાત પહેલાં હોસ્પિટલ જુઓ')}
         text={t(
-          'Real, unedited photographs of our ICU, operation theatres, patient rooms, consulting suites and arrival lounge on the 4th floor.',
-          '૪થા માળે આવેલા અમારા ICU, મોડ્યુલર OT, દર્દીના રૂમ, કન્સલ્ટિંગ સુઇટ્સ અને રિસેપ્શનના વાસ્તવિક ફોટોગ્રાફ્સ.'
+          'Real photographs of our ICU, operation theatres, patient rooms, consulting rooms and arrival lounge on the 4th floor.',
+          '૪થા માળે આવેલા અમારા ICU, ઓપરેશન થીયેટર, દર્દીના રૂમ, કન્સલ્ટિંગ રૂમ અને રિસેપ્શનના વાસ્તવિક ફોટોગ્રાફ્સ.'
         )}
-        cardTitle={t('Visual Facility Index', 'સુવિધા ફોટો ઇન્ડેક્સ')}
-        cardBadge={t('16 Authentic Photos', '૧૬ અસલી ફોટા')}
-        cardIcon={<Image size={18} />}
-        stats={[
-          { value: `${GALLERY_IMAGES.length}`, label: t('Facility Photos', 'હોસ્પિટલ ફોટા'), sub: t('100% Real untouched', 'વાસ્તવિક છબીઓ') },
-          { value: '4 Sections', label: t('Key Areas', 'મુખ્ય વિભાગો'), sub: t('ICU, OT, Rooms, OPD', 'ICU, OT, રૂમ, OPD') },
-          { value: 'HD', label: t('Image Quality', 'ગુણવત્તા'), sub: t('Full zoom inspection', 'ઝૂમ કરી જુઓ') },
-          { value: '4th Floor', label: t('City Centre', 'સિટી સેન્ટર'), sub: t('Modasa, Gujarat', 'મોડાસા, ગુજરાત') }
+        facts={[
+          { value: `${GALLERY_IMAGES.length}`, label: t('Photos', 'ફોટા') },
+          { value: `${GALLERY_CATEGORIES.length - 1}`, label: t('Areas of the hospital', 'હોસ્પિટલના વિભાગો') },
+          { value: t('4th floor', '૪થો માળ'), label: t('City Centre, Modasa', 'સીટી સેન્ટર, મોડાસા') }
         ]}
-        highlights={[
-          t('Advanced 16-bed ventilator ICU and central nursing station', 'અદ્યતન ૧૬-બેડ વેન્ટિલેટર આઈ.સી.યુ. અને સેન્ટ્રલ મોનિટરિંગ'),
-          t('Sterile modular laminar-airflow operation theatre with surgical lighting', 'સર્જિકલ લાઇટિંગ સાથે મોડ્યુલર લેમિનર-એરફ્લો OT'),
-          t('Air-conditioned deluxe rooms, semi-special, and spacious reception lounge', 'એર-કન્ડિશન્ડ ડીલક્સ રૂમ અને વિશાળ રિસેપ્શન લોબી')
-        ]}
+        note={{
+          icon: <Camera size={20} />,
+          title: t('Real photographs', 'વાસ્તવિક ફોટોગ્રાફ્સ'),
+          text: t('Taken inside Pulse Hospital', 'પલ્સ હોસ્પિટલની અંદરના ફોટા')
+        }}
         actions={
           <>
-            <button className="btn btn-primary" onClick={() => setIndex(0)}>
-              <Eye size={17} /> {t('Start Photo Tour', 'ફોટો ટૂર શરૂ કરો')}
+            <button className="btn-primary" onClick={() => setIndex(0)}>
+              <Eye size={17} /> {t('Start the photo tour', 'ફોટો ટૂર શરૂ કરો')}
             </button>
-            <button className="btn btn-ghost-light" onClick={() => onNavigate('facilities')}>
-              <Sparkles size={17} /> {t('View Facility Specs', 'સુવિધા વિગત')}
+            <button className="btn-secondary" onClick={() => onNavigate('facilities')}>
+              {t('View facilities', 'સુવિધાઓ જુઓ')}
             </button>
           </>
         }

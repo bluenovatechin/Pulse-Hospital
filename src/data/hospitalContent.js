@@ -34,38 +34,47 @@ export const HOSPITAL_INFO = {
   phoneHref: "tel:+916353344875",
   whatsappNumber: "916353344875",
   phones: ["+91 63533 44875"],
-  email: "care@pulsehospitalmodasa.com",
+  // Appointment lines printed on the hospital brochure
+  appointmentLines: ["95120 45641", "95120 45642"],
+  appointmentLinesHref: ["tel:+919512045641", "tel:+919512045642"],
   mapsUrl: "https://maps.google.com/?q=City+Centre+Shamlaji+Road+Modasa+Gujarat",
   mapsEmbed: "https://maps.google.com/maps?q=City+Centre+Shamlaji+Road+Modasa&t=&z=15&ie=UTF8&iwloc=&output=embed",
   opdHours: "Mon – Sat · 09:00 AM – 01:30 PM & 04:30 PM – 08:00 PM",
-  timings: "Monday - Saturday: 08:30 AM - 08:30 PM | Emergency: 24 Hours Open",
   noticeEnglish: "Please bring this file and all past medical reports on your next visit.",
   noticeGujarati: "કૃપા કરીને આગલી મુલાકાતે આ ફાઇલ અને જુના રિપોર્ટ્સ સાથે લાવવા વિનંતી."
 };
 
 // --------------------------------------------------------
-// Real hospital photographs (public/assets/gallery-N.jpeg)
-// ASSET_BASE keeps paths working when the site is served from a
-// sub-folder (GitHub Pages: https://<user>.github.io/<repo>/).
+// Real hospital photographs (public/photos/gallery-N.webp, 1100px wide,
+// plus 640px and 800px copies for phones). ASSET_BASE keeps paths
+// working when the site is served from a sub-folder (GitHub Pages).
 // --------------------------------------------------------
-const ASSET_BASE = import.meta.env.BASE_URL;
+const ASSET_BASE = import.meta.env?.BASE_URL ?? "/";
+const photo = (n) => `${ASSET_BASE}photos/gallery-${n}.webp`;
+
+// srcset for any PHOTOS url, so phones download the smaller file
+export const photoSrcSet = (src) =>
+  src && src.endsWith(".webp")
+    ? `${src.replace(".webp", "-640.webp")} 640w, ${src.replace(".webp", "-800.webp")} 800w, ${src} 1100w`
+    : undefined;
+
 export const PHOTOS = {
-  reception: `${ASSET_BASE}assets/gallery-1.jpeg`,
-  waiting: `${ASSET_BASE}assets/gallery-2.jpeg`,
-  corridor: `${ASSET_BASE}assets/gallery-3.jpeg`,
-  nursingIsolation: `${ASSET_BASE}assets/gallery-4.jpeg`,
-  billing: `${ASSET_BASE}assets/gallery-5.jpeg`,
-  isolation: `${ASSET_BASE}assets/gallery-6.jpeg`,
-  twinRoom: `${ASSET_BASE}assets/gallery-7.jpeg`,
-  icuStation: `${ASSET_BASE}assets/gallery-8.jpeg`,
-  icuBeds: `${ASSET_BASE}assets/gallery-9.jpeg`,
-  icuWard: `${ASSET_BASE}assets/gallery-10.jpeg`,
-  surgicalUnit: `${ASSET_BASE}assets/gallery-11.jpeg`,
-  icuHall: `${ASSET_BASE}assets/gallery-12.jpeg`,
-  ot1: `${ASSET_BASE}assets/gallery-13.jpeg`,
-  ot2: `${ASSET_BASE}assets/gallery-14.jpeg`,
-  consult1: `${ASSET_BASE}assets/gallery-15.jpeg`,
-  consult2: `${ASSET_BASE}assets/gallery-16.jpeg`
+  reception: photo(1),
+  waiting: photo(2),
+  corridor: photo(3),
+  nursingIsolation: photo(4),
+  billing: photo(5),
+  isolation: photo(6),
+  twinRoom: photo(7),
+  icuStation: photo(8),
+  icuBeds: photo(9),
+  icuWard: photo(10),
+  surgicalUnit: photo(11),
+  icuHall: photo(12),
+  ot1: photo(13),
+  ot2: photo(14),
+  consult1: photo(15),
+  consult2: photo(16)
 };
 
 // --------------------------------------------------------
@@ -228,44 +237,6 @@ export const DOCTORS = [
     bioGujarati: "ફાઈબરઓપ્ટિક બ્રોન્કોસ્કોપી, PFT શ્વાસ ટેસ્ટ અને ક્રિટિકલ પલ્મોનરી સારવાર કરતા અનુભવી ચેસ્ટ ફિઝિશિયન."
   },
   {
-    id: 5,
-    name: "Dr. Mohammad Salim Mansuri",
-    nameGujarati: "ડૉ. મોહમ્મદ સલીમ મન્સૂરી",
-    initials: "SM",
-    colors: ["#e11d48", "#093437"],
-    type: "resident",
-    qualification: "MBBS, PGDEMS",
-    designation: "Resident Medical Officer (Critical Care)",
-    designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
-    hospital: "Pulse Hospital & ICU",
-    hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
-    mobile: "95120 45641",
-    mobileFormatted: "+91 95120 45641",
-    room: "ICU Station & Triage",
-    roomGujarati: "ICU સ્ટેશન અને ટ્રાયજ (૨૪ કલાક)",
-    experience: "8+ Years",
-    experienceGujarati: "૮+ વર્ષ અનુભવ",
-    specialties: ["Emergency Triage", "Intubation & Ventilation", "CPR"],
-    specialtiesGujarati: ["ઇમરજન્સી ટ્રાયજ", "ઇન્ટ્યુબેશન અને વેન્ટિલેશન", "CPR લાઈફ સપોર્ટ"],
-    whatTheyDo: [
-      "First doctor at the bedside in an emergency, day or night",
-      "Stabilises critical patients: CPR, intubation, ventilator set-up",
-      "Triage: decides who needs care first on arrival",
-      "Round-the-clock monitoring of ICU patients"
-    ],
-    whatTheyDoGujarati: [
-      "કોઈપણ ઇમરજન્સીમાં દિવસ-રાત પલંગ પાસે પહોંચનાર પ્રથમ તબીબ",
-      "ગંભીર દર્દીઓનું તાત્કાલિક સ્થિરીકરણ: CPR, ઇન્ટ્યુબેશન અને વેન્ટિલેટર સેટઅપ",
-      "દર્દીના લક્ષણો મુજબ પ્રાથમિકતા નક્કી કરી ત્વરિત સારવાર આપવી",
-      "ICU દર્દીઓનું ૨૪ કલાક સતત નિરીક્ષણ"
-    ],
-    departmentIds: ["emergency", "critical-care"],
-    timing: "Available 24x7 in Emergency & ICU Rotation",
-    timingGujarati: "ઇમરજન્સી અને ICU માં ૨૪x૭ ઉપલબ્ધ",
-    bio: "Stationed in Pulse ICU ensuring immediate round-the-clock emergency patient stabilisation, ventilator synchronisation, and swift bedside clinical management.",
-    bioGujarati: "પલ્સ આઈ.સી.યુ.માં ૨૪ કલાક તૈનાત રહી કટોકટીમાં દર્દીનું તાત્કાલિક જીવન રક્ષણ અને ક્લિનિકલ સંચાલન સુનિશ્ચિત કરે છે."
-  },
-  {
     id: 6,
     name: "Dr. Pulkit Pandya",
     nameGujarati: "ડૉ. પુલકિત પંડ્યા",
@@ -277,8 +248,6 @@ export const DOCTORS = [
     designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
     hospital: "Pulse Hospital & ICU",
     hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
-    mobile: "95120 45642",
-    mobileFormatted: "+91 95120 45642",
     room: "Emergency & ICCU Floor",
     roomGujarati: "ઇમરજન્સી અને ICCU ફ્લોર (૨૪ કલાક)",
     experience: "7+ Years",
@@ -307,7 +276,7 @@ export const DOCTORS = [
 
 export const DOCTOR_TYPES = {
   visiting: { label: "Visiting Consultant", labelGu: "વિઝિટિંગ કન્સલ્ટન્ટ" },
-  resident: { label: "Resident Medical Officer · 24x7", labelGu: "રેસિડેન્ટ મેડિકલ ઓફિસર · ૨૪x૭" }
+  resident: { label: "Medical Officer · 24x7", labelGu: "મેડિકલ ઓફિસર · ૨૪x૭" }
 };
 
 // --------------------------------------------------------
@@ -336,13 +305,13 @@ export const FACILITIES = [
     includes: [
       "I.C.C.U. (heart), M.I.C.U. (medical) and S.I.C.U. (surgical) beds",
       "Invasive and non-invasive ventilators",
-      "Multipara central monitoring and defibrillator",
+      "Multipara central monitoring, ECG and defibrillator",
       "Central oxygen and suction at every bed",
-      "Bedside 2D Echo, sonography and X-ray",
+      "Bedside 2D Echo, sonography and mobile X-ray",
       "Bedside dialysis inside the ICU"
     ],
     goodFor: "Patients who need continuous monitoring or life support: severe infection, heart attack, breathing failure, poisoning, or recovery after major surgery.",
-    doctorIds: [1, 2, 4, 5, 6]
+    doctorIds: [1, 2, 4, 6]
   },
   {
     id: "isolation",
@@ -361,7 +330,7 @@ export const FACILITIES = [
       "Dedicated infection-control nursing protocol"
     ],
     goodFor: "Patients with contagious or high-risk infections who need ICU-level care without sharing space.",
-    doctorIds: [2, 5]
+    doctorIds: [2]
   },
   {
     id: "emergency",
@@ -382,7 +351,7 @@ export const FACILITIES = [
       "Triage on arrival with a doctor on the floor 24x7"
     ],
     goodFor: "Anyone who needs urgent medical attention. No appointment needed: come straight in or call ahead.",
-    doctorIds: [5, 6, 3]
+    doctorIds: [6, 3]
   },
   {
     id: "nursing",
@@ -514,9 +483,10 @@ export const FACILITIES = [
       "Laminar airflow ceiling for infection control",
       "IITV (live X-ray) for orthopaedic surgery",
       "Anaesthesia workstation and cardiac monitors",
-      "Emergency and high-risk surgery"
+      "General, emergency and high-risk surgery",
+      "Plastic surgery"
     ],
-    goodFor: "Planned and emergency operations, including fracture fixation and abdominal surgery.",
+    goodFor: "Planned and emergency operations, including fracture fixation, general and abdominal surgery.",
     doctorIds: []
   },
   {
@@ -542,8 +512,8 @@ export const FACILITIES = [
   {
     id: "deluxe",
     category: "stay",
-    name: "Deluxe Private Rooms",
-    nameGu: "ડીલક્ષ પ્રાઇવેટ રૂમ",
+    name: "Super Deluxe & Deluxe Rooms",
+    nameGu: "સુપર ડીલક્ષ & ડીલક્ષ રૂમ",
     icon: "BedSingle",
     photo: PHOTOS.corridor,
     is24x7: true,
@@ -561,8 +531,8 @@ export const FACILITIES = [
   {
     id: "twin",
     category: "stay",
-    name: "Semi-Special & Twin-Sharing Rooms",
-    nameGu: "સેમી-સ્પેશિયલ & ટ્વીન શેરિંગ રૂમ",
+    name: "Special, Semi-Special & Twin Rooms",
+    nameGu: "સ્પેશ્યલ, સેમી-સ્પેશ્યલ & ટ્વીન રૂમ",
     icon: "BedDouble",
     photo: PHOTOS.twinRoom,
     is24x7: true,
@@ -595,6 +565,25 @@ export const FACILITIES = [
     ],
     goodFor: "OPD visits, follow-ups, and routine check-ups.",
     doctorIds: [1, 2, 3, 4]
+  },
+  {
+    id: "physio",
+    category: "support",
+    name: "Physiotherapy Department",
+    nameGu: "ફીઝીયોથેરાપી વિભાગ",
+    icon: "Accessibility",
+    photo: null,
+    is24x7: false,
+    summary: "Rehabilitation that helps patients get moving again after surgery, a stroke, a fracture or a long ICU stay.",
+    summaryGu: "સર્જરી, લકવો, ફ્રેક્ચર કે લાંબા ICU રોકાણ પછી દર્દીને ફરી હરતા-ફરતા કરવા માટે ફીઝીયોથેરાપી.",
+    includes: [
+      "Post-surgery and post-fracture rehabilitation",
+      "Stroke (paralysis) recovery exercises",
+      "Chest physiotherapy for lung patients",
+      "Mobilisation of ICU and bed-bound patients"
+    ],
+    goodFor: "Admitted patients recovering strength and movement, and OPD patients referred by their doctor.",
+    doctorIds: []
   },
   {
     id: "pharmacy",
@@ -652,6 +641,12 @@ export const HOSPITAL_FACILITIES = [
   { gu: "કાર્ડિયોલોજી અને 2D Echo સોનોગ્રાફી", en: "Cardiology & 2D Echo" },
   { gu: "ઇન્ફેક્શન રોગ સારવાર અને આઇસોલેશન સુવિધા", en: "Infectious disease care & isolation" },
   { gu: "ઈન-હાઉસ સીટી સ્કેન (મોડાસા CT સ્કેન સેન્ટર)", en: "In-house CT scan (Modasa CT Scan Centre)" },
+  { gu: "24x7 ક્રિટીકલ કેર સુવિધા", en: "Critical care 24x7" },
+  { gu: "જનરલ સર્જરી", en: "General surgery" },
+  { gu: "પલ્મોનોલોજી (ફેફસા વિભાગ)", en: "Pulmonology (lung care)" },
+  { gu: "ફીઝીયોથેરાપી વિભાગ", en: "Physiotherapy department" },
+  { gu: "રેડિયોલોજી અને પેથોલોજી", en: "Radiology & pathology" },
+  { gu: "સુપર સ્પેશ્યાલીસ્ટ કન્સલ્ટેશન", en: "Super-specialist consultation" },
   { gu: "પાર્કિંગની વિશાળ સુવિધા", en: "Ample parking" }
 ];
 
@@ -666,10 +661,10 @@ export const DEPARTMENTS = [
     icon: "Activity",
     intro: "For patients whose life is at risk and who need round-the-clock monitoring, ventilator support or organ support.",
     conditions: ["Sepsis & septic shock", "Respiratory failure", "Multi-organ failure", "Post-surgery ICU care", "Severe poisoning"],
-    conditionsGu: "",
+    conditionsGu: "કોમા, ગંભીર ઇન્ફેક્શન, શ્વાસ બંધ થવો, કોઈપણ જાતની ગંભીર બિમારી",
     services: ["Ventilator support", "Central monitoring", "Bedside dialysis", "Isolation ICU"],
     facilityIds: ["icu", "isolation", "nursing", "dialysis"],
-    doctorIds: [1, 2, 4, 5, 6]
+    doctorIds: [1, 2, 4, 6]
   },
   {
     id: "medicine",
@@ -753,7 +748,7 @@ export const DEPARTMENTS = [
     conditionsGu: "અકસ્માત ઈજા, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક · સાપ કરડવો, ઝેરી દવાની અસર",
     services: ["24x7 casualty desk", "Anti-snake venom", "Antidote protocols", "Trauma surgery"],
     facilityIds: ["emergency", "ct", "ot", "pharmacy"],
-    doctorIds: [5, 6]
+    doctorIds: [6]
   },
   {
     id: "surgery",
@@ -762,17 +757,28 @@ export const DEPARTMENTS = [
     icon: "Scissors",
     intro: "Planned and emergency operations in modular theatres, including keyhole, orthopaedic, spine and jaw surgery.",
     conditions: ["Fractures", "Abdominal surgery", "Hernia & gallbladder", "Spine problems", "Jaw & dental surgery"],
-    conditionsGu: "",
-    services: ["Laparoscopic surgery", "Orthopaedic surgery with IITV", "Neuro & spine surgery", "Maxillofacial surgery"],
-    facilityIds: ["ot", "lap-endo", "icu"],
+    conditionsGu: "હાઈ રીસ્ક સર્જરી, ગેસ્ટ્રો અને લેપ્રોસ્કોપી સર્જરી, ન્યુરો સર્જરી, સ્પાઈન સર્જરી, પ્લાસ્ટીક સર્જરી",
+    services: ["General surgery", "High-risk surgery", "Laparoscopic surgery", "Orthopaedic surgery with IITV", "Neuro & spine surgery", "Plastic surgery", "Maxillofacial surgery"],
+    facilityIds: ["ot", "lap-endo", "icu", "physio"],
     doctorIds: []
   }
 ];
 
-// Legacy grouped view of treatable conditions (used on the home page)
-export const MEDICAL_CONDITIONS = DEPARTMENTS
-  .filter((d) => d.conditionsGu)
-  .map((d) => ({ id: d.id, icon: d.icon, category: d.title, categoryGu: d.titleGujarati, conditions: d.conditionsGu }));
+// --------------------------------------------------------
+// Treatments available, as printed on the brochure (ઉપલબ્ધ સારવાર)
+// --------------------------------------------------------
+export const TREATMENTS = [
+  { gu: "બ્રેઈન હેમરેજ, લકવાની સારવાર", en: "Brain haemorrhage & paralysis (stroke)" },
+  { gu: "ઝેરી મલેરીયા, ડેન્ગ્યુમાં પ્લેટલેટ ઘટી જવા", en: "Severe malaria, dengue with low platelets" },
+  { gu: "કોમા, મગજનો તાવ અને ખેંચ", en: "Coma, brain fever & seizures" },
+  { gu: "દાઝેલાની સારવાર, ઝેરી કમળાની સારવાર", en: "Burns & severe jaundice" },
+  { gu: "લીવર અને કીડની રોગોની સારવાર", en: "Liver & kidney disease" },
+  { gu: "શ્વાસ અને હૃદય ની બિમારીની સારવાર", en: "Breathing & heart disease" },
+  { gu: "હીટ સ્ટ્રોક, ઇલેક્ટ્રીક શોક, હડીલો તાવ", en: "Heat stroke, electric shock & stubborn fever" },
+  { gu: "ઝેરી દવા અને સર્પદંશ સારવાર", en: "Poisoning & snakebite" },
+  { gu: "કોઈપણ જાતની ગંભીર બિમારી", en: "Any serious illness" },
+  { gu: "અકસ્માતને લગતી ઈજાની સારવાર", en: "Accident injuries" }
+];
 
 // --------------------------------------------------------
 // Photo gallery
@@ -799,40 +805,13 @@ export const GALLERY_IMAGES = [
 ];
 
 // --------------------------------------------------------
-// Testimonials & FAQs
+// FAQs
 // --------------------------------------------------------
-export const TESTIMONIALS = [
-  {
-    id: 1,
-    name: "Jigneshbhai Patel",
-    city: "Modasa",
-    comment: "When my father had acute breathlessness at 2 AM, Pulse Hospital's ICU team admitted him immediately. Dr. Santosh Prajapati and the nursing team were exceptional. The CT scan and dialysis were right inside the hospital.",
-    rating: 5,
-    treatment: "Severe Pneumonia & Respiratory Care"
-  },
-  {
-    id: 2,
-    name: "Dr. K. M. Solanki",
-    city: "Dhansura",
-    comment: "Booking next week's slot in advance online made our consultation with Dr. Dipesh Patel completely effortless. No waiting in long queues. The staff is polite and facilities match top Ahmedabad hospitals.",
-    rating: 5,
-    treatment: "Diabetic Care & Health Screening"
-  },
-  {
-    id: 3,
-    name: "Fatima Mansuri",
-    city: "Bayad",
-    comment: "Pulse Hospital saved my brother after a critical pesticide poisoning emergency. Within 10 minutes of arrival, Dr. Salim Mansuri and the ICU specialists started intensive resuscitation.",
-    rating: 5,
-    treatment: "Emergency Poisoning Resuscitation"
-  }
-];
-
 export const FAQS = [
   {
     q: "How does advance slot booking work?",
     qGu: "આગામી સપ્તાહ માટે એડવાન્સ સ્લોટ બુકિંગ કેવી રીતે કામ કરે છે?",
-    a: "Choose a doctor, pick any day in the coming week, and select a free 30-minute morning or evening slot. You'll get a booking ID (e.g. PLS-920101) and a slip you can print or share on WhatsApp.",
+    a: "Choose a doctor, pick any day in the coming week and a 30-minute morning or evening slot. Your request opens in WhatsApp addressed to the hospital reception, and you get a booking ID (e.g. PLS-920101) and a printable slip. Reception confirms the slot on WhatsApp.",
     aGu: "તમારા મનપસંદ ડૉક્ટર પસંદ કરો, આગામી સપ્તાહમાંથી કોઈપણ દિવસ અને અનુકૂળ ૩૦ મિનિટનો સમય સ્લોટ પસંદ કરો. બુકિંગ થતાં જ તમને બુકિંગ ID (દા.ત. PLS-920101) અને સ્લિપ મળશે જેને તમે પ્રિન્ટ કરી શકો છો અથવા વ્હોટ્સએપ પર મેળવી શકો છો."
   },
   {
@@ -844,8 +823,8 @@ export const FAQS = [
   {
     q: "Can I check or cancel my booking?",
     qGu: "શું હું મારી એપોઇન્ટમેન્ટ ચેક અથવા રદ કરી શકું છું?",
-    a: "Yes. Use “My Booking” at the top of the page and search with your mobile number or booking ID. You can view the slip or cancel the slot, which frees it for another patient.",
-    aGu: "હા. પેજના ઉપરના ભાગે 'મારી બુકિંગ' પર ક્લિક કરી તમારો મોબાઇલ નંબર અથવા બુકિંગ ID લખી શોધો. ત્યાંથી તમે સ્લિપ જોઈ શકો છો અથવા સ્લોટ રદ કરી શકો છો, જેથી અન્ય દર્દી તેનો લાભ લઈ શકે."
+    a: "Yes. Use “My Booking” and search with your mobile number or booking ID. It lists bookings made from this phone or computer; you can reopen the slip, or cancel, which prepares a WhatsApp message to reception so the slot can be released.",
+    aGu: "હા. પેજના ઉપરના ભાગે 'મારી બુકિંગ' પર ક્લિક કરી તમારો મોબાઇલ નંબર અથવા બુકિંગ ID લખી શોધો. આ ફોન/કમ્પ્યુટર પરથી કરેલી બુકિંગ દેખાશે; ત્યાંથી સ્લિપ જોઈ શકો છો અથવા રદ કરી શકો છો, જેથી રિસેપ્શનને વોટ્સએપ સંદેશ મોકલી સ્લોટ મુક્ત કરી શકાય."
   },
   {
     q: "What should I bring to my appointment?",

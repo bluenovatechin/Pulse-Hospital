@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle, Navigation, MessageCircle, Siren } from 'lucide-react';
+import { Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle, Navigation, MessageCircle } from 'lucide-react';
 import { PageHero } from '../components/ui';
 import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
 
@@ -7,7 +7,6 @@ const EMPTY_FORM = { name: '', phone: '', email: '', subject: 'General Consultat
 
 export default function ContactPage({ onNavigate, lang = 'en' }) {
   const [form, setForm] = useState(EMPTY_FORM);
-  const [submitting, setSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -46,7 +45,20 @@ _Sent via Pulse Hospital Website_`;
   const cards = [
     {
       icon: Phone, tone: 'red', title: t('Phone & emergency', 'ફોન & ઇમરજન્સી'),
-      body: <><a href={HOSPITAL_INFO.phoneHref} style={{ fontSize: 20, fontWeight: 800, color: 'var(--brand-navy)' }}>{HOSPITAL_INFO.appointmentNumber}</a><br />{t('Appointments, emergencies and WhatsApp', 'એપોઇન્ટમેન્ટ, ઇમરજન્સી અને વોટ્સએપ')}</>
+      body: (
+        <>
+          <a href={HOSPITAL_INFO.phoneHref} style={{ fontSize: 20, fontWeight: 800, color: 'var(--brand-navy)' }}>{HOSPITAL_INFO.appointmentNumber}</a>
+          <br />{t('Emergencies, helpline and WhatsApp', 'ઇમરજન્સી, હેલ્પલાઇન અને વોટ્સએપ')}
+          <br />
+          {t('Appointments: ', 'એપોઇન્ટમેન્ટ: ')}
+          {HOSPITAL_INFO.appointmentLines.map((n, i) => (
+            <React.Fragment key={n}>
+              {i > 0 && ' / '}
+              <a href={HOSPITAL_INFO.appointmentLinesHref[i]} style={{ fontWeight: 700, color: 'var(--brand-navy)' }}>{n}</a>
+            </React.Fragment>
+          ))}
+        </>
+      )
     },
     {
       icon: MapPin, tone: '', title: t('Address', 'સરનામું'),
@@ -61,40 +73,36 @@ _Sent via Pulse Hospital Website_`;
   return (
     <div>
       <PageHero
-        photo={PHOTOS.waiting}
+        photo={PHOTOS.billing}
+        photoAlt={t('Reception and billing counter', 'રીસેપ્શન અને બિલિંગ કાઉન્ટર')}
         crumbs={t('Contact', 'સંપર્ક')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Contact & Immediate Assistance', 'સંપર્ક અને તાત્કાલિક સહાય')}
-        eyebrowIcon={<Phone size={14} />}
-        title={t('We’re here for you 24x7', 'અમે ૨૪ કલાક તમારી સેવામાં')}
+        eyebrow={t('Contact', 'સંપર્ક')}
+        title={t('We’re here for you, day and night', 'અમે ૨૪ કલાક તમારી સેવામાં')}
         text={t(
-          'Call for anything urgent. For questions about ICU admission, tests or doctor availability, send a message and reception will call you back.',
-          'તાત્કાલિક હોય તો કૉલ કરો. બાકી સંદેશ મોકલો, રીસેપ્શન તમને કૉલ કરશે.'
+          'Call for anything urgent. For questions about ICU admission, tests or doctor availability, send us a WhatsApp message and reception will reply.',
+          'તાત્કાલિક હોય તો કૉલ કરો. ICU એડમિશન, ટેસ્ટ કે ડૉક્ટર વિશે પૂછવા વોટ્સએપ સંદેશ મોકલો, રીસેપ્શન જવાબ આપશે.'
         )}
-        cardTitle={t('Emergency Lines & Direct Desk', 'ઇમરજન્સી હેલ્પલાઇન અને સહાય')}
-        cardBadge={t('Live 24x7 Desk Active', '૨૪x૭ હેલ્પલાઇન કાર્યરત')}
-        cardIcon={<Siren size={18} />}
-        stats={[
-          { value: '24x7', label: t('Emergency Line', 'ઇમરજન્સી લાઇન'), sub: '95120 45641' },
-          { value: 'Trauma', label: t('Ambulance Care', 'એમ્બ્યુલન્સ લાઇન'), sub: '95120 45642' },
-          { value: 'OPD Desk', label: t('Appointments', 'એપોઇન્ટમેન્ટ'), sub: '75674 07272' },
-          { value: '4th Floor', label: t('City Centre', 'સિટી સેન્ટર'), sub: t('Shamlaji Road', 'શામળાજી રોડ') }
+        facts={[
+          { value: '24x7', label: t('Emergency & ICU', 'ઇમરજન્સી & ICU') },
+          { value: t('Mon–Sat', 'સોમ–શનિ'), label: t('OPD, morning & evening', 'OPD, સવાર & સાંજ') },
+          { value: t('4th floor', '૪થો માળ'), label: t('City Centre, Shamlaji Rd', 'સીટી સેન્ટર, શામળાજી રોડ') }
         ]}
-        highlights={[
-          t('Resident doctor stationed bedside on the 4th floor day & night', 'ડૉક્ટર ૨૪ કલાક આઈ.સી.યુ. ફ્લોર પર હાજર'),
-          t('Ambulance equipped with emergency oxygen & resuscitation support', 'ઓક્સિજન અને લાઈફ સપોર્ટ સુવિધા સાથે એમ્બ્યુલન્સ'),
-          t('Direct WhatsApp desk for test reports, inquiries and location help', 'રિપોર્ટ્સ અને પૂછપરછ માટે વોટ્સએપ હેલ્પડેસ્ક')
-        ]}
+        note={{
+          icon: <Phone size={20} />,
+          title: t('Appointment lines', 'એપોઇન્ટમેન્ટ નંબર'),
+          text: HOSPITAL_INFO.appointmentLines.join(' / ')
+        }}
         actions={
           <>
             <a className="btn btn-emergency" href={HOSPITAL_INFO.phoneHref}>
-              <Phone size={17} /> {t('Call Emergency Desk', 'ઇમરજન્સી કૉલ')}
+              <Phone size={17} /> {t('Call now', 'હમણાં કૉલ કરો')}
             </a>
-            <a className="btn btn-ghost-light" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer">
+            <a className="btn btn-secondary" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer">
               <MessageCircle size={17} /> WhatsApp
             </a>
-            <a className="btn btn-ghost-light" href={HOSPITAL_INFO.mapsUrl} target="_blank" rel="noreferrer">
-              <Navigation size={17} /> {t('GPS Directions', 'રસ્તો જુઓ')}
+            <a className="btn btn-secondary" href={HOSPITAL_INFO.mapsUrl} target="_blank" rel="noreferrer">
+              <Navigation size={17} /> {t('Directions', 'રસ્તો જુઓ')}
             </a>
           </>
         }
@@ -161,8 +169,8 @@ _Sent via Pulse Hospital Website_`;
                   <label className="form-label" htmlFor="c-msg">{t('Message *', 'સંદેશ / પ્રશ્ન *')}</label>
                   <textarea id="c-msg" name="message" className="form-textarea" rows={4} placeholder={t("Describe your question or the patient's symptoms...", "તમારો પ્રશ્ન અથવા દર્દીના લક્ષણો વિગતે જણાવો...")} value={form.message} onChange={handleChange} required style={{ width: '100%' }} />
                 </div>
-                <button type="submit" disabled={submitting} className="btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center' }}>
-                  <Send size={16} /> {submitting ? t('Sending...', 'મોકલાઈ રહ્યું છે...') : t('Send inquiry', 'પૂછપરછ મોકલો')}
+                <button type="submit" className="btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center' }}>
+                  <Send size={16} /> {t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો')}
                 </button>
               </form>
             </div>

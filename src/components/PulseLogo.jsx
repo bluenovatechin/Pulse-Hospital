@@ -2,10 +2,10 @@ import React from 'react';
 
 /**
  * Official Pulse Hospital & I.C.U Logo Component
- * Uses the official rendered.png medical cross emblem provided by Pulse Hospital
+ * Uses the official cross emblem (public/logo.webp, resized from the hospital's artwork)
  */
 const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-export const OFFICIAL_LOGO_SRC = `${BASE_URL}/rendered.png`;
+export const OFFICIAL_LOGO_SRC = `${BASE_URL}/logo.webp`;
 
 export default function PulseLogo({ 
   size = 42, 
@@ -53,7 +53,7 @@ export default function PulseLogo({
               style={{ 
                 fontFamily: "'Outfit', var(--font-heading), sans-serif",
                 fontSize: Math.max(16, Math.round(size * 0.44)), 
-                fontWeight: 900, 
+                fontWeight: 800, 
                 letterSpacing: '-0.02em',
                 color: isLight ? '#ffffff' : 'var(--brand-navy, #093437)',
                 whiteSpace: 'nowrap'

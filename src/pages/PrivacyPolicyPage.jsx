@@ -1,7 +1,7 @@
 import React from 'react';
-import { Shield, Lock, FileText, CheckCircle2, Phone, Mail, MapPin } from 'lucide-react';
-import { PageHero, SectionHead } from '../components/ui';
-import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
+import { Shield, Lock, FileText, CheckCircle2, Phone, MapPin } from 'lucide-react';
+import { PageHero } from '../components/ui';
+import { HOSPITAL_INFO } from '../data/hospitalContent';
 
 export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -9,30 +9,14 @@ export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
   return (
     <div>
       <PageHero
-        photo={PHOTOS.billing}
         crumbs={t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Patient Data Protection', 'દર્દી ડેટા સુરક્ષા')}
-        eyebrowIcon={<Lock size={14} />}
-        title={t('Privacy Policy & Health Data Protection', 'પ્રાઇવસી પોલિસી અને દર્દીની ગોપનીયતા')}
+        eyebrow={t('Privacy', 'ગોપનીયતા')}
+        title={t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
         text={t(
-          'How Pulse Hospital & I.C.U protects your medical records, appointment details, and personal health information.',
-          'પલ્સ હોસ્પિટલ તમારા મેડિકલ રેકોર્ડ્સ અને વ્યક્તિગત માહિતીની સુરક્ષા કઈ રીતે રાખે છે.'
+          'How Pulse Hospital & I.C.U handles the details you share when you book an appointment or contact us through this website.',
+          'આ વેબસાઇટ દ્વારા એપોઇન્ટમેન્ટ બુક કરતી વખતે કે સંપર્ક કરતી વખતે આપેલી માહિતી પલ્સ હોસ્પિટલ કઈ રીતે સંભાળે છે.'
         )}
-        cardTitle={t('Security & Standards Assurance', 'સુરક્ષા અને ગુણવત્તા ખાતરી')}
-        cardBadge={t('Strict Confidentiality', 'સંપૂર્ણ ગોપનીયતા')}
-        cardIcon={<Shield size={18} />}
-        stats={[
-          { value: '256-bit', label: t('SSL Security', 'SSL સુરક્ષા'), sub: t('End-to-end encrypted', 'સંપૂર્ણ એન્ક્રિપ્ટેડ') },
-          { value: '100%', label: t('Confidential', 'ગોપનીયતા'), sub: t('Zero external selling', 'કોઈ ડેટા વેચાણ નહિ') },
-          { value: '24x7', label: t('Integrity', 'ડેટા સુરક્ષા'), sub: t('Encrypted records', 'સુરક્ષિત રેકોર્ડ્સ') },
-          { value: 'DISHA', label: t('Aligned Standards', 'હેલ્થ ડેટા નિયમો'), sub: t('Healthcare Act', 'ભારતીય નિયમો મુજબ') }
-        ]}
-        highlights={[
-          t('Patient records and lab investigations are never shared or monetised', 'દર્દીના મેડિકલ રેકોર્ડ્સ કે રિપોર્ટ્સ ક્યારેય કોઈ સાથે શેર થતા નથી'),
-          t('Appointment lookup is restricted strictly to verified 10-digit mobile numbers', 'એપોઇન્ટમેન્ટ વિગત ફક્ત વેરિફાઇડ ૧૦ આંકડાના મોબાઇલ નંબર પર જ મળે છે'),
-          t('Internal medical access restricted strictly to attending clinical personnel', 'મેડિકલ ડેટા ફક્ત સારવાર આપતા ડૉક્ટર્સ અને સ્ટાફ સુધી જ સીમિત રહે છે')
-        ]}
       />
 
       <section className="section">
@@ -76,7 +60,7 @@ export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
                   t('Patient identification: Full name, age, gender, and contact phone number.', 'દર્દીનું પૂરું નામ, ઉંમર અને મોબાઈલ નંબર.'),
                   t('Clinical context: Reason for visit, primary symptoms, and optional prior hospital file number.', 'મુલાકાતનું કારણ, પ્રાથમિક લક્ષણો અને જૂનો ફાઇલ નંબર.'),
                   t('Appointment parameters: Preferred consulting doctor, chosen date, and 30-minute time slot.', 'પસંદ કરેલ ડૉક્ટર, તારીખ અને સમય સ્લોટ.'),
-                  t('Communication history: WhatsApp confirmations, SMS updates, and reception callback requests.', 'વોટ્સએપ અને એસએમએસ કન્ફર્મેશન મેસેજ.')
+                  t('Communication history: the WhatsApp messages exchanged with reception.', 'રિસેપ્શન સાથેના વોટ્સએપ સંદેશા.')
                 ].map((item, idx) => (
                   <li key={idx} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, color: 'var(--text-body)' }}>
                     <CheckCircle2 size={16} style={{ color: 'var(--mint)', flexShrink: 0, marginTop: 3 }} />
@@ -102,7 +86,7 @@ export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
                 {[
                   t('Reserving doctor consultation capacity and eliminating waiting room overcrowding.', 'ડૉક્ટરની એપોઇન્ટમેન્ટ સ્લોટ ફાળવણી માટે.'),
                   t('Verifying prior treatment records, allergy history, and ongoing prescriptions at bedside.', 'અગાઉના મેડિકલ રેકોર્ડ અને દવાઓની ચકાસણી માટે.'),
-                  t('Transmitting digital appointment slips directly to your designated WhatsApp number.', 'વોટ્સએપ પર બુકિંગ સ્લિપ મોકલવા માટે.'),
+                  t('Confirming your appointment with you on WhatsApp.', 'વોટ્સએપ પર તમારી એપોઇન્ટમેન્ટ કન્ફર્મ કરવા માટે.'),
                   t('Emergency triage coordination if urgent clinical admission is needed.', 'ઇમરજન્સી અને આઈ.સી.યુ. એડમિશન વ્યવસ્થા માટે.')
                 ].map((item, idx) => (
                   <li key={idx} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 14, color: 'var(--text-body)' }}>
@@ -133,8 +117,8 @@ export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
               </h4>
               <p style={{ color: 'var(--text-body)', fontSize: 14.5, lineHeight: 1.7 }}>
                 {t(
-                  'All digital interactions with this portal are protected with standard transport layer encryption (TLS/HTTPS). Clinical records and appointment history are stored on secure servers with restricted role-based administrative permissions. Patient records are retained in accordance with statutory medical record preservation timelines mandated under National Medical Commission guidelines.',
-                  'તમામ ડેટા એન્ક્રિપ્શન સાથે સુરક્ષિત રાખવામાં આવે છે અને ફક્ત અધિકૃત હોસ્પિટલ એડમિન દ્વારા જ તે જોઈ શકાય છે.'
+                  'This website is served over HTTPS and has no database of its own. When you book or send an inquiry, the details are placed in a WhatsApp message that you send to the hospital yourself, and a copy of your booking is kept only in your own browser so you can see it under “My Booking”. Clearing your browser data removes that copy. Records created at the hospital during your visit are kept as required by medical record regulations.',
+                  'આ વેબસાઇટ HTTPS પર ચાલે છે અને તેનો પોતાનો કોઈ ડેટાબેઝ નથી. બુકિંગ કે પૂછપરછની વિગતો વોટ્સએપ સંદેશ તરીકે તમે જાતે હોસ્પિટલને મોકલો છો, અને બુકિંગની નકલ ફક્ત તમારા બ્રાઉઝરમાં જ રહે છે. હોસ્પિટલમાં બનતા રેકોર્ડ્સ નિયમો મુજબ સાચવવામાં આવે છે.'
                 )}
               </p>
             </div>
@@ -184,10 +168,6 @@ export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <Phone size={16} style={{ color: 'var(--primary)' }} />
                   <span><a href={HOSPITAL_INFO.phoneHref} style={{ fontWeight: 700 }}>{HOSPITAL_INFO.appointmentNumber}</a> (Reception & Administration Desk)</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Mail size={16} style={{ color: 'var(--primary)' }} />
-                  <span>{HOSPITAL_INFO.email}</span>
                 </div>
               </div>
             </div>

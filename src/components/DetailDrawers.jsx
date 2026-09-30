@@ -67,7 +67,7 @@ export function FacilityDrawer({ facility, onClose, onBook, onOpenDoctor, lang =
             <div className="tag-cloud">
               {departments.map((d) => (
                 <span key={d.id} className="chip">
-                  <Icon name={d.icon} size={13} /> {lang === 'en' ? d.title : (d.titleGu || d.title)}
+                  <Icon name={d.icon} size={13} /> {lang === 'en' ? d.title : (d.titleGujarati || d.title)}
                 </span>
               ))}
             </div>
@@ -141,14 +141,23 @@ export function DoctorDrawer({ doctor, onClose, onBook, onOpenFacility, lang = '
             <small><MapPin size={11} /> {lang === 'en' ? "Where to find" : "ક્યાં મળવું"}</small>
             <strong>{lang === 'en' ? doctor.room : (doctor.roomGujarati || doctor.room)}</strong>
           </div>
-          <div className="info-cell">
-            <small><Building2 size={11} /> {lang === 'en' ? "Affiliated hospital" : "મુખ્ય હોસ્પિટલ"}</small>
-            <strong>{lang === 'en' ? doctor.hospital : (doctor.hospitalGujarati || doctor.hospital)}</strong>
-          </div>
-          <div className="info-cell">
-            <small><Phone size={11} /> {lang === 'en' ? "Direct line" : "સીધો સંપર્ક નંબર"}</small>
-            <strong>{doctor.mobileFormatted}</strong>
-          </div>
+          {!isResident && (
+            <div className="info-cell">
+              <small><Building2 size={11} /> {lang === 'en' ? "Own hospital" : "સંલગ્ન હોસ્પિટલ"}</small>
+              <strong>{lang === 'en' ? doctor.hospital : (doctor.hospitalGujarati || doctor.hospital)}</strong>
+            </div>
+          )}
+          {doctor.mobileFormatted ? (
+            <div className="info-cell">
+              <small><Phone size={11} /> {lang === 'en' ? "Doctor's clinic line" : "ડૉક્ટરનો સંપર્ક નંબર"}</small>
+              <a href={`tel:${doctor.mobileFormatted.replace(/\s/g, '')}`}><strong>{doctor.mobileFormatted}</strong></a>
+            </div>
+          ) : (
+            <div className="info-cell">
+              <small><Phone size={11} /> {lang === 'en' ? "Hospital line" : "હોસ્પિટલ નંબર"}</small>
+              <a href={HOSPITAL_INFO.phoneHref}><strong>{HOSPITAL_INFO.appointmentNumber}</strong></a>
+            </div>
+          )}
         </div>
 
         <div>
@@ -191,7 +200,7 @@ export function DoctorDrawer({ doctor, onClose, onBook, onOpenFacility, lang = '
             <Users size={18} />
             <span>
               {lang === 'en'
-                ? "Resident doctors are based in Emergency and the ICU around the clock. In an emergency you don't need an appointment: come straight in or call."
+                ? "Our medical officer is based in Emergency and the ICU around the clock. In an emergency you don't need an appointment: come straight in or call."
                 : "રેસિડેન્ટ તબીબો ઇમરજન્સી અને આઈ.સી.યુ.માં ૨૪ કલાક હાજર રહે છે. કટોકટીમાં એપોઇન્ટમેન્ટની જરૂર નથી: સીધા હોસ્પિટલ આવો અથવા કૉલ કરો."}
             </span>
           </div>
