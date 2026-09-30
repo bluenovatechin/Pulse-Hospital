@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/facilities</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/facilities</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/book-appointment</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/gallery</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/about</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/contact</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/privacy</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/terms</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/1</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/2</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/3</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/4</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/6</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-dipesh-patel</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-naimuddin-kazi</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-paras-patel</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-santosh-prajapati</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-pulkit-pandya</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/critical-care</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/medicine</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/cardiac</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/chest</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/kidney</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/gastro</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/neuro</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/emergency</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/departments/surgery</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/facilities/icu</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/facilities/isolation</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://bluenovatechin.github.io/Pulse-Hospital/facilities/emergency</loc><lastmod>2026-09-30</lastmod></url>
