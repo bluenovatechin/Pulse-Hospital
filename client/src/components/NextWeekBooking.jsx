@@ -283,9 +283,16 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 
         <div className="booking-header-content">
           <div className="booking-header-main">
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255, 255, 255, 0.2)', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
-              <Sparkles size={14} color="var(--accent-light)" />
-              <span>{lang === 'en' ? 'Advance Slot-Wise Scheduling' : 'આગામી સપ્તાહ માટે એડવાન્સ સ્લોટ બુકિંગ'}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px', flexWrap: 'wrap' }}>
+              <img 
+                src={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/rendered.png`} 
+                alt="Pulse Hospital" 
+                style={{ width: 46, height: 46, objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.35))' }} 
+              />
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255, 255, 255, 0.2)', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                <Sparkles size={14} color="var(--accent-light)" />
+                <span>{lang === 'en' ? 'Advance Slot-Wise Scheduling' : 'આગામી સપ્તાહ માટે એડવાન્સ સ્લોટ બુકિંગ'}</span>
+              </div>
             </div>
 
             <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#ffffff', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: 1.25 }}>

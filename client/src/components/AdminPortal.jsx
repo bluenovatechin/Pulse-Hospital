@@ -98,11 +98,18 @@ export default function AdminPortal({ onClose }) {
   };
 
   if (needsKey) {
+    const logoSrc = `${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/rendered.png`;
     return (
       <div className="modal-overlay">
         <div className="modal-content" style={{ maxWidth: 420, padding: 28 }} role="dialog" aria-modal="true" aria-label="Staff sign in">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <h3 style={{ fontSize: 20 }}>Staff portal</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img src={logoSrc} alt="Pulse Hospital" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+              <div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, margin: 0 }}>Staff portal</h3>
+                <span style={{ fontSize: 11, color: 'var(--brand-olive)', fontWeight: 700 }}>Pulse Hospital & I.C.U</span>
+              </div>
+            </div>
             <button onClick={onClose} aria-label="Close" style={{ background: 'none', border: 'none', color: 'var(--text-muted)' }}><X size={20} /></button>
           </div>
           <p style={{ fontSize: 14, color: 'var(--text-muted)', marginBottom: 16 }}>Enter the staff key to see patient appointments.</p>
@@ -128,6 +135,8 @@ export default function AdminPortal({ onClose }) {
     return matchDoc && matchStatus && matchSource && matchSearch;
   });
 
+  const logoSrc = `${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/rendered.png`;
+
   return (
     <div className="modal-overlay">
       <div className="modal-content" style={{ maxWidth: '960px', padding: '0', maxHeight: '92vh' }}>
@@ -142,18 +151,21 @@ export default function AdminPortal({ onClose }) {
           alignItems: 'center',
           borderBottom: '1px solid rgba(255,255,255,0.1)'
         }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, background: 'var(--primary)', color: '#ffffff', padding: '2px 8px', borderRadius: '4px' }}>
-                STAFF DESK
-              </span>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
-                Pulse Hospital Reception & Appointment Console
-              </h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <img src={logoSrc} alt="Pulse Hospital" style={{ width: 40, height: 40, objectFit: 'contain', flexShrink: 0 }} />
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, background: 'var(--primary)', color: '#ffffff', padding: '2px 8px', borderRadius: '4px' }}>
+                  STAFF DESK
+                </span>
+                <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
+                  Pulse Hospital Reception & Appointment Console
+                </h3>
+              </div>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginTop: '2px' }}>
+                Real-time slot manager, patient flow tracking, and doctor schedule oversight
+              </p>
             </div>
-            <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginTop: '2px' }}>
-              Real-time slot manager, patient flow tracking, and doctor schedule oversight
-            </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

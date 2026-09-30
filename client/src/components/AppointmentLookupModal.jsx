@@ -80,15 +80,22 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <div>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
-              {lang === 'en' ? 'Track My Appointment' : 'મારી એપોઇન્ટમેન્ટ ચેક કરો'}
-            </h3>
-            <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
-              {lang === 'en'
-                ? 'Search using your 10-digit mobile number or Booking ID (e.g. PLS-920101)'
-                : '૧૦ આંકડાનો મોબાઇલ નંબર અથવા બુકિંગ ID (દા.ત. PLS-920101) દ્વારા શોધો'}
-            </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <img 
+              src={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/rendered.png`} 
+              alt="Pulse Hospital" 
+              style={{ width: 38, height: 38, objectFit: 'contain', flexShrink: 0 }} 
+            />
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
+                {lang === 'en' ? 'Track My Appointment' : 'મારી એપોઇન્ટમેન્ટ ચેક કરો'}
+              </h3>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginTop: '2px' }}>
+                {lang === 'en'
+                  ? 'Search using your 10-digit mobile number or Booking ID (e.g. PLS-920101)'
+                  : '૧૦ આંકડાનો મોબાઇલ નંબર અથવા બુકિંગ ID (દા.ત. PLS-920101) દ્વારા શોધો'}
+              </p>
+            </div>
           </div>
 
           <button
