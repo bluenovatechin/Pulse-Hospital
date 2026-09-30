@@ -110,7 +110,7 @@ export default function AdminPortal({ onClose }) {
             <label className="form-label" htmlFor="staff-key">Staff key</label>
             <input id="staff-key" type="password" className="form-input" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} autoFocus autoComplete="current-password" />
             {authError && <div style={{ color: '#be123c', fontSize: 13, fontWeight: 600 }}>{authError}</div>}
-            <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'Checking…' : 'Open staff portal'}</button>
+            <button type="submit" className="btn-primary" disabled={loading}>{loading ? 'Checking...' : 'Open staff portal'}</button>
           </form>
         </div>
       </div>
@@ -273,9 +273,9 @@ export default function AdminPortal({ onClose }) {
             style={{ width: 'auto', minWidth: '150px', height: '40px', fontSize: '13px' }}
           >
             <option value="">All Origins (Who Booked)</option>
-            <option value="Patient">👤 Patient (Online)</option>
-            <option value="Staff">🏥 Hospital Staff / Reception</option>
-            <option value="Doctor">🩺 Doctor / OPD</option>
+            <option value="Patient">Patient (Online)</option>
+            <option value="Staff">Hospital Staff / Reception</option>
+            <option value="Doctor">Doctor / OPD</option>
           </select>
         </div>
 
@@ -317,8 +317,8 @@ export default function AdminPortal({ onClose }) {
                     <td style={{ padding: '12px 8px' }}>
                       {appt.bookedBy === 'Staff' ? (
                         <div>
-                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '10px', background: '#f3e8ff', color: '#7e22ce' }}>
-                            🏥 Staff
+                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: '#f1f5f9', color: '#334155' }}>
+                            Staff
                           </span>
                           <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                             {appt.bookedByName || 'Reception'}
@@ -326,8 +326,8 @@ export default function AdminPortal({ onClose }) {
                         </div>
                       ) : appt.bookedBy === 'Doctor' ? (
                         <div>
-                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '10px', background: '#ecfdf5', color: '#047857' }}>
-                            🩺 Doctor
+                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: '#ecfdf5', color: '#047857' }}>
+                            Doctor
                           </span>
                           <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                             {appt.bookedByName || 'OPD Desk'}
@@ -335,8 +335,8 @@ export default function AdminPortal({ onClose }) {
                         </div>
                       ) : (
                         <div>
-                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '10px', background: '#eff6ff', color: '#1d4ed8' }}>
-                            👤 Patient
+                          <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', background: '#eff6ff', color: '#0369a1' }}>
+                            Patient
                           </span>
                           <div style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
                             Online Self-Booking

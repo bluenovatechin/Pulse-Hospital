@@ -4,9 +4,8 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // Relative asset paths, so the build works at any address
-  // (GitHub Pages sub-folder, custom domain, or local preview).
-  base: './',
+  // Root asset path for clean HTML5 history API routing (no # in URLs)
+  base: '/',
   server: {
     port: 5173,
     proxy: {

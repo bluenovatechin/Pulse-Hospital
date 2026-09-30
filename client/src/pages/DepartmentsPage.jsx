@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, Phone, ArrowRight } from 'lucide-react';
+import { Calendar, Phone, ArrowRight, HeartPulse, Activity } from 'lucide-react';
 import { PageHero, Icon, Avatar } from '../components/ui';
 import { DEPARTMENTS, HOSPITAL_INFO, PHOTOS, getDoctor, getFacility } from '../data/hospitalContent';
 
@@ -41,12 +41,37 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
         photo={PHOTOS.icuBeds}
         crumbs={t('Departments', 'વિભાગો')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Clinical departments', 'તબીબી વિભાગો')}
+        eyebrow={t('Clinical Departments', 'તબીબી વિભાગો')}
+        eyebrowIcon={<HeartPulse size={14} />}
         title={t('Find the right department for your condition', 'તમારી તકલીફ માટે યોગ્ય વિભાગ')}
         text={t(
           'Each department lists the conditions it treats, the services it offers, the facilities it relies on and the doctors you will meet.',
           'દરેક વિભાગમાં કઈ બીમારીની સારવાર થાય છે, કઈ સેવાઓ છે અને કયા ડૉક્ટરો છે તે જુઓ.'
         )}
+        cardTitle={t('Clinical Wings & ICU Capacity', 'વિભાગીય ક્ષમતા અને વિહંગાવલોકન')}
+        cardBadge={t('7 Active Departments', '૭ કાર્યરત વિભાગો')}
+        cardIcon={<Activity size={18} />}
+        stats={[
+          { value: `${DEPARTMENTS.length}`, label: t('Specialized Wings', 'વિશિષ્ટ શાખાઓ'), sub: t('All vital systems', 'તમામ મહત્વના અંગો') },
+          { value: '16 Beds', label: t('ICU Capacity', 'આઈ.સી.યુ. ક્ષમતા'), sub: t('Ventilator equipped', 'વેન્ટિલેટર સજ્જ') },
+          { value: '15+', label: t('Key Procedures', 'અદ્યતન સારવારો'), sub: t('Bronchoscopy & Dialysis', 'બ્રોન્કોસ્કોપી & ડાયાલીસીસ') },
+          { value: '4th Floor', label: t('Single Location', 'એક જ ફ્લોર પર'), sub: t('City Centre, Modasa', 'સિટી સેન્ટર, મોડાસા') }
+        ]}
+        highlights={[
+          t('Full emergency resuscitation and multi-parameter critical care', 'તાત્કાલિક ઇમરજન્સી રિસસિટેશન અને મલ્ટિ-પેરામીટર આઈ.સી.યુ.'),
+          t('Pulmonology wing with fiberoptic bronchoscopy & sleep studies', 'બ્રોન્કોસ્કોપી અને સ્લીપ સ્ટડી સુવિધા સાથે ફેફસાં વિભાગ'),
+          t('In-house dialysis unit & CT scan without hazardous external transfer', 'દર્દીને બહાર મોકલ્યા વગર ઈન-હાઉસ ડાયાલીસીસ અને CT સ્કેન')
+        ]}
+        actions={
+          <>
+            <button className="btn btn-primary" onClick={() => onBook(null)}>
+              <Calendar size={17} /> {t('Book Department OPD', 'OPD સ્લોટ બુક કરો')}
+            </button>
+            <a className="btn btn-ghost-light" href={HOSPITAL_INFO.phoneHref}>
+              <Phone size={17} /> {t('ICU Admission Line', 'ICU એડમિશન હેલ્પલાઇન')}
+            </a>
+          </>
+        }
       />
 
       <section className="section">
@@ -56,7 +81,7 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
             <div className="filter-bar">
               {DEPARTMENTS.map((d) => (
                 <button key={d.id} className="filter-btn" aria-pressed={active === d.id} onClick={() => jump(d.id)}>
-                  <Icon name={d.icon} size={15} /> {d.title}
+                  <Icon name={d.icon} size={15} /> {lang === 'en' ? d.title : (d.titleGujarati || d.title)}
                 </button>
               ))}
             </div>
@@ -67,7 +92,7 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
             <nav className="dept-nav" aria-label="Departments">
               {DEPARTMENTS.map((d) => (
                 <button key={d.id} aria-current={active === d.id} onClick={() => jump(d.id)}>
-                  <Icon name={d.icon} size={17} /> {d.title}
+                  <Icon name={d.icon} size={17} /> {lang === 'en' ? d.title : (d.titleGujarati || d.title)}
                 </button>
               ))}
             </nav>
@@ -82,8 +107,8 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
                     <div className="dept-head">
                       <span className="icon-tile lg mint"><Icon name={d.icon} size={26} /></span>
                       <div>
-                        <h2>{d.title}</h2>
-                        <div className="gujarati-text muted" style={{ fontSize: 14 }}>{d.titleGujarati}</div>
+                        <h2>{lang === 'en' ? d.title : d.titleGujarati}</h2>
+                        <div className="gujarati-text muted" style={{ fontSize: 14 }}>{lang === 'en' ? d.titleGujarati : d.title}</div>
                         <p className="intro">{d.intro}</p>
                       </div>
                     </div>
@@ -100,7 +125,7 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
                           {d.services.map((s) => <span key={s} className="chip">{s}</span>)}
                           {facilities.map((f) => (
                             <button key={f.id} className="chip chip-mint" style={{ border: 'none' }} onClick={() => onOpenFacility(f.id)}>
-                              <Icon name={f.icon} size={13} /> {f.name} <ArrowRight size={12} />
+                              <Icon name={f.icon} size={13} /> {lang === 'en' ? f.name : f.nameGu} <ArrowRight size={12} />
                             </button>
                           ))}
                         </div>
@@ -116,12 +141,12 @@ export default function DepartmentsPage({ param, onNavigate, onOpenFacility, onB
                           <div className="mini-docs">
                             {doctors.map((doc) => (
                               <button key={doc.id} className="mini-doc" onClick={() => onNavigate('doctors', doc.id)}>
-                                <Avatar doctor={doc} /> {doc.name}
+                                <Avatar doctor={doc} /> {lang === 'en' ? doc.name : doc.nameGujarati}
                               </button>
                             ))}
                           </div>
                         ) : (
-                          <span className="muted" style={{ fontSize: 14 }}>{t('Visiting surgical team — call the helpline to schedule.', 'વિઝિટિંગ સર્જિકલ ટીમ — સમય માટે કૉલ કરો.')}</span>
+                          <span className="muted" style={{ fontSize: 14 }}>{t('Visiting surgical team: call the helpline to schedule.', 'વિઝિટિંગ સર્જિકલ ટીમ: સમય માટે કૉલ કરો.')}</span>
                         )}
                       </div>
                       {d.id === 'emergency' || !bookable ? (

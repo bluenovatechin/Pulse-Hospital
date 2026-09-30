@@ -22,6 +22,8 @@ import { DOCTORS } from '../data/hospitalContent';
 import { Avatar } from './ui';
 import { API } from '../api';
 
+const GUJARATI_MONTHS_SHORT = ["જાન્યુ", "ફેબ્રુ", "માર્ચ", "એપ્રિલ", "મે", "જૂન", "જુલાઈ", "ઑગસ્ટ", "સપ્ટે", "ઑક્ટો", "નવે", "ડિસે"];
+
 export default function NextWeekBooking({ preselectedDoctorId = null, onBookingSuccess, lang = 'en' }) {
   const [scheduleDays, setScheduleDays] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
@@ -266,7 +268,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
       setSelectedSlot('');
 
     } catch (err) {
-      setErrorMsg(err.message || 'Error booking appointment. Please try another slot.');
+      setErrorMsg(err.message || (lang === 'en' ? 'Error booking appointment. Please try another slot.' : 'એપોઇન્ટમેન્ટ બુક કરવામાં સમસ્યા આવી. કૃપા કરીને અન્ય સ્લોટ અજમાવો.'));
     } finally {
       setSubmitting(false);
     }
@@ -276,53 +278,48 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     <div className="next-week-card" id="booking-section">
       
       {/* Header Banner */}
-      <div style={{
-        background: 'linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-navy-light) 60%, #0369a1 100%)',
-        padding: '32px 28px',
-        color: '#ffffff',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.25)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+      <div className="booking-header-banner">
+        <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '220px', height: '220px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, transparent 70%)', filter: 'blur(35px)', pointerEvents: 'none' }} />
 
-        <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255, 255, 255, 0.2)', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
+        <div className="booking-header-content">
+          <div className="booking-header-main">
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255, 255, 255, 0.2)', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px' }}>
               <Sparkles size={14} color="var(--accent-light)" />
               <span>{lang === 'en' ? 'Advance Slot-Wise Scheduling' : 'આગામી સપ્તાહ માટે એડવાન્સ સ્લોટ બુકિંગ'}</span>
             </div>
 
-            <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff', marginBottom: '8px', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#ffffff', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
               {lang === 'en' ? 'Book Your Appointment for Next Week' : 'આગામી સપ્તાહ માટે તમારો સ્લોટ બુક કરો'}
             </h2>
 
-            <p style={{ color: 'rgba(255, 255, 255, 0.85)', fontSize: '14.5px', maxWidth: '650px', lineHeight: 1.5 }}>
+            <p style={{ color: 'rgba(255, 255, 255, 0.88)', fontSize: '14px', maxWidth: '620px', lineHeight: 1.55 }}>
               {lang === 'en' 
                 ? 'Select your doctor, pick your preferred date in next week, and reserve a dedicated 30-minute OPD slot to eliminate waiting time at the hospital.'
                 : 'તમારા મનપસંદ ડૉક્ટર પસંદ કરો, આગામી અઠવાડિયાની તારીખ અને અનુકૂળ સમય સ્લોટ પસંદ કરી હોસ્પિટલમાં રાહ જોયા વિના સીધા કન્સલ્ટેશન મેળવો.'}
             </p>
           </div>
 
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '14px', padding: '14px 18px', textAlign: 'right' }}>
-            <div style={{ fontSize: '11px', color: 'var(--accent-light)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Hospital OPD Timing
+          <div className="booking-opd-card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'var(--accent-light)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <Clock size={13} />
+              <span>{lang === 'en' ? 'Hospital OPD Timing' : 'હોસ્પિટલ OPD સમય'}</span>
             </div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginTop: '4px' }}>
-              Morning: 09:00 AM – 01:30 PM
+            <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#ffffff', marginTop: '6px' }}>
+              {lang === 'en' ? 'Morning: 09:00 AM – 01:30 PM' : 'સવારે: ૦૯:૦૦ AM – ૦૧:૩૦ PM'}
             </div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff' }}>
-              Evening: 04:30 PM – 08:00 PM
+            <div style={{ fontSize: '13.5px', fontWeight: 700, color: '#ffffff', marginTop: '2px' }}>
+              {lang === 'en' ? 'Evening: 04:30 PM – 08:00 PM' : 'સાંજે: ૦૪:૩૦ PM – ૦૮:૦૦ PM'}
             </div>
           </div>
         </div>
       </div>
 
-      <div style={{ padding: '32px 28px' }}>
+      <div className="booking-body">
         <form onSubmit={handleSubmit}>
           
           {/* STEP 1: Select Specialist Doctor */}
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800 }}>
                   1
@@ -332,48 +329,42 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                 </h3>
               </div>
               <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                {DOCTORS.length} Specialists Available
+                {DOCTORS.length} {lang === 'en' ? 'Specialists Available' : 'નિષ્ણાત તબીબો ઉપલબ્ધ'}
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '14px' }}>
+            <div className="booking-doctor-grid">
               {DOCTORS.map((doc) => {
                 const isSelected = selectedDoctorId === doc.id;
                 return (
                   <div
                     key={doc.id}
                     onClick={() => setSelectedDoctorId(doc.id)}
+                    className="booking-doctor-card"
                     style={{
                       border: isSelected ? '2px solid var(--primary)' : '1.5px solid var(--border-color)',
-                      borderRadius: 'var(--radius-lg)',
-                      padding: '14px 16px',
-                      cursor: 'pointer',
                       background: isSelected ? 'linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%)' : '#ffffff',
-                      boxShadow: isSelected ? '0 8px 20px rgba(2, 132, 199, 0.15)' : 'none',
-                      transition: 'all var(--transition-fast)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '14px'
+                      boxShadow: isSelected ? '0 6px 18px rgba(2, 132, 199, 0.14)' : 'none'
                     }}
                   >
                     <Avatar doctor={doc} />
 
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                         <h4 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--brand-navy)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {lang === 'en' ? doc.name : doc.nameGujarati}
                         </h4>
                         {isSelected && (
-                          <CheckCircle2 size={18} color="var(--primary)" />
+                          <CheckCircle2 size={18} color="var(--primary)" style={{ flexShrink: 0 }} />
                         )}
                       </div>
 
                       <div style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 600, marginTop: '2px' }}>
-                        {doc.qualification}
+                        {doc.qualification} {doc.experience ? `• ${lang === 'en' ? doc.experience : (doc.experienceGujarati || doc.experience)}` : ''}
                       </div>
 
                       <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Building2 size={12} />
+                        <Building2 size={12} style={{ flexShrink: 0 }} />
                         <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {lang === 'en' ? doc.hospital : doc.hospitalGujarati}
                         </span>
@@ -401,18 +392,12 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(2, 132, 199, 0.08)', color: 'var(--primary)', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 600 }}>
                 <CalendarCheck size={14} />
-                <span>Advance Calendar (Mon – Sun)</span>
+                <span>{lang === 'en' ? 'Advance Calendar (Mon – Sun)' : 'એડવાન્સ કેલેન્ડર (સોમ – રવિ)'}</span>
               </div>
             </div>
 
             {/* Horizontal Scrollable Day Tabs */}
-            <div style={{ 
-              display: 'flex', 
-              gap: '12px', 
-              overflowX: 'auto', 
-              paddingBottom: '8px',
-              paddingTop: '2px'
-            }}>
+            <div className="booking-days-scroller">
               {scheduleDays.map((day) => {
                 const isSelected = selectedDate === day.date;
                 return (
@@ -434,7 +419,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                         borderRadius: '4px',
                         whiteSpace: 'nowrap'
                       }}>
-                        {day.displayBadge}
+                        {lang === 'en' ? day.displayBadge : (day.displayBadge === 'Next Week Start' ? 'નવું સપ્તાહ શરૂ' : day.displayBadge)}
                       </span>
                     )}
 
@@ -447,16 +432,18 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                     </span>
 
                     <span style={{ fontSize: '11px', color: 'var(--text-light)', fontWeight: 600 }}>
-                      {new Date(`${day.date}T00:00:00`).toLocaleString('en-US', { month: 'short' })}
+                      {lang === 'en'
+                        ? new Date(`${day.date}T00:00:00`).toLocaleString('en-US', { month: 'short' })
+                        : GUJARATI_MONTHS_SHORT[new Date(`${day.date}T00:00:00`).getMonth()]}
                     </span>
 
                     {day.isSunday ? (
                       <span style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700, marginTop: '4px' }}>
-                        Emergency
+                        {lang === 'en' ? 'Emergency' : 'ઇમરજન્સી'}
                       </span>
                     ) : (
                       <span style={{ fontSize: '10px', color: 'var(--success)', fontWeight: 700, marginTop: '4px' }}>
-                        Open OPD
+                        {lang === 'en' ? 'Open OPD' : 'OPD ચાલુ'}
                       </span>
                     )}
                   </div>
@@ -477,7 +464,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                     {lang === 'en' ? 'Select 30-Minute Time Slot' : '૩૦ મિનિટનો સમય સ્લોટ પસંદ કરો'}
                   </h3>
                   <p style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
-                    {selectedDoctor.name} • {selectedDoctor.room}
+                    {lang === 'en' ? selectedDoctor.name : selectedDoctor.nameGujarati} • {lang === 'en' ? selectedDoctor.room : (selectedDoctor.roomGujarati || selectedDoctor.room)}
                   </p>
                 </div>
               </div>
@@ -486,15 +473,15 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '3px', border: '1.5px solid #cbd5e1', background: '#ffffff' }} />
-                  <span style={{ color: 'var(--text-muted)' }}>Available</span>
+                  <span style={{ color: 'var(--text-muted)' }}>{lang === 'en' ? 'Available' : 'ઉપલબ્ધ'}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'var(--primary)' }} />
-                  <span style={{ color: 'var(--primary)', fontWeight: 700 }}>Selected</span>
+                  <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{lang === 'en' ? 'Selected' : 'પસંદ કરેલ'}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: '#e2e8f0', textDecoration: 'line-through' }} />
-                  <span style={{ color: '#94a3b8' }}>Booked</span>
+                  <span style={{ color: '#94a3b8' }}>{lang === 'en' ? 'Booked' : 'બુક થયેલ'}</span>
                 </div>
               </div>
             </div>
@@ -502,26 +489,26 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
             {loadingSlots ? (
               <div style={{ padding: '36px', textAlign: 'center', color: 'var(--text-muted)', background: '#f8fafc', borderRadius: 'var(--radius-lg)' }}>
                 <Clock size={28} className="animate-spin" style={{ margin: '0 auto 10px', color: 'var(--primary)' }} />
-                <p>Checking live slot availability with hospital schedule...</p>
+                <p>{lang === 'en' ? 'Checking live slot availability with hospital schedule...' : 'હોસ્પિટલ શિડ્યુલ મુજબ સ્લોટ તપાસી રહ્યાં છીએ...'}</p>
               </div>
             ) : !slotsData.isDoctorAvailable ? (
               <div style={{ padding: '24px', background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: 'var(--radius-lg)', color: '#b45309', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <Info size={24} />
                 <div>
-                  <strong>Doctor Schedule Notice:</strong> {slotsData.message || 'Doctor is not available on this day. Please pick another day or doctor.'}
+                  <strong>{lang === 'en' ? 'Doctor Schedule Notice:' : 'ડૉક્ટર શિડ્યુલ સૂચના:'}</strong> {slotsData.message || (lang === 'en' ? 'Doctor is not available on this day. Please pick another day or doctor.' : 'આ દિવસે ડૉક્ટર ઉપલબ્ધ નથી. કૃપા કરીને અન્ય દિવસ અથવા ડૉક્ટર પસંદ કરો.')}
                 </div>
               </div>
             ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+              <div className="booking-sessions-grid">
                 
                 {/* Morning Slots Panel */}
-                <div style={{ background: '#f8fafc', borderRadius: 'var(--radius-lg)', padding: '18px', border: '1px solid var(--border-color)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14.5px' }}>
+                <div className="booking-session-panel">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14px' }}>
                     <Clock size={16} color="var(--primary)" />
-                    <span>Morning Session (09:00 AM – 01:00 PM)</span>
+                    <span>{lang === 'en' ? 'Morning Session (09:00 AM – 01:00 PM)' : 'સવારનું સત્ર (સવારે ૦૯:૦૦ AM – ૦૧:૦૦ PM)'}</span>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '10px' }}>
+                  <div className="booking-slots-grid">
                     {slotsData.morningSlots && slotsData.morningSlots.map((s) => {
                       const isSelected = selectedSlot === s.time;
                       return (
@@ -536,7 +523,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                           {isSelected ? (
                             <CheckCircle2 size={15} />
                           ) : !s.isAvailable ? (
-                            <span style={{ fontSize: '10px', textDecoration: 'none' }}>Reserved</span>
+                            <span style={{ fontSize: '10px', textDecoration: 'none' }}>
+                              {lang === 'en' ? 'Reserved' : 'બુક થયેલ'}
+                            </span>
                           ) : null}
                         </div>
                       );
@@ -545,14 +534,14 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                 </div>
 
                 {/* Evening Slots Panel */}
-                <div style={{ background: '#f8fafc', borderRadius: 'var(--radius-lg)', padding: '18px', border: '1px solid var(--border-color)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14.5px' }}>
+                <div className="booking-session-panel">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14px' }}>
                     <Clock size={16} color="var(--accent)" />
-                    <span>Evening Session (04:30 PM – 08:00 PM)</span>
+                    <span>{lang === 'en' ? 'Evening Session (04:30 PM – 08:00 PM)' : 'સાંજનું સત્ર (સાંજે ૦૪:૩૦ PM – ૦૮:૦૦ PM)'}</span>
                   </div>
 
                   {slotsData.eveningSlots && slotsData.eveningSlots.length > 0 ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '10px' }}>
+                    <div className="booking-slots-grid">
                       {slotsData.eveningSlots.map((s) => {
                         const isSelected = selectedSlot === s.time;
                         return (
@@ -567,7 +556,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                             {isSelected ? (
                               <CheckCircle2 size={15} />
                             ) : !s.isAvailable ? (
-                              <span style={{ fontSize: '10px', textDecoration: 'none' }}>Reserved</span>
+                              <span style={{ fontSize: '10px', textDecoration: 'none' }}>
+                                {lang === 'en' ? 'Reserved' : 'બુક થયેલ'}
+                              </span>
                             ) : null}
                           </div>
                         );
@@ -575,7 +566,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                     </div>
                   ) : (
                     <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
-                      Sunday evenings are reserved for Emergency & Trauma triage only.
+                      {lang === 'en'
+                        ? 'Sunday evenings are reserved for Emergency & Trauma triage only.'
+                        : 'રવિવારે સાંજે માત્ર ઇમરજન્સી અને ટ્રોમા સારવાર જ ઉપલબ્ધ છે.'}
                     </div>
                   )}
                 </div>
@@ -585,9 +578,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
           </div>
 
           {/* STEP 4: Patient Details */}
-          <div style={{ marginBottom: '28px', background: '#ffffff', borderRadius: 'var(--radius-lg)', border: '1.5px solid var(--border-color)', padding: '24px' }}>
+          <div className="booking-patient-card">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800 }}>
+              <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--primary)', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 800, flexShrink: 0 }}>
                 4
               </div>
               <div>
@@ -601,37 +594,34 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
             </div>
 
             {/* Booking Source / Who is booking this appointment */}
-            <div style={{ marginBottom: '18px', padding: '12px 16px', background: '#f8fafc', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
-              <label className="form-label" style={{ marginBottom: '8px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ marginBottom: '18px', padding: '12px 14px', background: '#f8fafc', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)' }}>
+              <label className="form-label" style={{ marginBottom: '8px', fontSize: '12.5px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ fontWeight: 800 }}>{lang === 'en' ? 'Who is filling this appointment?' : 'આ એપોઇન્ટમેન્ટ કોણ ભરી રહ્યું છે?'}</span>
               </label>
               
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
+              <div className="booking-who-grid">
                 {[
-                  { id: 'Patient', labelEn: '👤 Patient / Self (Online)', labelGu: '👤 દર્દી પોતે (ઓનલાઈન)' },
-                  { id: 'Staff', labelEn: '🏥 Hospital Staff / Reception', labelGu: '🏥 હોસ્પિટલ સ્ટાફ / રિસેપ્શન' },
-                  { id: 'Doctor', labelEn: '🩺 Doctor / OPD Follow-up', labelGu: '🩺 ડૉક્ટર / OPD ફોલો-અપ' }
+                  { id: 'Patient', labelEn: 'Patient / Self (Online)', labelGu: 'દર્દી પોતે (ઓનલાઈન)', icon: User },
+                  { id: 'Staff', labelEn: 'Hospital Staff / Reception', labelGu: 'હોસ્પિટલ સ્ટાફ / રિસેપ્શન', icon: Building2 },
+                  { id: 'Doctor', labelEn: 'Doctor / OPD Follow-up', labelGu: 'ડૉક્ટર / OPD ફોલો-અપ', icon: Stethoscope }
                 ].map((item) => {
                   const isSelected = (formData.bookedBy || 'Patient') === item.id;
+                  const ItemIcon = item.icon;
                   return (
                     <button
                       type="button"
                       key={item.id}
                       onClick={() => setFormData({ ...formData, bookedBy: item.id })}
+                      className="booking-who-btn"
                       style={{
-                        padding: '8px 12px',
-                        borderRadius: 'var(--radius-md)',
-                        fontSize: '12.5px',
                         fontWeight: isSelected ? 800 : 600,
                         border: isSelected ? '2px solid var(--primary)' : '1px solid var(--border-color)',
                         background: isSelected ? '#eff6ff' : '#ffffff',
-                        color: isSelected ? 'var(--primary)' : 'var(--text-main)',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        transition: 'all 0.15s ease'
+                        color: isSelected ? 'var(--primary)' : 'var(--text-main)'
                       }}
                     >
-                      {lang === 'en' ? item.labelEn : item.labelGu}
+                      <ItemIcon size={15} style={{ color: isSelected ? 'var(--primary)' : 'var(--text-muted)', flexShrink: 0 }} />
+                      <span>{lang === 'en' ? item.labelEn : item.labelGu}</span>
                     </button>
                   );
                 })}
@@ -650,48 +640,49 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                     }
                     value={formData.bookedByName}
                     onChange={handleInputChange}
-                    style={{ fontSize: '12.5px', height: '36px' }}
+                    style={{ fontSize: '13px', height: '42px' }}
                   />
                 </div>
               )}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-              <div>
+            <div className="booking-form-grid">
+              <div className="booking-field-group">
                 <label className="form-label">{lang === 'en' ? 'Patient Full Name *' : 'દર્દીનું પૂરું નામ *'}</label>
                 <input
                   type="text"
                   name="patientName"
                   className="form-input"
-                  placeholder="e.g. Rameshchandra Patel"
+                  placeholder={lang === 'en' ? 'e.g. Rameshchandra Patel' : 'દા.ત. રમેશભાઈ પટેલ'}
                   value={formData.patientName}
                   onChange={handleInputChange}
                   required
                 />
               </div>
 
-              <div>
-                <label className="form-label">{lang === 'en' ? 'Mobile Number (10 Digits) *' : 'મોબાઇલ નંબર *'}</label>
+              <div className="booking-field-group">
+                <label className="form-label">{lang === 'en' ? 'Mobile Number (10 Digits) *' : 'મોબાઇલ નંબર (૧૦ આંકડા) *'}</label>
                 <input
                   type="tel"
                   name="patientPhone"
                   className="form-input"
-                  placeholder="e.g. 98250 12345"
+                  placeholder={lang === 'en' ? 'e.g. 98250 12345' : 'દા.ત. ૯૮૨૫૦ ૧૨૩૪૫'}
                   value={formData.patientPhone}
                   onChange={handleInputChange}
                   required
                 />
               </div>
 
-              <div>
-                <label className="form-label">{lang === 'en' ? 'Age & Gender' : 'ઉંમર & જાતિ'}</label>
-                <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="booking-field-group">
+                <label className="form-label">{lang === 'en' ? 'Age & Gender *' : 'ઉંમર અને જાતિ *'}</label>
+                <div className="booking-age-gender-row">
                   <input
                     type="number"
                     name="patientAge"
                     className="form-input"
-                    placeholder="Age"
-                    style={{ width: '90px' }}
+                    placeholder={lang === 'en' ? 'Age (Years)' : 'ઉંમર (વર્ષ)'}
+                    min="1"
+                    max="120"
                     value={formData.patientAge}
                     onChange={handleInputChange}
                   />
@@ -701,108 +692,96 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
                     value={formData.patientGender}
                     onChange={handleInputChange}
                   >
-                    <option value="Male">Male (પુરુષ)</option>
-                    <option value="Female">Female (સ્ત્રી)</option>
-                    <option value="Other">Other</option>
+                    <option value="Male">{lang === 'en' ? 'Male (પુરુષ)' : 'પુરુષ'}</option>
+                    <option value="Female">{lang === 'en' ? 'Female (સ્ત્રી)' : 'સ્ત્રી'}</option>
+                    <option value="Other">{lang === 'en' ? 'Other' : 'અન્ય'}</option>
                   </select>
                 </div>
               </div>
 
-              <div>
-                <label className="form-label">{lang === 'en' ? 'City / Village' : 'ગામ / શહેર'}</label>
+              <div className="booking-field-group">
+                <label className="form-label">{lang === 'en' ? 'City / Village' : 'ગામ / શહેર / વિસ્તાર'}</label>
                 <input
                   type="text"
                   name="city"
                   className="form-input"
-                  placeholder="e.g. Modasa, Dhansura, Bayad"
+                  placeholder={lang === 'en' ? 'e.g. Modasa, Dhansura, Bayad' : 'દા.ત. મોડાસા, ધનસુરા, બાયડ, મેઘરજ...'}
                   value={formData.city}
                   onChange={handleInputChange}
                 />
               </div>
 
-              <div>
+              <div className="booking-field-group">
                 <label className="form-label">
-                  {lang === 'en' ? 'Previous Hospital File No. (If Any)' : 'જૂની ફાઇલ નંબર (જો હોય તો)'}
+                  {lang === 'en' ? 'Previous Hospital File No. (If Any)' : 'જૂની હોસ્પિટલ ફાઇલ / કેસ નંબર (જો હોય તો)'}
                 </label>
                 <input
                   type="text"
                   name="previousFileNo"
                   className="form-input"
-                  placeholder="e.g. PH-2025-XXXX"
+                  placeholder={lang === 'en' ? 'e.g. PH-2025-XXXX' : 'દા.ત. PH-૨૦૨૫-XXXX'}
                   value={formData.previousFileNo}
                   onChange={handleInputChange}
                 />
-                <span style={{ fontSize: '11px', color: 'var(--primary)', marginTop: '4px', display: 'block', fontWeight: 600 }}>
-                  💡 Notice: Please bring this file and previous reports on your visit.
+                <span style={{ fontSize: '11px', color: 'var(--primary)', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px', fontWeight: 600 }}>
+                  <Info size={13} style={{ flexShrink: 0 }} /> {lang === 'en' ? 'Notice: Please bring this file and previous reports on your visit.' : 'સૂચના: કૃપા કરીને આ ફાઇલ અને જૂના રિપોર્ટ્સ મુલાકાત વખતે સાથે લાવવા વિનંતી.'}
                 </span>
               </div>
 
-              <div>
-                <label className="form-label">{lang === 'en' ? 'Email Address (Optional)' : 'ઇમેઇલ (મરજિયાત)'}</label>
+              <div className="booking-field-group">
+                <label className="form-label">{lang === 'en' ? 'Email Address (Optional)' : 'ઇમેઇલ સરનામું (મરજિયાત)'}</label>
                 <input
                   type="email"
                   name="patientEmail"
                   className="form-input"
-                  placeholder="e.g. patient@example.com"
+                  placeholder={lang === 'en' ? 'e.g. patient@example.com' : 'દા.ત. patient@example.com'}
                   value={formData.patientEmail}
                   onChange={handleInputChange}
                 />
               </div>
-            </div>
 
-            <div style={{ marginTop: '16px' }}>
-              <label className="form-label">{lang === 'en' ? 'Brief Reason for Visit / Symptoms' : 'તકલીફ / રોગના લક્ષણો'}</label>
-              <textarea
-                name="symptoms"
-                className="form-textarea"
-                placeholder={lang === 'en' ? 'e.g. Routine sugar checkup, cough since 3 days, blood pressure consultation...' : 'દા.ત. ડાયાબીટીસ ચેકઅપ, શ્વાસની તકલીફ, તાવ, બ્લડ પ્રેશર...'}
-                value={formData.symptoms}
-                onChange={handleInputChange}
-                rows={2}
-              />
+              <div className="booking-field-group booking-field-full">
+                <label className="form-label">{lang === 'en' ? 'Brief Reason for Visit / Symptoms' : 'મુલાકાતનું કારણ / રોગના લક્ષણો'}</label>
+                <textarea
+                  name="symptoms"
+                  className="form-textarea"
+                  placeholder={lang === 'en' ? 'e.g. Routine sugar checkup, cough since 3 days, blood pressure consultation...' : 'દા.ત. ડાયાબિટીસ નિયમિત તપાસ, શ્વાસની તકલીફ, છાતીમાં દુખાવો, તાવ, બ્લડ પ્રેશર ચેકઅપ...'}
+                  value={formData.symptoms}
+                  onChange={handleInputChange}
+                  rows={2}
+                />
+              </div>
             </div>
           </div>
 
           {/* Error Banner */}
           {errorMsg && (
             <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '14px 18px', borderRadius: 'var(--radius-md)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <AlertCircle size={20} />
+              <AlertCircle size={20} style={{ flexShrink: 0 }} />
               <span style={{ fontSize: '14px', fontWeight: 600 }}>{errorMsg}</span>
             </div>
           )}
 
           {/* Submission Bar */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)',
-            padding: '20px 24px',
-            borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--border-color)',
-            flexWrap: 'wrap',
-            gap: '16px'
-          }}>
+          <div className="booking-submit-bar">
             <div>
-              <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+              <div style={{ fontSize: '12.5px', color: 'var(--text-muted)' }}>
                 {lang === 'en' ? 'Selected Slot for Next Week:' : 'પસંદ કરેલ સ્લોટ:'}
               </div>
-              <div style={{ fontSize: '17px', fontWeight: 800, color: 'var(--brand-navy)' }}>
+              <div style={{ fontSize: '17px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
                 {selectedDate ? `${selectedDate} ` : ''} 
-                {selectedSlot ? `• ${selectedSlot}` : '(No slot chosen yet)'}
+                {selectedSlot ? `• ${selectedSlot}` : (lang === 'en' ? '(No slot chosen yet)' : '(હજુ કોઈ સ્લોટ પસંદ નથી કર્યો)')}
               </div>
-              <div style={{ fontSize: '12.5px', color: 'var(--primary)', fontWeight: 600 }}>
-                Doctor: {selectedDoctor.name} ({selectedDoctor.room})
+              <div style={{ fontSize: '12.5px', color: 'var(--primary)', fontWeight: 600, marginTop: '2px' }}>
+                {lang === 'en' ? 'Doctor:' : 'તબીબ:'} {lang === 'en' ? selectedDoctor.name : selectedDoctor.nameGujarati} ({lang === 'en' ? selectedDoctor.room : (selectedDoctor.roomGujarati || selectedDoctor.room)})
               </div>
             </div>
 
             <button
               type="submit"
               disabled={submitting || !selectedSlot}
-              className="btn-primary"
+              className="btn-primary booking-submit-btn"
               style={{
-                padding: '14px 32px',
-                fontSize: '15px',
                 opacity: (!selectedSlot || submitting) ? 0.6 : 1,
                 cursor: (!selectedSlot || submitting) ? 'not-allowed' : 'pointer'
               }}
@@ -810,7 +789,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
               {submitting ? (
                 <>
                   <Clock size={18} className="animate-spin" />
-                  <span>Reserving Slot...</span>
+                  <span>{lang === 'en' ? 'Reserving Slot...' : 'સ્લોટ બુક થઈ રહ્યો છે...'}</span>
                 </>
               ) : (
                 <>

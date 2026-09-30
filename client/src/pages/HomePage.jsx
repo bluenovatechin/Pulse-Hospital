@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Building2
+  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Building2,
+  ShieldCheck, Clock, FileText
 } from 'lucide-react';
 import DoctorCard from '../components/DoctorCard';
 import { SectionHead, Media, Icon, delay } from '../components/ui';
 import {
-  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TESTIMONIALS, FAQS, PHOTOS, getFacility
+  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, FAQS, PHOTOS, getFacility
 } from '../data/hospitalContent';
 
 // Facilities featured in the home-page bento grid, in display order
@@ -26,14 +27,21 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
         <div className="container-wide">
           <div className="home-hero-grid">
             <div className="page-enter">
-              <span className="chip chip-dark"><span className="live-dot" style={{ color: '#fb7185' }} /> {t('Emergency & ICU open now · 24x7', 'ઇમરજન્સી & ICU હમણાં ખુલ્લું · ૨૪x૭')}</span>
+              <div className="page-hero-eyebrow-pill" style={{ color: '#fda4af', background: 'rgba(225, 29, 72, 0.16)', borderColor: 'rgba(225, 29, 72, 0.35)' }}>
+                <span className="hero-pulse-dot" style={{ backgroundColor: '#fb7185', boxShadow: '0 0 0 0 rgba(251, 113, 133, 0.7)' }} />
+                <span>{t('Emergency & ICU Open Now · 24x7', 'ઇમરજન્સી & ICU હમણાં ખુલ્લું · ૨૪x૭')}</span>
+              </div>
               <h1>
-                {lang === 'en' ? <>Critical care, <em>close to home</em> in Modasa.</> : <>મોડાસામાં જ <em>અદ્યતન ICU</em> અને ઇમરજન્સી સારવાર.</>}
+                {lang === 'en' ? (
+                  <>24x7 Critical Care & Multi-Specialty Hospital in Modasa</>
+                ) : (
+                  <>મોડાસામાં ૨૪ કલાક અદ્યતન ICU અને ઇમરજન્સી સારવાર</>
+                )}
               </h1>
               <p className="lead">
                 {t(
-                  'ICU with ventilators, in-house CT scan, 24x7 dialysis, modular operation theatres and senior MD physicians — all on one floor, so no one has to rush to Ahmedabad.',
-                  'વેન્ટીલેટર ICU, ઈન-હાઉસ સીટી સ્કેન, ૨૪ કલાક ડાયાલીસીસ, મોડ્યુલર ઓપરેશન થીયેટર અને અનુભવી એમ.ડી. ડોક્ટરો — બધું એક જ જગ્યાએ.'
+                  'ICU with ventilators, in-house CT scan, 24x7 dialysis, modular operation theatres and senior MD physicians: all on one floor, so no one has to rush to Ahmedabad.',
+                  'વેન્ટીલેટર ICU, ઈન-હાઉસ સીટી સ્કેન, ૨૪ કલાક ડાયાલીસીસ, મોડ્યુલર ઓપરેશન થીયેટર અને અનુભવી એમ.ડી. ડોક્ટરો: બધું એક જ જગ્યાએ.'
                 )}
               </p>
               <div className="hero-ctas">
@@ -65,8 +73,13 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
                 <Phone size={17} /> {t('Call emergency desk', 'ઇમરજન્સી કૉલ')}
               </a>
               <div className="er-list">
-                {['Accidents & trauma', 'Snakebite & poisoning', 'Stroke & chest pain', 'Breathlessness'].map((x) => (
-                  <span key={x}><Plus size={13} /> {x}</span>
+                {[
+                  { en: 'Accidents & trauma', gu: 'અકસ્માત અને ઇજા' },
+                  { en: 'Snakebite & poisoning', gu: 'ઝેરી જીવજંતુ અને પોઇઝનિંગ' },
+                  { en: 'Stroke & chest pain', gu: 'લકવો અને છાતીમાં દુખાવો' },
+                  { en: 'Breathlessness', gu: 'શ્વાસ ચઢવો અને દમ' }
+                ].map((x) => (
+                  <span key={x.en}><Plus size={13} /> {t(x.en, x.gu)}</span>
                 ))}
               </div>
             </aside>
@@ -91,7 +104,7 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
           </button>
           <a className="quick-card is-er" href={HOSPITAL_INFO.phoneHref} data-reveal style={delay(3)}>
             <span className="icon-tile"><Siren size={22} /></span>
-            <span><strong>{t('Emergency', 'ઇમરજન્સી')}</strong><small>{t('No appointment needed — call or walk in', 'એપોઇન્ટમેન્ટ જરૂરી નથી')}</small></span>
+            <span><strong>{t('Emergency', 'ઇમરજન્સી')}</strong><small>{t('No appointment needed: call or walk in', 'એપોઇન્ટમેન્ટ જરૂરી નથી')}</small></span>
           </a>
         </div>
       </div>
@@ -179,7 +192,7 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             {[
               [t('Choose a doctor', 'ડૉક્ટર પસંદ કરો'), t('Pick the specialist you need, or start from a doctor’s profile.', 'તમને જરૂરી નિષ્ણાંત પસંદ કરો.')],
               [t('Pick a day', 'દિવસ પસંદ કરો'), t('Any day in the coming week, Monday to Sunday.', 'આવતા અઠવાડિયાનો કોઈ પણ દિવસ.')],
-              [t('Select a 30-min slot', 'સમય સ્લોટ પસંદ કરો'), t('Morning or evening — booked slots are shown struck-through.', 'સવાર કે સાંજ — ૩૦ મિનિટનો સ્લોટ.')],
+              [t('Select a 30-min slot', 'સમય સ્લોટ પસંદ કરો'), t('Morning or evening: booked slots are shown struck-through.', 'સવાર કે સાંજ: ૩૦ મિનિટનો સ્લોટ.')],
               [t('Get your slip', 'સ્લિપ મેળવો'), t('Receive a booking ID; print it or share it on WhatsApp.', 'બુકિંગ ID મેળવો, પ્રિન્ટ કે વોટ્સએપ કરો.')]
             ].map(([h, p], i) => (
               <div className="step" key={h} data-reveal style={delay(i)}>
@@ -224,21 +237,69 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
         </div>
       </section>
 
-      {/* ---------- Testimonials ---------- */}
+      {/* ---------- Patient & Visitor Guide (Replaces Fake Reviews) ---------- */}
       <section className="section">
         <div className="container-wide">
-          <SectionHead center eyebrow={t('Patient stories', 'દર્દીઓના પ્રતિભાવો')} title={t('Trusted by families across Arvalli', 'અરવલ્લીના પરિવારોનો વિશ્વાસ')} />
+          <SectionHead
+            center
+            eyebrow={t('Patient & Visitor Guide', 'દર્દી & મુલાકાતી માર્ગદર્શિકા')}
+            title={t('Essential information before you visit', 'હોસ્પિટલ મુલાકાત વખતે ધ્યાનમાં રાખવા જેવી બાબતો')}
+            text={t('Clear clinical protocols designed to save critical minutes and ensure seamless medical care.', 'ઇમરજન્સી અને ઓપીડી દરમિયાન દર્દીઓની સુવિધા માટેના નિયમો.')}
+          />
           <div className="grid grid-3">
-            {TESTIMONIALS.map((q, i) => (
-              <figure key={q.id} className="card quote-card" data-reveal style={delay(i)}>
-                <div className="stars" aria-label={`${q.rating} out of 5`}>{'★'.repeat(q.rating)}</div>
-                <blockquote>“{q.comment}”</blockquote>
-                <footer>
-                  <span className="icon-tile mint" style={{ fontWeight: 800 }}>{q.name[0]}</span>
-                  <span><strong>{q.name}</strong><span>{q.city} · {q.treatment}</span></span>
-                </footer>
-              </figure>
-            ))}
+            <div className="card" style={{ padding: 26 }} data-reveal style={delay(0)}>
+              <span className="icon-tile red" style={{ width: 42, height: 42, marginBottom: 16 }}>
+                <Siren size={20} />
+              </span>
+              <h3 style={{ fontSize: 18, color: 'var(--brand-navy)', marginBottom: 8 }}>
+                {t('Emergency Protocol', 'ઇમરજન્સી પ્રોટોકોલ')}
+              </h3>
+              <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
+                {t(
+                  'No prior appointment needed for acute emergencies. Walk directly into the casualty bay on 4th Floor, City Centre or call ahead so our ICU and trauma team is alerted before arrival.',
+                  'તાત્કાલિક ઇમરજન્સીમાં એપોઇન્ટમેન્ટની જરૂર નથી. સીધા ૪થા માળે ઇમરજન્સી ડેસ્ક પર આવો અથવા આવતાં પહેલાં કૉલ કરો.'
+                )}
+              </p>
+              <div style={{ fontSize: 13, color: 'var(--pulse-red)', fontWeight: 700 }}>
+                {t('24x7 Doctor on floor · Direct ambulance drop', '૨૪ કલાક ડૉક્ટર હાજર · એમ્બ્યુલન્સ સુવિધા')}
+              </div>
+            </div>
+
+            <div className="card" style={{ padding: 26 }} data-reveal style={delay(1)}>
+              <span className="icon-tile" style={{ width: 42, height: 42, marginBottom: 16 }}>
+                <Clock size={20} />
+              </span>
+              <h3 style={{ fontSize: 18, color: 'var(--brand-navy)', marginBottom: 8 }}>
+                {t('OPD Consultations', 'OPD કન્સલ્ટેશન')}
+              </h3>
+              <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
+                {t(
+                  'Senior visiting MD consultants consult Monday to Saturday in designated morning and evening sessions. Reserve a 30-minute advance slot to avoid prolonged waiting room delays.',
+                  'સોમવારથી શનિવાર એમ.ડી. ફિઝિશિયન ઉપલબ્ધ છે. લાઈનમાં રાહ જોવાનો સમય બચાવવા ૩૦ મિનિટનો એડવાન્સ સ્લોટ બુક કરો.'
+                )}
+              </p>
+              <div style={{ fontSize: 13, color: 'var(--primary)', fontWeight: 700 }}>
+                {t('Morning: 09:00 - 01:30 | Evening: 04:30 - 08:00', 'સવારે ૦૯:૦૦ - ૦૧:૩૦ | સાંજે ૦૪:૩૦ - ૦૮:૦૦')}
+              </div>
+            </div>
+
+            <div className="card" style={{ padding: 26 }} data-reveal style={delay(2)}>
+              <span className="icon-tile mint" style={{ width: 42, height: 42, marginBottom: 16 }}>
+                <FileText size={20} />
+              </span>
+              <h3 style={{ fontSize: 18, color: 'var(--brand-navy)', marginBottom: 8 }}>
+                {t('What to Bring', 'સાથે લાવવાના દસ્તાવેજ')}
+              </h3>
+              <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
+                {t(
+                  'Please carry your past hospital file, recent blood test reports, prior ECG or CT scans, and a list of ongoing medications so the doctor can evaluate treatment continuity accurately.',
+                  'તબીબી તપાસ માટે જૂની હોસ્પિટલ ફાઇલ, અગાઉના રિપોર્ટ્સ અને હાલ ચાલતી દવાઓની યાદી સાથે લાવવી.'
+                )}
+              </p>
+              <div style={{ fontSize: 13, color: 'var(--mint-deep)', fontWeight: 700 }}>
+                {t('In-house CT, digital X-ray & lab on same floor', 'સીટી સ્કેન, એક્સ-રે અને લેબ એક જ જગ્યાએ')}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -250,8 +311,8 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
           <div className="faq" data-reveal>
             {FAQS.map((f, i) => (
               <details key={f.q} open={i === 0}>
-                <summary>{f.q}<Plus size={20} /></summary>
-                <div className="answer">{f.a}</div>
+                <summary>{lang === 'en' ? f.q : (f.qGu || f.q)}<Plus size={20} /></summary>
+                <div className="answer">{lang === 'en' ? f.a : (f.aGu || f.a)}</div>
               </details>
             ))}
           </div>

@@ -1,8 +1,8 @@
 // ========================================================
-// Pulse Hospital & I.C.U — Website Content
+// Pulse Hospital & I.C.U: Website Content
 // Single source of truth for everything the pages display.
 // To add a doctor / facility / department / photo, add an
-// entry to the matching array below — pages pick it up
+// entry to the matching array below: pages pick it up
 // automatically.
 // ========================================================
 
@@ -78,52 +78,76 @@ export const DOCTORS = [
     name: "Dr. Dipesh S. Patel",
     nameGujarati: "ડૉ. દિપેશ એસ. પટેલ",
     initials: "DP",
-    colors: ["#0a78c2", "#3fae8c"],
+    colors: ["#0e655c", "#386e2e"],
     type: "visiting",
     qualification: "MD Medicine",
     designation: "Consultant Physician & Critical Care Specialist",
+    designationGujarati: "કન્સલ્ટન્ટ ફિઝિશિયન અને ક્રિટિકલ કેર સ્પેશ્યાલીસ્ટ",
     hospital: "Deep Hospital, Modasa",
     hospitalGujarati: "દીપ હોસ્પિટલ, મોડાસા",
     mobile: "75674 07272",
     mobileFormatted: "+91 75674 07272",
     room: "OPD Suite 401",
+    roomGujarati: "OPD સુઇટ ૪૦૧ (૪થો માળ)",
     experience: "14+ Years",
+    experienceGujarati: "૧૪+ વર્ષ અનુભવ",
     specialties: ["General Medicine", "Diabetes & Thyroid", "Hypertension", "ICU Care"],
+    specialtiesGujarati: ["જનરલ મેડિસિન", "ડાયાબિટીસ અને થાઇરોઇડ", "હાયપરટેન્શન (બ્લડ પ્રેશર)", "ICU ક્રિટિકલ કેર"],
     whatTheyDo: [
       "Diagnoses and treats adult medical illnesses in the OPD",
       "Long-term care for diabetes, thyroid and blood pressure",
       "Leads ICU treatment for critically ill medical patients",
       "Treats fevers and infections such as dengue, malaria and typhoid"
     ],
+    whatTheyDoGujarati: [
+      "ઓપીડીમાં પુખ્ત વયના તમામ સામાન્ય અને જટિલ રોગોનું નિદાન અને સારવાર",
+      "ડાયાબિટીસ, થાઇરોઇડ અને બ્લડ પ્રેશરનું લાંબા ગાળાનું યોગ્ય નિયંત્રણ",
+      "ગંભીર દર્દીઓ માટે ICU માં તબીબી સારવારનું સંચાલન",
+      "ડેન્ગ્યુ, મેલેરિયા અને ટાઈફોઈડ જેવા તમામ પ્રકારના તાવ અને ઇન્ફેક્શનની સારવાર"
+    ],
     departmentIds: ["critical-care", "medicine", "cardiac"],
     timing: "Mon - Sat (09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM)",
-    bio: "Renowned physician in Modasa with extensive expertise in treating internal medical emergencies, complex lifestyle metabolic disorders, and critical care management."
+    timingGujarati: "સોમ - શનિ (સવારે ૦૯:૦૦ થી ૦૧:૦૦ અને સાંજે ૦૪:૩૦ થી ૦૭:૩૦)",
+    bio: "Renowned physician in Modasa with extensive expertise in treating internal medical emergencies, complex lifestyle metabolic disorders, and critical care management.",
+    bioGujarati: "મોડાસાના ખ્યાતનામ ફિઝિશિયન, ઇન્ટરનલ મેડિકલ ઇમરજન્સી, જટિલ મેટાબોલિક બીમારીઓ અને ક્રિટિકલ કેર સારવારમાં બહોળો અનુભવ."
   },
   {
     id: 2,
     name: "Dr. Naimuddin N. Kazi",
     nameGujarati: "ડૉ. નઈમુદ્દીન એન. કાઝી",
     initials: "NK",
-    colors: ["#173a63", "#0a78c2"],
+    colors: ["#093437", "#0e655c"],
     type: "visiting",
     qualification: "MD (Medicine)",
     designation: "Consultant Physician & Intensive Care Specialist",
+    designationGujarati: "કન્સલ્ટન્ટ ફિઝિશિયન અને ઇન્ટેન્સિવ કેર સ્પેશ્યાલીસ્ટ",
     hospital: "Hayat Hospital, Modasa",
     hospitalGujarati: "હયાત હોસ્પિટલ, મોડાસા",
     mobile: "95120 45646",
     mobileFormatted: "+91 95120 45646",
     room: "OPD Suite 402",
+    roomGujarati: "OPD સુઇટ ૪૦૨ (૪થો માળ)",
     experience: "16+ Years",
+    experienceGujarati: "૧૬+ વર્ષ અનુભવ",
     specialties: ["Infectious Diseases", "Liver & Renal Health", "Intensive Care", "Geriatric Medicine"],
+    specialtiesGujarati: ["ચેપી રોગો (ઇન્ફેક્શન)", "લિવર અને કિડની રોગ", "ઇન્ટેન્સિવ કેર", "વૃદ્ધાવસ્થા સંબંધિત રોગો"],
     whatTheyDo: [
       "Treats serious infections, including sepsis and septic shock",
       "Manages liver disease (jaundice, hepatic encephalopathy) and kidney problems",
       "Provides intensive care and advanced life support",
       "Medical care for elderly patients"
     ],
+    whatTheyDoGujarati: [
+      "સેપ્સિસ અને સેપ્ટિક શોક સહિતના ગંભીર ચેપી રોગોની નિષ્ણાત સારવાર",
+      "લિવરના રોગો (કમળો, હેપેટિક એન્સેફાલોપથી) અને કિડની સમસ્યાઓનું નિવારણ",
+      "ગંભીર દર્દીઓ માટે ઇન્ટેન્સિવ કેર અને લાઈફ સપોર્ટ સુવિધા",
+      "વયોવૃદ્ધ દર્દીઓ માટે ખાસ તબીબી સંભાળ"
+    ],
     departmentIds: ["critical-care", "medicine", "kidney", "gastro"],
     timing: "Mon - Sat (09:30 AM - 01:30 PM & 05:00 PM - 08:00 PM)",
-    bio: "Senior medical specialist with decades of leadership in multi-system infection management, septic shock, hepatic encephalopathy, and advanced life support."
+    timingGujarati: "સોમ - શનિ (સવારે ૦૯:૩૦ થી ૦૧:૩૦ અને સાંજે ૦૫:૦૦ થી ૦૮:૦૦)",
+    bio: "Senior medical specialist with decades of leadership in multi-system infection management, septic shock, hepatic encephalopathy, and advanced life support.",
+    bioGujarati: "બહુ-અંગ ઇન્ફેક્શન, સેપ્ટિક શોક અને એડવાન્સ લાઈફ સપોર્ટ સંચાલનમાં દાયકાઓથી આગેવાની ધરાવતા સિનિયર મેડિકલ નિષ્ણાત."
   },
   {
     id: 3,
@@ -134,39 +158,55 @@ export const DOCTORS = [
     type: "visiting",
     qualification: "MD (Medicine)",
     designation: "Consultant Physician & Cardio-Metabolic Expert",
+    designationGujarati: "કન્સલ્ટન્ટ ફિઝિશિયન અને કાર્ડિયો-મેટાબોલિક એક્સપર્ટ",
     hospital: "Vedant Hospital, Modasa",
     hospitalGujarati: "વેદાંત હોસ્પિટલ, મોડાસા",
     mobile: "81608 10013",
     mobileFormatted: "+91 81608 10013",
     room: "OPD Suite 403",
+    roomGujarati: "OPD સુઇટ ૪૦૩ (૪થો માળ)",
     experience: "12+ Years",
+    experienceGujarati: "૧૨+ વર્ષ અનુભવ",
     specialties: ["Cardiac Care", "Stroke & Neuro Recovery", "Metabolic Diseases", "Emergency Trauma"],
+    specialtiesGujarati: ["હૃદય રોગ સંભાળ", "સ્ટ્રોક અને ન્યુરો રિકવરી", "મેટાબોલિક રોગો", "ઇમરજન્સી ટ્રોમા"],
     whatTheyDo: [
       "Preventive heart care and management of BP emergencies",
       "Treats stroke and guides recovery afterwards",
       "Manages metabolic disease such as diabetes and cholesterol",
       "Handles acute medical emergencies"
     ],
+    whatTheyDoGujarati: [
+      "હૃદયની બીમારીઓથી બચાવ અને એક્યુટ બીપી ઇમરજન્સીનું ત્વરિત નિયંત્રણ",
+      "લકવો (પેરાલિસિસ/સ્ટ્રોક) સારવાર અને દર્દીનું પુનર્વસન",
+      "ડાયાબિટીસ અને કોલેસ્ટ્રોલ જેવી મેટાબોલિક બીમારીઓનું નિયમન",
+      "ગંભીર અકસ્માત અને ઇમરજન્સી કેસોનું તાત્કાલિક સંચાલન"
+    ],
     departmentIds: ["cardiac", "neuro", "medicine"],
     timing: "Mon - Sat (10:00 AM - 01:30 PM & 04:30 PM - 07:30 PM)",
-    bio: "Specialist physician dedicated to preventive cardiology, acute hypertensive crises, stroke recovery, and advanced medical diagnostics."
+    timingGujarati: "સોમ - શનિ (સવારે ૧૦:૦૦ થી ૦૧:૩૦ અને સાંજે ૦૪:૩૦ થી ૦૭:૩૦)",
+    bio: "Specialist physician dedicated to preventive cardiology, acute hypertensive crises, stroke recovery, and advanced medical diagnostics.",
+    bioGujarati: "પ્રિવેન્ટિવ કાર્ડિયોલોજી, હાઇપરટેન્સિવ કટોકટી, સ્ટ્રોક રિકવરી અને અદ્યતન તબીબી નિદાનમાં સમર્પિત નિષ્ણાત તબીબ."
   },
   {
     id: 4,
     name: "Dr. Santosh J. Prajapati",
     nameGujarati: "ડૉ. સંતોષ જે. પ્રજાપતિ",
     initials: "SP",
-    colors: ["#1f7a60", "#5cc0f5"],
+    colors: ["#0e655c", "#289672"],
     type: "visiting",
     qualification: "MBBS, DTCD, FICCM",
     designation: "Chest Physician & Critical Care Specialist",
+    designationGujarati: "ચેસ્ટ ફિઝિશિયન (ફેફસાંના નિષ્ણાત) અને ક્રિટિકલ કેર",
     hospital: "Medicare Hospital & ICU, Modasa",
     hospitalGujarati: "મેડીકેર હોસ્પિટલ & આઈ.સી.યુ., મોડાસા",
     mobile: "82002 40287",
     mobileFormatted: "+91 82002 40287",
     room: "Pulmonology Lab & OPD 404",
+    roomGujarati: "પલ્મોનોલોજી લેબ અને OPD ૪૦૪",
     experience: "15+ Years",
+    experienceGujarati: "૧૫+ વર્ષ અનુભવ",
     specialties: ["Pulmonology / Lungs", "Bronchoscopy", "Asthma & COPD", "Sleep Study (Polysomnography)"],
+    specialtiesGujarati: ["ફેફસાં અને શ્વાસના રોગો", "બ્રોન્કોસ્કોપી ટેસ્ટ", "અસ્થમા અને દમ (COPD)", "સ્લીપ સ્ટડી (ઊંઘની તપાસ)"],
     whatTheyDo: [
       "Treats lung and breathing problems: asthma, COPD, pneumonia",
       "Performs bronchoscopy (a camera test of the airways)",
@@ -174,61 +214,94 @@ export const DOCTORS = [
       "Drains fluid collected around the lungs (pleural effusion)",
       "Manages ventilator care for ICU patients"
     ],
+    whatTheyDoGujarati: [
+      "દમ (અસ્થમા), કફ, શ્વાસ ચઢવો અને ન્યુમોનિયાનું ચોક્કસ નિદાન અને સારવાર",
+      "બ્રોન્કોસ્કોપી (ફેફસાંની નળીઓની કેમેરા દ્વારા તપાસ)",
+      "PFT શ્વાસ પરીક્ષણ અને રાત્રિ સ્લીપ સ્ટડી ટેસ્ટ",
+      "ફેફસાંમાં ભરાયેલું પાણી સુરક્ષિત રીતે બહાર કાઢવું (પ્લુરલ એફ્યુઝન)",
+      "ICU દર્દીઓ માટે અદ્યતન વેન્ટિલેટર વ્યવસ્થાપન"
+    ],
     departmentIds: ["chest", "critical-care"],
     timing: "Mon - Sat (09:00 AM - 01:00 PM & 04:00 PM - 07:00 PM)",
-    bio: "Chest physician performing fiberoptic bronchoscopy, PFT breathing tests, pleural effusion thoracentesis, and specialised critical lung interventions."
+    timingGujarati: "સોમ - શનિ (સવારે ૦૯:૦૦ થી ૦૧:૦૦ અને સાંજે ૦૪:૦૦ થી ૦૭:૦૦)",
+    bio: "Chest physician performing fiberoptic bronchoscopy, PFT breathing tests, pleural effusion thoracentesis, and specialised critical lung interventions.",
+    bioGujarati: "ફાઈબરઓપ્ટિક બ્રોન્કોસ્કોપી, PFT શ્વાસ ટેસ્ટ અને ક્રિટિકલ પલ્મોનરી સારવાર કરતા અનુભવી ચેસ્ટ ફિઝિશિયન."
   },
   {
     id: 5,
     name: "Dr. Mohammad Salim Mansuri",
     nameGujarati: "ડૉ. મોહમ્મદ સલીમ મન્સૂરી",
     initials: "SM",
-    colors: ["#e11d48", "#173a63"],
+    colors: ["#e11d48", "#093437"],
     type: "resident",
     qualification: "MBBS, PGDEMS",
     designation: "Resident Medical Officer (Critical Care)",
+    designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
     hospital: "Pulse Hospital & ICU",
     hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
     mobile: "95120 45641",
     mobileFormatted: "+91 95120 45641",
     room: "ICU Station & Triage",
+    roomGujarati: "ICU સ્ટેશન અને ટ્રાયજ (૨૪ કલાક)",
     experience: "8+ Years",
+    experienceGujarati: "૮+ વર્ષ અનુભવ",
     specialties: ["Emergency Triage", "Intubation & Ventilation", "CPR"],
+    specialtiesGujarati: ["ઇમરજન્સી ટ્રાયજ", "ઇન્ટ્યુબેશન અને વેન્ટિલેશન", "CPR લાઈફ સપોર્ટ"],
     whatTheyDo: [
       "First doctor at the bedside in an emergency, day or night",
       "Stabilises critical patients: CPR, intubation, ventilator set-up",
       "Triage: decides who needs care first on arrival",
       "Round-the-clock monitoring of ICU patients"
     ],
+    whatTheyDoGujarati: [
+      "કોઈપણ ઇમરજન્સીમાં દિવસ-રાત પલંગ પાસે પહોંચનાર પ્રથમ તબીબ",
+      "ગંભીર દર્દીઓનું તાત્કાલિક સ્થિરીકરણ: CPR, ઇન્ટ્યુબેશન અને વેન્ટિલેટર સેટઅપ",
+      "દર્દીના લક્ષણો મુજબ પ્રાથમિકતા નક્કી કરી ત્વરિત સારવાર આપવી",
+      "ICU દર્દીઓનું ૨૪ કલાક સતત નિરીક્ષણ"
+    ],
     departmentIds: ["emergency", "critical-care"],
     timing: "Available 24x7 in Emergency & ICU Rotation",
-    bio: "Stationed in Pulse ICU ensuring immediate round-the-clock emergency patient stabilisation, ventilator synchronisation, and swift bedside clinical management."
+    timingGujarati: "ઇમરજન્સી અને ICU માં ૨૪x૭ ઉપલબ્ધ",
+    bio: "Stationed in Pulse ICU ensuring immediate round-the-clock emergency patient stabilisation, ventilator synchronisation, and swift bedside clinical management.",
+    bioGujarati: "પલ્સ આઈ.સી.યુ.માં ૨૪ કલાક તૈનાત રહી કટોકટીમાં દર્દીનું તાત્કાલિક જીવન રક્ષણ અને ક્લિનિકલ સંચાલન સુનિશ્ચિત કરે છે."
   },
   {
     id: 6,
     name: "Dr. Pulkit Pandya",
     nameGujarati: "ડૉ. પુલકિત પંડ્યા",
     initials: "PK",
-    colors: ["#075f9c", "#3fae8c"],
+    colors: ["#093437", "#289672"],
     type: "resident",
     qualification: "MBBS, CCEBDM",
     designation: "Resident Medical Officer (Critical Care)",
+    designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
     hospital: "Pulse Hospital & ICU",
     hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
     mobile: "95120 45642",
     mobileFormatted: "+91 95120 45642",
     room: "Emergency & ICCU Floor",
+    roomGujarati: "ઇમરજન્સી અને ICCU ફ્લોર (૨૪ કલાક)",
     experience: "7+ Years",
+    experienceGujarati: "૭+ વર્ષ અનુભવ",
     specialties: ["Trauma Resuscitation", "Dialysis Monitoring", "Post-Surgical ICU Care"],
+    specialtiesGujarati: ["ટ્રોમા રીસસીટેશન", "ડાયાલિસિસ મોનિટરિંગ", "સર્જરી પછીની ICU કેર"],
     whatTheyDo: [
       "Resuscitates and stabilises accident and trauma patients",
       "Monitors patients during dialysis",
       "Looks after patients in the ICU after surgery",
       "Runs antidote protocols for poisoning cases"
     ],
+    whatTheyDoGujarati: [
+      "અકસ્માત અને ઇજા પામેલા દર્દીઓનું તાત્કાલિક સ્થિરીકરણ",
+      "ડાયાલિસિસ પ્રક્રિયા દરમિયાન દર્દીની સતત દેખરેખ",
+      "મોટી સર્જરી પછી દર્દીની આઈ.સી.યુ.માં ખાસ સંભાળ",
+      "ઝેર અથવા પોઈઝનિંગ કેસમાં એન્ટિડોટ પ્રોટોકોલનું અમલીકરણ"
+    ],
     departmentIds: ["emergency", "critical-care", "kidney"],
     timing: "Available 24x7 in Emergency & ICU Rotation",
-    bio: "Specialised in emergency medicine and trauma stabilisation, continuous arterial line monitoring, and acute poison antidote protocols."
+    timingGujarati: "ઇમરજન્સી અને ICU માં ૨૪x૭ ઉપલબ્ધ",
+    bio: "Specialised in emergency medicine and trauma stabilisation, continuous arterial line monitoring, and acute poison antidote protocols.",
+    bioGujarati: "ઇમરજન્સી મેડિસિન, ટ્રોમા સ્ટેબિલાઇઝેશન અને ડાયાલિસિસ મોનિટરિંગમાં નિપુણતા ધરાવતા રેસિડેન્ટ તબીબ."
   }
 ];
 
@@ -238,7 +311,7 @@ export const DOCTOR_TYPES = {
 };
 
 // --------------------------------------------------------
-// Facilities — what the hospital physically has
+// Facilities: what the hospital physically has
 // `photo: null` renders an illustrated tile instead of a photo.
 // --------------------------------------------------------
 export const FACILITY_CATEGORIES = [
@@ -259,6 +332,7 @@ export const FACILITIES = [
     photo: PHOTOS.icuHall,
     is24x7: true,
     summary: "Multi-bed critical care with ventilators, central monitoring and specialist doctors on duty around the clock.",
+    summaryGu: "વેન્ટિલેટર, સેન્ટ્રલ મોનિટરિંગ અને ચોવીસ કલાક ઉપલબ્ધ નિષ્ણાત ડોક્ટરો સાથે મલ્ટી-બેડ ક્રિટિકલ કેર.",
     includes: [
       "I.C.C.U. (heart), M.I.C.U. (medical) and S.I.C.U. (surgical) beds",
       "Invasive and non-invasive ventilators",
@@ -267,7 +341,7 @@ export const FACILITIES = [
       "Bedside 2D Echo, sonography and X-ray",
       "Bedside dialysis inside the ICU"
     ],
-    goodFor: "Patients who need continuous monitoring or life support — severe infection, heart attack, breathing failure, poisoning, or recovery after major surgery.",
+    goodFor: "Patients who need continuous monitoring or life support: severe infection, heart attack, breathing failure, poisoning, or recovery after major surgery.",
     doctorIds: [1, 2, 4, 5, 6]
   },
   {
@@ -279,6 +353,7 @@ export const FACILITIES = [
     photo: PHOTOS.isolation,
     is24x7: true,
     summary: "A glass-walled, separately entered ICU room for patients with infectious illness, protecting them and everyone else.",
+    summaryGu: "ચેપી રોગોવાળા દર્દીઓ માટે અલગ કાચનો આઈસોલેશન રૂમ, જે દર્દી અને અન્ય તમામનું રક્ષણ કરે છે.",
     includes: [
       "Separate glass-door entry from the main ICU",
       "Full ICU bed with monitor, oxygen and suction",
@@ -297,6 +372,7 @@ export const FACILITIES = [
     photo: null,
     is24x7: true,
     summary: "A casualty desk with an immediate doctor response for accidents, poisoning, snakebite, burns, stroke and high fever.",
+    summaryGu: "અકસ્માત, ઝેર, સાપ કરડવો, બર્ન્સ અને સ્ટ્રોક માટે તાત્કાલિક ડોક્ટર સેવા સાથેનું કેઝ્યુઅલટી ડેસ્ક.",
     includes: [
       "Road accident and multiple-injury (polytrauma) care",
       "Snakebite protocol with anti-snake venom",
@@ -305,7 +381,7 @@ export const FACILITIES = [
       "Burns, electric shock and heat stroke",
       "Triage on arrival with a doctor on the floor 24x7"
     ],
-    goodFor: "Anyone who needs urgent medical attention. No appointment needed — come straight in or call ahead.",
+    goodFor: "Anyone who needs urgent medical attention. No appointment needed: come straight in or call ahead.",
     doctorIds: [5, 6, 3]
   },
   {
@@ -317,13 +393,14 @@ export const FACILITIES = [
     photo: PHOTOS.icuStation,
     is24x7: true,
     summary: "Experienced ICU nurses watch every bed's vitals on a central screen and respond within moments.",
+    summaryGu: "અનુભવી આઈસીયુ નર્સિંગ સ્ટાફ સેન્ટ્રલ સ્ક્રીન પર તમામ દર્દીના વાઈટલ્સનું સતત મોનિટરિંગ કરે છે.",
     includes: [
       "Central monitor showing every ICU bed's vitals",
       "Qualified ICU nursing staff on every shift",
       "Emergency crash cart and medicine trolley on the floor",
       "Duty roster board for clear handovers"
     ],
-    goodFor: "Every admitted patient — this is the team at your bedside between doctor rounds.",
+    goodFor: "Every admitted patient: this is the team at your bedside between doctor rounds.",
     doctorIds: []
   },
   {
@@ -335,6 +412,7 @@ export const FACILITIES = [
     photo: null,
     is24x7: true,
     summary: "Emergency and scheduled haemodialysis, supported by a dedicated RO water plant.",
+    summaryGu: "તાત્કાલિક અને નિયમિત હિમોડાયાલિસિસ, સમર્પિત RO વોટર પ્લાન્ટ સાથે કાર્યરત.",
     includes: [
       "Emergency dialysis for sudden kidney failure",
       "Scheduled maintenance dialysis sessions",
@@ -342,7 +420,7 @@ export const FACILITIES = [
       "ICU bedside dialysis for critically ill patients",
       "Separate machine for seropositive patients"
     ],
-    goodFor: "Patients with kidney failure — both regular dialysis patients and emergencies.",
+    goodFor: "Patients with kidney failure: both regular dialysis patients and emergencies.",
     doctorIds: [2, 6]
   },
   {
@@ -353,7 +431,8 @@ export const FACILITIES = [
     icon: "Scan",
     photo: null,
     is24x7: true,
-    summary: "Modasa CT Scan Centre on the same premises — no ambulance transfer for a scan.",
+    summary: "Modasa CT Scan Centre on the same premises, with no ambulance transfer needed for a scan.",
+    summaryGu: "હોસ્પિટલ પરિસરમાં જ મોડાસા સીટી સ્કેન સેન્ટર, બહાર ગયા વિના ઝડપી રિપોર્ટ.",
     includes: [
       "Brain and head CT for stroke and bleeding",
       "HRCT chest for pneumonia and lung disease",
@@ -373,6 +452,7 @@ export const FACILITIES = [
     photo: null,
     is24x7: true,
     summary: "Automated blood testing that runs day and night, so treatment decisions are never waiting on a report.",
+    summaryGu: "દિવસ અને રાત કાર્યરત ઓટોમેટેડ લેબોરેટરી, જેથી તાત્કાલિક સારવાર શરૂ થઈ શકે.",
     includes: [
       "Automated biochemistry and haematology",
       "Arterial blood gas (ABG) analysis",
@@ -390,7 +470,8 @@ export const FACILITIES = [
     icon: "HeartPulse",
     photo: null,
     is24x7: true,
-    summary: "Heart ultrasound, abdominal sonography and digital X-ray — including portable machines that come to the bed.",
+    summary: "Heart ultrasound, abdominal sonography and digital X-ray, including portable machines that come to the bed.",
+    summaryGu: "હૃદયનું 2D ઇકો, સોનોગ્રાફી અને પોર્ટેબલ ડિજિટલ એક્સ-રે જે દર્દીના પલંગ સુધી પહોંચે છે.",
     includes: [
       "2D Echocardiography with colour Doppler",
       "Abdominal and emergency (FAST) sonography",
@@ -409,6 +490,7 @@ export const FACILITIES = [
     photo: null,
     is24x7: false,
     summary: "Specialist lung testing led by the chest physician: bronchoscopy, spirometry and sleep studies.",
+    summaryGu: "ચેસ્ટ ફિઝિશિયન દ્વારા ફેફસાની વિશિષ્ટ તપાસ: બ્રોન્કોસ્કોપી, સ્પાઇરોમેટ્રી (PFT) અને સ્લીપ સ્ટડી.",
     includes: [
       "Fiberoptic video bronchoscopy (દુરબીન દ્વારા ફેફસાની તપાસ)",
       "PFT / spirometry (ફુંક દ્વારા ફેફસાની ક્ષમતા તપાસ)",
@@ -427,6 +509,7 @@ export const FACILITIES = [
     photo: PHOTOS.ot1,
     is24x7: true,
     summary: "Sterile modular theatres with laminar airflow, LED surgical lights and a full anaesthesia workstation.",
+    summaryGu: "લેમિનર એરફ્લો, LED સર્જિકલ લાઇટ્સ અને એડવાન્સ એનેસ્થેસિયા વર્કસ્ટેશન સાથેનું મોડ્યુલર ઓપરેશન થિયેટર.",
     includes: [
       "Laminar airflow ceiling for infection control",
       "IITV (live X-ray) for orthopaedic surgery",
@@ -445,6 +528,7 @@ export const FACILITIES = [
     photo: PHOTOS.ot2,
     is24x7: false,
     summary: "Keyhole surgery and camera procedures, plus neuro/spine and maxillofacial (dental) surgical wings.",
+    summaryGu: "દુરબીન સર્જરી, પેટ-આંતરડાની એન્ડોસ્કોપી, તેમજ ન્યુરો/સ્પાઈન અને મેક્સિલોફેશિયલ સર્જરી.",
     includes: [
       "Laparoscopic (keyhole) surgery",
       "Endoscopy for stomach and intestine",
@@ -464,6 +548,7 @@ export const FACILITIES = [
     photo: PHOTOS.corridor,
     is24x7: true,
     summary: "Private air-conditioned rooms for a quiet recovery, with space for a family member.",
+    summaryGu: "શાંત વાતાવરણ અને સ્વજનોના રહેવાની સુવિધા સાથે એર-કન્ડિશન્ડ પ્રાઇવેટ રૂમ.",
     includes: [
       "Air-conditioned private room with attached bath",
       "Motorised bed with nurse-call button",
@@ -482,6 +567,7 @@ export const FACILITIES = [
     photo: PHOTOS.twinRoom,
     is24x7: true,
     summary: "Bright, curtained two-bed rooms with the same medical fittings as private rooms.",
+    summaryGu: "પ્રાઇવેટ રૂમ જેવી જ તમામ તબીબી સુવિધાઓ સાથે આરામદાયક ટ્વીન શેરિંગ રૂમ.",
     includes: [
       "Privacy curtains around each bed",
       "Motorised Fowler beds",
@@ -500,6 +586,7 @@ export const FACILITIES = [
     photo: PHOTOS.consult1,
     is24x7: false,
     summary: "Private consulting rooms with an examination couch, where you meet your doctor for a booked 30-minute slot.",
+    summaryGu: "તમારા બુક કરેલા સમય મુજબ ડોક્ટર સાથે રૂબરૂ પરામર્શ માટે પ્રાઇવેટ તપાસ રૂમ.",
     includes: [
       "Private, air-conditioned consulting room",
       "Examination couch behind a privacy curtain",
@@ -518,6 +605,7 @@ export const FACILITIES = [
     photo: null,
     is24x7: true,
     summary: "An in-house medical store that stays open all night, so prescriptions never wait for morning.",
+    summaryGu: "૨૪ કલાક ખુલ્લો મેડિકલ સ્ટોર, જેથી દર્દીની દવાઓ માટે ક્યારેય રાહ ન જોવી પડે.",
     includes: [
       "Open 24 hours, every day",
       "ICU and emergency medicines stocked",
@@ -535,13 +623,14 @@ export const FACILITIES = [
     photo: PHOTOS.reception,
     is24x7: true,
     summary: "A calm, air-conditioned arrival area with a help desk, a separate billing counter and a spacious waiting lounge.",
+    summaryGu: "હેલ્પ ડેસ્ક, બિલિંગ કાઉન્ટર અને વિશાળ વેઇટિંગ લાઉન્જ સાથે શાંત રિસેપ્શન એરિયા.",
     includes: [
       "Reception and help desk",
       "Separate billing section",
       "Large seated waiting lounge for families",
       "Lift access, wheelchair assistance and ample parking"
     ],
-    goodFor: "Everyone — this is where your visit starts.",
+    goodFor: "Everyone: this is where your hospital visit starts.",
     doctorIds: []
   }
 ];
@@ -567,7 +656,7 @@ export const HOSPITAL_FACILITIES = [
 ];
 
 // --------------------------------------------------------
-// Departments — clinical specialties and what they treat
+// Departments: clinical specialties and what they treat
 // --------------------------------------------------------
 export const DEPARTMENTS = [
   {
@@ -611,7 +700,7 @@ export const DEPARTMENTS = [
     title: "Chest & Pulmonology",
     titleGujarati: "ફેફસાના રોગો (ચેસ્ટ & પલ્મોનોલોજી)",
     icon: "Wind",
-    intro: "Everything to do with the lungs and breathing — from long-term asthma to ICU ventilation.",
+    intro: "Everything to do with the lungs and breathing: from long-term asthma to ICU ventilation.",
     conditions: ["Breathlessness", "Pneumonia", "Fluid in the lungs", "Asthma", "COPD", "Sleep apnoea", "Post-COVID lung fibrosis"],
     conditionsGu: "શ્વાસ ચડવો, ન્યુમોનીયા, ફેફસામા પાણી ભરાવુ, અસ્થમા, સીઓપીડી (COPD)",
     services: ["Bronchoscopy", "PFT / spirometry", "Sleep study", "HRCT chest"],
@@ -647,7 +736,7 @@ export const DEPARTMENTS = [
     title: "Brain & Stroke Care",
     titleGujarati: "મગજના રોગો",
     icon: "Brain",
-    intro: "Fast diagnosis and treatment for stroke and other brain emergencies — the in-house CT saves critical minutes.",
+    intro: "Fast diagnosis and treatment for stroke and other brain emergencies; the in-house CT saves critical minutes.",
     conditions: ["Paralysis (stroke)", "Brain haemorrhage", "Fits / seizures", "Encephalitis (brain fever)"],
     conditionsGu: "લકવો (Paralysis), મગજનું હેમરેજ, ખેંચ (Fits), મગજનો તાવ (Encephalitis)",
     services: ["Emergency brain CT", "Stroke thrombolysis", "Neuro / spine surgery"],
@@ -659,7 +748,7 @@ export const DEPARTMENTS = [
     title: "Emergency, Trauma & Poisoning",
     titleGujarati: "ટ્રોમા / ઈમરજન્સી & પોઇઝનીંગ",
     icon: "Siren",
-    intro: "Immediate care for accidents, bites and poisoning. Walk in any time — no appointment needed.",
+    intro: "Immediate care for accidents, bites and poisoning. Walk in any time: no appointment needed.",
     conditions: ["Road accident injuries", "Burns", "Electric shock", "Heat stroke", "Snakebite", "Insect bites", "Pesticide / drug poisoning"],
     conditionsGu: "અકસ્માત ઈજા, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક · સાપ કરડવો, ઝેરી દવાની અસર",
     services: ["24x7 casualty desk", "Anti-snake venom", "Antidote protocols", "Trauma surgery"],
@@ -742,23 +831,33 @@ export const TESTIMONIALS = [
 export const FAQS = [
   {
     q: "How does advance slot booking work?",
-    a: "Choose a doctor, pick any day in the coming week, and select a free 30-minute morning or evening slot. You'll get a booking ID (e.g. PLS-920101) and a slip you can print or share on WhatsApp."
+    qGu: "આગામી સપ્તાહ માટે એડવાન્સ સ્લોટ બુકિંગ કેવી રીતે કામ કરે છે?",
+    a: "Choose a doctor, pick any day in the coming week, and select a free 30-minute morning or evening slot. You'll get a booking ID (e.g. PLS-920101) and a slip you can print or share on WhatsApp.",
+    aGu: "તમારા મનપસંદ ડૉક્ટર પસંદ કરો, આગામી સપ્તાહમાંથી કોઈપણ દિવસ અને અનુકૂળ ૩૦ મિનિટનો સમય સ્લોટ પસંદ કરો. બુકિંગ થતાં જ તમને બુકિંગ ID (દા.ત. PLS-920101) અને સ્લિપ મળશે જેને તમે પ્રિન્ટ કરી શકો છો અથવા વ્હોટ્સએપ પર મેળવી શકો છો."
   },
   {
     q: "Do I need an appointment for an emergency?",
-    a: "No. The emergency desk, ICU, CT scan, lab, pharmacy and dialysis run 24x7. Come straight to the 4th floor, City Centre, or call ahead so the team is ready."
+    qGu: "શું ઇમરજન્સીમાં એપોઇન્ટમેન્ટ લેવી જરૂરી છે?",
+    a: "No. The emergency desk, ICU, CT scan, lab, pharmacy and dialysis run 24x7. Come straight to the 4th floor, City Centre, or call ahead so the team is ready.",
+    aGu: "ના, બિલકુલ નહીં. ઇમરજન્સી ડેસ્ક, આઈ.સી.યુ., સીટી સ્કેન, લેબ, મેડિકલ સ્ટોર અને ડાયાલિસિસ ૨૪ કલાક કાર્યરત છે. સીધા ૪થા માળે આવો અથવા આવતાં પહેલાં કૉલ કરો જેથી અમારી ટીમ તૈયાર રહે."
   },
   {
     q: "Can I check or cancel my booking?",
-    a: "Yes. Use “My Booking” at the top of the page and search with your mobile number or booking ID. You can view the slip or cancel the slot, which frees it for another patient."
+    qGu: "શું હું મારી એપોઇન્ટમેન્ટ ચેક અથવા રદ કરી શકું છું?",
+    a: "Yes. Use “My Booking” at the top of the page and search with your mobile number or booking ID. You can view the slip or cancel the slot, which frees it for another patient.",
+    aGu: "હા. પેજના ઉપરના ભાગે 'મારી બુકિંગ' પર ક્લિક કરી તમારો મોબાઇલ નંબર અથવા બુકિંગ ID લખી શોધો. ત્યાંથી તમે સ્લિપ જોઈ શકો છો અથવા સ્લોટ રદ કરી શકો છો, જેથી અન્ય દર્દી તેનો લાભ લઈ શકે."
   },
   {
     q: "What should I bring to my appointment?",
-    a: "Please bring your hospital file and all previous medical reports, any recent lab tests and prescriptions, and a photo ID."
+    qGu: "હોસ્પિટલ મુલાકાત વખતે દર્દીએ શું સાથે લાવવું?",
+    a: "Please bring your hospital file and all previous medical reports, any recent lab tests and prescriptions, and a photo ID.",
+    aGu: "કૃપા કરીને હોસ્પિટલની ફાઇલ, જૂના તમામ રિપોર્ટ્સ, તાજેતરના લેબ રિપોર્ટ્સ, હાલ ચાલતી દવાઓની યાદી અને એક ઓળખપત્ર સાથે લાવવું."
   },
   {
     q: "Where is Pulse Hospital located?",
-    a: "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315. Lift access, wheelchair assistance and ample parking are available."
+    qGu: "પલ્સ હોસ્પિટલ ક્યાં આવેલી છે?",
+    a: "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315. Lift access, wheelchair assistance and ample parking are available.",
+    aGu: "૪થો માળ, એ-બ્લોક, સિટી સેન્ટર, શામળાજી રોડ, મોડાસા, અરવલ્લી - ૩૮૩૩૧૫. દર્દીઓ માટે લિફ્ટ, વ્હીલચેર સુવિધા અને વિશાળ પાર્કિંગ ઉપલબ્ધ છે."
   }
 ];
 

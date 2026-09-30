@@ -14,24 +14,35 @@ export default function DoctorCard({ doctor, onBook, onOpenProfile, lang = 'en',
         <div style={{ minWidth: 0 }}>
           <span className={`type-tag ${doctor.type}`}>{t(DOCTOR_TYPES[doctor.type].label, DOCTOR_TYPES[doctor.type].labelGu)}</span>
           <h3>{lang === 'en' ? doctor.name : doctor.nameGujarati}</h3>
-          <div className="qual">{doctor.qualification} · {doctor.experience}</div>
+          <div className="qual">
+            {doctor.qualification} · {t(doctor.experience, doctor.experienceGujarati || doctor.experience)}
+          </div>
         </div>
       </div>
 
-      <div className="role">{doctor.designation}</div>
+      <div className="role">
+        {t(doctor.designation, doctor.designationGujarati || doctor.designation)}
+      </div>
 
       <div>
-        <div className="eyebrow" style={{ fontSize: 11, marginBottom: 8 }}>{t('What they do', 'તેઓ શું કરે છે')}</div>
+        <div className="eyebrow" style={{ fontSize: 11, marginBottom: 8 }}>
+          {t('What they do', 'તેઓ શું કરે છે')}
+        </div>
         <ul className="does">
-          {doctor.whatTheyDo.slice(0, compact ? 3 : 4).map((item) => (
-            <li key={item}><CheckCircle2 size={15} /> <span>{item}</span></li>
-          ))}
+          {(lang === 'gu' && doctor.whatTheyDoGujarati ? doctor.whatTheyDoGujarati : doctor.whatTheyDo)
+            .slice(0, compact ? 3 : 4)
+            .map((item) => (
+              <li key={item}><CheckCircle2 size={15} /> <span>{item}</span></li>
+            ))}
         </ul>
       </div>
 
       <div className="meta">
-        <span><Clock size={14} /> {doctor.timing}</span>
-        <span><MapPin size={14} /> {doctor.room}{!isResident && ` · ${lang === 'en' ? doctor.hospital : doctor.hospitalGujarati}`}</span>
+        <span><Clock size={14} /> {t(doctor.timing, doctor.timingGujarati || doctor.timing)}</span>
+        <span>
+          <MapPin size={14} /> {t(doctor.room, doctor.roomGujarati || doctor.room)}
+          {!isResident && ` · ${t(doctor.hospital, doctor.hospitalGujarati)}`}
+        </span>
       </div>
 
       <div className="actions">

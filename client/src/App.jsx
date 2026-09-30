@@ -9,18 +9,20 @@ import DoctorsPage from './pages/DoctorsPage';
 import GalleryPage from './pages/GalleryPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsPage from './pages/TermsPage';
 import NextWeekBooking from './components/NextWeekBooking';
 import AppointmentSlipModal from './components/AppointmentSlipModal';
 import AppointmentLookupModal from './components/AppointmentLookupModal';
 import AdminPortal from './components/AdminPortal';
 import { FacilityDrawer, DoctorDrawer } from './components/DetailDrawers';
-import { useHashRoute } from './router';
+import { useRoute } from './router';
 import { lockScroll, unlockScroll } from './components/ui';
 import useReveal from './hooks/useReveal';
 import { HOSPITAL_INFO, getDoctor, getFacility } from './data/hospitalContent';
 
 export default function App() {
-  const [route, navigate] = useHashRoute();
+  const [route, navigate] = useRoute();
   const [lang, setLang] = useState('en');
   const [showTop, setShowTop] = useState(false);
 
@@ -107,6 +109,8 @@ export default function App() {
         {page === 'gallery' && <GalleryPage {...pageProps} />}
         {page === 'about' && <AboutPage {...pageProps} />}
         {page === 'contact' && <ContactPage {...pageProps} />}
+        {page === 'privacy' && <PrivacyPolicyPage {...pageProps} />}
+        {page === 'terms' && <TermsPage {...pageProps} />}
       </main>
 
       <Footer
@@ -145,21 +149,31 @@ export default function App() {
 
       {/* Booking modal */}
       {bookingModalOpen && (
-        <div className="modal-overlay" style={{ zIndex: 110 }} onClick={() => setBookingModalOpen(false)}>
-          <div className="modal-content" style={{ maxWidth: 880, padding: 0 }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Book an appointment">
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => setBookingModalOpen(false)}
-                aria-label="Close booking"
-                style={{
-                  position: 'absolute', top: 16, right: 16, zIndex: 20, width: 38, height: 38, borderRadius: '50%',
-                  background: 'rgba(255, 255, 255, 0.18)', color: '#fff', border: 'none',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}
-              >
-                <X size={20} />
-              </button>
-              <NextWeekBooking preselectedDoctorId={preselectedDoctorId} onBookingSuccess={handleBookingSuccess} lang={lang} />
+        <div className="modal-overlay booking-modal-overlay" style={{ zIndex: 110 }} onClick={() => setBookingModalOpen(false)}>
+          <div
+            className="booking-modal-dialog"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Book an appointment"
+          >
+            {/* Always visible close button - stays pinned at top-right even when scrolling */}
+            <button
+              onClick={() => setBookingModalOpen(false)}
+              aria-label="Close booking modal"
+              title="Close (Esc)"
+              className="booking-modal-close-btn"
+            >
+              <X size={19} />
+            </button>
+
+            {/* Scrollable appointment content with luxury scroller */}
+            <div className="booking-modal-scroll">
+              <NextWeekBooking
+                preselectedDoctorId={preselectedDoctorId}
+                onBookingSuccess={handleBookingSuccess}
+                lang={lang}
+              />
             </div>
           </div>
         </div>

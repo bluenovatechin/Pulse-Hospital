@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle, Navigation, MessageCircle } from 'lucide-react';
+import { Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle, Navigation, MessageCircle, Siren } from 'lucide-react';
 import { PageHero } from '../components/ui';
 import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
 import { API } from '../api';
@@ -20,7 +20,7 @@ export default function ContactPage({ onNavigate, lang = 'en' }) {
     setSuccessMsg('');
     setErrorMsg('');
     if (!form.name || !form.phone || !form.message) {
-      setErrorMsg('Please complete all required fields.');
+      setErrorMsg(t('Please complete all required fields.', 'કૃપા કરીને જરૂરી તમામ વિગતો ભરો.'));
       return;
     }
     setSubmitting(true);
@@ -31,11 +31,11 @@ export default function ContactPage({ onNavigate, lang = 'en' }) {
         body: JSON.stringify(form)
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to send message.');
-      setSuccessMsg(data.message || 'Your inquiry has been submitted. Our receptionist will call you shortly.');
+      if (!res.ok) throw new Error(data.error || t('Failed to send message.', 'સંદેશ મોકલવામાં નિષ્ફળતા.'));
+      setSuccessMsg(data.message || t('Your inquiry has been submitted. Our receptionist will call you shortly.', 'તમારી પૂછપરછ નોંધાઈ ગઈ છે. અમારો સ્ટાફ ટૂંક સમયમાં તમને સંપર્ક કરશે.'));
       setForm(EMPTY_FORM);
     } catch (err) {
-      setErrorMsg(err.message || 'Error submitting message. Please call our helpline directly.');
+      setErrorMsg(err.message || t('Error submitting message. Please call our helpline directly.', 'સંદેશ મોકલવામાં ક્ષતિ થઈ. કૃપા કરીને સીધા હેલ્પલાઈન પર કૉલ કરો.'));
     } finally {
       setSubmitting(false);
     }
@@ -62,16 +62,41 @@ export default function ContactPage({ onNavigate, lang = 'en' }) {
         photo={PHOTOS.waiting}
         crumbs={t('Contact', 'સંપર્ક')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Get in touch', 'સંપર્ક કરો')}
+        eyebrow={t('Contact & Immediate Assistance', 'સંપર્ક અને તાત્કાલિક સહાય')}
+        eyebrowIcon={<Phone size={14} />}
         title={t('We’re here for you 24x7', 'અમે ૨૪ કલાક તમારી સેવામાં')}
-        text={t('Call for anything urgent. For questions about ICU admission, tests or doctor availability, send a message and reception will call you back.', 'તાત્કાલિક હોય તો કૉલ કરો. બાકી સંદેશ મોકલો — રીસેપ્શન તમને કૉલ કરશે.')}
-      >
-        <div className="hero-ctas" style={{ marginTop: 22 }}>
-          <a className="btn btn-emergency btn-lg" href={HOSPITAL_INFO.phoneHref}><Phone size={18} /> {t('Call now', 'કૉલ કરો')}</a>
-          <a className="btn btn-lg btn-ghost-light" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer"><MessageCircle size={18} /> WhatsApp</a>
-          <a className="btn btn-lg btn-ghost-light" href={HOSPITAL_INFO.mapsUrl} target="_blank" rel="noreferrer"><Navigation size={18} /> {t('Directions', 'રસ્તો')}</a>
-        </div>
-      </PageHero>
+        text={t(
+          'Call for anything urgent. For questions about ICU admission, tests or doctor availability, send a message and reception will call you back.',
+          'તાત્કાલિક હોય તો કૉલ કરો. બાકી સંદેશ મોકલો, રીસેપ્શન તમને કૉલ કરશે.'
+        )}
+        cardTitle={t('Emergency Lines & Direct Desk', 'ઇમરજન્સી હેલ્પલાઇન અને સહાય')}
+        cardBadge={t('Live 24x7 Desk Active', '૨૪x૭ હેલ્પલાઇન કાર્યરત')}
+        cardIcon={<Siren size={18} />}
+        stats={[
+          { value: '24x7', label: t('Emergency Line', 'ઇમરજન્સી લાઇન'), sub: '95120 45641' },
+          { value: 'Trauma', label: t('Ambulance Care', 'એમ્બ્યુલન્સ લાઇન'), sub: '95120 45642' },
+          { value: 'OPD Desk', label: t('Appointments', 'એપોઇન્ટમેન્ટ'), sub: '75674 07272' },
+          { value: '4th Floor', label: t('City Centre', 'સિટી સેન્ટર'), sub: t('Shamlaji Road', 'શામળાજી રોડ') }
+        ]}
+        highlights={[
+          t('Resident doctor stationed bedside on the 4th floor day & night', 'ડૉક્ટર ૨૪ કલાક આઈ.સી.યુ. ફ્લોર પર હાજર'),
+          t('Ambulance equipped with emergency oxygen & resuscitation support', 'ઓક્સિજન અને લાઈફ સપોર્ટ સુવિધા સાથે એમ્બ્યુલન્સ'),
+          t('Direct WhatsApp desk for test reports, inquiries and location help', 'રિપોર્ટ્સ અને પૂછપરછ માટે વોટ્સએપ હેલ્પડેસ્ક')
+        ]}
+        actions={
+          <>
+            <a className="btn btn-emergency" href={HOSPITAL_INFO.phoneHref}>
+              <Phone size={17} /> {t('Call Emergency Desk', 'ઇમરજન્સી કૉલ')}
+            </a>
+            <a className="btn btn-ghost-light" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer">
+              <MessageCircle size={17} /> WhatsApp
+            </a>
+            <a className="btn btn-ghost-light" href={HOSPITAL_INFO.mapsUrl} target="_blank" rel="noreferrer">
+              <Navigation size={17} /> {t('GPS Directions', 'રસ્તો જુઓ')}
+            </a>
+          </>
+        }
+      />
 
       <section className="section">
         <div className="container-wide">
@@ -105,37 +130,37 @@ export default function ContactPage({ onNavigate, lang = 'en' }) {
                 <div className="callout" style={{ marginBottom: 16, background: 'var(--pulse-red-soft)', color: '#be123c' }}><AlertCircle size={18} /> <span>{errorMsg}</span></div>
               )}
 
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div>
-                  <label className="form-label" htmlFor="c-name">Full name *</label>
-                  <input id="c-name" name="name" className="form-input" placeholder="Your name" value={form.name} onChange={handleChange} required />
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
+                <div style={{ width: '100%' }}>
+                  <label className="form-label" htmlFor="c-name">{t('Full name *', 'દર્દી / મુલાકાતીનું નામ *')}</label>
+                  <input id="c-name" name="name" className="form-input" placeholder={t('Your name', 'તમારું પૂરું નામ')} value={form.name} onChange={handleChange} required style={{ width: '100%' }} />
                 </div>
-                <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
-                  <div>
-                    <label className="form-label" htmlFor="c-phone">Mobile number *</label>
-                    <input id="c-phone" type="tel" name="phone" className="form-input" placeholder="10-digit mobile" value={form.phone} onChange={handleChange} required />
+                <div className="booking-form-grid" style={{ gap: 14 }}>
+                  <div style={{ width: '100%' }}>
+                    <label className="form-label" htmlFor="c-phone">{t('Mobile number *', 'મોબાઇલ નંબર *')}</label>
+                    <input id="c-phone" type="tel" name="phone" className="form-input" placeholder={t('10-digit mobile', '૧૦ અંકનો મોબાઈલ')} value={form.phone} onChange={handleChange} required style={{ width: '100%' }} />
                   </div>
-                  <div>
-                    <label className="form-label" htmlFor="c-email">Email (optional)</label>
-                    <input id="c-email" type="email" name="email" className="form-input" placeholder="email@domain.com" value={form.email} onChange={handleChange} />
+                  <div style={{ width: '100%' }}>
+                    <label className="form-label" htmlFor="c-email">{t('Email (optional)', 'ઇમેઇલ (મરજિયાત)')}</label>
+                    <input id="c-email" type="email" name="email" className="form-input" placeholder="email@domain.com" value={form.email} onChange={handleChange} style={{ width: '100%' }} />
                   </div>
                 </div>
-                <div>
-                  <label className="form-label" htmlFor="c-subject">Topic</label>
-                  <select id="c-subject" name="subject" className="form-input" value={form.subject} onChange={handleChange}>
-                    <option>General Consultation Inquiry</option>
-                    <option>ICU Admission Information</option>
-                    <option>CT Scan / Radiology Booking</option>
-                    <option>Dialysis Inquiry</option>
-                    <option>Doctor Availability Query</option>
+                <div style={{ width: '100%' }}>
+                  <label className="form-label" htmlFor="c-subject">{t('Topic', 'વિષય')}</label>
+                  <select id="c-subject" name="subject" className="form-input" value={form.subject} onChange={handleChange} style={{ width: '100%' }}>
+                    <option value="General Consultation Inquiry">{t('General Consultation Inquiry', 'સામાન્ય તપાસ / પરામર્શ')}</option>
+                    <option value="ICU Admission Information">{t('ICU Admission Information', 'ICU એડમિશન માહિતી')}</option>
+                    <option value="CT Scan / Radiology Booking">{t('CT Scan / Radiology Booking', 'સીટી સ્કેન / રેડિયોલોજી બુકિંગ')}</option>
+                    <option value="Dialysis Inquiry">{t('Dialysis Inquiry', 'ડાયાલીસીસ પૂછપરછ')}</option>
+                    <option value="Doctor Availability Query">{t('Doctor Availability Query', 'ડોક્ટર ઉપલબ્ધતા પૂછપરછ')}</option>
                   </select>
                 </div>
-                <div>
-                  <label className="form-label" htmlFor="c-msg">Message *</label>
-                  <textarea id="c-msg" name="message" className="form-textarea" rows={4} placeholder="Describe your question or the patient's symptoms…" value={form.message} onChange={handleChange} required />
+                <div style={{ width: '100%' }}>
+                  <label className="form-label" htmlFor="c-msg">{t('Message *', 'સંદેશ / પ્રશ્ન *')}</label>
+                  <textarea id="c-msg" name="message" className="form-textarea" rows={4} placeholder={t("Describe your question or the patient's symptoms...", "તમારો પ્રશ્ન અથવા દર્દીના લક્ષણો વિગતે જણાવો...")} value={form.message} onChange={handleChange} required style={{ width: '100%' }} />
                 </div>
-                <button type="submit" disabled={submitting} className="btn-primary btn-lg">
-                  <Send size={16} /> {submitting ? 'Sending…' : 'Send inquiry'}
+                <button type="submit" disabled={submitting} className="btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center' }}>
+                  <Send size={16} /> {submitting ? t('Sending...', 'મોકલાઈ રહ્યું છે...') : t('Send inquiry', 'પૂછપરછ મોકલો')}
                 </button>
               </form>
             </div>

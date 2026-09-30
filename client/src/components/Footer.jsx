@@ -1,7 +1,8 @@
 import React from 'react';
-import { Phone, MapPin, Clock, Activity, FileText, Lock } from 'lucide-react';
+import { Phone, MapPin, Clock, FileText, Lock } from 'lucide-react';
 import { HOSPITAL_INFO, FACILITIES } from '../data/hospitalContent';
 import { NAV_LINKS } from './Navbar';
+import PulseLogo from './PulseLogo';
 
 export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpenAdmin, lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -12,16 +13,12 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpen
       <div className="container-wide">
         <div className="footer-grid">
           <div>
-            <div className="brand" style={{ marginBottom: 16 }}>
-              <span className="brand-mark"><Activity size={22} strokeWidth={2.5} /></span>
-              <span>
-                <span className="brand-name" style={{ display: 'block' }}>PULSE HOSPITAL</span>
-                <span className="brand-sub">& I.C.U · Caring for life</span>
-              </span>
+            <div style={{ marginBottom: 16 }}>
+              <PulseLogo size={44} variant="light" lang={lang} />
             </div>
             <p style={{ lineHeight: 1.65 }}>
               {t(
-                "Modasa's 24x7 emergency and critical care hospital — ICU, in-house CT scan, dialysis, modular operation theatres and senior MD physicians under one roof.",
+                "Modasa's 24x7 emergency and critical care hospital: ICU, in-house CT scan, dialysis, modular operation theatres and senior MD physicians under one roof.",
                 'મોડાસામાં ૨૪ કલાક કાર્યરત આઈ.સી.યુ., સીટી સ્કેન, ડાયાલીસીસ અને અનુભવી એમ.ડી. ફિઝિશિયન ડોક્ટરોની ટીમ.'
               )}
             </p>
@@ -33,6 +30,8 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpen
               {NAV_LINKS.map((l) => (
                 <li key={l.id}><button onClick={() => onNavigate(l.id)}>{t(l.en, l.gu)}</button></li>
               ))}
+              <li><button onClick={() => onNavigate('privacy')}>{t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}</button></li>
+              <li><button onClick={() => onNavigate('terms')}>{t('Terms & Conditions', 'નિયમો અને શરતો')}</button></li>
             </ul>
           </div>
 
@@ -40,7 +39,7 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpen
             <h4>{t('Open 24x7', '૨૪ કલાક ઉપલબ્ધ')}</h4>
             <ul>
               {topFacilities.map((f) => (
-                <li key={f.id}><button onClick={() => onNavigate('facilities', f.id)}>{f.name}</button></li>
+                <li key={f.id}><button onClick={() => onNavigate('facilities', f.id)}>{lang === 'en' ? f.name : (f.nameGu || f.name)}</button></li>
               ))}
             </ul>
           </div>
@@ -63,7 +62,7 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpen
                 <Clock size={17} />
                 <span>
                   <strong style={{ color: '#fff' }}>{t('Emergency: 24 hours, 365 days', 'ઇમરજન્સી: ૨૪ કલાક')}</strong>
-                  <br />OPD: {HOSPITAL_INFO.opdHours}
+                  <br />{t('OPD: ', 'OPD: ')}{lang === 'en' ? HOSPITAL_INFO.opdHours : (HOSPITAL_INFO.opdHoursGujarati || HOSPITAL_INFO.opdHours)}
                 </span>
               </div>
               <ul style={{ marginTop: 4 }}>
@@ -82,9 +81,19 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, onOpen
         </div>
 
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Pulse Hospital & I.C.U, Modasa. All rights reserved.</span>
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+            <span>© {new Date().getFullYear()} Pulse Hospital & I.C.U, Modasa. {t('All rights reserved.', 'સર્વાધિકાર સુરક્ષિત.')}</span>
+            <span style={{ opacity: 0.4 }}>|</span>
+            <button onClick={() => onNavigate('privacy')} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+              {t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
+            </button>
+            <span style={{ opacity: 0.4 }}>|</span>
+            <button onClick={() => onNavigate('terms')} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+              {t('Terms & Conditions', 'નિયમો અને શરતો')}
+            </button>
+          </div>
           <button onClick={onOpenAdmin} style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-            <Lock size={12} /> Staff portal
+            <Lock size={12} /> {t('Staff portal', 'સ્ટાફ પોર્ટલ')}
           </button>
         </div>
       </div>

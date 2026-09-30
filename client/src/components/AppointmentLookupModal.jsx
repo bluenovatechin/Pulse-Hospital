@@ -43,7 +43,11 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
   };
 
   const handleCancelAppointment = async (id) => {
-    if (!window.confirm('Are you sure you want to cancel this appointment slot? The slot will be released for other patients.')) {
+    const confirmPrompt = lang === 'en'
+      ? 'Are you sure you want to cancel this appointment slot? The slot will be released for other patients.'
+      : 'શું તમે ખરેખર આ એપોઇન્ટમેન્ટ સ્લોટ રદ કરવા માંગો છો? આ સ્લોટ અન્ય દર્દીઓ માટે ઉપલબ્ધ થઈ જશે.';
+
+    if (!window.confirm(confirmPrompt)) {
       return;
     }
 
@@ -57,7 +61,7 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
         setResults(prev => prev.map(a => a.id === id ? { ...a, status: 'Cancelled' } : a));
       }
     } catch (err) {
-      alert('Error cancelling appointment.');
+      alert(lang === 'en' ? 'Error cancelling appointment.' : 'એપોઇન્ટમેન્ટ રદ કરવામાં ક્ષતિ આવી.');
     } finally {
       setCancellingId(null);
     }
@@ -81,7 +85,9 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
               {lang === 'en' ? 'Track My Appointment' : 'મારી એપોઇન્ટમેન્ટ ચેક કરો'}
             </h3>
             <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>
-              Search using your 10-digit mobile number or Booking ID (e.g. PLS-920101)
+              {lang === 'en'
+                ? 'Search using your 10-digit mobile number or Booking ID (e.g. PLS-920101)'
+                : '૧૦ આંકડાનો મોબાઇલ નંબર અથવા બુકિંગ ID (દા.ત. PLS-920101) દ્વારા શોધો'}
             </p>
           </div>
 
@@ -105,26 +111,27 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
         </div>
 
         {/* Search Bar */}
-        <div style={{ padding: '24px' }}>
-          <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <div style={{ position: 'relative', flex: 1 }}>
+        <div style={{ padding: '20px 18px' }}>
+          <form onSubmit={handleSearch} className="lookup-form">
+            <div style={{ position: 'relative', flex: 1, width: '100%' }}>
               <input
                 type="text"
                 className="form-input"
-                placeholder={lang === 'en' ? 'Enter Mobile Number or PLS-XXXXXX' : 'મોબાઇલ નંબર અથવા બુકિંગ ID લખો'}
+                placeholder={lang === 'en' ? 'Enter Mobile Number or PLS-XXXXXX' : '૧૦ આંકડાનો મોબાઇલ નંબર અથવા PLS-XXXXXX લખો'}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 autoFocus
+                style={{ width: '100%' }}
               />
             </div>
             <button
               type="submit"
               disabled={loading}
               className="btn-primary"
-              style={{ padding: '10px 20px' }}
+              style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
             >
               <Search size={16} />
-              <span>{loading ? 'Searching...' : 'Search'}</span>
+              <span>{loading ? (lang === 'en' ? 'Searching...' : 'શોધાઈ રહ્યું છે...') : (lang === 'en' ? 'Search' : 'શોધો')}</span>
             </button>
           </form>
 
@@ -140,9 +147,13 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
               {results.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--text-muted)' }}>
                   <AlertCircle size={32} style={{ margin: '0 auto 8px', color: '#94a3b8' }} />
-                  <p style={{ fontWeight: 600 }}>No appointments found matching "{query}"</p>
+                  <p style={{ fontWeight: 600 }}>
+                    {lang === 'en' ? `No appointments found matching "${query}"` : `"${query}" માટે કોઈ એપોઇન્ટમેન્ટ મળી નથી`}
+                  </p>
                   <p style={{ fontSize: '12px', marginTop: '4px' }}>
-                    Please verify the mobile number or booking reference ID and try again.
+                    {lang === 'en'
+                      ? 'Please verify the mobile number or booking reference ID and try again.'
+                      : 'કૃપા કરીને મોબાઇલ નંબર અથવા બુકિંગ સંદર્ભ નંબર ચકાસી ફરી પ્રયાસ કરો.'}
                   </p>
                 </div>
               ) : (
@@ -176,7 +187,7 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
                           backgroundColor: appt.status === 'Cancelled' ? '#fee2e2' : '#dcfce7',
                           color: appt.status === 'Cancelled' ? '#b91c1c' : '#15803d'
                         }}>
-                          {appt.status.toUpperCase()}
+                          {appt.status === 'Cancelled' ? (lang === 'en' ? 'CANCELLED' : 'રદ થયેલ') : (lang === 'en' ? 'CONFIRMED' : 'કન્ફર્મ થયેલ')}
                         </span>
                       </div>
 
@@ -220,7 +231,7 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
                           }}
                         >
                           <FileText size={13} />
-                          <span>View Slip</span>
+                          <span>{lang === 'en' ? 'View Slip' : 'સ્લિપ જુઓ'}</span>
                         </button>
 
                         {appt.status !== 'Cancelled' && (
@@ -242,7 +253,7 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
                             }}
                           >
                             <Trash2 size={13} />
-                            <span>{cancellingId === appt.id ? 'Cancelling...' : 'Cancel Slot'}</span>
+                            <span>{cancellingId === appt.id ? (lang === 'en' ? 'Cancelling...' : 'રદ થઈ રહ્યું છે...') : (lang === 'en' ? 'Cancel Slot' : 'સ્લોટ રદ કરો')}</span>
                           </button>
                         )}
                       </div>

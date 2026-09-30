@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Phone, MapPin, Calendar, Menu, X, Siren, UserCheck, Activity, Globe, Lock,
+  Phone, MapPin, Calendar, Menu, X, Siren, UserCheck, Globe, Lock,
   Home, Building2, Stethoscope, Users, Images, Info, Mail
 } from 'lucide-react';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
 import { lockScroll, unlockScroll } from './ui';
+import PulseLogo from './PulseLogo';
 
 export const NAV_LINKS = [
   { id: 'home', en: 'Home', gu: 'મુખ્ય પૃષ્ઠ', icon: Home },
@@ -69,11 +70,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="container-wide header-inner">
           <button className="brand" onClick={() => go('home')} aria-label="Pulse Hospital home">
-            <span className="brand-mark"><Activity size={24} strokeWidth={2.5} /></span>
-            <span>
-              <span className="brand-name" style={{ display: 'block' }}>PULSE HOSPITAL <span>& I.C.U</span></span>
-              <span className="brand-sub">{t('Caring for life · Modasa', 'જીવનની સંભાળ · મોડાસા')}</span>
-            </span>
+            <PulseLogo size={42} lang={lang} />
           </button>
 
           <nav className="main-nav" aria-label="Main">
@@ -106,7 +103,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
         <div className="mobile-menu" onClick={() => setMenuOpen(false)}>
           <div className="mobile-menu-panel" role="dialog" aria-modal="true" aria-label="Menu" onClick={(e) => e.stopPropagation()}>
             <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-              <span className="brand-name">Menu</span>
+              <PulseLogo size={32} lang={lang} tagline={false} />
               <button className="menu-toggle" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={22} /></button>
             </div>
 
@@ -136,7 +133,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
               style={{ marginTop: 'auto', fontSize: 13, color: 'var(--text-muted)' }}
               onClick={() => { setMenuOpen(false); onOpenAdmin(); }}
             >
-              <Lock size={15} /> Staff & Reception Portal
+              <Lock size={15} /> {t('Staff & Reception Portal', 'સ્ટાફ & રિસેપ્શન પોર્ટલ')}
             </button>
           </div>
         </div>

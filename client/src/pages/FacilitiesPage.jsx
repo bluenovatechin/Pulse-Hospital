@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { CheckCircle2, LayoutGrid, Calendar, Phone } from 'lucide-react';
+import { CheckCircle2, LayoutGrid, Calendar, Phone, Building2, ShieldCheck, Eye } from 'lucide-react';
 import FacilityCard from '../components/FacilityCard';
 import { PageHero, SectionHead, Icon, delay } from '../components/ui';
 import {
@@ -25,19 +25,38 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
         photo={PHOTOS.ot1}
         crumbs={t('Facilities', 'સુવિધાઓ')}
         onHome={() => onNavigate('home')}
-        eyebrow={t('Hospital facilities', 'હોસ્પિટલ સુવિધાઓ')}
+        eyebrow={t('Hospital Facilities & Infrastructure', 'હોસ્પિટલ સુવિધાઓ અને ઇન્ફ્રાસ્ટ્રક્ચર')}
+        eyebrowIcon={<Building2 size={14} />}
         title={t('What we have, and what it means for you', 'અમારી સુવિધાઓ અને તમારા માટે તેનો અર્થ')}
         text={t(
-          'From a ventilator ICU and in-house CT scan to modular theatres and private rooms — each facility below explains what it includes and who it is for.',
-          'વેન્ટીલેટર ICU, ઈન-હાઉસ CT સ્કેનથી લઈને મોડ્યુલર OT અને પ્રાઇવેટ રૂમ સુધી — દરેક સુવિધાની વિગત નીચે.'
+          'From a ventilator ICU and in-house CT scan to modular theatres and private rooms: each facility below explains what it includes and who it is for.',
+          'વેન્ટીલેટર ICU, ઈન-હાઉસ CT સ્કેનથી લઈને મોડ્યુલર OT અને પ્રાઇવેટ રૂમ સુધી: દરેક સુવિધાની વિગત નીચે.'
         )}
-      >
-        <div className="hero-stats">
-          <span className="chip chip-dark"><span className="live-dot" style={{ color: 'var(--mint)' }} /> {open24} {t('facilities open 24x7', 'સુવિધાઓ ૨૪x૭')}</span>
-          <span className="chip chip-dark">{FACILITIES.length} {t('facilities on one floor', 'સુવિધાઓ')}</span>
-          <span className="chip chip-dark">{t('No transfer needed for CT or dialysis', 'CT કે ડાયાલીસીસ માટે બહાર જવાની જરૂર નથી')}</span>
-        </div>
-      </PageHero>
+        cardTitle={t('Infrastructure & Diagnostic Arsenal', 'તબીબી સાધન અને ઇન્ફ્રાસ્ટ્રક્ચર')}
+        cardBadge={t('Zero External Transfer', 'અમદાવાદ જવાની જરૂર નથી')}
+        cardIcon={<ShieldCheck size={18} />}
+        stats={[
+          { value: `${FACILITIES.length}`, label: t('Integrated Facilities', 'સંકલિત સુવિધાઓ'), sub: t('All on 4th Floor', '૪થા માળે એક સાથે') },
+          { value: `${open24}`, label: t('Open 24 Hours', '૨૪ કલાક કાર્યરત'), sub: t('ICU, CT, Dialysis, Lab', 'ICU, CT, ડાયાલીસીસ, લેબ') },
+          { value: '32 Slice', label: t('Advanced CT Scan', 'અદ્યતન CT સ્કેન'), sub: t('In-House Fast Imaging', 'ઝડપી ચોક્કસ રિપોર્ટ') },
+          { value: '100+ km', label: t('Travel Saved', 'મુસાફરીનો બચાવ'), sub: t('Avoid emergency journey', 'અમદાવાદ જવાનો અંત') }
+        ]}
+        highlights={[
+          t('In-house 32-slice CT scan operational 24 hours with immediate reporting', 'તાત્કાલિક રિપોર્ટ સાથે ૨૪ કલાક કાર્યરત ૩૨-સ્લાઇસ CT સ્કેન'),
+          t('Modular laminar airflow operation theatre with HEPA filtration', 'HEPA ફિલ્ટરેશન સાથે મોડ્યુલર લેમિનર એરફ્લો ઓપરેશન થીયેટર'),
+          t('24x7 in-house pathology lab, blood gas analysis & digital pharmacy', '૨૪ કલાક ઇન-હાઉસ પેથોલોજી લેબ, બ્લડ ગેસ અને ફાર્મસી')
+        ]}
+        actions={
+          <>
+            <button className="btn btn-primary" onClick={() => onNavigate('contact')}>
+              <Phone size={17} /> {t('Emergency Admission', 'ઇમરજન્સી એડમિશન')}
+            </button>
+            <button className="btn btn-ghost-light" onClick={() => onNavigate('gallery')}>
+              <Eye size={17} /> {t('View Photo Tour', 'ફોટો ટૂર જુઓ')}
+            </button>
+          </>
+        }
+      />
 
       <section className="section">
         <div className="container-wide">
@@ -90,7 +109,7 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
           <div className="cta-band" data-reveal>
             <div>
               <h3>{t('Not sure which facility you need?', 'કઈ સુવિધા જોઈએ ખબર નથી?')}</h3>
-              <p>{t('Book an OPD consultation and the doctor will guide you — or call the helpline for anything urgent.', 'OPD કન્સલ્ટેશન બુક કરો અથવા હેલ્પલાઇન પર કૉલ કરો.')}</p>
+              <p>{t('Book an OPD consultation and the doctor will guide you, or call the helpline for anything urgent.', 'OPD કન્સલ્ટેશન બુક કરો અથવા હેલ્પલાઇન પર કૉલ કરો.')}</p>
             </div>
             <div className="row">
               <button className="btn-primary btn-lg" onClick={() => onBook(null)} style={{ background: '#fff', color: 'var(--brand-navy)', borderColor: '#fff' }}>
