@@ -1,18 +1,24 @@
 // ========================================================
-// Pulse Hospital & I.C.U - Clean HTML5 Path Router
+// Pulse Hospital & I.C.U - Clean URL router
 //
-// Clean path-based routing (NO '#' in URLs):
-//   /                     → home
-//   /facilities           → facilities
-//   /facilities/icu       → facilities, ICU panel open
-//   /doctors/4            → doctors, Dr. Santosh's profile open
-//   /departments/chest    → departments, scrolled to Chest
-//   /privacy              → privacy policy
-//   /terms                → terms and conditions
+//   /                               home
+//   /facilities                     all facilities
+//   /facilities/icu                 one facility (full page)
+//   /departments                    all departments
+//   /departments/chest              one department (full page)
+//   /doctors                        all doctors
+//   /doctors/dr-santosh-prajapati   one doctor's profile (full page)
+//   /book-appointment               booking form
+//   /book-appointment/dr-paras-patel  booking form with that doctor chosen
+//   /my-appointments                look up bookings made on this device
+//   /my-appointments/PLS-123456     one appointment slip
+//   /gallery /about /contact /privacy /terms
 //
-// Automatically intercepts and migrates legacy '#' hashes to clean paths.
+// Works under a sub-folder (GitHub Pages: /Pulse-Hospital/...), migrates
+// old '#/page' links, and renders on the server at build time
+// (see src/entry-server.jsx) by passing the URL in explicitly.
 // ========================================================
-import { useCallback, useEffect, useState } from 'react';
+import { createElement, useCallback, useEffect, useState } from 'react';
 
 export const PAGES = [
   'home',
@@ -23,128 +29,99 @@ export const PAGES = [
   'about',
   'contact',
   'privacy',
-  'terms'
+  'terms',
+  'book-appointment',
+  'my-appointments'
 ];
 
 // Old page ids or aliases that should resolve cleanly
 const ALIASES = {
-  services: 'facilities'
+  services: 'facilities',
+  book: 'book-appointment',
+  appointment: 'book-appointment',
+  'my-booking': 'my-appointments'
 };
 
-const ROUTE_BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
+export const ROUTE_BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
 
-/**
- * Parse the current path and optional param from window.location.pathname
- * If an old hash link (e.g. #/terms) is present, it extracts it and cleans up the URL.
- */
-export function parsePath(pathname = window.location.pathname, hash = window.location.hash) {
-  // Check for legacy hash like #/terms or #facilities
+/** Route for a path like "/Pulse-Hospital/doctors/dr-paras-patel" */
+export function parsePath(pathname, hash = '') {
+  // Legacy hash links such as #/terms or #facilities
   if (hash && hash.startsWith('#')) {
-    const hashClean = hash.replace(/^#\/?/, '');
-    const [hPage = '', hParam = null] = hashClean.split('/');
-    const resolvedHPage = ALIASES[hPage] || hPage;
-    if (resolvedHPage && PAGES.includes(resolvedHPage)) {
-      const cleanPath = buildPath(resolvedHPage, hParam);
-      try {
-        window.history.replaceState(null, '', cleanPath);
-      } catch (e) {
-        // Fallback if replaceState is restricted
-      }
-      return {
-        page: resolvedHPage,
-        param: hParam ? decodeURIComponent(hParam) : null
-      };
-    }
+    const [hPage = '', hParam = null] = hash.replace(/^#\/?/, '').split('/');
+    const page = ALIASES[hPage] || hPage;
+    if (page && PAGES.includes(page)) return { page, param: hParam ? decodeURIComponent(hParam) : null };
   }
 
-  // Strip base prefix if hosted on GitHub Pages subfolder (e.g. /Pulse-Hospital)
-  let effectivePath = pathname;
-  if (ROUTE_BASE && effectivePath.startsWith(ROUTE_BASE)) {
-    effectivePath = effectivePath.slice(ROUTE_BASE.length);
-  }
+  let path = pathname || '/';
+  if (ROUTE_BASE && path.startsWith(ROUTE_BASE)) path = path.slice(ROUTE_BASE.length);
+  const clean = path.replace(/\.html$/, '').replace(/^\/+|\/+$/g, '');
+  if (!clean || clean === 'index') return { page: 'home', param: null };
 
-  // Parse path segments: /facilities/icu -> ['facilities', 'icu']
-  const cleanPath = effectivePath.replace(/^\/+|\/+$/g, '');
-  if (!cleanPath) {
-    return { page: 'home', param: null };
-  }
-
-  const [rawPage = '', param = null] = cleanPath.split('/');
+  const [rawPage = '', param = null] = clean.split('/');
   const page = ALIASES[rawPage] || rawPage;
-
-  if (PAGES.includes(page)) {
-    return {
-      page,
-      param: param ? decodeURIComponent(param) : null
-    };
-  }
-
-  return { page: 'home', param: null };
+  if (PAGES.includes(page)) return { page, param: param ? decodeURIComponent(param) : null };
+  return { page: 'notfound', param: null };
 }
 
-/**
- * Build a clean URL path without '#'
- */
+/** Clean URL for a page (+ optional id / slug) */
 export function buildPath(page, param) {
-  let sub = '/';
-  if (!page || page === 'home') {
-    sub = param ? `/${encodeURIComponent(param)}` : '/';
-  } else {
-    sub = `/${page}${param ? `/${encodeURIComponent(param)}` : ''}`;
-  }
+  const sub = !page || page === 'home' ? '/' : `/${page}${param ? `/${encodeURIComponent(param)}` : ''}`;
   return ROUTE_BASE ? `${ROUTE_BASE}${sub}` : sub;
 }
 
-// Custom event to sync route state across components
+// Custom event so every useRoute() stays in sync
 const NAV_EVENT = 'pulse-hospital-navigate';
 
-export function useRoute() {
-  const [route, setRoute] = useState(() => parsePath());
+/** Navigate without a full page load */
+export function navigateTo(page, param = null, { replace = false } = {}) {
+  const next = buildPath(page, param);
+  if (next === window.location.pathname && !window.location.hash) return;
+  window.history[replace ? 'replaceState' : 'pushState'](null, '', next);
+  window.dispatchEvent(new Event(NAV_EVENT));
+}
+
+/**
+ * Current route. `initialUrl` is only passed when rendering on the server;
+ * in the browser the route comes from the address bar.
+ */
+export function useRoute(initialUrl) {
+  const [route, setRoute] = useState(() =>
+    initialUrl !== undefined ? parsePath(initialUrl) : parsePath(window.location.pathname, window.location.hash)
+  );
 
   useEffect(() => {
-    const handlePopState = () => {
-      setRoute(parsePath());
-    };
+    const sync = () => setRoute(parsePath(window.location.pathname, window.location.hash));
+    window.addEventListener('popstate', sync);
+    window.addEventListener(NAV_EVENT, sync);
 
-    const handleCustomNav = () => {
-      setRoute(parsePath());
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    window.addEventListener(NAV_EVENT, handleCustomNav);
-
-    // Initial check to clean any legacy hash in address bar
-    if (window.location.hash && window.location.hash.startsWith('#/')) {
-      const parsed = parsePath();
-      setRoute(parsed);
+    // Tidy legacy '#/page' links into clean URLs
+    if (window.location.hash.startsWith('#/')) {
+      const r = parsePath(window.location.pathname, window.location.hash);
+      window.history.replaceState(null, '', buildPath(r.page, r.param));
+      sync();
     }
-
     return () => {
-      window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener(NAV_EVENT, handleCustomNav);
+      window.removeEventListener('popstate', sync);
+      window.removeEventListener(NAV_EVENT, sync);
     };
   }, []);
 
-  const navigate = useCallback((page, param = null, { replace = false } = {}) => {
-    const nextPath = buildPath(page, param);
-    const currentPath = window.location.pathname;
-
-    if (nextPath === currentPath && !window.location.hash) return;
-
-    if (replace) {
-      window.history.replaceState(null, '', nextPath);
-    } else {
-      window.history.pushState(null, '', nextPath);
-    }
-
-    setRoute(parsePath(nextPath, ''));
-    window.dispatchEvent(new Event(NAV_EVENT));
-  }, []);
-
+  const navigate = useCallback((page, param = null, opts) => navigateTo(page, param, opts), []);
   return [route, navigate];
 }
 
-// Backwards-compatible export
-export const useHashRoute = useRoute;
-export const parseHash = parsePath;
-export const buildHash = buildPath;
+/**
+ * A real <a href> link (so search engines can follow it) that navigates
+ * in-app on a normal click. Ctrl/Cmd-click still opens a new tab.
+ */
+export function Link({ to = 'home', param = null, onClick, children, ...rest }) {
+  const href = buildPath(to, param);
+  const handle = (e) => {
+    onClick?.(e);
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    navigateTo(to, param);
+  };
+  return createElement('a', { href, onClick: handle, ...rest }, children);
+}

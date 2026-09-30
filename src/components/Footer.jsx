@@ -1,10 +1,11 @@
 import React from 'react';
 import { Phone, MapPin, Clock, FileText } from 'lucide-react';
-import { HOSPITAL_INFO, FACILITIES } from '../data/hospitalContent';
+import { HOSPITAL_INFO, FACILITIES, DOCTORS, DEPARTMENTS } from '../data/hospitalContent';
+import { Link } from '../router';
 import { NAV_LINKS } from './Navbar';
 import PulseLogo from './PulseLogo';
 
-export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, lang = 'en' }) {
+export default function Footer({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const topFacilities = FACILITIES.filter((f) => f.is24x7).slice(0, 6);
 
@@ -22,24 +23,35 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, lang =
                 'મોડાસામાં ૨૪ કલાક કાર્યરત આઈ.સી.યુ., સીટી સ્કેન, ડાયાલીસીસ અને અનુભવી એમ.ડી. ફિઝિશિયન ડોક્ટરોની ટીમ.'
               )}
             </p>
+            <h4 style={{ marginTop: 22 }}>{t('Departments', 'વિભાગો')}</h4>
+            <ul className="footer-inline">
+              {DEPARTMENTS.map((d) => (
+                <li key={d.id}><Link to="departments" param={d.id}>{lang === 'en' ? d.title : (d.titleGujarati || d.title)}</Link></li>
+              ))}
+            </ul>
           </div>
 
           <div>
             <h4>{t('Explore', 'પૃષ્ઠો')}</h4>
             <ul>
               {NAV_LINKS.map((l) => (
-                <li key={l.id}><button onClick={() => onNavigate(l.id)}>{t(l.en, l.gu)}</button></li>
+                <li key={l.id}><Link to={l.id}>{t(l.en, l.gu)}</Link></li>
               ))}
-              <li><button onClick={() => onNavigate('privacy')}>{t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}</button></li>
-              <li><button onClick={() => onNavigate('terms')}>{t('Terms & Conditions', 'નિયમો અને શરતો')}</button></li>
+              <li><Link to="book-appointment">{t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4>{t('Open 24x7', '૨૪ કલાક ઉપલબ્ધ')}</h4>
+            <h4>{t('Our doctors', 'અમારા ડૉક્ટરો')}</h4>
+            <ul>
+              {DOCTORS.map((d) => (
+                <li key={d.id}><Link to="doctors" param={d.slug}>{lang === 'en' ? d.name : d.nameGujarati}</Link></li>
+              ))}
+            </ul>
+            <h4 style={{ marginTop: 22 }}>{t('Open 24x7', '૨૪ કલાક ઉપલબ્ધ')}</h4>
             <ul>
               {topFacilities.map((f) => (
-                <li key={f.id}><button onClick={() => onNavigate('facilities', f.id)}>{lang === 'en' ? f.name : (f.nameGu || f.name)}</button></li>
+                <li key={f.id}><Link to="facilities" param={f.id}>{lang === 'en' ? f.name : (f.nameGu || f.name)}</Link></li>
               ))}
             </ul>
           </div>
@@ -66,8 +78,8 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, lang =
                 </span>
               </div>
               <ul style={{ marginTop: 4 }}>
-                <li><button onClick={onOpenBooking} style={{ color: 'var(--primary-light)', fontWeight: 700 }}>{t('Book an appointment →', 'એપોઇન્ટમેન્ટ બુક કરો →')}</button></li>
-                <li><button onClick={onOpenLookup}>{t('Check or cancel my booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}</button></li>
+                <li><Link to="book-appointment" style={{ color: 'var(--primary-light)', fontWeight: 700 }}>{t('Book an appointment →', 'એપોઇન્ટમેન્ટ બુક કરો →')}</Link></li>
+                <li><Link to="my-appointments">{t('Check or cancel my booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}</Link></li>
               </ul>
             </div>
           </div>
@@ -84,13 +96,13 @@ export default function Footer({ onNavigate, onOpenBooking, onOpenLookup, lang =
           <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
             <span>© {new Date().getFullYear()} Pulse Hospital & I.C.U, Modasa. {t('All rights reserved.', 'સર્વાધિકાર સુરક્ષિત.')}</span>
             <span style={{ opacity: 0.4 }}>|</span>
-            <button onClick={() => onNavigate('privacy')} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+            <Link to="privacy" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
               {t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
-            </button>
+            </Link>
             <span style={{ opacity: 0.4 }}>|</span>
-            <button onClick={() => onNavigate('terms')} style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+            <Link to="terms" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
               {t('Terms & Conditions', 'નિયમો અને શરતો')}
-            </button>
+            </Link>
           </div>
         </div>
       </div>

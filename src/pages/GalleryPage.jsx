@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { X, ChevronLeft, ChevronRight, Camera, Eye } from 'lucide-react';
 import { PageHero, delay, lockScroll, unlockScroll } from '../components/ui';
+import { Link } from '../router';
 import { GALLERY_IMAGES, GALLERY_CATEGORIES, PHOTOS } from '../data/hospitalContent';
 
-export default function GalleryPage({ onNavigate, lang = 'en' }) {
+export default function GalleryPage({ lang = 'en' }) {
   const [category, setCategory] = useState('All');
   const [index, setIndex] = useState(null);
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -43,7 +44,6 @@ export default function GalleryPage({ onNavigate, lang = 'en' }) {
         photo={PHOTOS.waiting}
         photoAlt={t('Patient waiting lounge', 'વેઇટિંગ લાઉન્જ')}
         crumbs={t('Hospital tour', 'ગેલેરી')}
-        onHome={() => onNavigate('home')}
         eyebrow={t('Hospital tour', 'હોસ્પિટલ ટૂર')}
         title={t('See the hospital before you visit', 'મુલાકાત પહેલાં હોસ્પિટલ જુઓ')}
         text={t(
@@ -65,9 +65,9 @@ export default function GalleryPage({ onNavigate, lang = 'en' }) {
             <button className="btn-primary" onClick={() => setIndex(0)}>
               <Eye size={17} /> {t('Start the photo tour', 'ફોટો ટૂર શરૂ કરો')}
             </button>
-            <button className="btn-secondary" onClick={() => onNavigate('facilities')}>
+            <Link to="facilities" className="btn btn-secondary">
               {t('View facilities', 'સુવિધાઓ જુઓ')}
-            </button>
+            </Link>
           </>
         }
       />

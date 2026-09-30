@@ -1,13 +1,14 @@
 // ========================================================
 // Shared presentational building blocks
 // ========================================================
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
-  X, ChevronRight, Activity, HeartPulse, Scan, Scissors, BedDouble, BedSingle, HandHeart,
+  ChevronRight, Activity, HeartPulse, Scan, Scissors, BedDouble, BedSingle, HandHeart,
   ShieldPlus, Siren, MonitorDot, Droplets, Microscope, Wind, Stethoscope, ClipboardPlus,
   Pill, Armchair, Soup, Brain, CheckCircle2, Accessibility, Bone
 } from 'lucide-react';
 import { photoSrcSet } from '../data/hospitalContent';
+import { Link } from '../router';
 
 // Icons referenced by name from data/hospitalContent.js.
 // Using a new icon name in the data? Import it above and add it here.
@@ -70,18 +71,29 @@ export function Photo({ src, alt = '', sizes = '(max-width: 720px) 100vw, 50vw',
 /**
  * Inner-page hero: a calm, light split layout.
  * Left: breadcrumb, eyebrow, title, intro, actions and up to three short facts.
- * Right: one framed hospital photo with an optional floating note.
+ * Right: one framed hospital photo (with an optional floating note), or any
+ * custom `aside` such as a doctor's profile card.
+ *
+ * `crumbs` is the trail after "Home": a string for a top-level page, or
+ * [{ label, to, param }] for deeper pages (the last item is the current page).
  */
-export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, onHome, actions, facts = [], note }) {
+export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, actions, facts = [], note, aside }) {
+  const trail = !crumbs ? [] : Array.isArray(crumbs) ? crumbs : [{ label: crumbs }];
   return (
     <section className="page-hero">
       <div className="container-wide page-hero-grid">
         <div className="page-hero-main page-enter">
-          {crumbs && (
+          {trail.length > 0 && (
             <nav className="crumbs" aria-label="Breadcrumb">
-              <button onClick={onHome}>Home</button>
-              <ChevronRight size={13} aria-hidden="true" />
-              <span aria-current="page">{crumbs}</span>
+              <Link to="home">Home</Link>
+              {trail.map((c, i) => (
+                <React.Fragment key={c.label}>
+                  <ChevronRight size={13} aria-hidden="true" />
+                  {i < trail.length - 1 && c.to
+                    ? <Link to={c.to} param={c.param}>{c.label}</Link>
+                    : <span aria-current="page">{c.label}</span>}
+                </React.Fragment>
+              ))}
             </nav>
           )}
 
@@ -102,7 +114,9 @@ export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, o
           )}
         </div>
 
-        {photo && (
+        {aside && <div className="page-hero-media page-enter" style={{ animationDelay: '90ms' }}>{aside}</div>}
+
+        {!aside && photo && (
           <div className="page-hero-media page-enter" style={{ animationDelay: '90ms' }}>
             <div className="hero-frame">
               <Photo src={photo} alt={photoAlt} eager sizes="(max-width: 1023px) 100vw, 45vw" />
@@ -134,7 +148,7 @@ export function SectionHead({ eyebrow, title, text, center = false, children }) 
   );
 }
 
-// Ref-counted page scroll lock, so stacked overlays (drawer + modal)
+// Ref-counted page scroll lock, so stacked overlays (menu + lightbox)
 // don't unlock each other when one closes.
 let lockCount = 0;
 export function lockScroll() {
@@ -144,42 +158,6 @@ export function lockScroll() {
 export function unlockScroll() {
   lockCount = Math.max(0, lockCount - 1);
   if (!lockCount) document.body.classList.remove('no-scroll');
-}
-
-// Right-side detail panel. Closes on Escape or backdrop click.
-export function Drawer({ onClose, label, children }) {
-  const panelRef = useRef(null);
-
-  useEffect(() => {
-    // Ignore Escape while a modal is stacked on top of the drawer
-    const onKey = (e) => e.key === 'Escape' && !document.querySelector('.modal-overlay') && onClose();
-    document.addEventListener('keydown', onKey);
-    lockScroll();
-    panelRef.current?.focus();
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      unlockScroll();
-    };
-  }, [onClose]);
-
-  return (
-    <div className="drawer-overlay" onClick={onClose}>
-      <aside
-        className="drawer"
-        role="dialog"
-        aria-modal="true"
-        aria-label={label}
-        tabIndex={-1}
-        ref={panelRef}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button className="drawer-close" onClick={onClose} aria-label="Close">
-          <X size={20} />
-        </button>
-        {children}
-      </aside>
-    </div>
-  );
 }
 
 // Stagger helper for reveal animations

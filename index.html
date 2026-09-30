@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- Title, description, canonical and per-page share tags are filled in by vite.config.js -->
+    <script>document.documentElement.classList.add('js')</script>
+    <!-- Title, description, robots, canonical, share tags and structured data
+         for each page are written here by vite.config.js / scripts/prerender.mjs -->
     <!--seo-->
-    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#093437" />
     <meta name="format-detection" content="telephone=yes" />
     <meta name="geo.region" content="IN-GJ" />
@@ -33,15 +34,9 @@
     <!-- Loaded without blocking the first paint; system fonts show until they arrive -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" /></noscript>
-
-    <!--jsonld-->
   </head>
   <body>
-    <div id="root"></div>
-    <noscript>
-      Pulse Hospital &amp; I.C.U, 4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315.
-      24x7 emergency: +91 63533 44875. Appointments: 95120 45641 / 95120 45642.
-    </noscript>
+    <div id="root"><!--app--></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

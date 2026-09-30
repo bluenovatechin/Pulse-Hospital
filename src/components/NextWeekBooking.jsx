@@ -81,7 +81,7 @@ function generateDoctorSlots(docId, date) {
   };
 }
 
-export default function NextWeekBooking({ preselectedDoctorId = null, onBookingSuccess, lang = 'en' }) {
+export default function NextWeekBooking({ preselectedDoctorId = null, onBookingSuccess, lang = 'en', showHeader = true }) {
   const [scheduleDays, setScheduleDays] = useState(() => generateUpcomingSchedule(lang));
   const [selectedDate, setSelectedDate] = useState(() => {
     const days = generateUpcomingSchedule(lang);
@@ -190,7 +190,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
       previousFileNo: formData.previousFileNo || '',
       symptoms: formData.symptoms || '',
       bookedAt: new Date().toISOString(),
-      status: 'Confirmed'
+      status: 'Requested'
     };
 
     // Save to localStorage for instant reference & retrieval in My Booking
@@ -254,8 +254,8 @@ _Sent via Pulse Hospital Online Booking Portal_`;
   return (
     <div className="next-week-card" id="booking-section">
       
-      {/* Header Banner */}
-      <div className="booking-header-banner">
+      {/* Header Banner (hidden on the booking page, which has its own header) */}
+      {showHeader && <div className="booking-header-banner">
         <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '220px', height: '220px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, transparent 70%)', filter: 'blur(35px)', pointerEvents: 'none' }} />
 
         <div className="booking-header-content">
@@ -296,7 +296,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       <div className="booking-body">
         <form onSubmit={handleSubmit}>

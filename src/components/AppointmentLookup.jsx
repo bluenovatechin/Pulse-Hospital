@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Search, 
-  X, 
   Calendar, 
   Clock, 
   User, 
@@ -13,7 +12,8 @@ import {
 } from 'lucide-react';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
 
-export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en' }) {
+// "My appointments": bookings saved in this browser, with search, slip and cancel
+export default function AppointmentLookup({ onViewSlip, lang = 'en' }) {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
@@ -89,58 +89,9 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
     }
   };
 
-  const logoSrc = `${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/logo.webp`;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content" style={{ maxWidth: '600px', padding: '0' }}>
-        
-        {/* Header */}
-        <div style={{
-          background: 'var(--brand-navy)',
-          color: '#ffffff',
-          padding: '20px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <img 
-              src={logoSrc} 
-              alt="Pulse Hospital" 
-              style={{ width: 38, height: 38, objectFit: 'contain', flexShrink: 0 }} 
-            />
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
-                {lang === 'en' ? 'Track My Appointment' : 'મારી એપોઇન્ટમેન્ટ ચેક કરો'}
-              </h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginTop: '2px' }}>
-                {lang === 'en'
-                  ? 'Search using your 10-digit mobile number or Booking ID (e.g. PLS-920101)'
-                  : '૧૦ આંકડાનો મોબાઇલ નંબર અથવા બુકિંગ ID (દા.ત. PLS-920101) દ્વારા શોધો'}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={onClose}
-            style={{
-              background: 'rgba(255,255,255,0.1)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '32px',
-              height: '32px',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
-          >
-            <X size={18} />
-          </button>
-        </div>
-
+    <div className="card page-card">
         {/* Search input form */}
         <div style={{ padding: '24px' }}>
           <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
@@ -246,7 +197,7 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
                             backgroundColor: appt.status === 'Cancelled' ? '#fee2e2' : '#dcfce7',
                             color: appt.status === 'Cancelled' ? '#b91c1c' : '#15803d'
                           }}>
-                            {appt.status === 'Cancelled' ? (lang === 'en' ? 'CANCELLED' : 'રદ થયેલ') : (lang === 'en' ? 'CONFIRMED' : 'કન્ફર્મ થયેલ')}
+                            {appt.status === 'Cancelled' ? (lang === 'en' ? 'CANCELLED' : 'રદ થયેલ') : (lang === 'en' ? 'REQUEST SENT' : 'વિનંતી મોકલાઈ')}
                           </span>
                         </div>
 
@@ -311,8 +262,6 @@ export default function AppointmentLookupModal({ onClose, onViewSlip, lang = 'en
             </div>
           )}
         </div>
-
-      </div>
     </div>
   );
 }

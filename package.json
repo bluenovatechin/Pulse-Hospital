@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
-    "predeploy": "vite build --base=/Pulse-Hospital/",
+    "predeploy": "vite build --base=/Pulse-Hospital/ && vite build --ssr src/entry-server.jsx --outDir dist-ssr --base=/Pulse-Hospital/ && node scripts/prerender.mjs",
     "deploy": "gh-pages -d dist --nojekyll"
   },
   "dependencies": {

@@ -1,9 +1,10 @@
 import React from 'react';
 import { MapPin, Clock, HeartPulse, ShieldCheck, Users, FileText, Calendar, ArrowRight, Phone } from 'lucide-react';
 import { PageHero, SectionHead, delay } from '../components/ui';
+import { Link } from '../router';
 import { HOSPITAL_INFO, DOCTORS, PHOTOS } from '../data/hospitalContent';
 
-export default function AboutPage({ onNavigate, onBook, lang = 'en' }) {
+export default function AboutPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
   const values = [
@@ -19,7 +20,6 @@ export default function AboutPage({ onNavigate, onBook, lang = 'en' }) {
         photo={PHOTOS.reception}
         photoAlt={t('Reception and help desk at Pulse Hospital', 'પલ્સ હોસ્પિટલ રીસેપ્શન')}
         crumbs={t('About', 'અમારા વિશે')}
-        onHome={() => onNavigate('home')}
         eyebrow={t('About Pulse Hospital & I.C.U', 'પલ્સ હોસ્પિટલ & આઈ.સી.યુ. વિશે')}
         title={t('Emergency and critical care for Arvalli', 'અરવલ્લી માટે ઇમરજન્સી અને ક્રિટિકલ કેર')}
         text={t(
@@ -67,8 +67,8 @@ export default function AboutPage({ onNavigate, onBook, lang = 'en' }) {
                 )}
               </p>
               <div className="row" style={{ marginTop: 24 }}>
-                <button className="btn-primary" onClick={() => onNavigate('facilities')}>{t('See our facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={16} /></button>
-                <button className="btn-secondary" onClick={() => onNavigate('doctors')}>{t('Meet the doctors', 'ડૉક્ટરોને મળો')}</button>
+                <Link to="facilities" className="btn btn-primary">{t('See our facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={16} /></Link>
+                <Link to="doctors" className="btn btn-secondary">{t('Meet the doctors', 'ડૉક્ટરોને મળો')}</Link>
               </div>
             </div>
             <div className="photo" style={{ aspectRatio: '4 / 3', borderRadius: 'var(--radius-xl)', boxShadow: 'var(--shadow-xl)' }} data-reveal>
@@ -110,7 +110,7 @@ export default function AboutPage({ onNavigate, onBook, lang = 'en' }) {
               <h3 style={{ marginTop: 16 }}>{t('Visit notice', 'મુલાકાતી સૂચના')}</h3>
               <p style={{ marginTop: 6, color: 'var(--mint-deep)' }}>{HOSPITAL_INFO.noticeEnglish}</p>
               <p className="gujarati-text" style={{ marginTop: 4, color: 'var(--mint-deep)' }}>{HOSPITAL_INFO.noticeGujarati}</p>
-              <button className="btn-primary" style={{ marginTop: 18 }} onClick={() => onBook(null)}><Calendar size={16} /> {t('Book a slot', 'સ્લોટ બુક કરો')}</button>
+              <Link to="book-appointment" className="btn btn-primary" style={{ marginTop: 18 }}><Calendar size={16} /> {t('Book a slot', 'સ્લોટ બુક કરો')}</Link>
             </div>
           </div>
         </div>

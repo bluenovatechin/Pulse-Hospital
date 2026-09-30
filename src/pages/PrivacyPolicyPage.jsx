@@ -3,14 +3,13 @@ import { Shield, Lock, FileText, CheckCircle2, Phone, MapPin } from 'lucide-reac
 import { PageHero } from '../components/ui';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
 
-export default function PrivacyPolicyPage({ onNavigate, lang = 'en' }) {
+export default function PrivacyPolicyPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
   return (
     <div>
       <PageHero
         crumbs={t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
-        onHome={() => onNavigate('home')}
         eyebrow={t('Privacy', 'ગોપનીયતા')}
         title={t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
         text={t(

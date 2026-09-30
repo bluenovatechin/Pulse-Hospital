@@ -1,9 +1,10 @@
 import React from 'react';
-import { Calendar, Clock, MapPin, CheckCircle2, Siren } from 'lucide-react';
+import { Calendar, Clock, MapPin, CheckCircle2 } from 'lucide-react';
 import { Avatar } from './ui';
-import { DOCTOR_TYPES, HOSPITAL_INFO } from '../data/hospitalContent';
+import { DOCTOR_TYPES } from '../data/hospitalContent';
+import { Link } from '../router';
 
-export default function DoctorCard({ doctor, onBook, onOpenProfile, lang = 'en', compact = false }) {
+export default function DoctorCard({ doctor, lang = 'en', compact = false }) {
   const isResident = doctor.type === 'resident';
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
@@ -13,7 +14,7 @@ export default function DoctorCard({ doctor, onBook, onOpenProfile, lang = 'en',
         <Avatar doctor={doctor} />
         <div style={{ minWidth: 0 }}>
           <span className={`type-tag ${doctor.type}`}>{t(DOCTOR_TYPES[doctor.type].label, DOCTOR_TYPES[doctor.type].labelGu)}</span>
-          <h3>{lang === 'en' ? doctor.name : doctor.nameGujarati}</h3>
+          <h3><Link to="doctors" param={doctor.slug}>{lang === 'en' ? doctor.name : doctor.nameGujarati}</Link></h3>
           <div className="qual">
             {doctor.qualification} · {t(doctor.experience, doctor.experienceGujarati || doctor.experience)}
           </div>
@@ -46,18 +47,12 @@ export default function DoctorCard({ doctor, onBook, onOpenProfile, lang = 'en',
       </div>
 
       <div className="actions">
-        <button className="btn-secondary btn-sm" onClick={() => onOpenProfile(doctor.id)}>
+        <Link to="doctors" param={doctor.slug} className="btn btn-secondary btn-sm">
           {t('View profile', 'પ્રોફાઇલ જુઓ')}
-        </button>
-        {isResident ? (
-          <a className="btn btn-sm btn-emergency" href={HOSPITAL_INFO.phoneHref}>
-            <Siren size={15} /> {t('Emergency', 'ઇમરજન્સી')}
-          </a>
-        ) : (
-          <button className="btn-primary btn-sm" onClick={() => onBook(doctor.id)}>
-            <Calendar size={15} /> {t('Book slot', 'સ્લોટ બુક કરો')}
-          </button>
-        )}
+        </Link>
+        <Link to="book-appointment" param={doctor.slug} className="btn btn-primary btn-sm">
+          <Calendar size={15} /> {t('Book slot', 'સ્લોટ બુક કરો')}
+        </Link>
       </div>
     </article>
   );

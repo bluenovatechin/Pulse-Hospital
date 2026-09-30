@@ -5,7 +5,7 @@ import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
 
 const EMPTY_FORM = { name: '', phone: '', email: '', subject: 'General Consultation Inquiry', message: '' };
 
-export default function ContactPage({ onNavigate, lang = 'en' }) {
+export default function ContactPage({ lang = 'en' }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -76,7 +76,6 @@ _Sent via Pulse Hospital Website_`;
         photo={PHOTOS.billing}
         photoAlt={t('Reception and billing counter', 'રીસેપ્શન અને બિલિંગ કાઉન્ટર')}
         crumbs={t('Contact', 'સંપર્ક')}
-        onHome={() => onNavigate('home')}
         eyebrow={t('Contact', 'સંપર્ક')}
         title={t('We’re here for you, day and night', 'અમે ૨૪ કલાક તમારી સેવામાં')}
         text={t(

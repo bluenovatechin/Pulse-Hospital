@@ -1202,6 +1202,7 @@ button.card {
   margin-bottom: 22px;
 }
 
+.crumbs a,
 .crumbs button {
   background: none;
   border: none;
@@ -1211,6 +1212,7 @@ button.card {
   color: var(--text-muted);
 }
 
+.crumbs a:hover,
 .crumbs button:hover {
   color: var(--primary);
 }
@@ -2092,7 +2094,35 @@ button.card {
 }
 
 .type-tag.resident {
-  color: var(--mint-deep);
+  color: var(--primary);
+}
+
+/* Doctors page: all doctors in one group; an incomplete last row is centred */
+.doctor-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.doctor-grid > * {
+  flex: 1 1 100%;
+}
+
+@media (min-width: 720px) {
+  .doctor-grid > * {
+    flex: 0 1 calc((100% - 20px) / 2);
+  }
+}
+
+@media (min-width: 1100px) {
+  .doctor-grid {
+    gap: 24px;
+  }
+
+  .doctor-grid > * {
+    flex: 0 1 calc((100% - 48px) / 3);
+  }
 }
 
 /* ---------- Department sections ---------- */
@@ -2495,92 +2525,311 @@ button.card {
   gap: 10px;
 }
 
-/* ---------- Drawer (detail panel) ---------- */
-.drawer-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 105;
-  background: rgba(7, 21, 42, 0.55);
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: flex-end;
-  animation: fade-in 0.25s ease;
+/* ---------- Detail pages (doctor, facility, department) ---------- */
+.detail-layout {
+  display: grid;
+  gap: 28px;
+  align-items: start;
 }
 
-.drawer {
-  width: min(560px, 100vw);
-  height: 100%;
-  background: #fff;
-  overflow-y: auto;
-  box-shadow: var(--shadow-xl);
-  animation: slide-in-right 0.45s var(--ease-out);
+@media (min-width: 1024px) {
+  .detail-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 40px;
+  }
+
+  .detail-side {
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+}
+
+.detail-main,
+.detail-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.detail-block {
+  background: var(--surface-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 26px;
+}
+
+.detail-block h2 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+
+.detail-block .lede {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-body);
+}
+
+.detail-block .lede + p {
+  margin-top: 10px;
+}
+
+.tick-list--cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 10px 24px;
+}
+
+.link-list {
+  list-style: none;
   display: flex;
   flex-direction: column;
 }
 
-.drawer-media {
-  position: relative;
-  aspect-ratio: 16 / 10;
+.link-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 0;
+  border-top: 1px solid var(--border-light);
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--brand-navy);
+}
+
+.link-list li:first-child a {
+  border-top: none;
+}
+
+.link-list a svg:first-child {
+  color: var(--primary);
   flex-shrink: 0;
 }
 
-.drawer-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 3;
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-sm);
-  border: none;
-  background: rgba(255, 255, 255, 0.95);
-  color: var(--brand-navy);
+.link-list a svg:last-child {
+  margin-left: auto;
+  color: var(--text-light);
+  transition: transform var(--transition-fast);
+}
+
+.link-list a:hover {
+  color: var(--primary);
+}
+
+.link-list a:hover svg:last-child {
+  transform: translateX(3px);
+  color: var(--primary);
+}
+
+/* Doctor profile card in the hero */
+.profile-card {
+  padding: 26px;
+  border-radius: 28px;
+  box-shadow: 0 30px 60px -30px rgba(9, 52, 55, 0.35);
+}
+
+.profile-card-head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-md);
+  gap: 16px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-light);
 }
 
-.drawer-body {
-  padding: 26px;
+.profile-card-head strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--brand-navy);
+}
+
+.profile-card-head div > span {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.profile-facts {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 14px;
+  padding: 18px 0 20px;
 }
 
-.drawer-body h2 {
-  font-size: 26px;
-  letter-spacing: -0.02em;
-}
-
-.drawer-body h4 {
-  font-size: 12.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-  font-family: var(--font-body);
-  margin-bottom: 10px;
-}
-
-.drawer-body .lede {
-  font-size: 15.5px;
-  color: var(--text-body);
-  line-height: 1.65;
-}
-
-.drawer-foot {
-  position: sticky;
-  bottom: 0;
-  margin-top: auto;
-  padding: 16px 26px;
-  background: rgba(255, 255, 255, 0.96);
-  border-top: 1px solid var(--border-color);
+.profile-facts dt {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-.drawer-foot>* {
-  flex: 1;
+.profile-facts dd {
+  margin-top: 3px;
+  font-size: 14.5px;
+  color: var(--brand-navy);
+  line-height: 1.45;
+}
+
+.profile-facts a {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Icon tile used as the hero visual when a facility/department has no photo */
+.hero-art {
+  display: flex;
+  border-radius: 28px;
+}
+
+.doc-row--compact {
+  margin-top: 4px;
+}
+
+@media (min-width: 720px) {
+  .doc-row--compact {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+/* Departments overview cards */
+.dept-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 26px;
+  height: 100%;
+  color: inherit;
+}
+
+.dept-card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.dept-card-sub {
+  font-size: 14px;
+}
+
+.dept-card p {
+  font-size: 14.5px;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.dept-card-conditions {
+  color: var(--text-muted) !important;
+  font-size: 13.5px !important;
+}
+
+.dept-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.avatar-stack {
+  display: flex;
+}
+
+.avatar-stack .avatar {
+  margin-left: -8px;
+  border: 2px solid #fff;
+}
+
+.avatar-stack .avatar:first-child {
+  margin-left: 0;
+}
+
+/* Booking page */
+.booking-page-body {
+  max-width: 1100px;
+}
+
+.booking-placeholder {
+  padding: 28px;
+}
+
+.booking-doctor-links {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.booking-doctor-links a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  color: inherit;
+}
+
+.booking-doctor-links a:hover {
+  border-color: var(--primary-light);
+}
+
+.booking-doctor-links strong {
+  display: block;
+  color: var(--brand-navy);
+}
+
+.booking-doctor-links small {
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.booking-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 26px;
+  border-radius: 28px;
+}
+
+.booking-side h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Slip, lookup and messages shown as page cards */
+.page-card {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+.page-card.empty-state {
+  padding: 32px;
+}
+
+.page-card.empty-state h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.slip-card .slip-scroll {
+  overflow: visible;
+}
+
+/* Footer: departments listed inline */
+.site-footer .footer-inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px 14px;
 }
 
 .tick-list {
@@ -2657,6 +2906,7 @@ button.card {
 
 /* ---------- Timetable ---------- */
 .table-wrap {
+  position: relative; /* keeps absolutely positioned children (e.g. .sr-only) inside the scroll area */
   overflow-x: auto;
 }
 
@@ -3088,14 +3338,16 @@ button.card {
   animation: page-in 0.55s var(--ease-out) both;
 }
 
-[data-reveal] {
+/* Only hidden when JavaScript runs (index.html adds .js), so the
+   pre-rendered HTML is fully visible without it */
+.js [data-reveal] {
   opacity: 0;
   transform: translateY(22px);
   transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
   transition-delay: var(--d, 0ms);
 }
 
-[data-reveal].is-visible {
+.js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
@@ -3212,7 +3464,7 @@ button.card {
     scroll-behavior: auto !important;
   }
 
-  [data-reveal] {
+  .js [data-reveal] {
     opacity: 1;
     transform: none;
   }
@@ -4049,4 +4301,11 @@ button.card {
 /* Placeholder while a lazily loaded page or form downloads */
 .page-loading {
   min-height: 100vh;
+}
+
+/* Phones already have the Emergency button in the bottom bar: keep the booking form near the top */
+@media (max-width: 1023px) {
+  .page-hero-media:has(.booking-side) {
+    display: none;
+  }
 }

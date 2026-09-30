@@ -79,11 +79,12 @@ export const PHOTOS = {
 
 // --------------------------------------------------------
 // Doctors
-// `id` must match the server's doctor ids (used for slot booking).
+// `id` is used internally (bookings, links between data); `slug` is the page URL.
 // --------------------------------------------------------
 export const DOCTORS = [
   {
     id: 1,
+    slug: "dr-dipesh-patel", // used in the page URL: /doctors/dr-dipesh-patel
     name: "Dr. Dipesh S. Patel",
     nameGujarati: "ડૉ. દિપેશ એસ. પટેલ",
     initials: "DP",
@@ -122,6 +123,7 @@ export const DOCTORS = [
   },
   {
     id: 2,
+    slug: "dr-naimuddin-kazi", // used in the page URL: /doctors/dr-naimuddin-kazi
     name: "Dr. Naimuddin N. Kazi",
     nameGujarati: "ડૉ. નઈમુદ્દીન એન. કાઝી",
     initials: "NK",
@@ -160,6 +162,7 @@ export const DOCTORS = [
   },
   {
     id: 3,
+    slug: "dr-paras-patel", // used in the page URL: /doctors/dr-paras-patel
     name: "Dr. Paras H. Patel",
     nameGujarati: "ડૉ. પારસ એચ. પટેલ",
     initials: "PP",
@@ -198,6 +201,7 @@ export const DOCTORS = [
   },
   {
     id: 4,
+    slug: "dr-santosh-prajapati", // used in the page URL: /doctors/dr-santosh-prajapati
     name: "Dr. Santosh J. Prajapati",
     nameGujarati: "ડૉ. સંતોષ જે. પ્રજાપતિ",
     initials: "SP",
@@ -238,6 +242,7 @@ export const DOCTORS = [
   },
   {
     id: 6,
+    slug: "dr-pulkit-pandya", // used in the page URL: /doctors/dr-pulkit-pandya
     name: "Dr. Pulkit Pandya",
     nameGujarati: "ડૉ. પુલકિત પંડ્યા",
     initials: "PK",
@@ -843,6 +848,7 @@ export const FAQS = [
 // --------------------------------------------------------
 // Helpers
 // --------------------------------------------------------
-export const getDoctor = (id) => DOCTORS.find((d) => d.id === Number(id));
+// Accepts a slug ("dr-paras-patel") or an old numeric id ("3")
+export const getDoctor = (key) => DOCTORS.find((d) => d.slug === key || d.id === Number(key));
 export const getFacility = (id) => FACILITIES.find((f) => f.id === id);
 export const getDepartment = (id) => DEPARTMENTS.find((d) => d.id === id);

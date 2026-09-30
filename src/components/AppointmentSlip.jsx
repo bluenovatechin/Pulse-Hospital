@@ -1,8 +1,10 @@
 import React from 'react';
-import { CheckCircle, Printer, Share2, X, Calendar, Clock, ShieldCheck, Building2 } from 'lucide-react';
+import { CheckCircle, Printer, Share2, Calendar, Clock, ShieldCheck, Building2 } from 'lucide-react';
 import PulseLogo from './PulseLogo';
+import { Link } from '../router';
 
-export default function AppointmentSlipModal({ appointment, onClose, lang = 'en' }) {
+// Printable appointment slip (shown on /my-appointments/<id>)
+export default function AppointmentSlip({ appointment, lang = 'en' }) {
   if (!appointment) return null;
 
   const handlePrint = () => {
@@ -29,11 +31,8 @@ export default function AppointmentSlipModal({ appointment, onClose, lang = 'en'
   };
 
   return (
-    <div className="modal-overlay">
-      {/* Header and action bar stay put; the slip between them scrolls */}
-      <div className="modal-content slip-modal" style={{ maxWidth: '640px', padding: '0' }} role="dialog" aria-modal="true" aria-label="Appointment confirmed">
-        
-        {/* Modal Top Bar */}
+    <div className="card page-card slip-card">
+        {/* Top bar */}
         <div className="no-print" style={{ 
           flexShrink: 0,
           background: 'linear-gradient(135deg, var(--brand-navy) 0%, var(--primary) 100%)',
@@ -49,32 +48,14 @@ export default function AppointmentSlipModal({ appointment, onClose, lang = 'en'
             </div>
             <div>
               <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
-                {lang === 'en' ? 'Appointment Confirmed!' : 'એપોઇન્ટમેન્ટ કન્ફર્મ થઈ ગઈ!'}
+                {lang === 'en' ? 'Booking request sent' : 'બુકિંગ વિનંતી મોકલાઈ'}
               </h3>
               <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)' }}>
-                {lang === 'en' ? 'Official Advance Booking Receipt & Slip' : 'સત્તાવાર એડવાન્સ બુકિંગ પાવતી & સ્લીપ'}
+                {lang === 'en' ? 'Reception will confirm your slot on WhatsApp. Keep this slip.' : 'રિસેપ્શન વોટ્સએપ પર સ્લોટ કન્ફર્મ કરશે. આ સ્લિપ સાચવો.'}
               </p>
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            aria-label="Close"
-            style={{
-              background: 'rgba(255,255,255,0.15)',
-              border: 'none',
-              borderRadius: '50%',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              cursor: 'pointer'
-            }}
-          >
-            <X size={18} />
-          </button>
         </div>
 
         {/* Printable Hospital Receipt Content */}
@@ -104,7 +85,7 @@ export default function AppointmentSlipModal({ appointment, onClose, lang = 'en'
                 </span>
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                {lang === 'en' ? 'Status: ' : 'સ્થિતિ: '}<span style={{ color: 'var(--success)', fontWeight: 700 }}>{lang === 'en' ? 'CONFIRMED' : 'કન્ફર્મ થયેલ'}</span>
+                {lang === 'en' ? 'Status: ' : 'સ્થિતિ: '}<span style={{ color: 'var(--success)', fontWeight: 700 }}>{lang === 'en' ? 'REQUEST SENT' : 'વિનંતી મોકલાઈ'}</span>
               </div>
             </div>
           </div>
@@ -273,16 +254,10 @@ export default function AppointmentSlipModal({ appointment, onClose, lang = 'en'
             </button>
           </div>
 
-          <button
-            onClick={onClose}
-            className="btn-primary"
-            style={{ padding: '8px 24px', fontSize: '13px' }}
-          >
-            {lang === 'en' ? 'Done' : 'પૂર્ણ'}
-          </button>
+          <Link to="my-appointments" className="btn btn-primary" style={{ padding: '8px 24px', fontSize: '13px' }}>
+            {lang === 'en' ? 'All my appointments' : 'મારી બધી એપોઇન્ટમેન્ટ'}
+          </Link>
         </div>
-
-      </div>
     </div>
   );
 }

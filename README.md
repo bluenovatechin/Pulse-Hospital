@@ -29,7 +29,7 @@ Open **http://localhost:5173**
 | Command | Purpose |
 |---|---|
 | `npm run dev` / `npm start` | Starts the Vite dev server at `http://localhost:5173` |
-| `npm run build` | Builds the production site into `dist/` (served from `/`, e.g. for Vercel) |
+| `npm run build` | Builds the site into `dist/` and pre-renders every page to HTML (served from `/`, e.g. for Vercel) |
 | `npm run preview` | Serves the `dist/` build locally to check it |
 | `npm run lint` | Checks the code with Oxlint |
 | `npm run deploy` | Builds for GitHub Pages and publishes it (see below) |
@@ -42,8 +42,10 @@ Open **http://localhost:5173**
 2. They fill in their name, mobile number and (optionally) age, city, previous file number and symptoms.
 3. On **Book Slot via WhatsApp**, the app:
    - opens WhatsApp with a ready-made booking message addressed to the hospital desk (`+91 63533 44875`),
-   - shows a printable appointment slip with a reference ID (`PLS-XXXXXX`),
-   - saves the booking in the patient's own browser (`localStorage`) so they can see it again under **My booking**.
+   - opens the booking slip page `/my-appointments/PLS-XXXXXX` (printable, shareable on WhatsApp),
+   - saves the booking in the patient's own browser (`localStorage`) so they can see it again under **My appointments**.
+
+Booking starts at `/book-appointment`; every doctor's page links to `/book-appointment/<doctor>`, which opens the form with that doctor chosen.
 
 Nothing is stored on a server. The hospital receives bookings only as WhatsApp messages, and slot availability is not checked against other patients' bookings — reception confirms each booking on WhatsApp.
 
@@ -59,9 +61,32 @@ All content lives in **[`src/data/hospitalContent.js`](src/data/hospitalContent.
 
 Photos live in `public/photos/` as WebP files in three widths: `gallery-N.webp` (1100 px), `gallery-N-800.webp` and `gallery-N-640.webp` (phones pick the smaller ones automatically). To add a photo, export those three sizes (e.g. with [Squoosh](https://squoosh.app)), then reference it in `PHOTOS` in `hospitalContent.js`.
 
+## Pages
+
+Every page has its own URL, navbar and footer (there are no pop-ups):
+
+| URL | Page |
+|---|---|
+| `/` | Home |
+| `/doctors`, `/doctors/dr-dipesh-patel` … | All doctors; one full profile page per doctor |
+| `/departments`, `/departments/chest` … | All departments; one page per department |
+| `/facilities`, `/facilities/icu` … | All facilities; one page per facility |
+| `/book-appointment`, `/book-appointment/dr-paras-patel` | Booking form (optionally with a doctor chosen) |
+| `/my-appointments`, `/my-appointments/PLS-123456` | Bookings made on this device; one printable slip |
+| `/gallery`, `/about`, `/contact`, `/privacy`, `/terms` | The remaining pages |
+
+Adding a doctor, department or facility to `hospitalContent.js` automatically creates its page, adds it to the sitemap and links it from the rest of the site. A doctor's URL comes from their `slug` field.
+
 ### SEO
 
-Page titles, descriptions and the hospital's schema.org data are in [`src/data/seo.js`](src/data/seo.js). Each build writes a separate HTML file per page (`doctors.html`, `facilities/icu.html`, …) with that page's title and description, plus `sitemap.xml`. If the site moves to a custom domain, update `SITE_URL` there.
+- **Pre-rendered HTML.** `npm run build` / `npm run deploy` render every page to a complete HTML file (`dist/doctors/dr-paras-patel.html`, …) with its content, title, description, canonical link and share tags, so Google reads the page without running JavaScript. The browser then takes over the same HTML. This is done by [`src/entry-server.jsx`](src/entry-server.jsx) and [`scripts/prerender.mjs`](scripts/prerender.mjs).
+- **Structured data** (schema.org): the hospital on every page, a `Physician` entry for each doctor, breadcrumbs on detail pages and the FAQ on the home page.
+- **Real links** (`<a href>`) everywhere, and the footer links every doctor and department, so search engines can discover all pages.
+- `sitemap.xml` and `robots.txt` are generated on each build. Appointment pages are marked `noindex` (they are private to the patient).
+
+Titles, descriptions and structured data live in [`src/data/seo.js`](src/data/seo.js). If the site moves to a custom domain, update `SITE_URL` there.
+
+**Getting found for doctor names and "hospital in Modasa":** the site now gives Google everything it needs, but ranking also depends on things outside the code. Most important: submit the sitemap in [Google Search Console](https://search.google.com/search-console), set up the hospital's **Google Business Profile** (with this website link), use a custom domain, and get the site linked from the doctors' own clinic pages, social profiles and local directories (Practo, Justdial, Google Maps).
 
 ---
 
@@ -69,7 +94,8 @@ Page titles, descriptions and the hospital's schema.org data are in [`src/data/s
 
 - **WhatsApp OPD booking** — slot-wise advance booking for the coming week, sent directly to the hospital desk.
 - **Printable appointment slip** — print or save as PDF.
-- **My booking** — patients can look up, view or cancel bookings made on the same device; cancelling also prepares a WhatsApp cancellation message.
+- **My appointments** — patients can look up, view or cancel bookings made on the same device; cancelling also prepares a WhatsApp cancellation message.
+- **A page for everything** — each doctor, department and facility has its own page with its own URL.
 - **Gujarati & English** — one-tap language switch.
 - **Emergency first** — call buttons always visible on desktop and in the mobile bottom bar.
 - **Photo tour** — ICU, operation theatres, CT scan, rooms and more.
@@ -114,7 +140,7 @@ npm run deploy
 ### Notes
 
 - The sub-path `/Pulse-Hospital/` must match the repository name. If the repository is renamed, update `--base=/Pulse-Hospital/` in the `predeploy` script in [`package.json`](package.json).
-- Every page URL (e.g. `/Pulse-Hospital/doctors`) has its own HTML file, so links and refreshes return a normal page; any other URL falls back to `404.html`, which loads the app but is marked `noindex`.
+- Every page URL (e.g. `/Pulse-Hospital/doctors/dr-paras-patel`) has its own HTML file, so links and refreshes return a normal page. Any other URL (including appointment slips, which exist only in the patient's browser) is served `404.html`, which starts the app and shows the right page.
 - Never edit the `gh-pages` branch by hand; it is overwritten on every deploy.
 
 ---
@@ -133,25 +159,32 @@ Pulse Hospital/
 │   ├── data/
 │   │   ├── hospitalContent.js   Single source of truth: doctors, facilities,
 │   │   │                        departments, photos, phone numbers, address
-│   │   └── seo.js               Page titles/descriptions, sitemap routes, schema.org
-│   ├── pages/                   One component per page (Home, Facilities, Departments,
-│   │                            Doctors, Gallery, About, Contact, Privacy, Terms)
+│   │   └── seo.js               Page titles/descriptions, structured data, page list
+│   ├── pages/
+│   │   ├── HomePage.jsx, AboutPage.jsx, ContactPage.jsx, GalleryPage.jsx
+│   │   ├── DoctorsPage.jsx, DoctorPage.jsx            All doctors / one doctor
+│   │   ├── DepartmentsPage.jsx, DepartmentPage.jsx    All departments / one department
+│   │   ├── FacilitiesPage.jsx, FacilityPage.jsx       All facilities / one facility
+│   │   ├── BookingPage.jsx                            Booking form page
+│   │   ├── AppointmentsPage.jsx                       My appointments + booking slip
+│   │   └── PrivacyPolicyPage.jsx, TermsPage.jsx, NotFoundPage.jsx
 │   ├── components/
 │   │   ├── Navbar.jsx, Footer.jsx
 │   │   ├── PulseLogo.jsx              Logo component
-│   │   ├── DoctorCard.jsx, FacilityCard.jsx
-│   │   ├── DetailDrawers.jsx          Slide-in facility / doctor panels
-│   │   ├── ui.jsx                     Shared UI: Avatar, PageHero, Icon...
+│   │   ├── DoctorCard.jsx, DoctorMini.jsx, FacilityCard.jsx
+│   │   ├── ui.jsx                     Shared UI: PageHero, Avatar, Photo, Icon...
 │   │   ├── NextWeekBooking.jsx        WhatsApp slot booking form
-│   │   ├── AppointmentSlipModal.jsx   Printable appointment slip
-│   │   └── AppointmentLookupModal.jsx "My booking" (browser-stored bookings)
+│   │   ├── AppointmentSlip.jsx        Printable booking slip
+│   │   └── AppointmentLookup.jsx      Search / cancel bookings saved in the browser
 │   ├── hooks/useReveal.js       Scroll-in animations
-│   ├── router.js                Clean URL routing, supports the GitHub Pages sub-path
-│   ├── App.jsx                  App shell, modals and navigation
-│   ├── main.jsx                 React entry point
+│   ├── router.js                Clean URLs, <Link>, GitHub Pages sub-path support
+│   ├── App.jsx                  App shell: picks the page for the URL
+│   ├── main.jsx                 Browser entry (takes over the pre-rendered HTML)
+│   ├── entry-server.jsx         Build-time entry that renders pages to HTML
 │   └── index.css                Design system: typography, colours, responsive styles
-├── index.html                   HTML entry page
-├── vite.config.js               Vite config + SEO build step (per-page HTML, sitemap, 404)
+├── scripts/prerender.mjs        Writes one HTML file per page + 404.html, sitemap, robots
+├── index.html                   HTML template
+├── vite.config.js               Vite config (fills the home page <head>)
 └── package.json                 Dependencies and scripts
 ```
 

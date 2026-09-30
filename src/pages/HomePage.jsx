@@ -2,15 +2,17 @@ import React from 'react';
 import {
   Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText
 } from 'lucide-react';
-import { SectionHead, Media, Icon, Photo, Avatar, delay } from '../components/ui';
+import { SectionHead, Media, Icon, Photo, delay } from '../components/ui';
+import DoctorMini from '../components/DoctorMini';
+import { Link } from '../router';
 import {
-  HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, getFacility
+  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, getFacility
 } from '../data/hospitalContent';
 
 // Facilities featured in the home-page bento grid, in display order
 const FEATURED = ['icu', 'ot', 'ct', 'twin', 'dialysis', 'isolation'];
 
-export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en' }) {
+export default function HomePage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const featured = FEATURED.map(getFacility).filter(Boolean);
 
@@ -36,12 +38,12 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
               )}
             </p>
             <div className="hero-ctas">
-              <button className="btn-primary btn-lg" onClick={() => onBook(null)}>
+              <Link to="book-appointment" className="btn btn-primary btn-lg">
                 <Calendar size={18} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-              </button>
-              <button className="btn-secondary btn-lg" onClick={() => onNavigate('facilities')}>
+              </Link>
+              <Link to="facilities" className="btn btn-secondary btn-lg">
                 {t('Explore facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={18} />
-              </button>
+              </Link>
             </div>
             <dl className="hero-facts">
               <div><dt>24x7</dt><dd>{t('Emergency, ICU & dialysis', 'ઇમરજન્સી, ICU & ડાયાલીસીસ')}</dd></div>
@@ -72,18 +74,18 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
       {/* ---------- Quick actions ---------- */}
       <div className="container-wide quick-actions">
         <div className="quick-grid">
-          <button className="quick-card" onClick={() => onBook(null)} data-reveal style={delay(0)}>
+          <Link to="book-appointment" className="quick-card" data-reveal style={delay(0)}>
             <span className="icon-tile"><Calendar size={22} /></span>
             <span><strong>{t('Book a slot', 'સ્લોટ બુક કરો')}</strong><small>{t('Pick a doctor, day & 30-min time', 'ડૉક્ટર, દિવસ અને સમય પસંદ કરો')}</small></span>
-          </button>
-          <button className="quick-card" onClick={() => onNavigate('doctors')} data-reveal style={delay(1)}>
+          </Link>
+          <Link to="doctors" className="quick-card" data-reveal style={delay(1)}>
             <span className="icon-tile mint"><Users size={22} /></span>
             <span><strong>{t('Find a doctor', 'ડૉક્ટર શોધો')}</strong><small>{t('See who treats what, and when', 'કોણ શું સારવાર કરે છે')}</small></span>
-          </button>
-          <button className="quick-card" onClick={onOpenLookup} data-reveal style={delay(2)}>
+          </Link>
+          <Link to="my-appointments" className="quick-card" data-reveal style={delay(2)}>
             <span className="icon-tile"><UserCheck size={22} /></span>
             <span><strong>{t('My booking', 'મારી એપોઇન્ટમેન્ટ')}</strong><small>{t('View slip or cancel with your mobile no.', 'સ્લિપ જુઓ અથવા રદ કરો')}</small></span>
-          </button>
+          </Link>
           <a className="quick-card is-er" href={HOSPITAL_INFO.phoneHref} data-reveal style={delay(3)}>
             <span className="icon-tile"><Siren size={22} /></span>
             <span><strong>{t('Emergency', 'ઇમરજન્સી')}</strong><small>{t('No appointment needed: call or walk in', 'એપોઇન્ટમેન્ટ જરૂરી નથી')}</small></span>
@@ -100,14 +102,14 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
               title={t('Everything critical, under one roof', 'જરૂરી બધી સુવિધા, એક જ છત નીચે')}
               text={t('Tap any facility to see what it includes, who it is for, and which doctors work there.', 'કોઈપણ સુવિધા પર ક્લિક કરી વિગત જુઓ.')}
             />
-            <button className="btn-outline" onClick={() => onNavigate('facilities')} data-reveal>
+            <Link to="facilities" className="btn btn-outline" data-reveal>
               {t(`All ${FACILITIES.length} facilities`, 'બધી સુવિધાઓ')} <ArrowRight size={16} />
-            </button>
+            </Link>
           </div>
 
           <div className="bento">
             {featured.map((f, i) => (
-              <button key={f.id} className="bento-tile" onClick={() => onNavigate('facilities', f.id)} data-reveal style={delay(i)}>
+              <Link to="facilities" param={f.id} key={f.id} className="bento-tile" data-reveal style={delay(i)}>
                 <Media photo={f.photo} icon={f.icon} alt={f.name} iconSize={i === 0 ? 96 : 64} />
                 <span className="go" aria-hidden="true"><ArrowUpRight size={18} /></span>
                 <span className="inner">
@@ -115,7 +117,7 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
                   <h3>{lang === 'en' ? f.name : f.nameGu}</h3>
                   <p>{f.summary}</p>
                 </span>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -128,33 +130,14 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             <SectionHead
               eyebrow={t('Our doctors', 'અમારા ડૉક્ટરો')}
               title={t('Know who is treating you', 'તમારી સારવાર કોણ કરે છે')}
-              text={t('Senior consultants for OPD and ICU, backed by a medical officer in Emergency and the ICU around the clock.', 'OPD અને ICU માટે એમ.ડી. કન્સલ્ટન્ટ, અને ૨૪ કલાક રેસિડેન્ટ ડૉક્ટરો.')}
+              text={t(`Our ${DOCTORS.length} doctors care for patients in the OPD, the ICU and Emergency, day and night.`, `અમારા ${DOCTORS.length} ડૉક્ટરો OPD, ICU અને ઇમરજન્સીમાં દિવસ-રાત દર્દીઓની સંભાળ રાખે છે.`)}
             />
-            <button className="btn-outline" onClick={() => onNavigate('doctors')} data-reveal>
+            <Link to="doctors" className="btn btn-outline" data-reveal>
               {t('All doctors & timetable', 'બધા ડૉક્ટરો')} <ArrowRight size={16} />
-            </button>
+            </Link>
           </div>
           <div className="doc-row">
-            {DOCTORS.map((d, i) => (
-              <article key={d.id} className="doc-mini" data-reveal style={delay(i)}>
-                <button className="doc-mini-main" onClick={() => onNavigate('doctors', d.id)} aria-label={`${d.name}: ${t('view profile', 'પ્રોફાઇલ જુઓ')}`}>
-                  <Avatar doctor={d} />
-                  <span className={`type-tag ${d.type}`}>{t(DOCTOR_TYPES[d.type].label, DOCTOR_TYPES[d.type].labelGu)}</span>
-                  <h3>{lang === 'en' ? d.name : d.nameGujarati}</h3>
-                  <span className="qual">{d.qualification}</span>
-                  <span className="role">{t(d.designation, d.designationGujarati || d.designation)}</span>
-                </button>
-                {d.type === 'resident' ? (
-                  <a className="btn btn-sm btn-emergency btn-block" href={HOSPITAL_INFO.phoneHref}>
-                    <Siren size={15} /> {t('Emergency 24x7', 'ઇમરજન્સી ૨૪x૭')}
-                  </a>
-                ) : (
-                  <button className="btn-primary btn-sm btn-block" onClick={() => onBook(d.id)}>
-                    <Calendar size={15} /> {t('Book slot', 'સ્લોટ બુક કરો')}
-                  </button>
-                )}
-              </article>
-            ))}
+            {DOCTORS.map((d, i) => <DoctorMini key={d.id} doctor={d} lang={lang} style={delay(i)} />)}
           </div>
         </div>
       </section>
@@ -182,9 +165,9 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
             ))}
           </div>
           <div style={{ textAlign: 'center', marginTop: 32 }} data-reveal>
-            <button className="btn-primary btn-lg" onClick={() => onBook(null)}>
+            <Link to="book-appointment" className="btn btn-primary btn-lg">
               <Calendar size={18} /> {t('Start booking', 'બુકિંગ શરૂ કરો')}
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -200,17 +183,11 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
           />
           <div className="grid grid-3">
             {DEPARTMENTS.map((d, i) => (
-              <button
-                key={d.id}
-                className="cond-card"
-                style={{ ...delay(i, 50), textAlign: 'left', color: 'inherit', font: 'inherit' }}
-                onClick={() => onNavigate('departments', d.id)}
-                data-reveal
-              >
+              <Link to="departments" param={d.id} key={d.id} className="cond-card" style={{ ...delay(i, 50), textAlign: 'left', color: 'inherit', font: 'inherit' }} data-reveal>
                 <h3><span className="icon-tile dark" style={{ width: 36, height: 36 }}><Icon name={d.icon} size={18} /></span>{d.title}</h3>
                 <div className="gu gujarati-text">{d.titleGujarati}</div>
                 <p>{d.conditions.slice(0, 4).join(' · ')}</p>
-              </button>
+              </Link>
             ))}
           </div>
 
@@ -316,9 +293,9 @@ export default function HomePage({ onNavigate, onBook, onOpenLookup, lang = 'en'
               <p>{t('Reserve a 30-minute slot now, or call the helpline if it’s urgent.', 'હમણાં જ ૩૦ મિનિટનો સ્લોટ બુક કરો, અથવા તાત્કાલિક હોય તો કૉલ કરો.')}</p>
             </div>
             <div className="row">
-              <button className="btn-primary btn-lg" onClick={() => onBook(null)} style={{ background: '#fff', color: 'var(--brand-navy)', borderColor: '#fff' }}>
+              <Link to="book-appointment" className="btn btn-primary btn-lg" style={{ background: '#fff', color: 'var(--brand-navy)', borderColor: '#fff' }}>
                 <Calendar size={18} /> {t('Book a slot', 'સ્લોટ બુક કરો')}
-              </button>
+              </Link>
               <a className="btn btn-lg btn-ghost-light" href={HOSPITAL_INFO.phoneHref}><Phone size={18} /> {HOSPITAL_INFO.appointmentNumber}</a>
             </div>
           </div>

@@ -2,11 +2,12 @@ import React, { useMemo, useState } from 'react';
 import { CheckCircle2, LayoutGrid, Calendar, Phone, Scan, Eye } from 'lucide-react';
 import FacilityCard from '../components/FacilityCard';
 import { PageHero, SectionHead, Icon, delay } from '../components/ui';
+import { Link } from '../router';
 import {
   FACILITIES, FACILITY_CATEGORIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS
 } from '../data/hospitalContent';
 
-export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lang = 'en' }) {
+export default function FacilitiesPage({ lang = 'en' }) {
   const [category, setCategory] = useState('all');
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
@@ -25,7 +26,6 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
         photo={PHOTOS.ot1}
         photoAlt={t('Modular operation theatre at Pulse Hospital', 'પલ્સ હોસ્પિટલનું મોડ્યુલર ઓપરેશન થીયેટર')}
         crumbs={t('Facilities', 'સુવિધાઓ')}
-        onHome={() => onNavigate('home')}
         eyebrow={t('Facilities', 'સુવિધાઓ')}
         title={t('What we have, and what it means for you', 'અમારી સુવિધાઓ અને તમારા માટે તેનો અર્થ')}
         text={t(
@@ -44,12 +44,12 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
         }}
         actions={
           <>
-            <button className="btn-primary" onClick={() => onBook(null)}>
+            <Link to="book-appointment" className="btn btn-primary">
               <Calendar size={17} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-            </button>
-            <button className="btn-secondary" onClick={() => onNavigate('gallery')}>
+            </Link>
+            <Link to="gallery" className="btn btn-secondary">
               <Eye size={17} /> {t('See the photo tour', 'ફોટો ટૂર જુઓ')}
-            </button>
+            </Link>
           </>
         }
       />
@@ -71,7 +71,7 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
           <div className="grid grid-3" key={category}>
             {shown.map((f, i) => (
               <div key={f.id} className="page-enter" style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}>
-                <FacilityCard facility={f} onOpen={onOpenFacility} lang={lang} />
+                <FacilityCard facility={f} lang={lang} />
               </div>
             ))}
           </div>
@@ -108,9 +108,9 @@ export default function FacilitiesPage({ onNavigate, onOpenFacility, onBook, lan
               <p>{t('Book an OPD consultation and the doctor will guide you, or call the helpline for anything urgent.', 'OPD કન્સલ્ટેશન બુક કરો અથવા હેલ્પલાઇન પર કૉલ કરો.')}</p>
             </div>
             <div className="row">
-              <button className="btn-primary btn-lg" onClick={() => onBook(null)} style={{ background: '#fff', color: 'var(--brand-navy)', borderColor: '#fff' }}>
+              <Link to="book-appointment" className="btn btn-primary btn-lg" style={{ background: '#fff', color: 'var(--brand-navy)', borderColor: '#fff' }}>
                 <Calendar size={18} /> {t('Book consultation', 'કન્સલ્ટેશન બુક કરો')}
-              </button>
+              </Link>
               <a className="btn btn-lg btn-ghost-light" href={HOSPITAL_INFO.phoneHref}><Phone size={18} /> {t('Call', 'કૉલ')}</a>
             </div>
           </div>

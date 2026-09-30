@@ -6,6 +6,7 @@ import {
 import { HOSPITAL_INFO } from '../data/hospitalContent';
 import { lockScroll, unlockScroll } from './ui';
 import PulseLogo from './PulseLogo';
+import { Link } from '../router';
 
 export const NAV_LINKS = [
   { id: 'home', en: 'Home', gu: 'મુખ્ય પૃષ્ઠ', icon: Home },
@@ -17,7 +18,7 @@ export const NAV_LINKS = [
   { id: 'contact', en: 'Contact', gu: 'સંપર્ક', icon: Mail }
 ];
 
-export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLookup, lang, setLang }) {
+export default function Navbar({ activePage, lang, setLang }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -40,10 +41,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
     };
   }, [menuOpen]);
 
-  const go = (id) => {
-    setMenuOpen(false);
-    onNavigate(id);
-  };
+  const close = () => setMenuOpen(false);
 
   return (
     <>
@@ -58,7 +56,7 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
             </span>
           </div>
           <div className="topbar-right">
-            <button onClick={onOpenLookup} className="hide-sm"><UserCheck size={14} /> {t('My Booking', 'મારી એપોઇન્ટમેન્ટ')}</button>
+            <Link to="my-appointments" className="hide-sm"><UserCheck size={14} /> {t('My Booking', 'મારી એપોઇન્ટમેન્ટ')}</Link>
             <button className="lang-btn" onClick={() => setLang(lang === 'en' ? 'gu' : 'en')} title="Toggle Gujarati / English">
               <Globe size={13} /> {lang === 'en' ? 'ગુજરાતી' : 'English'}
             </button>
@@ -69,28 +67,28 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
       {/* Sticky header */}
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="container-wide header-inner">
-          <button className="brand" onClick={() => go('home')} title="Home">
+          <Link to="home" className="brand" title="Home">
             <PulseLogo size={42} lang={lang} />
-          </button>
+          </Link>
 
           <nav className="main-nav" aria-label="Main">
             {NAV_LINKS.map((l) => (
-              <button
+              <Link
                 key={l.id}
+                to={l.id}
                 className="nav-link"
                 aria-current={activePage === l.id ? 'page' : undefined}
-                onClick={() => go(l.id)}
               >
                 {t(l.en, l.gu)}
-              </button>
+              </Link>
             ))}
           </nav>
 
           <div className="header-actions">
-            <button onClick={onOpenBooking} className="btn-primary header-book" style={{ padding: '11px 18px', fontSize: 14 }}>
+            <Link to="book-appointment" className="btn btn-primary header-book" style={{ padding: '11px 18px', fontSize: 14 }}>
               <Calendar size={16} />
               {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-            </button>
+            </Link>
             <button className="menu-toggle" onClick={() => setMenuOpen(true)} aria-label="Open menu" aria-expanded={menuOpen}>
               <Menu size={22} />
             </button>
@@ -110,20 +108,20 @@ export default function Navbar({ activePage, onNavigate, onOpenBooking, onOpenLo
             {NAV_LINKS.map((l) => {
               const I = l.icon;
               return (
-                <button key={l.id} className="nav-link" aria-current={activePage === l.id ? 'page' : undefined} onClick={() => go(l.id)}>
+                <Link key={l.id} to={l.id} className="nav-link" aria-current={activePage === l.id ? 'page' : undefined} onClick={close}>
                   <I size={18} /> {t(l.en, l.gu)}
-                </button>
+                </Link>
               );
             })}
 
             <div className="menu-divider" />
 
-            <button className="btn-primary btn-lg" onClick={() => { setMenuOpen(false); onOpenBooking(); }}>
+            <Link to="book-appointment" className="btn btn-primary btn-lg" onClick={close}>
               <Calendar size={18} /> {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-            </button>
-            <button className="btn-secondary" style={{ marginTop: 8 }} onClick={() => { setMenuOpen(false); onOpenLookup(); }}>
+            </Link>
+            <Link to="my-appointments" className="btn btn-secondary" style={{ marginTop: 8 }} onClick={close}>
               <UserCheck size={17} /> {t('Check / Cancel My Booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}
-            </button>
+            </Link>
             <a className="btn btn-emergency" style={{ marginTop: 8 }} href={HOSPITAL_INFO.phoneHref}>
               <Phone size={17} /> {t('Call Emergency', 'ઇમરજન્સી કૉલ')}
             </a>

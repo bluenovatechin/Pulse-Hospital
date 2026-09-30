@@ -3,14 +3,13 @@ import { AlertCircle, Calendar, Phone, CheckCircle2, FileText, Scale, MapPin } f
 import { PageHero } from '../components/ui';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
 
-export default function TermsPage({ onNavigate, onBook, lang = 'en' }) {
+export default function TermsPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
   return (
     <div>
       <PageHero
         crumbs={t('Terms & Conditions', 'નિયમો અને શરતો')}
-        onHome={() => onNavigate('home')}
         eyebrow={t('Terms', 'નિયમો')}
         title={t('Terms & Conditions', 'નિયમો અને શરતો')}
         text={t(
