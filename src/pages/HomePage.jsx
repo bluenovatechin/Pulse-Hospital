@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText
 } from 'lucide-react';
@@ -13,8 +13,13 @@ import {
 const FEATURED = ['icu', 'ot', 'ct', 'twin', 'dialysis', 'isolation'];
 
 export default function HomePage({ lang = 'en' }) {
+  const [openFaq, setOpenFaq] = useState(0);
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const featured = FEATURED.map(getFacility).filter(Boolean);
+
+  const toggleFaq = (index) => {
+    setOpenFaq((prev) => (prev === index ? -1 : index));
+  };
 
   return (
     <div>
@@ -98,7 +103,7 @@ export default function HomePage({ lang = 'en' }) {
       </div>
 
       {/* ---------- Facilities bento ---------- */}
-      <section className="section">
+      <section className="section ">
         <div className="container-wide">
           <div className="row-between" style={{ marginBottom: 32 }}>
             <SectionHead
@@ -147,7 +152,7 @@ export default function HomePage({ lang = 'en' }) {
       </section>
 
       {/* ---------- How booking works ---------- */}
-      <section className="section">
+      <section className="section how-to-book">
         <div className="container-wide">
           <SectionHead
             center
@@ -277,13 +282,39 @@ export default function HomePage({ lang = 'en' }) {
       <section className="section section--white">
         <div className="container-wide" style={{ maxWidth: 860 }}>
           <SectionHead center eyebrow="FAQ" title={t('Questions patients often ask', 'વારંવાર પુછાતા પ્રશ્નો')} />
-          <div className="faq" data-reveal>
-            {FAQS.map((f, i) => (
-              <details key={f.q} open={i === 0}>
-                <summary>{lang === 'en' ? f.q : (f.qGu || f.q)}<Plus size={20} /></summary>
-                <div className="answer">{lang === 'en' ? f.a : (f.aGu || f.a)}</div>
-              </details>
-            ))}
+          <div className="faq" data-reveal role="region" aria-label="Frequently Asked Questions">
+            {FAQS.map((f, i) => {
+              const isOpen = openFaq === i;
+              const question = lang === 'en' ? f.q : (f.qGu || f.q);
+              const answer = lang === 'en' ? f.a : (f.aGu || f.a);
+              return (
+                <div key={f.q} className={`faq-item ${isOpen ? 'is-open' : ''}`}>
+                  <button
+                    type="button"
+                    className="faq-question-btn"
+                    onClick={() => toggleFaq(i)}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${i}`}
+                    id={`faq-question-${i}`}
+                  >
+                    <span>{question}</span>
+                    <span className="faq-toggle-icon" aria-hidden="true">
+                      <Plus size={18} />
+                    </span>
+                  </button>
+                  <div
+                    id={`faq-answer-${i}`}
+                    className="faq-collapse"
+                    role="region"
+                    aria-labelledby={`faq-question-${i}`}
+                  >
+                    <div className="faq-collapse-inner">
+                      <div className="faq-answer-content">{answer}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
