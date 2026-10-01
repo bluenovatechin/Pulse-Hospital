@@ -7,9 +7,9 @@ import {
   AlertCircle, 
   Building2, 
   Trash2,
-  FileText,
-  MessageCircle
+  FileText
 } from 'lucide-react';
+import { WhatsAppIcon } from './ui';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
 
 // "My appointments": bookings saved in this browser, with search, slip and cancel
@@ -156,7 +156,7 @@ export default function AppointmentLookup({ onViewSlip, lang = 'en' }) {
                       textDecoration: 'none'
                     }}
                   >
-                    <MessageCircle size={16} />
+                    <WhatsAppIcon size={18} />
                     <span>{lang === 'en' ? 'Chat with Reception on WhatsApp' : 'વોટ્સએપ પર રિસેપ્શનનો સંપર્ક કરો'}</span>
                   </a>
                 </div>

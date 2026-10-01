@@ -16,7 +16,7 @@ const PAGE_META = {
   home: {
     title: 'Pulse Hospital & I.C.U Modasa | 24x7 ICU, Emergency & Dialysis',
     description:
-      'Pulse Hospital & I.C.U (પલ્સ હોસ્પિટલ), City Centre, Shamlaji Road, Modasa: 24x7 emergency, ventilator ICU, in-house CT scan, dialysis and modular operation theatres. Book a doctor appointment online.'
+      'Pulse Hospital & I.C.U (પલ્સ હોસ્પિટલ), City Centre, Shamlaji Road, Modasa: 2000+ critical patients treated and 5000+ OPD consultations in one year. 24x7 emergency, ventilator ICU, in-house CT scan, dialysis and operation theatres. Book an appointment online.'
   },
   facilities: {
     title: `Facilities: ICU, CT Scan, Dialysis & Operation Theatre | ${BRAND}`,
@@ -40,7 +40,7 @@ const PAGE_META = {
   about: {
     title: `About Us | ${BRAND}`,
     description:
-      'Pulse Hospital & I.C.U brings 24x7 emergency and critical care, dialysis, CT and specialist doctors to Modasa and the Arvalli district.'
+      'Pulse Hospital & I.C.U brings 24x7 emergency and critical care, dialysis, CT and specialist doctors to Modasa and the Arvalli district: 2000+ critical patients, 5000+ OPD consultations and 70+ complicated surgeries in one year.'
   },
   contact: {
     title: `Contact, Address & Directions | ${BRAND}`,
@@ -148,7 +148,7 @@ function hospital() {
     alternateName: [HOSPITAL_INFO.nameGujarati, 'Pulse Hospital Modasa', 'Pulse Hospital and ICU'],
     slogan: HOSPITAL_INFO.tagline,
     url: SITE_URL,
-    logo: `${SITE_URL}logo.png`,
+    logo: `${SITE_URL}logo-full.png`,
     image: `${SITE_URL}og-image.jpg`,
     telephone,
     address,

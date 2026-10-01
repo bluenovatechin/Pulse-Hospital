@@ -1,42 +1,52 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <script>document.documentElement.classList.add('js')</script>
-    <!-- Title, description, robots, canonical, share tags and structured data
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <script>document.documentElement.classList.add('js')</script>
+  <!-- Title, description, robots, canonical, share tags and structured data
          for each page are written here by vite.config.js / scripts/prerender.mjs -->
-    <!--seo-->
-    <meta name="theme-color" content="#093437" />
-    <meta name="format-detection" content="telephone=yes" />
-    <meta name="geo.region" content="IN-GJ" />
-    <meta name="geo.placename" content="Modasa, Arvalli" />
+  <!--seo-->
+  <meta name="theme-color" content="#093437" />
+  <meta name="format-detection" content="telephone=yes" />
+  <meta name="geo.region" content="IN-GJ" />
+  <meta name="geo.placename" content="Modasa, Arvalli" />
 
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Pulse Hospital & I.C.U" />
-    <meta property="og:locale" content="en_IN" />
-    <meta property="og:locale:alternate" content="gu_IN" />
-    <meta property="og:image" content="%SITE_URL%og-image.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Pulse Hospital & I.C.U, Modasa: 24x7 emergency and critical care" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="%SITE_URL%og-image.jpg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Pulse Hospital & I.C.U" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:locale:alternate" content="gu_IN" />
+  <meta property="og:image" content="%SITE_URL%og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Pulse Hospital & I.C.U, Modasa: 24x7 emergency and critical care" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="%SITE_URL%og-image.jpg" />
 
-    <!-- Fonts: Outfit (headings), Plus Jakarta Sans (body), Noto Sans / Anek Gujarati.
+  <!-- Fonts: Outfit (headings), Plus Jakarta Sans (body), Noto Sans / Anek Gujarati.
          Gujarati files only download when Gujarati text is on screen (unicode-range). -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Loaded without blocking the first paint; system fonts show until they arrive -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" /></noscript>
-  </head>
-  <body>
-    <div id="root"><!--app--></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Loaded without blocking the first paint; system fonts show until they arrive -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anek+Gujarati:wght@600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+  </noscript>
+</head>
+
+<body>
+  <div id="root"><!--app--></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

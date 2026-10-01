@@ -770,6 +770,22 @@ export const DEPARTMENTS = [
 ];
 
 // --------------------------------------------------------
+// Milestones, as published by the hospital on Instagram
+// (https://www.instagram.com/p/Dc7gWFgo-gQ/)
+// --------------------------------------------------------
+export const MILESTONES = {
+  period: "In one year",
+  periodGu: "એક વર્ષમાં",
+  items: [
+    { value: "2000+", en: "Critical patients treated", gu: "ક્રિટિકલ દર્દીઓની સારવાર" },
+    { value: "5000+", en: "OPD consultations", gu: "OPD કન્સલ્ટેશન" },
+    { value: "70+", en: "Complicated surgeries", gu: "જટિલ સર્જરી" }
+  ],
+  noteGu: "આ સફર માત્ર આંકડાઓની નથી, પરંતુ તમારા વિશ્વાસ અને સહકારની છે.",
+  noteEn: "This journey is not just about numbers; it is about your trust and support."
+};
+
+// --------------------------------------------------------
 // Treatments available, as printed on the brochure (ઉપલબ્ધ સારવાર)
 // --------------------------------------------------------
 export const TREATMENTS = [

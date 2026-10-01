@@ -56,8 +56,12 @@ const urls = routes
   .filter((r) => r.index)
   .map((r) => `  <url><loc>${SITE_URL}${pagePath(r.page, r.param)}</loc><lastmod>${today}</lastmod></url>`)
   .join('\n');
-write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
-write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`);
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+const robotsTxt = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`;
+write('sitemap.xml', sitemapXml);
+write('robots.txt', robotsTxt);
+fs.writeFileSync(path.join(root, 'public', 'sitemap.xml'), sitemapXml);
+fs.writeFileSync(path.join(root, 'public', 'robots.txt'), robotsTxt);
 
 fs.rmSync(ssrDir, { recursive: true, force: true });
 console.log(`Pre-rendered ${routes.length + 1} pages (${routes.filter((r) => r.index).length} in sitemap.xml)`);

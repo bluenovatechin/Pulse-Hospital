@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { Phone, MessageCircle, CalendarCheck } from 'lucide-react';
-import { PageHero, Avatar } from '../components/ui';
+import { Phone, CalendarCheck } from 'lucide-react';
+import { PageHero, Avatar, WhatsAppIcon } from '../components/ui';
 import { Link, navigateTo } from '../router';
 import { DOCTORS, HOSPITAL_INFO } from '../data/hospitalContent';
 
@@ -42,12 +42,12 @@ export default function BookingPage({ doctor, lang = 'en' }) {
           ? t(`Book an appointment with ${doctor.name}`, `${doctor.nameGujarati} સાથે એપોઇન્ટમેન્ટ બુક કરો`)
           : t('Book a doctor appointment', 'ડૉક્ટરની એપોઇન્ટમેન્ટ બુક કરો')}
         text={t(
-          'Pick a doctor, a day in the coming week and a 30-minute morning or evening slot. Your request opens in WhatsApp for the hospital reception, who confirm the slot.',
-          'ડૉક્ટર, આવતા અઠવાડિયાનો દિવસ અને ૩૦ મિનિટનો સ્લોટ પસંદ કરો. વિનંતી વોટ્સએપ પર રિસેપ્શનને જશે અને તેઓ સ્લોટ કન્ફર્મ કરશે.'
+          'Pick a doctor, any day from today through the next 15 days, and a 30-minute morning or evening slot. Your request opens directly in WhatsApp for hospital confirmation.',
+          'ડૉક્ટર, આજથી આગામી ૧૫ દિવસમાંથી કોઈપણ દિવસ અને ૩૦ મિનિટનો સ્લોટ પસંદ કરો. વિનંતી વોટ્સએપ પર રિસેપ્શનને જશે અને તેઓ સ્લોટ કન્ફર્મ કરશે.'
         )}
         facts={[
           { value: '30 min', label: t('Per consultation', 'દરેક મુલાકાત') },
-          { value: t('Mon–Sun', 'સોમ–રવિ'), label: t('Coming week', 'આવતું અઠવાડિયું') },
+          { value: t('15 Days', '૧૫ દિવસ'), label: t('Advance calendar', 'એડવાન્સ કેલેન્ડર') },
           { value: 'WhatsApp', label: t('Confirmed by reception', 'રિસેપ્શન કન્ફર્મ કરે') }
         ]}
         aside={
@@ -56,7 +56,7 @@ export default function BookingPage({ doctor, lang = 'en' }) {
             <h2>{t('Emergency?', 'ઇમરજન્સી?')}</h2>
             <p className="muted">{t('No appointment is needed. Come straight to the 4th floor or call now.', 'એપોઇન્ટમેન્ટની જરૂર નથી. સીધા ૪થા માળે આવો અથવા કૉલ કરો.')}</p>
             <a className="btn btn-emergency btn-block" href={HOSPITAL_INFO.phoneHref}><Phone size={17} /> {HOSPITAL_INFO.appointmentNumber}</a>
-            <a className="btn btn-secondary btn-block" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer"><MessageCircle size={17} /> {t('Ask on WhatsApp', 'વોટ્સએપ પર પૂછો')}</a>
+            <a className="btn btn-secondary btn-block" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer"><WhatsAppIcon size={18} /> {t('Ask on WhatsApp', 'વોટ્સએપ પર પૂછો')}</a>
           </div>
         }
       />

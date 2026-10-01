@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin, Clock, HeartPulse, ShieldCheck, Users, FileText, Calendar, ArrowRight, Phone } from 'lucide-react';
 import { PageHero, SectionHead, delay } from '../components/ui';
 import { Link } from '../router';
-import { HOSPITAL_INFO, DOCTORS, PHOTOS } from '../data/hospitalContent';
+import { HOSPITAL_INFO, PHOTOS, MILESTONES } from '../data/hospitalContent';
 
 export default function AboutPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -26,11 +26,9 @@ export default function AboutPage({ lang = 'en' }) {
           'Pulse Hospital & I.C.U is on the 4th floor of City Centre, Shamlaji Road, bringing ICU, dialysis, CT and specialist care to Modasa and the villages around it.',
           'સીટી સેન્ટર, શામળાજી રોડના ૪થા માળે આવેલી પલ્સ હોસ્પિટલ મોડાસા અને આસપાસના ગામો માટે ICU, ડાયાલીસીસ, CT અને નિષ્ણાત સારવાર લાવે છે.'
         )}
-        facts={[
-          { value: '24x7', label: t('Emergency & ICU', 'ઇમરજન્સી & ICU') },
-          { value: `${DOCTORS.length}`, label: t('Doctors on our panel', 'અમારા ડૉક્ટરો') },
-          { value: 'Modasa', label: t('Arvalli, Gujarat', 'અરવલ્લી, ગુજરાત') }
-        ]}
+        factsLabel={t(MILESTONES.period, MILESTONES.periodGu)}
+        facts={MILESTONES.items.map((m) => ({ value: m.value, label: t(m.en, m.gu) }))}
+        factsNote={MILESTONES.noteGu}
         note={{
           icon: <HeartPulse size={20} />,
           title: t('Caring for life', 'જીવનની સંભાળ'),

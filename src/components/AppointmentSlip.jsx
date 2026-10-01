@@ -1,6 +1,7 @@
 import React from 'react';
-import { CheckCircle, Printer, Share2, Calendar, Clock, ShieldCheck, Building2 } from 'lucide-react';
+import { CheckCircle, Printer, Calendar, Clock, ShieldCheck, Building2 } from 'lucide-react';
 import PulseLogo from './PulseLogo';
+import { WhatsAppIcon } from './ui';
 import { Link } from '../router';
 
 // Printable appointment slip (shown on /my-appointments/<id>)
@@ -64,7 +65,7 @@ export default function AppointmentSlip({ appointment, lang = 'en' }) {
           {/* Hospital Header */}
           <div style={{ borderBottom: '2px solid var(--border-color)', paddingBottom: '16px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-              <PulseLogo size={46} lang={lang} />
+              <PulseLogo size={46} />
               <div style={{ borderLeft: '1.5px solid var(--border-color)', paddingLeft: '14px' }}>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
                   4th Floor, A-block, City Centre, Shamlaji Road, Modasa
@@ -249,7 +250,7 @@ export default function AppointmentSlip({ appointment, lang = 'en' }) {
                 cursor: 'pointer'
               }}
             >
-              <Share2 size={15} />
+              <WhatsAppIcon size={18} />
               <span>{lang === 'en' ? 'Share to WhatsApp' : 'વ્હોટ્સએપ પર મેળવો'}</span>
             </button>
           </div>

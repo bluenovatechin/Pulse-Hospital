@@ -3,6 +3,7 @@ import { Phone, Calendar, ArrowUp, UserCheck } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import { WhatsAppIcon } from './components/ui';
 import { useRoute, navigateTo, Link } from './router';
 import useReveal from './hooks/useReveal';
 import { HOSPITAL_INFO, getDoctor, getFacility, getDepartment } from './data/hospitalContent';
@@ -100,7 +101,7 @@ export default function App({ url }) {
   // Start each new page at the top
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [page, param]);
 
-  useReveal();
+  useReveal(page, param);
   useDocumentMeta(page, param);
 
   useEffect(() => {
@@ -136,22 +137,73 @@ export default function App({ url }) {
 
       <Footer lang={lang} />
 
-      {/* Desktop floating buttons */}
-      <div className="fab-stack">
+      {/* Floating contact & navigation buttons (bottom-right) */}
+      <div className="fab-stack" role="region" aria-label="Quick contact actions">
         {showTop && (
-          <button className="fab top" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top" title="Back to top">
-            <ArrowUp size={20} />
+          <button
+            className="fab top"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label={lang === 'en' ? 'Back to top' : 'ઉપર જાઓ'}
+            data-tooltip={lang === 'en' ? 'Back to top' : 'ઉપર જાઓ'}
+          >
+            <ArrowUp size={19} strokeWidth={2.2} />
           </button>
         )}
-        <a className="fab er" href={HOSPITAL_INFO.phoneHref} aria-label="Call emergency" title="Call emergency"><Phone size={22} /></a>
-        <Link to="book-appointment" className="fab book" aria-label="Book appointment" title="Book appointment"><Calendar size={22} /></Link>
+        <a
+          className="fab wa"
+          href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(
+            lang === 'en'
+              ? 'Hello Pulse Hospital, I would like to inquire about appointments and medical services.'
+              : 'નમસ્તે પલ્સ હોસ્પિટલ, મારે એપોઇન્ટમેન્ટ અને સારવાર વિશે માહિતી મેળવવી છે.'
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={lang === 'en' ? 'Chat on WhatsApp' : 'વોટ્સએપ પર સંપર્ક કરો'}
+          data-tooltip={lang === 'en' ? 'Chat on WhatsApp' : 'વોટ્સએપ'}
+        >
+          <WhatsAppIcon size={28} />
+        </a>
+        <a
+          className="fab er"
+          href={HOSPITAL_INFO.phoneHref}
+          aria-label={lang === 'en' ? 'Call emergency' : 'ઇમરજન્સી કૉલ'}
+          data-tooltip={lang === 'en' ? 'Emergency: 63533 44875' : 'ઇમરજન્સી: ૬૩૫૩૩ ૪૪૮૭૫'}
+        >
+          <Phone size={20} strokeWidth={2.2} />
+        </a>
+        <Link
+          to="book-appointment"
+          className="fab book"
+          aria-label={lang === 'en' ? 'Book appointment' : 'એપોઇન્ટમેન્ટ બુક કરો'}
+          data-tooltip={lang === 'en' ? 'Book Appointment' : 'સ્લોટ બુક કરો'}
+        >
+          <Calendar size={20} strokeWidth={2.2} />
+        </Link>
       </div>
 
       {/* Mobile bottom action bar */}
       <nav className="mobile-bar" aria-label="Quick actions">
-        <a className="er" href={HOSPITAL_INFO.phoneHref}><Phone size={18} /> {lang === 'en' ? 'Emergency' : 'ઇમરજન્સી'}</a>
-        <Link to="my-appointments"><UserCheck size={18} /> {lang === 'en' ? 'My booking' : 'મારી બુકિંગ'}</Link>
-        <Link to="book-appointment" className="book"><Calendar size={18} /> {lang === 'en' ? 'Book slot' : 'બુક કરો'}</Link>
+        <a className="er" href={HOSPITAL_INFO.phoneHref}>
+          <Phone size={17} strokeWidth={2.2} /> {lang === 'en' ? 'Emergency' : 'ઇમરજન્સી'}
+        </a>
+        <a
+          className="wa"
+          href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(
+            lang === 'en'
+              ? 'Hello Pulse Hospital, I would like to inquire about appointments and medical services.'
+              : 'નમસ્તે પલ્સ હોસ્પિટલ, મારે એપોઇન્ટમેન્ટ અને સારવાર વિશે માહિતી મેળવવી છે.'
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <WhatsAppIcon size={19} /> {lang === 'en' ? 'WhatsApp' : 'વોટ્સએપ'}
+        </a>
+        <Link to="my-appointments">
+          <UserCheck size={17} strokeWidth={2.2} /> {lang === 'en' ? 'Booking' : 'બુકિંગ'}
+        </Link>
+        <Link to="book-appointment" className="book">
+          <Calendar size={17} strokeWidth={2.2} /> {lang === 'en' ? 'Book Slot' : 'બુક કરો'}
+        </Link>
       </nav>
     </div>
   );

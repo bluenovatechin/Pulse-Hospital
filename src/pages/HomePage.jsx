@@ -2,11 +2,11 @@ import React from 'react';
 import {
   Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText
 } from 'lucide-react';
-import { SectionHead, Media, Icon, Photo, delay } from '../components/ui';
+import { SectionHead, Media, Icon, Photo, CountUp, delay } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
 import { Link } from '../router';
 import {
-  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, getFacility
+  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, MILESTONES, getFacility
 } from '../data/hospitalContent';
 
 // Facilities featured in the home-page bento grid, in display order
@@ -45,11 +45,15 @@ export default function HomePage({ lang = 'en' }) {
                 {t('Explore facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={18} />
               </Link>
             </div>
-            <dl className="hero-facts">
-              <div><dt>24x7</dt><dd>{t('Emergency, ICU & dialysis', 'ઇમરજન્સી, ICU & ડાયાલીસીસ')}</dd></div>
-              <div><dt>{DOCTORS.length}</dt><dd>{t('Doctors on our panel', 'અમારા ડૉક્ટરો')}</dd></div>
-              <div><dt>CT</dt><dd>{t('Scan centre in-house', 'ઈન-હાઉસ સીટી સ્કેન')}</dd></div>
-            </dl>
+            <div className="milestones">
+              <span className="milestones-period">{t(MILESTONES.period, MILESTONES.periodGu)}</span>
+              <dl className="hero-facts">
+                {MILESTONES.items.map((m) => (
+                  <div key={m.en}><dt><CountUp value={m.value} /></dt><dd>{t(m.en, m.gu)}</dd></div>
+                ))}
+              </dl>
+              <p className="milestones-note gujarati-text">{MILESTONES.noteGu}</p>
+            </div>
           </div>
 
           <div className="hero-collage page-enter" style={{ animationDelay: '90ms' }}>
@@ -153,7 +157,7 @@ export default function HomePage({ lang = 'en' }) {
           <div className="steps">
             {[
               [t('Choose a doctor', 'ડૉક્ટર પસંદ કરો'), t('Pick the specialist you need, or start from a doctor’s profile.', 'તમને જરૂરી નિષ્ણાંત પસંદ કરો.')],
-              [t('Pick a day', 'દિવસ પસંદ કરો'), t('Any day in the coming week, Monday to Sunday.', 'આવતા અઠવાડિયાનો કોઈ પણ દિવસ.')],
+              [t('Pick a day', 'દિવસ પસંદ કરો'), t('Today or any of the next 15 days.', 'આજે અથવા આગામી ૧૫ દિવસમાંથી કોઈપણ દિવસ.')],
               [t('Select a 30-min slot', 'સમય સ્લોટ પસંદ કરો'), t('Morning or evening, whichever suits you.', 'સવાર કે સાંજ: ૩૦ મિનિટનો સ્લોટ.')],
               [t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો'), t('Your request goes to reception, who confirm the slot. Keep the booking slip.', 'વિનંતી રિસેપ્શનને જશે અને તેઓ સ્લોટ કન્ફર્મ કરશે. બુકિંગ સ્લિપ સાચવો.')]
             ].map(([h, p], i) => (
@@ -212,7 +216,7 @@ export default function HomePage({ lang = 'en' }) {
             text={t('Clear clinical protocols designed to save critical minutes and ensure seamless medical care.', 'ઇમરજન્સી અને ઓપીડી દરમિયાન દર્દીઓની સુવિધા માટેના નિયમો.')}
           />
           <div className="grid grid-3">
-            <div className="card" style={{ padding: 26, ...delay(0) }} data-reveal>
+            <div className="card card-hover" style={{ padding: 26, ...delay(0) }} data-reveal>
               <span className="icon-tile red" style={{ width: 42, height: 42, marginBottom: 16 }}>
                 <Siren size={20} />
               </span>
@@ -230,7 +234,7 @@ export default function HomePage({ lang = 'en' }) {
               </div>
             </div>
 
-            <div className="card" style={{ padding: 26, ...delay(1) }} data-reveal>
+            <div className="card card-hover" style={{ padding: 26, ...delay(1) }} data-reveal>
               <span className="icon-tile" style={{ width: 42, height: 42, marginBottom: 16 }}>
                 <Clock size={20} />
               </span>
@@ -248,7 +252,7 @@ export default function HomePage({ lang = 'en' }) {
               </div>
             </div>
 
-            <div className="card" style={{ padding: 26, ...delay(2) }} data-reveal>
+            <div className="card card-hover" style={{ padding: 26, ...delay(2) }} data-reveal>
               <span className="icon-tile mint" style={{ width: 42, height: 42, marginBottom: 16 }}>
                 <FileText size={20} />
               </span>

@@ -1,19 +1,26 @@
 import { useEffect } from 'react';
 
-// Fades elements marked with `data-reveal` into view as they scroll in.
-// Also watches for elements added later (lazy-loaded pages, filtered
-// lists), so nothing is left invisible.
-export default function useReveal() {
+/**
+ * Fades elements marked with `data-reveal` into view as they scroll in.
+ * Robust against React StrictMode, page refreshes, and dynamic DOM updates.
+ */
+export default function useReveal(page, param) {
   useEffect(() => {
-    const root = document.getElementById('root');
-    const pending = () => root.querySelectorAll('[data-reveal]:not(.is-visible):not([data-reveal-watched])');
+    if (typeof window === 'undefined') return;
 
+    const root = document.getElementById('root') || document.body;
+
+    // Clean up any stale data-reveal-watched attributes from prior runs
+    root.querySelectorAll('[data-reveal-watched]').forEach((el) => {
+      el.removeAttribute('data-reveal-watched');
+    });
+
+    const pending = () => root.querySelectorAll('[data-reveal]:not(.is-visible)');
+
+    // In case IntersectionObserver is unsupported, reveal all elements immediately
     if (!('IntersectionObserver' in window)) {
-      const showAll = () => pending().forEach((el) => el.classList.add('is-visible'));
-      showAll();
-      const mo = new MutationObserver(showAll);
-      mo.observe(root, { childList: true, subtree: true });
-      return () => mo.disconnect();
+      pending().forEach((el) => el.classList.add('is-visible'));
+      return;
     }
 
     const io = new IntersectionObserver(
@@ -25,20 +32,57 @@ export default function useReveal() {
           }
         });
       },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+      { rootMargin: '0px 0px 100px 0px', threshold: 0.01 }
     );
-    const scan = () =>
-      pending().forEach((el) => {
-        el.setAttribute('data-reveal-watched', '');
-        io.observe(el);
-      });
 
+    // Track observed elements in memory for this effect instance (survives StrictMode remounts)
+    const observed = new WeakSet();
+
+    const scan = () => {
+      const elements = pending();
+      const windowH = window.innerHeight || document.documentElement.clientHeight;
+
+      elements.forEach((el) => {
+        // Immediate reveal: if element is within or close to viewport, reveal immediately
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= windowH + 120 && rect.bottom >= -100) {
+          el.classList.add('is-visible');
+          return;
+        }
+
+        if (!observed.has(el)) {
+          observed.add(el);
+          io.observe(el);
+        }
+      });
+    };
+
+    // Run initial scan synchronously and on next tick
     scan();
+    const frameId = requestAnimationFrame(scan);
+
+    // Scroll and resize listeners as fast reactive triggers
+    window.addEventListener('scroll', scan, { passive: true });
+    window.addEventListener('resize', scan, { passive: true });
+
+    // Watch for dynamically added DOM elements (lazy loaded routes, etc.)
     const mo = new MutationObserver(scan);
     mo.observe(root, { childList: true, subtree: true });
+
+    // Safety fallback: ensure nothing ever remains permanently hidden
+    const safetyTimer = setTimeout(() => {
+      root.querySelectorAll('[data-reveal]:not(.is-visible)').forEach((el) => {
+        el.classList.add('is-visible');
+      });
+    }, 600);
+
     return () => {
+      cancelAnimationFrame(frameId);
+      clearTimeout(safetyTimer);
+      window.removeEventListener('scroll', scan);
+      window.removeEventListener('resize', scan);
       io.disconnect();
       mo.disconnect();
     };
-  }, []);
+  }, [page, param]);
 }

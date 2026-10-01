@@ -68,7 +68,7 @@ export default function Navbar({ activePage, lang, setLang }) {
       <header className={`site-header ${scrolled ? 'scrolled' : ''}`}>
         <div className="container-wide header-inner">
           <Link to="home" className="brand" title="Home">
-            <PulseLogo size={42} lang={lang} />
+            <PulseLogo size={42} />
           </Link>
 
           <nav className="main-nav" aria-label="Main">
@@ -101,7 +101,7 @@ export default function Navbar({ activePage, lang, setLang }) {
         <div className="mobile-menu" onClick={() => setMenuOpen(false)}>
           <div className="mobile-menu-panel" role="dialog" aria-modal="true" aria-label="Menu" onClick={(e) => e.stopPropagation()}>
             <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-              <PulseLogo size={32} lang={lang} tagline={false} />
+              <PulseLogo size={32} />
               <button className="menu-toggle" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={22} /></button>
             </div>
 

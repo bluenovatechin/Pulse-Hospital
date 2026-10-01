@@ -83,32 +83,25 @@ export default function DoctorPage({ doctor: d, lang = 'en' }) {
 
       <section className="section">
         <div className="container-wide detail-layout">
-          <div className="detail-main">
-            <article className="detail-block" data-reveal>
-              <h2>{t(`About ${d.name}`, `${d.nameGujarati} વિશે`)}</h2>
-              <p className="lede">{t(d.bio, d.bioGujarati || d.bio)}</p>
-              {lang === 'en' && d.bioGujarati && <p className="gujarati-text muted">{d.bioGujarati}</p>}
-            </article>
+          {/* One continuous profile: about, what they do, specialties */}
+          <article className="detail-main prose" data-reveal>
+            <h2>{t(`About ${d.name}`, `${d.nameGujarati} વિશે`)}</h2>
+            <p className="lede">{t(d.bio, d.bioGujarati || d.bio)}</p>
+            {lang === 'en' && d.bioGujarati && <p className="gujarati-text muted">{d.bioGujarati}</p>}
 
-            <article className="detail-block" data-reveal>
-              <h2>{t(`What ${firstName} does`, 'તેઓ શું કરે છે')}</h2>
-              <ul className="tick-list">
-                {does.map((i) => <li key={i}><CheckCircle2 size={18} /> <span>{i}</span></li>)}
-              </ul>
-            </article>
+            <h3>{t(`What ${firstName} does`, 'તેઓ શું કરે છે')}</h3>
+            <ul className="tick-list">
+              {does.map((i) => <li key={i}><CheckCircle2 size={18} /> <span>{i}</span></li>)}
+            </ul>
 
-            <article className="detail-block" data-reveal>
-              <h2>{t('Specialties', 'વિશેષતા')}</h2>
-              <div className="tag-cloud">
-                {specialties.map((s) => <span key={s} className="chip chip-blue">{s}</span>)}
-              </div>
-            </article>
-          </div>
+            <h3>{t('Specialties', 'વિશેષતા')}</h3>
+            <p>{specialties.join(' · ')}</p>
+          </article>
 
           <aside className="detail-side">
             {departments.length > 0 && (
-              <div className="detail-block" data-reveal>
-                <h2>{t('Departments', 'વિભાગો')}</h2>
+              <div className="side-group" data-reveal>
+                <h3>{t('Departments', 'વિભાગો')}</h3>
                 <ul className="link-list">
                   {departments.map((x) => (
                     <li key={x.id}>
@@ -121,8 +114,8 @@ export default function DoctorPage({ doctor: d, lang = 'en' }) {
               </div>
             )}
             {facilities.length > 0 && (
-              <div className="detail-block" data-reveal>
-                <h2>{t('Facilities they work in', 'સુવિધાઓ')}</h2>
+              <div className="side-group" data-reveal>
+                <h3>{t('Facilities they work in', 'સુવિધાઓ')}</h3>
                 <ul className="link-list">
                   {facilities.map((f) => (
                     <li key={f.id}>

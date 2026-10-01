@@ -8,42 +8,49 @@ import {
   Sparkles,
   Info,
   CalendarCheck,
-  Stethoscope,
-  MessageCircle
+  Stethoscope
 } from 'lucide-react';
+import PulseLogo from './PulseLogo';
 import { DOCTORS, HOSPITAL_INFO } from '../data/hospitalContent';
-import { Avatar } from './ui';
+import { Avatar, WhatsAppIcon } from './ui';
 
 const GUJARATI_MONTHS_SHORT = ["જાન્યુ", "ફેબ્રુ", "માર્ચ", "એપ્રિલ", "મે", "જૂન", "જુલાઈ", "ઑગસ્ટ", "સપ્ટે", "ઑક્ટો", "નવે", "ડિસે"];
 
-// Client-side schedule generator for coming week (Monday - Sunday)
+// Client-side schedule generator for current date through next 15 days
 function generateUpcomingSchedule(lang = 'en') {
   const today = new Date();
-  const currentDay = today.getDay();
-  const daysUntilNextMonday = (8 - currentDay) % 7 || 7;
-  const nextMonday = new Date(today);
-  nextMonday.setDate(today.getDate() + daysUntilNextMonday);
-
-  const dayNames = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const dayNamesGujarati = ["સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર", "રવિવાર"];
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const dayNamesGujarati = ["રવિવાર", "સોમવાર", "મંગળવાર", "બુધવાર", "ગુરુવાર", "શુક્રવાર", "શનિવાર"];
+  const dayNamesGujaratiShort = ["રવિ", "સોમ", "મંગળ", "બુધ", "ગુરુ", "શુક્ર", "શનિ"];
   const days = [];
 
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(nextMonday);
-    d.setDate(nextMonday.getDate() + i);
+  // Generate today (day 0) through the next 15 days (day 1..15) -> 16 selectable days total
+  for (let i = 0; i <= 15; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}`;
     const monthName = d.toLocaleString('en-US', { month: 'short' });
+    const dayOfWeek = d.getDay(); // 0 is Sunday, 1 is Monday ... 6 is Saturday
+
+    let displayBadge = null;
+    if (i === 0) {
+      displayBadge = lang === 'en' ? "Today" : "આજે";
+    } else if (i === 1) {
+      displayBadge = lang === 'en' ? "Tomorrow" : "આવતીકાલે";
+    }
+
     days.push({
       date: dateStr,
-      dayName: dayNames[i],
-      dayNameGujarati: dayNamesGujarati[i],
-      formatted: `${dayNames[i].slice(0, 3)}, ${monthName} ${d.getDate()}`,
-      isWeekend: i === 5 || i === 6,
-      isSunday: i === 6,
-      displayBadge: i === 0 ? (lang === 'en' ? "Next Week Start" : "નવા સપ્તાહની શરૂઆત") : null,
+      dayName: dayNames[dayOfWeek],
+      dayNameGujarati: dayNamesGujarati[dayOfWeek],
+      dayNameGujaratiShort: dayNamesGujaratiShort[dayOfWeek],
+      formatted: `${dayNames[dayOfWeek].slice(0, 3)}, ${monthName} ${d.getDate()}`,
+      isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
+      isSunday: dayOfWeek === 0,
+      displayBadge,
       availableSlots: 45
     });
   }
@@ -261,25 +268,21 @@ _Sent via Pulse Hospital Online Booking Portal_`;
         <div className="booking-header-content">
           <div className="booking-header-main">
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px', flexWrap: 'wrap' }}>
-              <img 
-                src={`${(import.meta.env.BASE_URL || '/').replace(/\/$/, '')}/logo.webp`} 
-                alt="Pulse Hospital" 
-                style={{ width: 46, height: 46, objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.35))' }} 
-              />
+              <PulseLogo size={36} variant="light" showText={false} />
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255, 255, 255, 0.12)', border: '1px solid rgba(255, 255, 255, 0.2)', padding: '5px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 <Sparkles size={14} color="var(--accent-light)" />
-                <span>{lang === 'en' ? 'Advance Slot-Wise Scheduling' : 'આગામી સપ્તાહ માટે એડવાન્સ સ્લોટ બુકિંગ'}</span>
+                <span>{lang === 'en' ? 'Today & 15-Day Advance Booking' : 'આજે અને આગામી ૧૫ દિવસ માટે એડવાન્સ બુકિંગ'}</span>
               </div>
             </div>
 
             <h2 style={{ fontSize: '26px', fontWeight: 800, color: '#ffffff', marginBottom: '8px', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
-              {lang === 'en' ? 'Book Your Appointment for Next Week' : 'આગામી સપ્તાહ માટે તમારો સ્લોટ બુક કરો'}
+              {lang === 'en' ? 'Book Your OPD Appointment' : 'તમારો OPD એપોઇન્ટમેન્ટ સ્લોટ બુક કરો'}
             </h2>
 
             <p style={{ color: 'rgba(255, 255, 255, 0.88)', fontSize: '14px', maxWidth: '620px', lineHeight: 1.55 }}>
               {lang === 'en' 
-                ? 'Select your doctor, pick your preferred date in next week, and reserve a dedicated 30-minute OPD slot to eliminate waiting time at the hospital.'
-                : 'તમારા મનપસંદ ડૉક્ટર પસંદ કરો, આગામી અઠવાડિયાની તારીખ અને અનુકૂળ સમય સ્લોટ પસંદ કરી હોસ્પિટલમાં રાહ જોયા વિના સીધા કન્સલ્ટેશન મેળવો.'}
+                ? 'Select your doctor, pick any date from today through the next 15 days, and reserve a dedicated 30-minute OPD slot to eliminate waiting time at the hospital.'
+                : 'તમારા મનપસંદ ડૉક્ટર પસંદ કરો, આજથી આગામી ૧૫ દિવસમાંથી અનુકૂળ તારીખ અને સમય સ્લોટ પસંદ કરી હોસ્પિટલમાં રાહ જોયા વિના કન્સલ્ટેશન મેળવો.'}
             </p>
           </div>
 
@@ -360,7 +363,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
             </div>
           </div>
 
-          {/* STEP 2: Choose Advance Date for Next Week */}
+          {/* STEP 2: Choose Date (Today & Next 15 Days) */}
           <div style={{ marginBottom: '32px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -369,14 +372,14 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                 </div>
                 <div>
                   <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--brand-navy)' }}>
-                    {lang === 'en' ? 'Select Date in Next Week' : 'આગામી સપ્તાહની તારીખ પસંદ કરો'}
+                    {lang === 'en' ? 'Select Date (Today & Next 15 Days)' : 'તારીખ પસંદ કરો (આજે અને આગામી ૧૫ દિવસ)'}
                   </h3>
                 </div>
               </div>
 
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(14, 101, 92, 0.08)', color: 'var(--primary)', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 600 }}>
                 <CalendarCheck size={14} />
-                <span>{lang === 'en' ? 'Advance Calendar (Mon – Sun)' : 'એડવાન્સ કેલેન્ડર (સોમ – રવિ)'}</span>
+                <span>{lang === 'en' ? '15-Day Booking Window' : '૧૫ દિવસની એડવાન્સ સુવિધા'}</span>
               </div>
             </div>
 
@@ -403,12 +406,12 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                         borderRadius: '4px',
                         whiteSpace: 'nowrap'
                       }}>
-                        {lang === 'en' ? day.displayBadge : (day.displayBadge === 'Next Week Start' ? 'નવું સપ્તાહ શરૂ' : day.displayBadge)}
+                        {day.displayBadge}
                       </span>
                     )}
 
                     <span style={{ fontSize: '12px', fontWeight: 700, color: isSelected ? 'var(--primary)' : 'var(--text-muted)', textTransform: 'uppercase' }}>
-                      {lang === 'en' ? day.dayName.slice(0, 3) : day.dayNameGujarati}
+                      {lang === 'en' ? day.dayName.slice(0, 3) : (day.dayNameGujaratiShort || day.dayNameGujarati)}
                     </span>
 
                     <span style={{ fontSize: '20px', fontWeight: 800, color: isSelected ? 'var(--primary)' : 'var(--brand-navy)', margin: '4px 0' }}>
@@ -423,7 +426,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
 
                     {day.isSunday ? (
                       <span style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700, marginTop: '4px' }}>
-                        {lang === 'en' ? 'Emergency' : 'ઇમરજન્સી'}
+                        {lang === 'en' ? 'Emergency OPD' : 'ઇમરજન્સી OPD'}
                       </span>
                     ) : (
                       <span style={{ fontSize: '10px', color: 'var(--success)', fontWeight: 700, marginTop: '4px' }}>
@@ -780,7 +783,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                 </>
               ) : (
                 <>
-                  <MessageCircle size={19} />
+                  <WhatsAppIcon size={20} />
                   <span>{lang === 'en' ? 'Book Slot via WhatsApp' : 'વોટ્સએપ દ્વારા સ્લોટ બુક કરો'}</span>
                 </>
               )}

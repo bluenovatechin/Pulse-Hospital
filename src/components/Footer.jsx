@@ -15,7 +15,7 @@ export default function Footer({ lang = 'en' }) {
         <div className="footer-grid">
           <div>
             <div style={{ marginBottom: 16 }}>
-              <PulseLogo size={44} variant="light" lang={lang} />
+              <PulseLogo size={44} variant="light" />
             </div>
             <p style={{ lineHeight: 1.65 }}>
               {t(

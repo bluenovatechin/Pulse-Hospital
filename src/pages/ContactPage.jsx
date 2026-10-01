@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Phone, MapPin, Clock, Send, CheckCircle2, AlertCircle, Navigation, MessageCircle } from 'lucide-react';
-import { PageHero } from '../components/ui';
+import { Phone, MapPin, Clock, CheckCircle2, AlertCircle, Navigation } from 'lucide-react';
+import { PageHero, WhatsAppIcon } from '../components/ui';
 import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
 
 const EMPTY_FORM = { name: '', phone: '', email: '', subject: 'General Consultation Inquiry', message: '' };
@@ -98,7 +98,7 @@ _Sent via Pulse Hospital Website_`;
               <Phone size={17} /> {t('Call now', 'હમણાં કૉલ કરો')}
             </a>
             <a className="btn btn-secondary" href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}`} target="_blank" rel="noreferrer">
-              <MessageCircle size={17} /> WhatsApp
+              <WhatsAppIcon size={18} /> WhatsApp
             </a>
             <a className="btn btn-secondary" href={HOSPITAL_INFO.mapsUrl} target="_blank" rel="noreferrer">
               <Navigation size={17} /> {t('Directions', 'રસ્તો જુઓ')}
@@ -169,7 +169,7 @@ _Sent via Pulse Hospital Website_`;
                   <textarea id="c-msg" name="message" className="form-textarea" rows={4} placeholder={t("Describe your question or the patient's symptoms...", "તમારો પ્રશ્ન અથવા દર્દીના લક્ષણો વિગતે જણાવો...")} value={form.message} onChange={handleChange} required style={{ width: '100%' }} />
                 </div>
                 <button type="submit" className="btn-primary btn-lg" style={{ width: '100%', justifyContent: 'center' }}>
-                  <Send size={16} /> {t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો')}
+                  <WhatsAppIcon size={18} /> {t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો')}
                 </button>
               </form>
             </div>

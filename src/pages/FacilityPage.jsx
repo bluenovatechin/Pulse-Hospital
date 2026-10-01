@@ -74,8 +74,8 @@ export default function FacilityPage({ facility: f, lang = 'en' }) {
 
           <aside className="detail-side">
             {departments.length > 0 && (
-              <div className="detail-block" data-reveal>
-                <h2>{t('Departments that use it', 'સંલગ્ન વિભાગો')}</h2>
+              <div className="side-group" data-reveal>
+                <h3>{t('Departments that use it', 'સંલગ્ન વિભાગો')}</h3>
                 <ul className="link-list">
                   {departments.map((d) => (
                     <li key={d.id}>
@@ -87,8 +87,8 @@ export default function FacilityPage({ facility: f, lang = 'en' }) {
                 </ul>
               </div>
             )}
-            <div className="detail-block" data-reveal>
-              <h2>{t('Visit', 'મુલાકાત')}</h2>
+            <div className="side-group" data-reveal>
+              <h3>{t('Visit', 'મુલાકાત')}</h3>
               <p className="muted">{lang === 'en' ? HOSPITAL_INFO.address.full : HOSPITAL_INFO.addressGujarati.full}</p>
               <p style={{ marginTop: 8 }}><a href={HOSPITAL_INFO.phoneHref}><strong>{HOSPITAL_INFO.appointmentNumber}</strong></a></p>
             </div>

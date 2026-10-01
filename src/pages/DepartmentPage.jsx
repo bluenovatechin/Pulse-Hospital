@@ -63,7 +63,7 @@ export default function DepartmentPage({ department: d, lang = 'en' }) {
 
             <article className="detail-block" data-reveal>
               <h2>{t('Services', 'સેવાઓ')}</h2>
-              <div className="tag-cloud">{d.services.map((s) => <span key={s} className="chip chip-blue">{s}</span>)}</div>
+              <p>{d.services.join(' · ')}</p>
             </article>
 
             <article className="detail-block" data-reveal>
@@ -79,8 +79,8 @@ export default function DepartmentPage({ department: d, lang = 'en' }) {
           </div>
 
           <aside className="detail-side">
-            <div className="detail-block" data-reveal>
-              <h2>{t('Other departments', 'અન્ય વિભાગો')}</h2>
+            <div className="side-group" data-reveal>
+              <h3>{t('Other departments', 'અન્ય વિભાગો')}</h3>
               <ul className="link-list">
                 {others.map((x) => (
                   <li key={x.id}>

@@ -2,96 +2,77 @@ import React from 'react';
 
 /**
  * Official Pulse Hospital & I.C.U Logo Component
- * Uses the official cross emblem (public/logo.webp, resized from the hospital's artwork)
+ * Images are generated from brand/pulse-logo.png by scripts/generate-logos.mjs:
+ *   logo-emblem.webp     cross emblem only
+ *   logo-name.webp       "PULSE HOSPITAL & I.C.U / CARING FOR LIFE" wordmark
+ *   logo-name-light.webp same wordmark for dark backgrounds
  */
 const BASE_URL = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
-export const OFFICIAL_LOGO_SRC = `${BASE_URL}/logo.webp`;
+export const LOGO_EMBLEM_SRC = `${BASE_URL}/logo-emblem.webp`;
+const LOGO_NAME_SRC = `${BASE_URL}/logo-name.webp`;
+const LOGO_NAME_LIGHT_SRC = `${BASE_URL}/logo-name-light.webp`;
 
-export default function PulseLogo({ 
-  size = 42, 
-  showText = true, 
+// Natural size of the generated wordmark (keeps width/height attributes exact)
+const NAME_W = 540;
+const NAME_H = 70;
+
+export default function PulseLogo({
+  size = 42,
+  showText = true,
   variant = 'default', // 'default' | 'light' (for dark navy/green backgrounds) | 'mark-only'
-  tagline = true,
-  lang = 'en',
   className = ''
 }) {
   const isLight = variant === 'light';
+  // The wordmark is drawn a little larger than in the print lockup so it stays readable at header sizes
+  const nameHeight = Math.round(size * 0.58);
+  const nameWidth = Math.round((nameHeight * NAME_W) / NAME_H);
+
+  const emblem = (
+    <img
+      src={LOGO_EMBLEM_SRC}
+      alt={showText && variant !== 'mark-only' ? '' : 'Pulse Hospital & I.C.U'}
+      width={size}
+      height={size}
+      style={{ width: size, height: size, objectFit: 'contain', flexShrink: 0, display: 'block' }}
+    />
+  );
 
   return (
-    <div 
+    <div
       className={`pulse-logo-wrapper ${className}`}
-      style={{ 
-        display: 'inline-flex', 
-        alignItems: 'center', 
-        gap: Math.max(10, Math.round(size * 0.28)),
-        textDecoration: 'none',
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: Math.max(8, Math.round(size * 0.24)),
         lineHeight: 1
       }}
     >
-      {/* Official Pulse Hospital Cross Emblem */}
-      <img
-        src={OFFICIAL_LOGO_SRC}
-        alt="Pulse Hospital & I.C.U"
-        width={size}
-        height={size}
-        style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          objectFit: 'contain',
-          flexShrink: 0,
-          filter: isLight 
-            ? 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45))' 
-            : 'drop-shadow(0 2px 6px rgba(9, 52, 55, 0.16))'
-        }}
-      />
+      {isLight ? (
+        // White tile so the navy part of the cross stays visible on dark backgrounds
+        <span
+          style={{
+            display: 'inline-flex',
+            padding: Math.round(size * 0.12),
+            background: '#ffffff',
+            borderRadius: Math.round(size * 0.28),
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.25)',
+            flexShrink: 0
+          }}
+        >
+          {emblem}
+        </span>
+      ) : (
+        emblem
+      )}
 
-      {/* Typography: PULSE HOSPITAL & I.C.U / CARING FOR LIFE */}
       {showText && variant !== 'mark-only' && (
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
-            <span 
-              style={{ 
-                fontFamily: "'Outfit', var(--font-heading), sans-serif",
-                fontSize: Math.max(16, Math.round(size * 0.44)), 
-                fontWeight: 800, 
-                letterSpacing: '-0.02em',
-                color: isLight ? '#ffffff' : 'var(--brand-navy, #093437)',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              PULSE HOSPITAL
-            </span>
-            <span 
-              style={{ 
-                fontFamily: "'Outfit', var(--font-heading), sans-serif",
-                fontSize: Math.max(14, Math.round(size * 0.38)), 
-                fontWeight: 800, 
-                color: isLight ? '#86efac' : 'var(--brand-olive, #386e2e)',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              &amp; I.C.U
-            </span>
-          </div>
-
-          {tagline && (
-            <div 
-              style={{ 
-                fontSize: Math.max(10, Math.round(size * 0.23)), 
-                fontWeight: 700, 
-                letterSpacing: '0.14em',
-                color: isLight ? 'rgba(255, 255, 255, 0.82)' : 'var(--brand-olive, #386e2e)',
-                textTransform: 'uppercase',
-                marginTop: '2px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <span>{lang === 'gu' ? 'જીવનની સંભાળ • મોડાસા' : 'CARING FOR LIFE • MODASA'}</span>
-            </div>
-          )}
-        </div>
+        <img
+          src={isLight ? LOGO_NAME_LIGHT_SRC : LOGO_NAME_SRC}
+          alt="Pulse Hospital & I.C.U, Caring for Life"
+          width={nameWidth}
+          height={nameHeight}
+          style={{ width: nameWidth, height: nameHeight, maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+        />
       )}
     </div>
   );
