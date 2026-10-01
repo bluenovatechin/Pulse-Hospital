@@ -51,7 +51,7 @@ export default function AboutPage({ lang = 'en' }) {
           <div className="grid grid-2" style={{ alignItems: 'center', gap: 48 }}>
             <div data-reveal>
               <span className="eyebrow">{t('Our story', 'અમારી વાત')}</span>
-              <h2 style={{ fontSize: 'clamp(26px, 3vw, 36px)', margin: '10px 0 16px' }}>{t('Caring for life, in every moment', 'જીવનની સુરક્ષા આપણી પ્રાથમિકતા')}</h2>
+              <h2 style={{ fontSize: 'clamp(22px, 3.8vw, 36px)', margin: '10px 0 16px', lineHeight: 1.25 }}>{t('Caring for life, in every moment', 'જીવનની સુરક્ષા આપણી પ્રાથમિકતા')}</h2>
               <p style={{ color: 'var(--text-body)', marginBottom: 14 }}>
                 {t(
                   'Patients who once had to rush 100+ kilometres to Ahmedabad for ventilator support, emergency dialysis or a CT scan can now receive that care right here in Modasa.',

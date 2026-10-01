@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { Phone, Calendar, ArrowUp, UserCheck } from 'lucide-react';
+import { Phone, Calendar, ArrowUp } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -11,20 +11,35 @@ import { SITE_URL, getPageMeta, pagePath } from './data/seo';
 
 // Everything except the home page loads on demand, keeping the first download small.
 // At build time every page is pre-rendered to HTML (scripts/prerender.js).
-const FacilitiesPage = lazy(() => import('./pages/FacilitiesPage'));
-const FacilityPage = lazy(() => import('./pages/FacilityPage'));
-const DepartmentsPage = lazy(() => import('./pages/DepartmentsPage'));
-const DepartmentPage = lazy(() => import('./pages/DepartmentPage'));
-const DoctorsPage = lazy(() => import('./pages/DoctorsPage'));
-const DoctorPage = lazy(() => import('./pages/DoctorPage'));
-const GalleryPage = lazy(() => import('./pages/GalleryPage'));
-const AboutPage = lazy(() => import('./pages/AboutPage'));
-const ContactPage = lazy(() => import('./pages/ContactPage'));
-const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'));
-const TermsPage = lazy(() => import('./pages/TermsPage'));
-const BookingPage = lazy(() => import('./pages/BookingPage'));
-const AppointmentsPage = lazy(() => import('./pages/AppointmentsPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+// Once a page's code has been fetched it renders straight away, so page
+// transitions never flash the loading placeholder.
+const PAGE_LOADERS = [];
+function lazyPage(loader) {
+  let Loaded = null;
+  const load = () => loader().then((m) => { Loaded = m.default; return m; });
+  const Lazy = lazy(load);
+  PAGE_LOADERS.push(load);
+  return function Page(props) {
+    // Chosen once per mount, so a page already on screen is never swapped out
+    const [Component] = useState(() => Loaded || Lazy);
+    return <Component {...props} />;
+  };
+}
+
+const FacilitiesPage = lazyPage(() => import('./pages/FacilitiesPage'));
+const FacilityPage = lazyPage(() => import('./pages/FacilityPage'));
+const DepartmentsPage = lazyPage(() => import('./pages/DepartmentsPage'));
+const DepartmentPage = lazyPage(() => import('./pages/DepartmentPage'));
+const DoctorsPage = lazyPage(() => import('./pages/DoctorsPage'));
+const DoctorPage = lazyPage(() => import('./pages/DoctorPage'));
+const GalleryPage = lazyPage(() => import('./pages/GalleryPage'));
+const AboutPage = lazyPage(() => import('./pages/AboutPage'));
+const ContactPage = lazyPage(() => import('./pages/ContactPage'));
+const PrivacyPolicyPage = lazyPage(() => import('./pages/PrivacyPolicyPage'));
+const TermsPage = lazyPage(() => import('./pages/TermsPage'));
+const BookingPage = lazyPage(() => import('./pages/BookingPage'));
+const AppointmentsPage = lazyPage(() => import('./pages/AppointmentsPage'));
+const NotFoundPage = lazyPage(() => import('./pages/NotFoundPage'));
 
 // Keep <head> in step with the current page (title, description, canonical, share tags)
 function useDocumentMeta(page, param) {
@@ -100,6 +115,14 @@ export default function App({ url }) {
 
   // Start each new page at the top
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [page, param]);
+
+  // Once the browser is idle, fetch the other pages so later clicks switch instantly
+  useEffect(() => {
+    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1500));
+    const cancel = window.cancelIdleCallback || clearTimeout;
+    const id = idle(() => PAGE_LOADERS.forEach((preload) => preload().catch(() => {})));
+    return () => cancel(id);
+  }, []);
 
   useReveal(page, param);
   useDocumentMeta(page, param);
@@ -180,31 +203,6 @@ export default function App({ url }) {
           <Calendar size={20} strokeWidth={2.2} />
         </Link>
       </div>
-
-      {/* Mobile bottom action bar */}
-      <nav className="mobile-bar" aria-label="Quick actions">
-        <a className="er" href={HOSPITAL_INFO.phoneHref}>
-          <Phone size={17} strokeWidth={2.2} /> {lang === 'en' ? 'Emergency' : 'ઇમરજન્સી'}
-        </a>
-        <a
-          className="wa"
-          href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(
-            lang === 'en'
-              ? 'Hello Pulse Hospital, I would like to inquire about appointments and medical services.'
-              : 'નમસ્તે પલ્સ હોસ્પિટલ, મારે એપોઇન્ટમેન્ટ અને સારવાર વિશે માહિતી મેળવવી છે.'
-          )}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <WhatsAppIcon size={19} /> {lang === 'en' ? 'WhatsApp' : 'વોટ્સએપ'}
-        </a>
-        <Link to="my-appointments">
-          <UserCheck size={17} strokeWidth={2.2} /> {lang === 'en' ? 'Booking' : 'બુકિંગ'}
-        </Link>
-        <Link to="book-appointment" className="book">
-          <Calendar size={17} strokeWidth={2.2} /> {lang === 'en' ? 'Book Slot' : 'બુક કરો'}
-        </Link>
-      </nav>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight, Camera, Eye, Play, Pause, Grid } from 'lucide-react';
 import { PageHero, delay, lockScroll, unlockScroll } from '../components/ui';
 import { Link } from '../router';
@@ -164,9 +165,10 @@ export default function GalleryPage({ lang = 'en' }) {
         actions={
           <>
             <button
-              className="btn-primary"
+              className="btn btn-primary"
               onClick={() => {
                 setCategory('All');
+                setSlideDirection(0);
                 setIndex(0);
               }}
             >
@@ -206,7 +208,10 @@ export default function GalleryPage({ lang = 'en' }) {
                 key={img.id}
                 className="masonry-item page-enter"
                 style={{ ...delay(i, 40), animationDelay: `${Math.min(i, 10) * 40}ms` }}
-                onClick={() => setIndex(i)}
+                onClick={() => {
+                  setSlideDirection(0);
+                  setIndex(i);
+                }}
                 aria-label={t(`Open ${img.title} photo tour`, `${img.titleGujarati} ફોટો જુઓ`)}
               >
                 <div className="photo zoomable" style={{ aspectRatio: i % 3 === 0 ? '4 / 5' : '4 / 3' }}>
@@ -232,8 +237,9 @@ export default function GalleryPage({ lang = 'en' }) {
         </div>
       </section>
 
-      {/* Fullscreen Hospital Tour Slider */}
-      {current && (
+      {/* Fullscreen Hospital Tour Slider. Rendered into <body> so no animated
+          parent (page transitions use transforms) can trap its fixed position. */}
+      {current && createPortal(
         <div
           className="lightbox"
           role="dialog"
@@ -343,6 +349,7 @@ export default function GalleryPage({ lang = 'en' }) {
             >
               <img
                 key={current.id}
+                data-dir={slideDirection}
                 src={current.src}
                 srcSet={photoSrcSet(current.src)}
                 sizes="(max-width: 768px) 100vw, 1080px"
@@ -395,7 +402,8 @@ export default function GalleryPage({ lang = 'en' }) {
               })}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -19,6 +19,7 @@
 // (see src/entry-server.jsx) by passing the URL in explicitly.
 // ========================================================
 import { createElement, useCallback, useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 
 export const PAGES = [
   'home',
@@ -76,9 +77,27 @@ const NAV_EVENT = 'pulse-hospital-navigate';
 /** Navigate without a full page load */
 export function navigateTo(page, param = null, { replace = false } = {}) {
   const next = buildPath(page, param);
-  if (next === window.location.pathname && !window.location.hash) return;
-  window.history[replace ? 'replaceState' : 'pushState'](null, '', next);
-  window.dispatchEvent(new Event(NAV_EVENT));
+
+  // Already on this page (e.g. logo clicked on the home page): glide back to the top
+  if (next === window.location.pathname && !window.location.hash) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const go = () => {
+    window.history[replace ? 'replaceState' : 'pushState'](null, '', next);
+    // Render the new page synchronously so it can be captured for the transition
+    flushSync(() => window.dispatchEvent(new Event(NAV_EVENT)));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  // Cross-fade between pages where the browser supports it; plain swap otherwise
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  if (!replace && !reduceMotion && document.startViewTransition) {
+    document.startViewTransition(go);
+  } else {
+    go();
+  }
 }
 
 /**

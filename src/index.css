@@ -9,24 +9,28 @@
 
 :root {
   /* Brand Theme from Official Hospital Brochure (1.jpeg) */
-  --brand-navy: #093437;        /* Signature deep pine teal from brochure */
+  --brand-navy: #093437;
+  /* Signature deep pine teal from brochure */
   --brand-navy-card: #0d4044;
   --brand-navy-light: #16565c;
   --brand-navy-dark: #052224;
 
-  --primary: #0e655c;           /* Rich medical teal-green */
+  --primary: #0e655c;
+  /* Rich medical teal-green */
   --primary-hover: #094f48;
   --primary-light: #3baea3;
   --primary-subtle: #edf8f6;
   --primary-glow: rgba(14, 101, 92, 0.25);
 
-  --brand-olive: #386e2e;       /* Signature olive forest green from 1.jpeg */
+  --brand-olive: #386e2e;
+  /* Signature olive forest green from 1.jpeg */
   --brand-olive-hover: #2b5a23;
   --brand-olive-light: #4f9443;
   --brand-olive-soft: #eef7eb;
   --brand-olive-glow: rgba(56, 110, 46, 0.25);
 
-  --mint: #289672;              /* Clean clinical mint */
+  --mint: #289672;
+  /* Clean clinical mint */
   --mint-soft: #e6f7f1;
   --mint-deep: #12644b;
 
@@ -75,7 +79,8 @@
   --radius-md: 6px;
   --radius-lg: 8px;
   --radius-xl: 10px;
-  --radius-frame: 10px; /* large photos and hero cards */
+  --radius-frame: 10px;
+  /* large photos and hero cards */
   --radius-full: 6px;
 
   /* Motion */
@@ -143,6 +148,12 @@ textarea {
 
 button {
   cursor: pointer;
+}
+
+a,
+*:focus,
+*:active {
+  -webkit-tap-highlight-color: transparent;
 }
 
 img {
@@ -367,10 +378,11 @@ html[lang="gu"] * {
 }
 
 .section-head h2 {
-  font-size: clamp(28px, 3.4vw, 42px);
+  font-size: clamp(22px, 3.8vw, 38px);
   font-weight: 600;
   margin-top: 10px;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
 }
 
 .section-head p {
@@ -398,10 +410,11 @@ html[lang="gu"] * {
 }
 
 .section-title {
-  font-size: clamp(28px, 3.4vw, 40px);
+  font-size: clamp(22px, 3.8vw, 36px);
   font-weight: 800;
   color: var(--brand-navy);
   letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
 .title-line {
@@ -716,9 +729,9 @@ html[lang="gu"] * {
   font-weight: 600;
   color: var(--text-body);
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.18s ease,
-              color 0.18s ease;
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .filter-btn:hover {
@@ -756,8 +769,8 @@ html[lang="gu"] * {
 
 .card-hover {
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.28s ease;
+    box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.28s ease;
 }
 
 .card-hover:hover {
@@ -787,8 +800,8 @@ button.card {
   color: var(--primary);
   box-shadow: 0 2px 6px -1px rgba(9, 52, 55, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8);
   transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.24s ease,
-              box-shadow 0.24s ease;
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
 }
 
 .icon-tile svg {
@@ -1282,9 +1295,9 @@ button.card {
 }
 
 .page-hero-title {
-  font-size: clamp(32px, 4.4vw, 54px);
-  line-height: 1.08;
-  max-width: 16ch;
+  font-size: clamp(24px, 4.6vw, 46px);
+  line-height: 1.18;
+  max-width: 18ch;
 }
 
 .page-hero-desc {
@@ -1348,18 +1361,19 @@ button.card {
 
 .hero-facts dt {
   font-family: var(--font-heading);
-  font-size: clamp(20px, 2.2vw, 26px);
+  font-size: clamp(17px, 3.6vw, 24px);
   font-weight: 700;
   color: var(--brand-navy);
   letter-spacing: -0.02em;
-  line-height: 1.1;
+  line-height: 1.15;
+  word-break: break-word;
 }
 
 .hero-facts dd {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-muted);
   margin-top: 4px;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 /* Photo frame + floating note */
@@ -1518,15 +1532,22 @@ button.card {
 }
 
 @keyframes beacon {
-  0% { transform: scale(0.6); opacity: 0.7; }
-  100% { transform: scale(1.8); opacity: 0; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
 }
 
 .home-hero h1 {
-  font-size: clamp(34px, 4.8vw, 62px);
-  line-height: 1.05;
-  margin: 18px 0 0;
-  max-width: 14ch;
+  font-size: clamp(25px, 5.2vw, 54px);
+  line-height: 1.18;
+  margin: 16px 0 0;
+  max-width: 16ch;
 }
 
 .home-hero h1 em {
@@ -1535,11 +1556,11 @@ button.card {
 }
 
 .home-hero .lead {
-  font-size: clamp(15.5px, 1.3vw, 17.5px);
+  font-size: clamp(15px, 1.3vw, 17.5px);
   line-height: 1.6;
   color: var(--text-body);
   max-width: 530px;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 .home-hero .hero-facts {
@@ -1629,7 +1650,7 @@ button.card {
 
 .er-card .er-num {
   font-family: var(--font-heading);
-  font-size: 26px;
+  font-size: clamp(20px, 5.5vw, 26px);
   font-weight: 700;
   color: var(--brand-navy);
   line-height: 1.2;
@@ -1677,8 +1698,8 @@ button.card {
   box-shadow: 0 2px 8px rgba(9, 52, 55, 0.04);
   color: inherit;
   transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.26s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.26s ease;
+    box-shadow 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.26s ease;
 }
 
 .quick-card:hover {
@@ -1747,10 +1768,10 @@ button.card {
 .stat strong {
   display: block;
   font-family: var(--font-heading);
-  font-size: clamp(30px, 3.4vw, 42px);
+  font-size: clamp(24px, 4.6vw, 40px);
   font-weight: 800;
   color: var(--brand-navy);
-  line-height: 1;
+  line-height: 1.1;
   letter-spacing: -0.02em;
 }
 
@@ -2018,8 +2039,8 @@ button.card {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.22s ease;
+    box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s ease;
 }
 
 .doc-mini:hover {
@@ -2206,12 +2227,12 @@ button.card {
   gap: 20px;
 }
 
-.doctor-grid > * {
+.doctor-grid>* {
   flex: 1 1 100%;
 }
 
 @media (min-width: 720px) {
-  .doctor-grid > * {
+  .doctor-grid>* {
     flex: 0 1 calc((100% - 20px) / 2);
   }
 }
@@ -2221,7 +2242,7 @@ button.card {
     gap: 24px;
   }
 
-  .doctor-grid > * {
+  .doctor-grid>* {
     flex: 0 1 calc((100% - 48px) / 3);
   }
 }
@@ -2324,7 +2345,8 @@ button.card {
 }
 
 .dept-section h2 {
-  font-size: clamp(22px, 2.6vw, 28px);
+  font-size: clamp(19px, 3.4vw, 26px);
+  line-height: 1.25;
 }
 
 .dept-section .intro {
@@ -2419,8 +2441,8 @@ button.card {
   border-radius: var(--radius-lg);
   box-shadow: 0 2px 8px rgba(9, 52, 55, 0.04);
   transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.26s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.26s ease;
+    box-shadow 0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.26s ease;
 }
 
 .step:hover {
@@ -2468,9 +2490,9 @@ button.card {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: background 0.25s ease,
-              border-color 0.25s ease,
-              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.25s ease;
+    border-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease;
 }
 
 .cond-card:hover {
@@ -2555,8 +2577,8 @@ button.card {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   transition: border-color var(--transition-fast),
-              box-shadow var(--transition-fast),
-              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow var(--transition-fast),
+    transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .faq details:hover {
@@ -2643,7 +2665,8 @@ button.card {
 
 .cta-band h3 {
   color: #fff;
-  font-size: clamp(22px, 2.6vw, 30px);
+  font-size: clamp(20px, 3.4vw, 28px);
+  line-height: 1.25;
 }
 
 .cta-band p {
@@ -2688,8 +2711,8 @@ button.card {
   padding: 0;
 }
 
-.detail-main > .detail-block + *,
-.detail-main > .callout + * {
+.detail-main>.detail-block+*,
+.detail-main>.callout+* {
   padding-top: 28px;
   border-top: 1px solid var(--border-color);
 }
@@ -2739,7 +2762,7 @@ button.card {
   color: var(--text-body);
 }
 
-.prose .lede + p {
+.prose .lede+p {
   margin-top: 10px;
 }
 
@@ -2756,7 +2779,7 @@ button.card {
   color: var(--text-body);
 }
 
-.detail-block .lede + p {
+.detail-block .lede+p {
   margin-top: 10px;
 }
 
@@ -2830,7 +2853,7 @@ button.card {
   color: var(--brand-navy);
 }
 
-.profile-card-head div > span {
+.profile-card-head div>span {
   font-size: 14px;
   color: var(--text-muted);
 }
@@ -2960,9 +2983,9 @@ button.card {
   border-radius: var(--radius-lg);
   color: inherit;
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease,
-              background 0.2s ease;
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .booking-doctor-links a:hover {
@@ -2989,8 +3012,8 @@ button.card {
   padding: 26px;
   border-radius: var(--radius-frame);
   transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.24s ease;
+    box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.24s ease;
 }
 
 .booking-side:hover {
@@ -3105,7 +3128,8 @@ button.card {
 
 /* ---------- Timetable ---------- */
 .table-wrap {
-  position: relative; /* keeps absolutely positioned children (e.g. .sr-only) inside the scroll area */
+  position: relative;
+  /* keeps absolutely positioned children (e.g. .sr-only) inside the scroll area */
   overflow-x: auto;
 }
 
@@ -3296,19 +3320,44 @@ button.card {
   justify-content: space-between;
   user-select: none;
   -webkit-user-select: none;
-  animation: tourFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: tourFadeIn 0.3s var(--ease-out);
   overflow: hidden;
+  overscroll-behavior: contain;
   touch-action: pan-y pinch-zoom;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 @keyframes tourFadeIn {
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Each photo glides in from the side it came from (data-dir: 1 next, -1 previous, 0 opened) */
+@keyframes tourSlideIn {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--slide-from, 0px), 0, 0) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes tourProgress {
-  from { width: 0%; }
-  to { width: 100%; }
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
 }
 
 /* Slideshow progress bar track */
@@ -3321,6 +3370,7 @@ button.card {
   background: rgba(255, 255, 255, 0.08);
   z-index: 30;
 }
+
 .tour-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #25D366, #128C7E);
@@ -3373,6 +3423,7 @@ button.card {
   min-width: 0;
   padding: 0 12px;
 }
+
 .tour-header-title strong {
   display: block;
   font-size: 16px;
@@ -3382,6 +3433,7 @@ button.card {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .tour-header-title small {
   display: block;
   font-size: 12px;
@@ -3413,21 +3465,25 @@ button.card {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
 }
+
 .tour-icon-btn:hover {
   background: rgba(255, 255, 255, 0.22);
   border-color: rgba(255, 255, 255, 0.36);
   transform: scale(1.05);
 }
+
 .tour-icon-btn.active {
   background: #25D366;
   border-color: #25D366;
   color: #062215;
 }
+
 .tour-close-btn {
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.35);
   color: #fca5a5;
 }
+
 .tour-close-btn:hover {
   background: #ef4444;
   border-color: #ef4444;
@@ -3442,16 +3498,16 @@ button.card {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 76px;
   min-height: 0;
   overflow: hidden;
 }
 
+/* Fills the stage, leaving room for the arrows; the photo scales to fit inside */
 .tour-slide-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  max-width: 1080px;
+  position: absolute;
+  inset: 8px 84px;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3459,9 +3515,13 @@ button.card {
 }
 
 .tour-slide-image {
+  display: block;
+  width: auto;
+  height: auto;
   max-width: 100%;
-  max-height: calc(100vh - 210px);
+  max-height: 100%;
   object-fit: contain;
+  animation: tourSlideIn 0.5s var(--ease-out) both;
   border-radius: var(--radius-lg);
   box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.12);
   user-select: none;
@@ -3473,6 +3533,14 @@ button.card {
 
 .tour-slide-image:active {
   cursor: grabbing;
+}
+
+.tour-slide-image[data-dir='1'] {
+  --slide-from: 48px;
+}
+
+.tour-slide-image[data-dir='-1'] {
+  --slide-from: -48px;
 }
 
 /* Nav arrows on stage sides */
@@ -3496,6 +3564,7 @@ button.card {
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
+
 .tour-nav-btn:hover {
   background: #25D366;
   border-color: #25D366;
@@ -3503,9 +3572,11 @@ button.card {
   transform: translateY(-50%) scale(1.1);
   box-shadow: 0 12px 28px rgba(37, 211, 102, 0.45);
 }
+
 .tour-nav-btn.prev {
   left: 18px;
 }
+
 .tour-nav-btn.next {
   right: 18px;
 }
@@ -3516,6 +3587,7 @@ button.card {
   flex-direction: column;
   gap: 8px;
   padding: 10px 20px 16px;
+  animation: tourRise 0.45s var(--ease-out) 0.08s both;
   background: linear-gradient(0deg, rgba(4, 12, 24, 0.96) 0%, transparent 100%);
   z-index: 20;
   flex-shrink: 0;
@@ -3526,14 +3598,28 @@ button.card {
   text-align: center;
   color: #fff;
 }
+
 .tour-mobile-title strong {
   display: block;
   font-size: 14px;
 }
+
 .tour-mobile-title small {
   display: block;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.65);
+}
+
+@keyframes tourRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .tour-thumb-strip {
@@ -3542,14 +3628,16 @@ button.card {
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 4px 2px;
-  justify-content: flex-start;
+  justify-content: safe center;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
   -webkit-overflow-scrolling: touch;
 }
+
 .tour-thumb-strip::-webkit-scrollbar {
   height: 4px;
 }
+
 .tour-thumb-strip::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 4px;
@@ -3569,16 +3657,19 @@ button.card {
   transition: all 0.2s ease;
   outline: none;
 }
+
 .tour-thumb-item:hover {
   opacity: 0.85;
   transform: translateY(-2px);
 }
+
 .tour-thumb-item.active {
   opacity: 1;
   border-color: #25D366;
   box-shadow: 0 0 12px rgba(37, 211, 102, 0.55);
   transform: translateY(-2px);
 }
+
 .tour-thumb-item img {
   width: 100%;
   height: 100%;
@@ -3591,33 +3682,75 @@ button.card {
   .lightbox-header {
     padding: 10px 14px;
   }
+
   .tour-header-title {
     display: none;
   }
+
   .tour-mobile-title {
     display: block;
     margin-bottom: 4px;
   }
-  .lightbox-stage {
-    padding: 8px 10px;
+
+  .tour-slide-container {
+    inset: 4px 10px;
   }
-  .tour-nav-btn {
-    width: 44px;
-    height: 44px;
-    background: rgba(4, 12, 24, 0.75);
-  }
-  .tour-nav-btn.prev {
-    left: 8px;
-  }
-  .tour-nav-btn.next {
-    right: 8px;
-  }
+
   .tour-slide-image {
-    max-height: calc(100vh - 175px);
+    border-radius: var(--radius-md, 12px);
   }
+
+  /* Arrows sit over the photo edges so the photo can use the full width */
+  .tour-nav-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(4, 12, 24, 0.6);
+  }
+
+  .tour-nav-btn.prev {
+    left: 14px;
+  }
+
+  .tour-nav-btn.next {
+    right: 14px;
+  }
+
+  .tour-nav-btn:hover {
+    transform: translateY(-50%);
+  }
+
+  .lightbox-bottom {
+    padding: 8px 12px 12px;
+  }
+
   .tour-thumb-item {
     flex: 0 0 54px;
     height: 38px;
+  }
+}
+
+/* Phones in landscape and other short screens: give the photo the room */
+@media (max-height: 520px) {
+  .lightbox-header {
+    padding: 6px 14px;
+  }
+
+  .tour-icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tour-mobile-title,
+  .tour-thumb-strip {
+    display: none;
+  }
+
+  .lightbox-bottom {
+    padding: 0;
+  }
+
+  .tour-header-title {
+    display: block;
   }
 }
 
@@ -3756,8 +3889,8 @@ button.card {
   justify-content: center;
   box-shadow: 0 6px 20px rgba(9, 52, 55, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
   transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.2s ease;
+    box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s ease;
   text-decoration: none;
   cursor: pointer;
 }
@@ -3845,66 +3978,6 @@ button.card {
   color: var(--primary);
 }
 
-/* Mobile action bar with 4 quick thumb actions */
-.mobile-bar {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 80;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: saturate(1.4) blur(16px);
-  -webkit-backdrop-filter: saturate(1.4) blur(16px);
-  border-top: 1px solid var(--border-color);
-  box-shadow: 0 -4px 20px rgba(9, 52, 55, 0.08);
-}
-
-.mobile-bar>* {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding: 8px 4px;
-  border-radius: var(--radius-sm);
-  border: none;
-  font-size: 11px;
-  font-weight: 700;
-  background: var(--surface-soft);
-  color: var(--brand-navy);
-  text-decoration: none;
-  transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease;
-}
-
-.mobile-bar>*:active {
-  transform: scale(0.96);
-}
-
-.mobile-bar .er {
-  background: var(--pulse-red-soft);
-  color: #be123c;
-}
-
-.mobile-bar .wa {
-  background: #e7f8ef;
-  color: #128C7E;
-}
-
-.mobile-bar .book {
-  background: var(--primary);
-  color: #fff;
-}
-
-@media (min-width: 900px) {
-  .mobile-bar {
-    display: none;
-  }
-}
-
 /* Number count up animation */
 .count-up {
   display: inline-block;
@@ -3912,15 +3985,48 @@ button.card {
   letter-spacing: -0.02em;
 }
 
-@media (max-width: 899px) {
-  .site-footer {
-    padding-bottom: 100px;
+/* ---------- Motion ---------- */
+/* 'backwards' (not 'both') so no transform lingers once the page has arrived;
+   a leftover transform would trap position: fixed overlays inside the page */
+.page-enter {
+  animation: page-in 0.55s var(--ease-out) backwards;
+}
+
+/* Page-to-page navigation (View Transitions API, see router.js): the old
+   page fades out while the new one fades in; .page-enter adds the rise */
+::view-transition-old(root) {
+  animation: vt-out 0.28s var(--ease-out) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.35s var(--ease-out) both;
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+.fab-stack {
+  view-transition-name: fab-stack;
+}
+
+::view-transition-group(site-header),
+::view-transition-group(fab-stack) {
+  animation-duration: 0.4s;
+  animation-timing-function: var(--ease-out);
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.99);
   }
 }
 
-/* ---------- Motion ---------- */
-.page-enter {
-  animation: page-in 0.55s var(--ease-out) both;
+@keyframes vt-in {
+  from {
+    opacity: 0;
+  }
 }
 
 /* Only hidden when JavaScript runs (index.html adds .js), so the
@@ -4384,8 +4490,8 @@ button.card {
   flex-shrink: 0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease;
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease;
 }
 
 .booking-opd-card:hover {
@@ -4483,9 +4589,9 @@ button.card {
   cursor: pointer;
   background: #ffffff;
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease,
-              background 0.2s ease;
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    background 0.2s ease;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -4599,9 +4705,9 @@ button.card {
   cursor: pointer;
   text-align: left;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.18s ease,
-              background 0.18s ease;
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    background 0.18s ease;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -4746,9 +4852,9 @@ button.card {
   background: #fff;
   cursor: pointer;
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease,
-              background-color 0.2s ease;
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s ease,
+    background-color 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4821,10 +4927,10 @@ button.card {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.18s ease,
-              background 0.18s ease,
-              color 0.18s ease;
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
   border: 1.5px solid var(--border-color);
   background: #fff;
   user-select: none;
@@ -4900,8 +5006,190 @@ button.card {
   transition: background var(--transition-fast);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+.modal-overlay,
+.modal-content {
+  border-radius: var(--radius-xl);
+}
+
+/* ---------- Mobile-first Polish & Proportions (<= 768px & <= 480px) ---------- */
+@media (max-width: 768px) {
+
+  /* Section padding and spacing */
+  .section,
+  .section-padding {
+    padding: 44px 0;
+  }
+
+  .section-head {
+    margin-bottom: 24px;
+  }
+
+  .section-head p {
+    font-size: 15px;
+    line-height: 1.55;
+    margin-top: 8px;
+  }
+
+  /* Page hero descriptions */
+  .page-hero-desc {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+
+  /* Milestones & Hero facts on mobile */
+  .milestones {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+
+  .hero-facts {
+    margin-top: 18px;
+    padding-top: 14px;
+    gap: 12px;
+  }
+
+  .hero-facts dd {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  /* Buttons on mobile: never overflow, wrap cleanly if needed */
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-emergency {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* Quick action cards on mobile */
+  .quick-card {
+    padding: 16px 14px;
+    gap: 10px;
+  }
+
+  .quick-card strong {
+    font-size: 15px;
+  }
+
+  .quick-card small {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .quick-card .icon-tile {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  /* Department cards & content blocks */
+  .dept-section {
+    padding: 20px 16px;
+  }
+
+  .cta-band {
+    padding: 24px 18px;
+    border-radius: var(--radius-lg);
+  }
+
+  .treatments {
+    padding: 20px 16px;
+    margin-top: 24px;
+    border-radius: var(--radius-lg);
+  }
+
+  /* Doctor card padding and layout */
+  .doctor-card {
+    padding: 18px 16px;
+  }
+
+  /* Facility card padding */
+  .facility-card .content {
+    padding: 18px 16px;
+  }
+
+  /* Subtle touch scrolling */
+  .table-wrap,
+  .filter-bar,
+  .booking-days-scroller,
+  .doc-row,
+  .tour-thumb-strip {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Very small mobile viewports (320px - 480px) */
+  .container-wide {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* Full-width call to action buttons on mobile fold */
+  .hero-ctas .btn,
+  .page-hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hero-facts {
+    gap: 8px;
+  }
+
+  .hero-facts dt {
+    font-size: 16px;
+  }
+
+  .hero-facts dd {
+    font-size: 11.5px;
+  }
+
+  .stat {
+    padding-left: 12px;
+  }
+
+  .stat strong {
+    font-size: 24px;
+  }
+
+  .stat span {
+    font-size: 12.5px;
+  }
+
+  .home-hero {
+    padding: 20px 0 28px;
+  }
+
+  .home-hero h1 {
+    margin-top: 12px;
+  }
+
+  .home-hero .lead {
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin-top: 12px;
+  }
+
+  .status-pill {
+    padding: 6px 12px 6px 10px;
+    font-size: 12px;
+  }
+
+  .prose h2 {
+    font-size: 22px;
+  }
+
+  .prose h3 {
+    font-size: 17px;
+  }
+
+  .prose p {
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
 }
 
 /* ---------- Print (appointment slip) ---------- */
@@ -4941,6 +5229,7 @@ button.card {
     display: none !important;
   }
 }
+
 /* Placeholder while a lazily loaded page or form downloads */
 .page-loading {
   min-height: 100vh;
