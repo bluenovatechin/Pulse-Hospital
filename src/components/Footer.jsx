@@ -93,7 +93,7 @@ export default function Footer({ lang = 'en' }) {
         </div>
 
         <div className="footer-bottom">
-          <div style={{ display: 'flex', gap: 16, alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
             <span>© {new Date().getFullYear()} Pulse Hospital & I.C.U, Modasa. {t('All rights reserved.', 'સર્વાધિકાર સુરક્ષિત.')}</span>
             <span style={{ opacity: 0.4 }}>|</span>
             <Link to="privacy" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
@@ -103,6 +103,34 @@ export default function Footer({ lang = 'en' }) {
             <Link to="terms" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
               {t('Terms & Conditions', 'નિયમો અને શરતો')}
             </Link>
+            <span style={{ opacity: 0.4 }}>|</span>
+            <button
+              type="button"
+              onClick={() => typeof window !== 'undefined' && window.openPulseCookieSettings && window.openPulseCookieSettings()}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: 13,
+                cursor: 'pointer',
+                padding: 0,
+                textDecoration: 'underline'
+              }}
+            >
+              {t('Cookie Settings', 'કુકીઝ પસંદગી')}
+            </button>
+            <span style={{ opacity: 0.4 }}>|</span>
+            <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
+              {t('Maintained by', 'સંચાલિત:')}{' '}
+              <a
+                href="https://github.com/Vyom1912"
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: 'var(--primary-light)', fontWeight: 600, textDecoration: 'underline' }}
+              >
+                Vyom1912
+              </a>
+            </span>
           </div>
         </div>
       </div>

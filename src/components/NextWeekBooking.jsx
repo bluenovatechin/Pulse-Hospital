@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Clock,
   User,
@@ -100,6 +100,11 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const formMountTime = useRef(0);
+
+  useEffect(() => {
+    formMountTime.current = Date.now();
+  }, []);
 
   // Form fields
   const [formData, setFormData] = useState({
@@ -112,7 +117,8 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     previousFileNo: '',
     symptoms: '',
     bookedBy: 'Patient',
-    bookedByName: ''
+    bookedByName: '',
+    website_url: '' // Anti-bot honeypot
   });
 
   // Re-generate schedule when language changes
@@ -155,6 +161,18 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMsg('');
+
+    // Honeypot spam verification
+    if (formData.website_url) {
+      console.warn('Bot submission blocked via honeypot.');
+      return;
+    }
+
+    // Minimum submission delay check (1.2s minimum human reading/filling time)
+    if (Date.now() - formMountTime.current < 1200) {
+      setErrorMsg(lang === 'en' ? 'Submission was too fast. Please verify your details.' : 'ફોર્મ ખૂબ ઝડપથી સબમિટ થયું. વિગતો ફરી ચકાસો.');
+      return;
+    }
 
     if (!selectedSlot) {
       setErrorMsg(lang === 'en' ? 'Please select an available time slot.' : 'કૃપા કરીને એપોઇન્ટમેન્ટનો સમય સ્લોટ પસંદ કરો.');
@@ -210,7 +228,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 
     // Build structured WhatsApp message to hospital reception
     const waText = 
-`🏥 *PULSE HOSPITAL & I.C.U — MODASA*
+`🏥 *PULSE HOSPITAL & I.C.U: MODASA*
 *Appointment Booking Request*
 ───────────────────────────────
 📋 *Reference ID:* ${apptId}
@@ -223,7 +241,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 📞 *Phone Number:* ${cleanPhone}
 🎂 *Age / Gender:* ${formData.patientAge ? formData.patientAge + ' yrs' : 'N/A'}, ${formData.patientGender}
 📍 *City / Area:* ${formData.city || 'Modasa'}
-${formData.bookedBy !== 'Patient' ? `🧾 *Booked By:* ${formData.bookedBy}${formData.bookedByName ? ` — ${formData.bookedByName}` : ''}\n` : ''}${formData.previousFileNo ? `📁 *Past File No:* ${formData.previousFileNo}\n` : ''}${formData.symptoms ? `📝 *Symptoms / Problem:* ${formData.symptoms}\n` : ''}───────────────────────────────
+${formData.bookedBy !== 'Patient' ? `🧾 *Booked By:* ${formData.bookedBy}${formData.bookedByName ? ` (${formData.bookedByName})` : ''}\n` : ''}${formData.previousFileNo ? `📁 *Past File No:* ${formData.previousFileNo}\n` : ''}${formData.symptoms ? `📝 *Symptoms / Problem:* ${formData.symptoms}\n` : ''}───────────────────────────────
 _Sent via Pulse Hospital Online Booking Portal_`;
 
     const whatsappUrl = `https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(waText)}`;
@@ -738,12 +756,26 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                   rows={2}
                 />
               </div>
+
+              {/* Bot prevention honeypot trap field */}
+              <div style={{ position: 'absolute', width: '1px', height: '1px', margin: '-1px', padding: 0, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', border: 0 }} aria-hidden="true">
+                <label htmlFor="booking_hp">Leave this empty</label>
+                <input
+                  id="booking_hp"
+                  type="text"
+                  name="website_url"
+                  value={formData.website_url}
+                  onChange={handleInputChange}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
             </div>
           </div>
 
           {/* Error Banner */}
           {errorMsg && (
-            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '14px 18px', borderRadius: 'var(--radius-md)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div role="alert" aria-live="assertive" style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '14px 18px', borderRadius: 'var(--radius-md)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <AlertCircle size={20} style={{ flexShrink: 0 }} />
               <span style={{ fontSize: '14px', fontWeight: 600 }}>{errorMsg}</span>
             </div>

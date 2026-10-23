@@ -13,6 +13,37 @@
   <meta name="geo.region" content="IN-GJ" />
   <meta name="geo.placename" content="Modasa, Arvalli" />
 
+  <!-- Security & Modern Web Standards -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="google-site-verification" content="GSC_PULSE_HOSPITAL_VERIFICATION_TOKEN" />
+
+  <!-- Google Analytics 4 & Consent Mode v2 Integration Hook -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied'
+    });
+    try {
+      var consentStr = localStorage.getItem('pulse_cookie_consent_v1');
+      if (consentStr && JSON.parse(consentStr).analytics) {
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      }
+    } catch (e) {}
+    window.addEventListener('pulse-cookie-consent-updated', function(e) {
+      if (e.detail && e.detail.analytics) {
+        gtag('consent', 'update', { 'analytics_storage': 'granted' });
+      } else {
+        gtag('consent', 'update', { 'analytics_storage': 'denied' });
+      }
+    });
+  </script>
+
+  <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />

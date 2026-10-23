@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Phone, Clock, MapPin, Building2, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Calendar, Phone, Clock, MapPin, Building2, CheckCircle2, ArrowRight, Award, GraduationCap } from 'lucide-react';
 import { PageHero, Avatar, Icon, SectionHead } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
 import { Link } from '../router';
@@ -27,6 +27,18 @@ export default function DoctorPage({ doctor: d, lang = 'en' }) {
         </div>
       </div>
       <dl className="profile-facts">
+        {d.gmcNumber && (
+          <div>
+            <dt><Award size={15} /> {t('GMC Reg. No.', 'GMC રજીસ્ટ્રેશન નં.')}</dt>
+            <dd><strong>{d.gmcNumber}</strong></dd>
+          </div>
+        )}
+        {d.medicalCollege && (
+          <div>
+            <dt><GraduationCap size={15} /> {t('Medical College', 'મેડિકલ કોલેજ')}</dt>
+            <dd>{lang === 'en' ? d.medicalCollege : (d.medicalCollegeGujarati || d.medicalCollege)}</dd>
+          </div>
+        )}
         <div>
           <dt><Clock size={15} /> {t('Timings', 'સમય')}</dt>
           <dd>{t(d.timing, d.timingGujarati || d.timing)}</dd>

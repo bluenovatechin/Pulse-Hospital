@@ -107,6 +107,39 @@ export default function DoctorsPage({ lang = 'en' }) {
         </div>
       </section>
 
+      {/* Leadership Team Showcase */}
+      <section className="section" style={{ background: 'var(--cream)', borderTop: '1px solid var(--border-soft)', borderBottom: '1px solid var(--border-soft)' }}>
+        <div className="container-wide">
+          <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'var(--shadow-lg)' }} data-reveal>
+            <div className="grid grid-2" style={{ alignItems: 'center' }}>
+              <div style={{ height: '100%', minHeight: 280 }}>
+                <img
+                  src={PHOTOS.doctorsTeam}
+                  alt={t('Pulse Hospital doctors team', 'પલ્સ હોસ્પિટલના ડોક્ટરોની ટીમ')}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  loading="lazy"
+                />
+              </div>
+              <div style={{ padding: '32px 36px' }}>
+                <span className="eyebrow">{t('Our Medical Panel', 'અમારી મેડિકલ ટીમ')}</span>
+                <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 26px)', color: 'var(--brand-navy)', margin: '8px 0 12px' }}>
+                  {t('Experienced Consultants & Critical Care Specialists', 'અનુભવી કન્સલ્ટન્ટ્સ અને ક્રિટિકલ કેર નિષ્ણાતો')}
+                </h3>
+                <p style={{ color: 'var(--text-body)', fontSize: 14.5, lineHeight: 1.6, marginBottom: 14 }}>
+                  {t(
+                    'All five core doctors work closely together to ensure continuous inpatient care, ICU resuscitation, and daily OPD clinics for patients across Arvalli.',
+                    'પાંચેય મુખ્ય ડોક્ટરો અરવલ્લી અને આસપાસના દર્દીઓ માટે ઇનપેશન્ટ કેર, ICU સારવાર અને દૈનિક OPD માં સાથે મળીને કાર્ય કરે છે.'
+                  )}
+                </p>
+                <div style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.6, background: '#fff', padding: '10px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-soft)' }}>
+                  <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Pulkit Pandya · Dr. Santosh J. Prajapati · Dr. Nimesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel', 'ડૉ. પુલકિત પંડ્યા · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. નિમેષ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Weekly timetable */}
       <section className="section section--white">
         <div className="container-wide">
@@ -135,6 +168,9 @@ export default function DoctorsPage({ lang = 'en' }) {
                         <span>
                           <strong style={{ color: 'var(--brand-navy)', display: 'block' }}>{lang === 'en' ? d.name : d.nameGujarati}</strong>
                           <span style={{ fontSize: 12.5, color: 'var(--primary)', fontWeight: 600 }}>{d.qualification}</span>
+                          {d.gmcNumber && (
+                            <span style={{ fontSize: 11, color: 'var(--text-muted)', display: 'block' }}>GMC: {d.gmcNumber}</span>
+                          )}
                         </span>
                       </Link>
                     </td>

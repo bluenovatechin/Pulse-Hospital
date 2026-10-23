@@ -78,6 +78,7 @@ const jobs = [
   ...[16, 32, 48].map((s) =>
     sharp(emblem).resize(s, s, { kernel: 'lanczos3' }).png({ compressionLevel: 9 })
       .toFile(OUT + (s === 48 ? 'favicon.png' : `favicon-${s}.png`))),
+  sharp(emblem).resize(32, 32, { kernel: 'lanczos3' }).png({ compressionLevel: 9 }).toFile(OUT + 'favicon.ico'),
   tile(180, 0.78, 'apple-touch-icon.png'),
   // 192/512 are also "maskable": keep the cross inside the 80% safe zone
   tile(192, 0.6, 'icon-192.png'),

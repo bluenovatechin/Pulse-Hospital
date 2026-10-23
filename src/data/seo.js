@@ -196,27 +196,46 @@ function breadcrumbs(items) {
 
 /** JSON-LD graph for a route (always includes the hospital itself) */
 export function jsonLdFor(page, param) {
-  const graph = [hospital()];
+  const { title, description } = getPageMeta(page, param);
+  const url = SITE_URL + pagePath(page, param);
+  const dateModified = '2026-10-23T12:00:00+05:30';
+
+  const graph = [
+    hospital(),
+    {
+      '@type': 'MedicalWebPage',
+      '@id': `${url}#webpage`,
+      url,
+      name: title,
+      description,
+      datePublished: '2026-03-01T00:00:00+05:30',
+      dateModified,
+      inLanguage: ['en-IN', 'gu-IN'],
+      isPartOf: { '@id': `${SITE_URL}#website` }
+    }
+  ];
+
   if (page === 'home') {
     graph.push({ '@type': 'WebSite', '@id': `${SITE_URL}#website`, url: SITE_URL, name: HOSPITAL_INFO.name, inLanguage: ['en-IN', 'gu-IN'] });
     graph.push({
       '@type': 'FAQPage',
       mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
     });
-  }
-  if (page === 'doctors') {
+  } else if (page === 'doctors') {
     const d = param && getDoctor(param);
     graph.push(...(d ? [d] : DOCTORS).map(physician));
     graph.push(breadcrumbs([['Home', ''], ['Doctors', 'doctors'], ...(d ? [[d.name, `doctors/${d.slug}`]] : [])]));
-  }
-  if (page === 'facilities') {
+  } else if (page === 'facilities') {
     const f = param && getFacility(param);
     graph.push(breadcrumbs([['Home', ''], ['Facilities', 'facilities'], ...(f ? [[f.name, `facilities/${f.id}`]] : [])]));
-  }
-  if (page === 'departments') {
+  } else if (page === 'departments') {
     const d = param && getDepartment(param);
     graph.push(breadcrumbs([['Home', ''], ['Departments', 'departments'], ...(d ? [[d.title, `departments/${d.id}`]] : [])]));
+  } else if (page === 'about' || page === 'contact' || page === 'gallery' || page === 'privacy' || page === 'terms') {
+    const label = title.split(' | ')[0];
+    graph.push(breadcrumbs([['Home', ''], [label, pagePath(page, param)]]));
   }
+
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
@@ -231,6 +250,7 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').repl
 export function seoHead({ page, param }, base = '/') {
   const { title, description, noindex } = getPageMeta(page, param);
   const url = SITE_URL + pagePath(page, param);
+  const dateModified = '2026-10-23T12:00:00+05:30';
   const n = !param && HERO_PHOTO[page];
   const photo = (w) => `${base}photos/gallery-${n}${w ? `-${w}` : ''}.webp`;
   const preload = n
@@ -245,6 +265,7 @@ export function seoHead({ page, param }, base = '/') {
     <meta property="og:title" content="${esc(title)}" />
     <meta property="og:description" content="${esc(description)}" />
     <meta property="og:url" content="${url}" />
+    <meta property="article:modified_time" content="${dateModified}" />
     <meta name="twitter:title" content="${esc(title)}" />
     <meta name="twitter:description" content="${esc(description)}" />${preload}
     <script type="application/ld+json">${jsonLd}</script>

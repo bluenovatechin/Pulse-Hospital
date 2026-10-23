@@ -40,7 +40,11 @@ const ALIASES = {
   services: 'facilities',
   book: 'book-appointment',
   appointment: 'book-appointment',
-  'my-booking': 'my-appointments'
+  'my-booking': 'my-appointments',
+  'privacy-policy': 'privacy',
+  'terms-and-conditions': 'terms',
+  'terms-conditions': 'terms',
+  'cashless-mediclaim': 'facilities'
 };
 
 export const ROUTE_BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');

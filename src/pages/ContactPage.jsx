@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Phone, MapPin, Clock, CheckCircle2, AlertCircle, Navigation } from 'lucide-react';
 import { PageHero, WhatsAppIcon } from '../components/ui';
 import { HOSPITAL_INFO, PHOTOS } from '../data/hospitalContent';
 
-const EMPTY_FORM = { name: '', phone: '', email: '', subject: 'General Consultation Inquiry', message: '' };
+const EMPTY_FORM = { name: '', phone: '', email: '', subject: 'General Consultation Inquiry', message: '', website_url: '' };
 
 export default function ContactPage({ lang = 'en' }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const formMountTime = useRef(0);
+
+  useEffect(() => {
+    formMountTime.current = Date.now();
+  }, []);
+
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,6 +23,19 @@ export default function ContactPage({ lang = 'en' }) {
     e.preventDefault();
     setSuccessMsg('');
     setErrorMsg('');
+
+    // Honeypot spam check
+    if (form.website_url) {
+      console.warn('Bot blocked via honeypot');
+      return;
+    }
+
+    // Rapid bot submission check
+    if (Date.now() - formMountTime.current < 1200) {
+      setErrorMsg(t('Form submitted too fast. Please verify your details.', 'ફોર્મ ખૂબ ઝડપથી સબમિટ થયું. વિગતો ફરી ચકાસો.'));
+      return;
+    }
+
     if (!form.name || !form.phone || !form.message) {
       setErrorMsg(t('Please complete all required fields.', 'કૃપા કરીને જરૂરી તમામ વિગતો ભરો.'));
       return;
@@ -24,7 +43,7 @@ export default function ContactPage({ lang = 'en' }) {
 
     const cleanPhone = form.phone.replace(/\D/g, '');
     const waText = 
-`🏥 *PULSE HOSPITAL & I.C.U — PATIENT INQUIRY*
+`🏥 *PULSE HOSPITAL & I.C.U: PATIENT INQUIRY*
 ───────────────────────────────
 👤 *Name:* ${form.name.trim()}
 📞 *Phone:* ${cleanPhone}
@@ -133,13 +152,19 @@ _Sent via Pulse Hospital Website_`;
               <p className="muted" style={{ fontSize: 14, marginTop: 4, marginBottom: 20 }}>{t('Reception will respond as soon as possible.', 'રીસેપ્શન જલદી જવાબ આપશે.')}</p>
 
               {successMsg && (
-                <div className="callout" style={{ marginBottom: 16 }}><CheckCircle2 size={18} /> <span>{successMsg}</span></div>
+                <div role="status" aria-live="polite" className="callout" style={{ marginBottom: 16 }}><CheckCircle2 size={18} /> <span>{successMsg}</span></div>
               )}
               {errorMsg && (
-                <div className="callout" style={{ marginBottom: 16, background: 'var(--pulse-red-soft)', color: '#be123c' }}><AlertCircle size={18} /> <span>{errorMsg}</span></div>
+                <div role="alert" aria-live="assertive" className="callout" style={{ marginBottom: 16, background: 'var(--pulse-red-soft)', color: '#be123c' }}><AlertCircle size={18} /> <span>{errorMsg}</span></div>
               )}
 
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
+                {/* Honeypot field for bot spam trap */}
+                <div style={{ position: 'absolute', width: '1px', height: '1px', margin: '-1px', padding: 0, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', border: 0 }} aria-hidden="true">
+                  <label htmlFor="c-website">Leave blank</label>
+                  <input id="c-website" name="website_url" type="text" value={form.website_url} onChange={handleChange} tabIndex={-1} autoComplete="off" />
+                </div>
+
                 <div style={{ width: '100%' }}>
                   <label className="form-label" htmlFor="c-name">{t('Full name *', 'દર્દી / મુલાકાતીનું નામ *')}</label>
                   <input id="c-name" name="name" className="form-input" placeholder={t('Your name', 'તમારું પૂરું નામ')} value={form.name} onChange={handleChange} required style={{ width: '100%' }} />

@@ -218,7 +218,7 @@ export default function HomePage({ lang = 'en' }) {
             center
             eyebrow={t('Patient & Visitor Guide', 'દર્દી & મુલાકાતી માર્ગદર્શિકા')}
             title={t('Essential information before you visit', 'હોસ્પિટલ મુલાકાત વખતે ધ્યાનમાં રાખવા જેવી બાબતો')}
-            text={t('Clear clinical protocols designed to save critical minutes and ensure seamless medical care.', 'ઇમરજન્સી અને ઓપીડી દરમિયાન દર્દીઓની સુવિધા માટેના નિયમો.')}
+            text={t('Clear clinical protocols designed to save critical minutes and ensure coordinated medical care.', 'ઇમરજન્સી અને ઓપીડી દરમિયાન દર્દીઓની સુવિધા માટેના નિયમો.')}
           />
           <div className="grid grid-3">
             <div className="card card-hover" style={{ padding: 26, ...delay(0) }} data-reveal>

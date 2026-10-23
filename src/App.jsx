@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { Phone, Calendar, ArrowUp } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CookieConsentBanner from './components/CookieConsentBanner';
 import HomePage from './pages/HomePage';
 import { WhatsAppIcon } from './components/ui';
 import { useRoute, navigateTo, Link } from './router';
@@ -159,6 +160,7 @@ export default function App({ url }) {
       </main>
 
       <Footer lang={lang} />
+      <CookieConsentBanner lang={lang} />
 
       {/* Floating contact & navigation buttons (bottom-right) */}
       <div className="fab-stack" role="region" aria-label="Quick contact actions">

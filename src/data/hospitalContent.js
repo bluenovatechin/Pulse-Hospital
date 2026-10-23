@@ -41,7 +41,17 @@ export const HOSPITAL_INFO = {
   mapsEmbed: "https://maps.google.com/maps?q=City+Centre+Shamlaji+Road+Modasa&t=&z=15&ie=UTF8&iwloc=&output=embed",
   opdHours: "Mon – Sat · 09:00 AM – 01:30 PM & 04:30 PM – 08:00 PM",
   noticeEnglish: "Please bring this file and all past medical reports on your next visit.",
-  noticeGujarati: "કૃપા કરીને આગલી મુલાકાતે આ ફાઇલ અને જુના રિપોર્ટ્સ સાથે લાવવા વિનંતી."
+  noticeGujarati: "કૃપા કરીને આગલી મુલાકાતે આ ફાઇલ અને જુના રિપોર્ટ્સ સાથે લાવવા વિનંતી.",
+  bedCount: {
+    total: 41,
+    iccu: 15,
+    isolation: 1,
+    micu: 7,
+    sicu: 7,
+    icuTotal: 30,
+    deluxeRooms: 3,
+    twinRooms: 3
+  }
 };
 
 // --------------------------------------------------------
@@ -74,7 +84,8 @@ export const PHOTOS = {
   ot1: photo(13),
   ot2: photo(14),
   consult1: photo(15),
-  consult2: photo(16)
+  consult2: photo(16),
+  doctorsTeam: `${ASSET_BASE}doctors-team.jpeg`
 };
 
 // --------------------------------------------------------
@@ -84,13 +95,17 @@ export const PHOTOS = {
 export const DOCTORS = [
   {
     id: 1,
-    slug: "dr-dipesh-patel", // used in the page URL: /doctors/dr-dipesh-patel
-    name: "Dr. Dipesh S. Patel",
-    nameGujarati: "ડૉ. દિપેશ એસ. પટેલ",
-    initials: "DP",
+    slug: "dr-nimesh-patel", // alias kept for backwards compatibility: dr-dipesh-patel
+    aliasSlugs: ["dr-dipesh-patel"],
+    name: "Dr. Nimesh S. Patel",
+    nameGujarati: "ડૉ. નિમેષ એસ. પટેલ",
+    initials: "NP",
     colors: ["#0e655c", "#386e2e"],
     type: "visiting",
-    qualification: "MD Medicine",
+    qualification: "MD (Medicine)",
+    medicalCollege: "Sumandeep Vidyapeeth, Vadodara",
+    medicalCollegeGujarati: "સુમનદીપ વિદ્યાપીઠ, વડોદરા",
+    gmcNumber: "G-28880",
     designation: "Consultant Physician & Critical Care Specialist",
     designationGujarati: "કન્સલ્ટન્ટ ફિઝિશિયન અને ક્રિટિકલ કેર સ્પેશ્યાલીસ્ટ",
     hospital: "Deep Hospital, Modasa",
@@ -130,6 +145,9 @@ export const DOCTORS = [
     colors: ["#093437", "#0e655c"],
     type: "visiting",
     qualification: "MD (Medicine)",
+    medicalCollege: "B.J. Medical College, Ahmedabad",
+    medicalCollegeGujarati: "બી.જે. મેડિકલ કોલેજ, અમદાવાદ",
+    gmcNumber: "G-20989",
     designation: "Consultant Physician & Intensive Care Specialist",
     designationGujarati: "કન્સલ્ટન્ટ ફિઝિશિયન અને ઇન્ટેન્સિવ કેર સ્પેશ્યાલીસ્ટ",
     hospital: "Hayat Hospital, Modasa",
@@ -169,6 +187,9 @@ export const DOCTORS = [
     colors: ["#be123c", "#f59e0b"],
     type: "visiting",
     qualification: "MD (Medicine)",
+    medicalCollege: "GCS Medical College, Ahmedabad",
+    medicalCollegeGujarati: "જીસીએસ મેડિકલ કોલેજ, અમદાવાદ",
+    gmcNumber: "G-33212",
     designation: "Consultant Physician & Cardio-Metabolic Expert",
     designationGujarati: "કન્સલ્ટન્ટ ફિઝિશિયન અને કાર્ડિયો-મેટાબોલિક એક્સપર્ટ",
     hospital: "Vedant Hospital, Modasa",
@@ -208,6 +229,9 @@ export const DOCTORS = [
     colors: ["#0e655c", "#289672"],
     type: "visiting",
     qualification: "MBBS, DTCD, FICCM",
+    medicalCollege: "B.J. Medical College, Ahmedabad",
+    medicalCollegeGujarati: "બી.જે. મેડિકલ કોલેજ, અમદાવાદ",
+    gmcNumber: "G-0421",
     designation: "Chest Physician & Critical Care Specialist",
     designationGujarati: "ચેસ્ટ ફિઝિશિયન (ફેફસાંના નિષ્ણાત) અને ક્રિટિકલ કેર",
     hospital: "Medicare Hospital & ICU, Modasa",
@@ -305,15 +329,18 @@ export const FACILITIES = [
     icon: "Activity",
     photo: PHOTOS.icuHall,
     is24x7: true,
-    summary: "Multi-bed critical care with ventilators, central monitoring and specialist doctors on duty around the clock.",
-    summaryGu: "વેન્ટિલેટર, સેન્ટ્રલ મોનિટરિંગ અને ચોવીસ કલાક ઉપલબ્ધ નિષ્ણાત ડોક્ટરો સાથે મલ્ટી-બેડ ક્રિટિકલ કેર.",
+    summary: "30-bed comprehensive critical care unit comprising 15 ICCU beds, 7 MICU beds, 7 SICU beds and 1 isolation bed with ventilators and central monitoring.",
+    summaryGu: "૧૫ ICCU બેડ, ૭ MICU બેડ, ૭ SICU બેડ અને ૧ આઈસોલેશન બેડ સાથે કુલ ૩૦ બેડનું અદ્યતન ક્રિટિકલ કેર યુનિટ.",
     includes: [
-      "I.C.C.U. (heart), M.I.C.U. (medical) and S.I.C.U. (surgical) beds",
+      "15 ICCU beds dedicated to acute cardiac & coronary emergencies",
+      "7 M.I.C.U. beds for severe medical illnesses & multi-organ care",
+      "7 S.I.C.U. beds for major surgical & trauma recovery",
+      "1 dedicated Isolation ICU bed with glass enclosure",
       "Invasive and non-invasive ventilators",
-      "Multipara central monitoring, ECG and defibrillator",
-      "Central oxygen and suction at every bed",
-      "Bedside 2D Echo, sonography and mobile X-ray",
-      "Bedside dialysis inside the ICU"
+      "Multipara central monitoring, ECG, defibrillators & crash cart",
+      "Central oxygen and suction at every single bed",
+      "Bedside 2D Echo, sonography and portable X-ray",
+      "Bedside hemodialysis inside the ICU"
     ],
     goodFor: "Patients who need continuous monitoring or life support: severe infection, heart attack, breathing failure, poisoning, or recovery after major surgery.",
     doctorIds: [1, 2, 4, 6]
@@ -326,13 +353,13 @@ export const FACILITIES = [
     icon: "ShieldPlus",
     photo: PHOTOS.isolation,
     is24x7: true,
-    summary: "A glass-walled, separately entered ICU room for patients with infectious illness, protecting them and everyone else.",
-    summaryGu: "ચેપી રોગોવાળા દર્દીઓ માટે અલગ કાચનો આઈસોલેશન રૂમ, જે દર્દી અને અન્ય તમામનું રક્ષણ કરે છે.",
+    summary: "A dedicated 1-bed glass-walled, separately entered isolation ICU room protecting contagious patients and hospital surroundings.",
+    summaryGu: "ચેપી રોગોવાળા દર્દીઓ માટે સમર્પિત ૧ બેડનો કાચનો આઈસોલેશન રૂમ, જે દર્દી અને અન્ય તમામનું રક્ષણ કરે છે.",
     includes: [
-      "Separate glass-door entry from the main ICU",
-      "Full ICU bed with monitor, oxygen and suction",
+      "1 dedicated glass-door isolation bed separate from the main ICU",
+      "Full ICU bed with central monitor, oxygen and suction",
       "Bedside ultrasound and ventilator support",
-      "Dedicated infection-control nursing protocol"
+      "Dedicated barrier nursing & infection-control protocol"
     ],
     goodFor: "Patients with contagious or high-risk infections who need ICU-level care without sharing space.",
     doctorIds: [2]
@@ -385,14 +412,15 @@ export const FACILITIES = [
     icon: "Droplets",
     photo: null,
     is24x7: true,
-    summary: "Emergency and scheduled haemodialysis, supported by a dedicated RO water plant.",
-    summaryGu: "તાત્કાલિક અને નિયમિત હિમોડાયાલિસિસ, સમર્પિત RO વોટર પ્લાન્ટ સાથે કાર્યરત.",
+    summary: "Emergency and scheduled haemodialysis, supported by high-grade dialysis machines and a dedicated RO water purification plant.",
+    summaryGu: "તાત્કાલિક અને નિયમિત હિમોડાયાલિસિસ, અદ્યતન મશીનો અને સમર્પિત RO વોટર પ્લાન્ટ સાથે કાર્યરત.",
     includes: [
-      "Emergency dialysis for sudden kidney failure",
+      "Hemodialysis machines with dedicated RO water treatment plant",
+      "Full inpatient dialysis support for the 41-bed facility",
+      "Emergency dialysis for acute kidney failure & poisonings",
       "Scheduled maintenance dialysis sessions",
-      "Dedicated RO water treatment plant",
       "ICU bedside dialysis for critically ill patients",
-      "Separate machine for seropositive patients"
+      "Separate machine protocol for seropositive patients"
     ],
     goodFor: "Patients with kidney failure: both regular dialysis patients and emergencies.",
     doctorIds: [2, 6]
@@ -405,14 +433,15 @@ export const FACILITIES = [
     icon: "Scan",
     photo: null,
     is24x7: true,
-    summary: "Modasa CT Scan Centre on the same premises, with no ambulance transfer needed for a scan.",
-    summaryGu: "હોસ્પિટલ પરિસરમાં જ મોડાસા સીટી સ્કેન સેન્ટર, બહાર ગયા વિના ઝડપી રિપોર્ટ.",
+    summary: "Modasa CT Scan Centre on the same premises with high-precision gantry and technician workstation, requiring zero transfer delay.",
+    summaryGu: "હોસ્પિટલ પરિસરમાં જ મોડાસા સીટી સ્કેન સેન્ટર, અદ્યતન ગેન્ટ્રી મશીન અને ટેકનિશિયન વર્કસ્ટેશન સાથે.",
     includes: [
-      "Brain and head CT for stroke and bleeding",
-      "HRCT chest for pneumonia and lung disease",
-      "Abdomen and pelvis CT (with contrast)",
-      "Spine and bone CT",
-      "Priority reporting for emergency cases"
+      "Modasa CT Scan machine (gantry) located in-house",
+      "Dedicated technician workstation for rapid slice reconstruction",
+      "Brain and head CT for stroke and trauma hemorrhage",
+      "HRCT chest for pneumonia and pulmonary evaluation",
+      "Abdomen, pelvis, spine and musculoskeletal CT",
+      "Priority 24x7 reporting for emergency cases"
     ],
     goodFor: "Head injury, suspected stroke, chest infections, abdominal pain, and trauma cases that need fast imaging.",
     doctorIds: [3, 4]
@@ -425,13 +454,15 @@ export const FACILITIES = [
     icon: "Microscope",
     photo: null,
     is24x7: true,
-    summary: "Automated blood testing that runs day and night, so treatment decisions are never waiting on a report.",
-    summaryGu: "દિવસ અને રાત કાર્યરત ઓટોમેટેડ લેબોરેટરી, જેથી તાત્કાલિક સારવાર શરૂ થઈ શકે.",
+    summary: "Automated blood testing machines, cell counter and sample counter operating 24 hours so treatment is never delayed.",
+    summaryGu: "ઓટોમેટેડ બ્લડ ટેસ્ટિંગ મશીન, સેલ કાઉન્ટર અને સેમ્પલ કાઉન્ટર સાથે ૨૪ કલાક કાર્યરત લેબોરેટરી.",
     includes: [
-      "Automated biochemistry and haematology",
-      "Arterial blood gas (ABG) analysis",
-      "Cardiac troponin (heart attack marker)",
-      "Dengue / malaria / typhoid panels and platelet counts"
+      "Automated blood testing machines & automated cell counter",
+      "Dedicated sample counter and barcode-managed workflows",
+      "Arterial blood gas (ABG) analysis for ICU patients",
+      "Cardiac troponin (rapid heart attack marker)",
+      "Automated biochemistry, haematology & electrolyte panels",
+      "Dengue, malaria, typhoid panels and platelet counts"
     ],
     goodFor: "Routine check-ups, fever work-ups, and emergency tests for ICU patients.",
     doctorIds: []
@@ -518,17 +549,17 @@ export const FACILITIES = [
     id: "deluxe",
     category: "stay",
     name: "Super Deluxe & Deluxe Rooms",
-    nameGu: "સુપર ડીલક્ષ & ડીલક્ષ રૂમ",
+    nameGu: "સુપર ડીલક્ષ & ડીલક્ષ રૂમ (૩ રૂમ)",
     icon: "BedSingle",
     photo: PHOTOS.corridor,
     is24x7: true,
-    summary: "Private air-conditioned rooms for a quiet recovery, with space for a family member.",
-    summaryGu: "શાંત વાતાવરણ અને સ્વજનોના રહેવાની સુવિધા સાથે એર-કન્ડિશન્ડ પ્રાઇવેટ રૂમ.",
+    summary: "3 private air-conditioned deluxe rooms for quiet recovery, with attached bathroom and dedicated attendant space.",
+    summaryGu: "શાંત વાતાવરણ અને સ્વજનોના રહેવાની સુવિધા સાથે ૩ પ્રાઇવેટ એર-કન્ડિશન્ડ ડીલક્ષ રૂમ.",
     includes: [
-      "Air-conditioned private room with attached bath",
-      "Motorised bed with nurse-call button",
-      "Central oxygen and suction supply",
-      "Seating for one attendant"
+      "3 private air-conditioned rooms with attached bath",
+      "Motorised hospital bed with nurse-call button",
+      "Central oxygen and suction pipeline",
+      "Seating and resting accommodation for one family attendant"
     ],
     goodFor: "Patients who prefer privacy during their stay.",
     doctorIds: []
@@ -536,18 +567,18 @@ export const FACILITIES = [
   {
     id: "twin",
     category: "stay",
-    name: "Special, Semi-Special & Twin Rooms",
-    nameGu: "સ્પેશ્યલ, સેમી-સ્પેશ્યલ & ટ્વીન રૂમ",
+    name: "Special & Twin-Sharing Rooms",
+    nameGu: "સ્પેશ્યલ & ટ્વીન શેરિંગ રૂમ (૩ રૂમ)",
     icon: "BedDouble",
     photo: PHOTOS.twinRoom,
     is24x7: true,
-    summary: "Bright, curtained two-bed rooms with the same medical fittings as private rooms.",
-    summaryGu: "પ્રાઇવેટ રૂમ જેવી જ તમામ તબીબી સુવિધાઓ સાથે આરામદાયક ટ્વીન શેરિંગ રૂમ.",
+    summary: "3 curtained twin-sharing patient rooms with the same central medical fittings and motorised beds as private rooms.",
+    summaryGu: "પ્રાઇવેટ રૂમ જેવી જ તમામ તબીબી સુવિધાઓ સાથે ૩ આરામદાયક ટ્વીન શેરિંગ રૂમ.",
     includes: [
-      "Privacy curtains around each bed",
-      "Motorised Fowler beds",
-      "Oxygen and suction at every bed",
-      "24x7 nursing on the floor"
+      "3 twin-sharing rooms with privacy curtains around each bed",
+      "Motorised Fowler beds with individual nurse alarms",
+      "Piped oxygen and suction at every bed",
+      "24x7 qualified nursing care on the floor"
     ],
     goodFor: "Comfortable, more affordable inpatient stays.",
     doctorIds: []
@@ -864,7 +895,24 @@ export const FAQS = [
 // --------------------------------------------------------
 // Helpers
 // --------------------------------------------------------
-// Accepts a slug ("dr-paras-patel") or an old numeric id ("3")
-export const getDoctor = (key) => DOCTORS.find((d) => d.slug === key || d.id === Number(key));
+// Accepts a slug ("dr-paras-patel"), alias ("dr-dipesh-patel"), or an old numeric id ("3")
+export const getDoctor = (key) => DOCTORS.find((d) => d.slug === key || d.id === Number(key) || (d.aliasSlugs && d.aliasSlugs.includes(key)));
 export const getFacility = (id) => FACILITIES.find((f) => f.id === id);
 export const getDepartment = (id) => DEPARTMENTS.find((d) => d.id === id);
+
+// --------------------------------------------------------
+// Verified Hospital Bed Capacity & Distribution (Total: 41 Beds)
+// --------------------------------------------------------
+export const BED_STATS = {
+  total: 41,
+  icuTotal: 30,
+  breakdown: [
+    { key: "iccu", count: 15, labelEn: "ICCU Beds (Cardiac)", labelGu: "ICCU બેડ (હૃદય રોગ)", tag: "Cardiac ICU", descEn: "Intensive Coronary Care Unit with cardiac defibrillators & continuous monitoring", descGu: "હૃદય રોગના ગંભીર દર્દીઓ માટે મોનિટરિંગ અને ડિફિબ્રિલેટર સાથે" },
+    { key: "micu", count: 7, labelEn: "MICU Beds (Medical)", labelGu: "MICU બેડ (મેડિકલ)", tag: "Medical ICU", descEn: "Medical Intensive Care Unit for multi-organ, infection & septic shock cases", descGu: "મેડિકલ ઇન્ટેન્સિવ કેર યુનિટ જટિલ બીમારીઓ અને ઇન્ફેક્શન માટે" },
+    { key: "sicu", count: 7, labelEn: "SICU Beds (Surgical)", labelGu: "SICU બેડ (સર્જિકલ)", tag: "Surgical ICU", descEn: "Surgical Intensive Care Unit for major trauma and post-operative monitoring", descGu: "સર્જિકલ આઈસીયુ ઓપરેશન અને ટ્રોમા પછીના દર્દીઓ માટે" },
+    { key: "isolation", count: 1, labelEn: "Isolation ICU Bed", labelGu: "આઈસોલેશન બેડ", tag: "Infection Care", descEn: "Glass-enclosed isolation bed with barrier nursing for infectious illness", descGu: "ચેપી રોગ નિયંત્રણ માટે સમર્પિત કાચનો આઈસોલેશન બેડ" },
+    { key: "deluxe", count: 3, labelEn: "Deluxe Rooms", labelGu: "ડીલક્ષ રૂમ", tag: "Private Room", descEn: "Air-conditioned private rooms with attached bath and attendant seating", descGu: "સ્વજનના રહેવાની સુવિધા સાથે ૩ પ્રાઇવેટ એસી રૂમ" },
+    { key: "twin", count: 3, labelEn: "Twin-Sharing Rooms", labelGu: "ટ્વીન શેરિંગ રૂમ", tag: "Semi-Special", descEn: "Curtained semi-special rooms with oxygen pipeline and motorised Fowler beds", descGu: "સેન્ટ્રલ ઓક્સિજન અને મોટરાઇઝ્ડ બેડ સાથે ૩ ટ્વીન રૂમ" }
+  ]
+};
+

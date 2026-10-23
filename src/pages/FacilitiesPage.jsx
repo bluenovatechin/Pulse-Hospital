@@ -4,7 +4,7 @@ import FacilityCard from '../components/FacilityCard';
 import { PageHero, SectionHead, Icon, delay } from '../components/ui';
 import { Link } from '../router';
 import {
-  FACILITIES, FACILITY_CATEGORIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS
+  FACILITIES, FACILITY_CATEGORIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS, BED_STATS
 } from '../data/hospitalContent';
 
 export default function FacilitiesPage({ lang = 'en' }) {
@@ -29,13 +29,13 @@ export default function FacilitiesPage({ lang = 'en' }) {
         eyebrow={t('Facilities', 'સુવિધાઓ')}
         title={t('What we have, and what it means for you', 'અમારી સુવિધાઓ અને તમારા માટે તેનો અર્થ')}
         text={t(
-          'From a ventilator ICU and in-house CT scan to modular theatres, physiotherapy and private rooms: each facility below explains what it includes and who it is for.',
-          'વેન્ટીલેટર ICU, ઈન-હાઉસ CT સ્કેનથી લઈને મોડ્યુલર OT, ફીઝીયોથેરાપી અને પ્રાઇવેટ રૂમ સુધી: દરેક સુવિધાની વિગત નીચે.'
+          'From a 30-bed ventilator ICU and in-house CT scan to modular theatres, 24x7 dialysis, pathology and comfortable rooms: 41 total beds on one floor in Modasa.',
+          '૩૦-બેડ વેન્ટીલેટર ICU, ઈન-હાઉસ CT સ્કેન, મોડ્યુલર OT, ૨૪ કલાક ડાયાલીસીસ, લેબ અને આરામદાયક રૂમ: મોડાસામાં કુલ ૪૧ બેડની અદ્યતન સુવિધા.'
         )}
         facts={[
-          { value: `${FACILITIES.length}`, label: t('Facilities', 'સુવિધાઓ') },
-          { value: `${open24}`, label: t('Open 24 hours', '૨૪ કલાક કાર્યરત') },
-          { value: t('1 floor', '૧ માળ'), label: t('4th floor, City Centre', '૪થો માળ, સીટી સેન્ટર') }
+          { value: `${BED_STATS.total}`, label: t('Total Hospital Beds', 'કુલ હોસ્પિટલ બેડ') },
+          { value: `${BED_STATS.icuTotal}`, label: t('Critical Care Beds', 'ક્રિટિકલ કેર બેડ') },
+          { value: `${open24}`, label: t('24x7 Services', '૨૪ કલાક સેવાઓ') }
         ]}
         note={{
           icon: <Scan size={20} />,
@@ -72,6 +72,31 @@ export default function FacilitiesPage({ lang = 'en' }) {
             {shown.map((f, i) => (
               <div key={f.id} className="page-enter" style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}>
                 <FacilityCard facility={f} lang={lang} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bed Distribution section */}
+      <section className="section" style={{ background: 'var(--cream)', borderTop: '1px solid var(--border-soft)', borderBottom: '1px solid var(--border-soft)' }}>
+        <div className="container-wide">
+          <SectionHead
+            eyebrow={t('Inpatient Infrastructure', 'ઇનપેશન્ટ ઇન્ફ્રાસ્ટ્રક્ચર')}
+            title={t('41-Bed Capacity & Ward Breakdown', '૪૧ બેડની હોસ્પિટલ ક્ષમતા અને વોર્ડ વિતરણ')}
+            text={t('Pulse Hospital is structured with 30 high-dependency critical care beds, dedicated isolation, and well-appointed private and twin rooms.', 'પલ્સ હોસ્પિટલમાં ૩૦ બેડનું એડવાન્સ ક્રિટિકલ કેર યુનિટ, આઈસોલેશન અને શાંત પ્રાઇવેટ તેમજ ટ્વીન રૂમ ઉપલબ્ધ છે.')}
+          />
+          <div className="grid grid-3" style={{ marginTop: 28, gap: 20 }}>
+            {BED_STATS.breakdown.map((b, i) => (
+              <div key={b.key} className="card card-hover" style={{ padding: 24, borderTop: '4px solid var(--primary)', background: '#fff', animationDelay: `${i * 45}ms` }} data-reveal>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span className="type-tag" style={{ background: 'var(--mint-soft)', color: 'var(--primary)', fontWeight: 600 }}>{b.tag}</span>
+                  <span style={{ fontSize: 26, fontWeight: 800, color: 'var(--brand-navy)' }}>
+                    {b.count} <span style={{ fontSize: 13, fontWeight: 500, color: 'var(--text-muted)' }}>{t(b.key === 'deluxe' || b.key === 'twin' ? 'Rooms' : 'Beds', b.key === 'deluxe' || b.key === 'twin' ? 'રૂમ' : 'બેડ')}</span>
+                  </span>
+                </div>
+                <h3 style={{ fontSize: 18, marginBottom: 8, color: 'var(--brand-navy)' }}>{lang === 'en' ? b.labelEn : b.labelGu}</h3>
+                <p style={{ fontSize: 13.5, color: 'var(--text-body)', lineHeight: 1.5, margin: 0 }}>{lang === 'en' ? b.descEn : b.descGu}</p>
               </div>
             ))}
           </div>
