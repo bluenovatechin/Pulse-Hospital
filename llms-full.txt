@@ -50,7 +50,15 @@
    - **OPD Timing**: Monday to Saturday (09:00 AM - 01:00 PM & 04:00 PM - 07:00 PM)
    - **Room**: Pulmonology Lab & OPD 404, 4th Floor City Centre, Modasa
 
-5. **Dr. Pulkit Pandya**
+5. **Dr. Saurabh Goswami**
+   - **Qualification**: MBBS, MD, DM (Cardiology), B.J. Medical College, Ahmedabad
+   - **Designation**: Consultant Interventional Cardiologist
+   - **Experience**: 10+ Years
+   - **Specialties**: Interventional Cardiology, Angiography & Angioplasty, Acute Heart Attack & Coronary Care, Heart Failure, Arrhythmia, Preventive Cardiology
+   - **OPD Timing**: Monday to Saturday (By Appointment & Cardiac Emergency)
+   - **Room**: Cardiology Suite 405, 4th Floor City Centre, Modasa
+
+6. **Dr. Pulkit Pandya**
    - **Qualification**: MBBS, CCEBDM
    - **Designation**: Resident Medical Officer (Critical Care)
    - **Experience**: 7+ Years
@@ -61,6 +69,9 @@
 - **30+ Bed Intensive Care Unit (ICU)**: Multi-parameter hemodynamic monitors, invasive and non-invasive mechanical ventilators, central oxygen, arterial line blood pressure monitoring, isolation cubicle for immunocompromised patients.
 - **In-House High-Speed CT Scan**: Available round-the-clock for stroke assessment within golden hour, polytrauma, abdominal pain, and thoracic emergencies.
 - **24x7 Hemodialysis Unit**: Modern dialysis machines with automated bicarbonate delivery, dedicated reverse osmosis (RO) ultra-pure water plant, and isolated station for seropositive patients.
+- **24x7 Emergency Ambulance Service**: Fully equipped rapid-response emergency ambulance with continuous oxygen support, stretcher, emergency first-aid kit, and trained paramedical escort across Modasa and Arvalli.
+- **Centralized Air Conditioning (Central AC)**: Complete climate control and advanced HEPA air filtration maintaining comfortable, sterile healing conditions throughout all ICUs, OTs, OPDs, and rooms.
+- **24x7 Purified Mineral Water (RO Plant)**: In-house commercial multi-stage RO water plant providing free, hygienic, safe mineral drinking water at dispensing stations on all floors.
 - **Twin Modular Operation Theatres**: Laminar airflow, HEPA filtration, C-arm fluoroscopy, harmonic scalpel, and advanced anesthesia workstations.
 - **In-House Pathology Laboratory**: Automated hematology, biochemistry, ABG (Arterial Blood Gas), electrolytes, and cardiac biomarker testing.
 - **In-House Pharmacy**: Open 24 hours for emergency and inpatient medications.
