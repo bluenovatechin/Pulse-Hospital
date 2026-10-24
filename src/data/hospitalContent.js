@@ -272,7 +272,7 @@ export const DOCTORS = [
     initials: "PK",
     colors: ["#093437", "#289672"],
     type: "resident",
-    qualification: "MBBS, CCEBDM",
+    qualification: "",
     designation: "Resident Medical Officer (Critical Care)",
     designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
     hospital: "Pulse Hospital & ICU",
@@ -300,6 +300,47 @@ export const DOCTORS = [
     timingGujarati: "ઇમરજન્સી અને ICU માં ૨૪x૭ ઉપલબ્ધ",
     bio: "Specialised in emergency medicine and trauma stabilisation, continuous arterial line monitoring, and acute poison antidote protocols.",
     bioGujarati: "ઇમરજન્સી મેડિસિન, ટ્રોમા સ્ટેબિલાઇઝેશન અને ડાયાલિસિસ મોનિટરિંગમાં નિપુણતા ધરાવતા રેસિડેન્ટ તબીબ."
+  },
+  {
+    id: 5,
+    slug: "dr-saurabh-goswami",
+    name: "Dr. Saurabh Goswami",
+    nameGujarati: "ડૉ. સૌરભ ગોસ્વામી",
+    initials: "SG",
+    colors: ["#be123c", "#0e655c"],
+    type: "visiting",
+    qualification: "MBBS, MD, DM (Cardiology)",
+    medicalCollege: "B.J. Medical College, Ahmedabad",
+    medicalCollegeGujarati: "બી.જે. મેડિકલ કોલેજ, અમદાવાદ",
+    designation: "Consultant Interventional Cardiologist",
+    designationGujarati: "કન્સલ્ટન્ટ ઇન્ટરવેન્શનલ કાર્ડિયોલોજિસ્ટ (હૃદય રોગ નિષ્ણાત)",
+    hospital: "Pulse Hospital & ICU, Modasa",
+    hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ., મોડાસા",
+    mobile: "95120 45641",
+    mobileFormatted: "+91 95120 45641",
+    room: "Cardiology Suite 405",
+    roomGujarati: "કાર્ડિયોલોજી OPD ૪૦૫ (૪થો માળ)",
+    experience: "10+ Years",
+    experienceGujarati: "૧૦+ વર્ષ અનુભવ",
+    specialties: ["Interventional Cardiology", "Angiography & Angioplasty", "Heart Failure & Arrhythmia", "Preventive Heart Care"],
+    specialtiesGujarati: ["ઇન્ટરવેન્શનલ કાર્ડિયોલોજી", "એન્જિયોગ્રાફી અને એન્જિયોપ્લાસ્ટી", "હાર્ટ ફેલ્યોર & એરિથમિયા", "પ્રિવેન્ટિવ હૃદય રોગ સંભાળ"],
+    whatTheyDo: [
+      "Expert management of acute heart attacks and coronary artery blockages",
+      "Guidance for coronary angiography, angioplasty, stents and pacemaker placement",
+      "Advanced care for heart failure, rhythm disturbances (arrhythmia) and chest pain",
+      "Comprehensive cardiac diagnostics: 2D Echocardiography, TMT stress testing & ECG"
+    ],
+    whatTheyDoGujarati: [
+      "હાર્ટ એટેક અને હૃદયની ધમનીઓમાં બ્લોકેજનું ચોક્કસ નિદાન અને નિષ્ણાત સારવાર",
+      "એન્જિયોગ્રાફી, એન્જિયોપ્લાસ્ટી, સ્ટેન્ટ અને પેસમેકર માટે સુપર-સ્પેશિયાલિસ્ટ પરામર્શ",
+      "છાતીમાં દુખાવો, હાર્ટ ફેલ્યોર અને અનિયમિત ધબકારા (એરિથમિયા) નું વ્યવસ્થાપન",
+      "2D ઇકો, TMT સ્ટ્રેસ ટેસ્ટ, ECG અને હૃદયની સંપૂર્ણ તપાસ"
+    ],
+    departmentIds: ["cardiac", "critical-care", "emergency"],
+    timing: "Mon - Sat (By Appointment & Cardiac Emergency Call)",
+    timingGujarati: "સોમ - શનિ (એપોઇન્ટમેન્ટ મુજબ & કાર્ડિયાક ઇમરજન્સી)",
+    bio: "Super-specialist Interventional Cardiologist with advanced DM training from B.J. Medical College, Ahmedabad, dedicated to acute coronary interventions, heart failure therapies, and preventive cardiology.",
+    bioGujarati: "બી.જે. મેડિકલ કોલેજ, અમદાવાદમાંથી DM (કાર્ડિયોલોજી) પૂર્ણ કરેલ સુપર-સ્પેશિયાલિસ્ટ ઇન્ટરવેન્શનલ કાર્ડિયોલોજિસ્ટ, હાર્ટ એટેક, એન્જિયોપ્લાસ્ટી અને કાર્ડિયાક કેરના નિષ્ણાત."
   }
 ];
 
@@ -657,6 +698,65 @@ export const FACILITIES = [
     ],
     goodFor: "Everyone: this is where your hospital visit starts.",
     doctorIds: []
+  },
+  {
+    id: "ambulance",
+    category: "critical",
+    name: "24x7 Emergency Ambulance Service",
+    nameGu: "૨૪ કલાક ઇમરજન્સી એમ્બ્યુલન્સ સેવા",
+    icon: "Ambulance",
+    photo: null,
+    is24x7: true,
+    summary: "Dedicated 24x7 patient pickup and transfer ambulance fitted with continuous medical oxygen, stretcher, emergency first-aid kit, and trained paramedical staff.",
+    summaryGu: "ઓક્સિજન સિલિન્ડર, સ્ટ્રેચર, ફર્સ્ટ-એઇડ અને પેરામેડિક સ્ટાફ સાથે દર્દીઓને ઝડપી લાવવા-લઈ જવા માટે ૨૪ કલાક કાર્યરત એમ્બ્યુલન્સ.",
+    includes: [
+      "Rapid response patient transport across Modasa and Arvalli district",
+      "Piped medical oxygen cylinder and emergency suction apparatus",
+      "Emergency folding stretcher and wheelchair boarding facility",
+      "Emergency resuscitation kit, splints, and vital medicines on board",
+      "Direct 24x7 emergency helpline dispatch: 95120 45641"
+    ],
+    goodFor: "Accident victims, acute chest pain or stroke cases, non-ambulatory patients, and critical inter-facility emergency transfers.",
+    doctorIds: [6, 5]
+  },
+  {
+    id: "mineral-water",
+    category: "support",
+    name: "24x7 Purified Mineral Water (RO Plant)",
+    nameGu: "૨૪ કલાક શુદ્ધ RO મિનરલ વોટર સુવિધા",
+    icon: "GlassWater",
+    photo: null,
+    is24x7: true,
+    summary: "Dedicated multi-stage commercial RO water purification plant providing 100% clean, hygienic, and safe mineral drinking water across all hospital floors.",
+    summaryGu: "તમામ વોર્ડ, રૂમ અને વેઇટિંગ એરિયામાં દર્દીઓ તેમજ તેમના સ્વજનો માટે અદ્યતન RO પ્લાન્ટ દ્વારા ૨૪ કલાક શુદ્ધ પીવાનું મિનરલ પાણી.",
+    includes: [
+      "In-house commercial multi-stage RO water filtration plant",
+      "Hygienic water dispensing points in all wards, ICU waiting, and corridors",
+      "Chilled and normal temperature pure drinking water availability",
+      "Strict microbiological quality checks and regular filter replacements",
+      "Free 24x7 safe drinking water access for all patients and visiting relatives"
+    ],
+    goodFor: "Ensuring pure, infection-free hydration for admitted patients, visiting attendants, and hospital staff.",
+    doctorIds: []
+  },
+  {
+    id: "central-ac",
+    category: "stay",
+    name: "Centralized Air Conditioning (Central AC)",
+    nameGu: "સેન્ટ્રલાઇઝ્ડ એર કન્ડિશનિંગ (સેન્ટ્રલ AC)",
+    icon: "Snowflake",
+    photo: null,
+    is24x7: true,
+    summary: "Hospital-wide centralized air conditioning ensuring optimal climate control, HEPA air filtration, and dust-free healing comfort across all floors.",
+    summaryGu: "ICU, ઓપરેશન થિયેટર, OPD કન્સલ્ટેશન રૂમ અને વેઇટિંગ એરિયા સહિત સમગ્ર હોસ્પિટલમાં ૨૪ કલાક સેન્ટ્રલાઇઝ્ડ એર કન્ડિશનિંગ (AC) વાતાવરણ.",
+    includes: [
+      "Centralized climate control maintaining clean and comfortable temperature",
+      "Advanced multi-tier air filtration promoting infection control",
+      "Strict temperature and sterile humidity standards in ICU and modular OTs",
+      "Uninterrupted 24x7 cooling with automatic heavy-duty generator backup"
+    ],
+    goodFor: "Providing a dust-free, comfortable, and infection-resistant environment for swift recovery across all seasons.",
+    doctorIds: []
   }
 ];
 
@@ -666,6 +766,9 @@ export const HOSPITAL_FACILITIES = [
   { gu: "24x7 કલાક ડાયાલિસીસની સુવિધા ઉપલબ્ધ", en: "Dialysis available 24x7" },
   { gu: "24x7 લેબોરેટરી કાર્યરત", en: "Laboratory open 24x7" },
   { gu: "24x7 કલાક મેડિકલ અને ફાર્મસી સુવિધા", en: "Medical store & pharmacy 24x7" },
+  { gu: "24x7 ઇમરજન્સી એમ્બ્યુલન્સ સેવા ઉપલબ્ધ", en: "24x7 emergency ambulance service" },
+  { gu: "સમગ્ર હોસ્પિટલમાં સેન્ટ્રલાઇઝ્ડ એર કન્ડિશનિંગ (Central AC)", en: "Centralized air conditioning (Central AC)" },
+  { gu: "શુદ્ધ RO મિનરલ વોટર સુવિધા", en: "Purified RO mineral water services" },
   { gu: "ક્વોલિફાઇડ સ્ટાફ દ્વારા I.C.U. ની દેખરેખ", en: "ICU supervised by qualified staff" },
   { gu: "અનુભવી નર્સીંગ સ્ટાફ અને સેન્ટ્રલ મોનિટરિંગ", en: "Experienced nurses & central monitoring" },
   { gu: "અત્ય અધતન સુસજ્જ મોડ્યુલર ઓપરેશન થીયેટર", en: "Fully equipped modular operation theatre" },
@@ -720,11 +823,11 @@ export const DEPARTMENTS = [
     titleGujarati: "હૃદય રોગો / એન્ડોક્રાઇન",
     icon: "HeartPulse",
     intro: "Emergency and ongoing care for the heart, blood pressure and related metabolic conditions.",
-    conditions: ["Heart attack", "Hypertensive crisis", "Heart failure", "Cholesterol & metabolic disease"],
-    conditionsGu: "હાર્ટ એટેક, બી.પી. (હાઈપરટેન્શન), થાઇરોઇડ, અનિયંત્રિત ડાયાબીટીસ",
-    services: ["2D Echo & Doppler", "I.C.C.U. (cardiac ICU)", "Cardiac troponin testing"],
-    facilityIds: ["icu", "imaging", "lab"],
-    doctorIds: [3, 1]
+    conditions: ["Heart attack", "Hypertensive crisis", "Heart failure", "Cholesterol & metabolic disease", "Arrhythmia & valve disorders"],
+    conditionsGu: "હાર્ટ એટેક, બી.પી. (હાઈપરટેન્શન), થાઇરોઇડ, અનિયંત્રિત ડાયાબીટીસ, અનિયમિત ધબકારા",
+    services: ["Consultation with DM Cardiologist", "2D Echo & Doppler", "I.C.C.U. (cardiac ICU)", "Cardiac troponin testing", "Angiography guidance"],
+    facilityIds: ["icu", "imaging", "ambulance", "lab"],
+    doctorIds: [5, 3, 1]
   },
   {
     id: "chest",
@@ -782,9 +885,9 @@ export const DEPARTMENTS = [
     intro: "Immediate care for accidents, bites and poisoning. Walk in any time: no appointment needed.",
     conditions: ["Road accident injuries", "Burns", "Electric shock", "Heat stroke", "Snakebite", "Insect bites", "Pesticide / drug poisoning"],
     conditionsGu: "અકસ્માત ઈજા, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક · સાપ કરડવો, ઝેરી દવાની અસર",
-    services: ["24x7 casualty desk", "Anti-snake venom", "Antidote protocols", "Trauma surgery"],
-    facilityIds: ["emergency", "ct", "ot", "pharmacy"],
-    doctorIds: [6]
+    services: ["24x7 casualty desk", "24x7 emergency ambulance", "Anti-snake venom", "Antidote protocols", "Trauma surgery"],
+    facilityIds: ["emergency", "ambulance", "ct", "ot", "pharmacy"],
+    doctorIds: [6, 5]
   },
   {
     id: "surgery",

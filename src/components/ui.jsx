@@ -5,7 +5,8 @@ import React from 'react';
 import {
   ChevronRight, Activity, HeartPulse, Scan, Scissors, BedDouble, BedSingle, HandHeart,
   ShieldPlus, Siren, MonitorDot, Droplets, Microscope, Wind, Stethoscope, ClipboardPlus,
-  Pill, Armchair, Soup, Brain, CheckCircle2, Accessibility, Bone
+  Pill, Armchair, Soup, Brain, CheckCircle2, Accessibility, Bone,
+  Ambulance, Snowflake, GlassWater
 } from 'lucide-react';
 import { photoSrcSet } from '../data/hospitalContent';
 import { Link } from '../router';
@@ -64,7 +65,7 @@ export function WhatsAppIcon({ size = 20, className = '', color, style = {}, ...
 const ICONS = {
   Activity, HeartPulse, Scan, Scissors, BedDouble, BedSingle, HandHeart, ShieldPlus, Siren,
   MonitorDot, Droplets, Microscope, Wind, Stethoscope, ClipboardPlus, Pill, Armchair, Soup, Brain, CheckCircle2,
-  Accessibility, Bone
+  Accessibility, Bone, Ambulance, Snowflake, GlassWater
 };
 
 // Render a lucide icon by name (names are stored in the data file)

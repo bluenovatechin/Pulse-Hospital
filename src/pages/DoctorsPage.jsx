@@ -128,12 +128,12 @@ export default function DoctorsPage({ lang = 'en' }) {
                 </h3>
                 <p style={{ color: 'var(--text-body)', fontSize: 14.5, lineHeight: 1.6, marginBottom: 14 }}>
                   {t(
-                    'All five core doctors work closely together to ensure continuous inpatient care, ICU resuscitation, and daily OPD clinics for patients across Arvalli.',
-                    'પાંચેય મુખ્ય ડોક્ટરો અરવલ્લી અને આસપાસના દર્દીઓ માટે ઇનપેશન્ટ કેર, ICU સારવાર અને દૈનિક OPD માં સાથે મળીને કાર્ય કરે છે.'
+                    'Our specialist consultants and critical care doctors work closely together to ensure continuous inpatient care, ICU resuscitation, and daily OPD clinics for patients across Arvalli.',
+                    'અમારા નિષ્ણાત કન્સલ્ટન્ટ્સ અને ક્રિટિકલ કેર ડોક્ટરો અરવલ્લી અને આસપાસના દર્દીઓ માટે ઇનપેશન્ટ કેર, ICU સારવાર અને દૈનિક OPD માં સાથે મળીને કાર્ય કરે છે.'
                   )}
                 </p>
                 <div style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.6, background: '#fff', padding: '10px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-soft)' }}>
-                  <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Pulkit Pandya · Dr. Santosh J. Prajapati · Dr. Nimesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel', 'ડૉ. પુલકિત પંડ્યા · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. નિમેષ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ')}
+                  <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Saurabh Goswami (DM Cardiology) · Dr. Nimesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel · Dr. Santosh J. Prajapati · Dr. Pulkit Pandya', 'ડૉ. સૌરભ ગોસ્વામી (DM કાર્ડિયોલોજી) · ડૉ. નિમેષ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. પુલકિત પંડ્યા')}
                 </div>
               </div>
             </div>
@@ -147,7 +147,7 @@ export default function DoctorsPage({ lang = 'en' }) {
           <SectionHead
             eyebrow={t('OPD timetable', 'OPD સમયપત્રક')}
             title={t('When each doctor is available', 'ડૉક્ટરો ક્યારે ઉપલબ્ધ છે')}
-            text={t('All five doctors at a glance. Book a 30-minute slot to avoid waiting.', 'પાંચેય ડૉક્ટરો એક નજરમાં. રાહ ટાળવા સ્લોટ બુક કરો.')}
+            text={t('All specialist doctors at a glance. Book a 30-minute slot to avoid waiting.', 'બધા નિષ્ણાત ડૉક્ટરો એક નજરમાં. રાહ ટાળવા સ્લોટ બુક કરો.')}
           />
           <div className="card table-wrap" data-reveal>
             <table className="timetable">
