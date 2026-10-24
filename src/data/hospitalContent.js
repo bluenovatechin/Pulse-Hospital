@@ -158,15 +158,17 @@ export const DOCTORS = [
     roomGujarati: "OPD સુઇટ ૪૦૨ (૪થો માળ)",
     experience: "16+ Years",
     experienceGujarati: "૧૬+ વર્ષ અનુભવ",
-    specialties: ["Infectious Diseases", "Liver & Renal Health", "Intensive Care", "Geriatric Medicine"],
-    specialtiesGujarati: ["ચેપી રોગો (ઇન્ફેક્શન)", "લિવર અને કિડની રોગ", "ઇન્ટેન્સિવ કેર", "વૃદ્ધાવસ્થા સંબંધિત રોગો"],
+    specialties: ["Diabetes & Thyroid", "Hypertension (BP)", "Infectious Diseases", "Liver & Renal Health", "Intensive Care"],
+    specialtiesGujarati: ["ડાયાબિટીસ અને થાઇરોઇડ", "હાયપરટેન્શન (બ્લડ પ્રેશર)", "ચેપી રોગો (ઇન્ફેક્શન)", "લિવર અને કિડની રોગ", "ઇન્ટેન્સિવ કેર"],
     whatTheyDo: [
+      "Long-term care for diabetes, thyroid and blood pressure",
       "Treats serious infections, including sepsis and septic shock",
       "Manages liver disease (jaundice, hepatic encephalopathy) and kidney problems",
       "Provides intensive care and advanced life support",
       "Medical care for elderly patients"
     ],
     whatTheyDoGujarati: [
+      "ડાયાબિટીસ, થાઇરોઇડ અને બ્લડ પ્રેશરનું લાંબા ગાળાનું યોગ્ય નિયંત્રણ",
       "સેપ્સિસ અને સેપ્ટિક શોક સહિતના ગંભીર ચેપી રોગોની નિષ્ણાત સારવાર",
       "લિવરના રોગો (કમળો, હેપેટિક એન્સેફાલોપથી) અને કિડની સમસ્યાઓનું નિવારણ",
       "ગંભીર દર્દીઓ માટે ઇન્ટેન્સિવ કેર અને લાઈફ સપોર્ટ સુવિધા",
@@ -175,8 +177,8 @@ export const DOCTORS = [
     departmentIds: ["critical-care", "medicine", "kidney", "gastro"],
     timing: "Mon - Sat (09:30 AM - 01:30 PM & 05:00 PM - 08:00 PM)",
     timingGujarati: "સોમ - શનિ (સવારે ૦૯:૩૦ થી ૦૧:૩૦ અને સાંજે ૦૫:૦૦ થી ૦૮:૦૦)",
-    bio: "Senior medical specialist with decades of leadership in multi-system infection management, septic shock, hepatic encephalopathy, and advanced life support.",
-    bioGujarati: "બહુ-અંગ ઇન્ફેક્શન, સેપ્ટિક શોક અને એડવાન્સ લાઈફ સપોર્ટ સંચાલનમાં દાયકાઓથી આગેવાની ધરાવતા સિનિયર મેડિકલ નિષ્ણાત."
+    bio: "Senior medical specialist with decades of leadership in long-term care for diabetes, thyroid and blood pressure, multi-system infections, septic shock, hepatic encephalopathy, and advanced life support.",
+    bioGujarati: "ડાયાબિટીસ, થાઇરોઇડ અને બ્લડ પ્રેશરનું લાંબા ગાળાનું યોગ્ય નિયંત્રણ, બહુ-અંગ ઇન્ફેક્શન, સેપ્ટિક શોક અને એડવાન્સ લાઈફ સપોર્ટ સંચાલનમાં દાયકાઓથી આગેવાની ધરાવતા સિનિયર મેડિકલ નિષ્ણાત."
   },
   {
     id: 3,
@@ -200,15 +202,17 @@ export const DOCTORS = [
     roomGujarati: "OPD સુઇટ ૪૦૩ (૪થો માળ)",
     experience: "12+ Years",
     experienceGujarati: "૧૨+ વર્ષ અનુભવ",
-    specialties: ["Cardiac Care", "Stroke & Neuro Recovery", "Metabolic Diseases", "Emergency Trauma"],
-    specialtiesGujarati: ["હૃદય રોગ સંભાળ", "સ્ટ્રોક અને ન્યુરો રિકવરી", "મેટાબોલિક રોગો", "ઇમરજન્સી ટ્રોમા"],
+    specialties: ["Diabetes & Thyroid", "Cardiac Care", "Hypertension & BP", "Stroke & Neuro Recovery", "Metabolic Diseases"],
+    specialtiesGujarati: ["ડાયાબિટીસ અને થાઇરોઇડ", "હૃદય રોગ સંભાળ", "હાયપરટેન્શન (બ્લડ પ્રેશર)", "સ્ટ્રોક અને ન્યુરો રિકવરી", "મેટાબોલિક રોગો"],
     whatTheyDo: [
+      "Long-term care for diabetes, thyroid and blood pressure",
       "Preventive heart care and management of BP emergencies",
       "Treats stroke and guides recovery afterwards",
       "Manages metabolic disease such as diabetes and cholesterol",
       "Handles acute medical emergencies"
     ],
     whatTheyDoGujarati: [
+      "ડાયાબિટીસ, થાઇરોઇડ અને બ્લડ પ્રેશરનું લાંબા ગાળાનું યોગ્ય નિયંત્રણ",
       "હૃદયની બીમારીઓથી બચાવ અને એક્યુટ બીપી ઇમરજન્સીનું ત્વરિત નિયંત્રણ",
       "લકવો (પેરાલિસિસ/સ્ટ્રોક) સારવાર અને દર્દીનું પુનર્વસન",
       "ડાયાબિટીસ અને કોલેસ્ટ્રોલ જેવી મેટાબોલિક બીમારીઓનું નિયમન",
@@ -217,8 +221,8 @@ export const DOCTORS = [
     departmentIds: ["cardiac", "neuro", "medicine"],
     timing: "Mon - Sat (10:00 AM - 01:30 PM & 04:30 PM - 07:30 PM)",
     timingGujarati: "સોમ - શનિ (સવારે ૧૦:૦૦ થી ૦૧:૩૦ અને સાંજે ૦૪:૩૦ થી ૦૭:૩૦)",
-    bio: "Specialist physician dedicated to preventive cardiology, acute hypertensive crises, stroke recovery, and advanced medical diagnostics.",
-    bioGujarati: "પ્રિવેન્ટિવ કાર્ડિયોલોજી, હાઇપરટેન્સિવ કટોકટી, સ્ટ્રોક રિકવરી અને અદ્યતન તબીબી નિદાનમાં સમર્પિત નિષ્ણાત તબીબ."
+    bio: "Specialist physician dedicated to long-term care for diabetes, thyroid and blood pressure, preventive cardiology, acute hypertensive crises, stroke recovery, and advanced medical diagnostics.",
+    bioGujarati: "ડાયાબિટીસ, થાઇરોઇડ અને બ્લડ પ્રેશરનું લાંબા ગાળાનું નિયંત્રણ, પ્રિવેન્ટિવ કાર્ડિયોલોજી, હાઇપરટેન્સિવ કટોકટી, સ્ટ્રોક રિકવરી અને અદ્યતન તબીબી નિદાનમાં સમર્પિત નિષ્ણાત તબીબ."
   },
   {
     id: 4,
