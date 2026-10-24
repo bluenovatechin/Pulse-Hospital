@@ -115,7 +115,8 @@ export default function DoctorsPage({ lang = 'en' }) {
               <div style={{ height: '100%', minHeight: 280 }}>
                 <img
                   src={PHOTOS.doctorsTeam}
-                  alt={t('Pulse Hospital doctors team', 'પલ્સ હોસ્પિટલના ડોક્ટરોની ટીમ')}
+                  alt={t('Pulse Hospital Modasa Doctors Team: Dr. Nimesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya', 'પલ્સ હોસ્પિટલ મોડાસા ડોક્ટર્સ ટીમ: ડૉ. નિમેષ પટેલ, ડૉ. નઈમુદ્દીન કાઝી, ડૉ. પારસ પટેલ, ડૉ. સંતોષ પ્રજાપતિ, ડૉ. પુલકિત પંડ્યા')}
+                  title={t('Specialist Doctors and Critical Care Physicians at Pulse Hospital & I.C.U Modasa', 'પલ્સ હોસ્પિટલ અને આઈસીયુ મોડાસાના નિષ્ણાત તબીબો')}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   loading="lazy"
                 />

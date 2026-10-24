@@ -192,7 +192,7 @@ export default function App({ url }) {
           className="fab er"
           href={HOSPITAL_INFO.phoneHref}
           aria-label={lang === 'en' ? 'Call emergency' : 'ઇમરજન્સી કૉલ'}
-          data-tooltip={lang === 'en' ? 'Emergency: 63533 44875' : 'ઇમરજન્સી: ૬૩૫૩૩ ૪૪૮૭૫'}
+          data-tooltip={lang === 'en' ? 'Emergency: 95120 45641' : 'ઇમરજન્સી: ૯૫૧૨૦ ૪૫૬૪૧'}
         >
           <Phone size={20} strokeWidth={2.2} />
         </a>

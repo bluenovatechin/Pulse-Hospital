@@ -30,10 +30,10 @@ export const HOSPITAL_INFO = {
   },
   // Active testing number for appointments & WhatsApp sending.
   // Original brochure lines: +91 95120 45641 / +91 95120 45642
-  appointmentNumber: "+91 63533 44875",
-  phoneHref: "tel:+916353344875",
-  whatsappNumber: "916353344875",
-  phones: ["+91 63533 44875"],
+  appointmentNumber: "+91 95120 45641",
+  phoneHref: "tel:+919512045641",
+  whatsappNumber: "919512045641",
+  phones: ["+91 95120 45641"],
   // Appointment lines printed on the hospital brochure
   appointmentLines: ["95120 45641", "95120 45642"],
   appointmentLinesHref: ["tel:+919512045641", "tel:+919512045642"],

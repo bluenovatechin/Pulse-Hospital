@@ -23,12 +23,12 @@ export default function AppointmentSlip({ appointment, lang = 'en' }) {
       `*Slot:* ${appointment.timeSlot}\n` +
       `*Room:* ${appointment.room}\n` +
       `*Location:* 4th Floor, City Centre, Shamlaji Road, Modasa\n` +
-      `*Appointment / WhatsApp Desk:* +91 63533 44875\n` +
+      `*Appointment / WhatsApp Desk:* +91 95120 45641\n` +
       `-----------------------------------------\n` +
       `*Important:* Please bring this file and previous medical reports on your visit.`
     );
-    // Directly targeted to user test WhatsApp number: 63533 44875
-    window.open(`https://api.whatsapp.com/send?phone=916353344875&text=${message}`, '_blank');
+    // Directly targeted to hospital WhatsApp number: 95120 45641
+    window.open(`https://api.whatsapp.com/send?phone=919512045641&text=${message}`, '_blank');
   };
 
   return (
@@ -71,7 +71,7 @@ export default function AppointmentSlip({ appointment, lang = 'en' }) {
                   4th Floor, A-block, City Centre, Shamlaji Road, Modasa
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--brand-olive)', fontWeight: 700 }}>
-                  Helpline & WhatsApp: +91 63533 44875 • 24x7 Emergency Care
+                  Helpline & WhatsApp: +91 95120 45641 • 24x7 Emergency Care
                 </div>
               </div>
             </div>

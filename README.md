@@ -41,7 +41,7 @@ Open **http://localhost:5173**
 1. The patient chooses a doctor, a date from next Monday to Sunday, and a free 30-minute morning or evening slot.
 2. They fill in their name, mobile number and (optionally) age, city, previous file number and symptoms.
 3. On **Book Slot via WhatsApp**, the app:
-   - opens WhatsApp with a ready-made booking message addressed to the hospital desk (`+91 63533 44875`),
+   - opens WhatsApp with a ready-made booking message addressed to the hospital desk (`+91 95120 45641`),
    - opens the booking slip page `/my-appointments/PLS-XXXXXX` (printable, shareable on WhatsApp),
    - saves the booking in the patient's own browser (`localStorage`) so they can see it again under **My appointments**.
 
@@ -55,7 +55,7 @@ The Contact page form works the same way: it opens a WhatsApp message to the hos
 
 All content lives in **[`src/data/hospitalContent.js`](src/data/hospitalContent.js)**: doctors, facilities, departments, the brochure's treatment list, the yearly milestones (`MILESTONES`), photos, phone numbers, the WhatsApp number (`whatsappNumber`) and the address. Edit it there and redeploy.
 
-> **Before launch:** `appointmentNumber` / `whatsappNumber` are currently a **test number** (+91 63533 44875). Bookings, the emergency call buttons and WhatsApp messages all go to it. Replace it with the hospital's real reception number (the brochure lists 95120 45641 / 95120 45642, which are shown as `appointmentLines`).
+> **Hospital Reception Line:** `appointmentNumber` / `whatsappNumber` is `+91 95120 45641` (the brochure also lists secondary line 95120 45642). Bookings, emergency call buttons and WhatsApp messages all go to it.
 
 ### Adding or changing photos
 

@@ -145,13 +145,48 @@ function hospital() {
     '@type': 'Hospital',
     '@id': HOSPITAL_ID,
     name: HOSPITAL_INFO.name,
-    alternateName: [HOSPITAL_INFO.nameGujarati, 'Pulse Hospital Modasa', 'Pulse Hospital and ICU'],
+    alternateName: [
+      HOSPITAL_INFO.nameGujarati,
+      'Pulse Hospital Modasa',
+      'Pulse Hospital and ICU',
+      'Pulse Hospital & I.C.U, Modasa',
+      'પલ્સ હોસ્પિટલ મોડાસા'
+    ],
     slogan: HOSPITAL_INFO.tagline,
     url: SITE_URL,
-    logo: `${SITE_URL}logo-full.png`,
-    image: `${SITE_URL}og-image.jpg`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}logo-full.png`,
+      contentUrl: `${SITE_URL}logo-full.png`,
+      caption: 'Pulse Hospital & I.C.U Logo'
+    },
+    image: [
+      {
+        '@type': 'ImageObject',
+        '@id': `${SITE_URL}#og-image`,
+        url: `${SITE_URL}og-image.jpg`,
+        contentUrl: `${SITE_URL}og-image.jpg`,
+        caption: 'Specialist MD Doctors & 24x7 Critical Care Team at Pulse Hospital & I.C.U Modasa',
+        description: 'Doctors team at Pulse Hospital & I.C.U Modasa: Dr. Nimesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya with 24x7 Ventilator ICU, In-house CT scan, Dialysis and Modular Operation Theatres.',
+        width: 1200,
+        height: 630
+      },
+      {
+        '@type': 'ImageObject',
+        '@id': `${SITE_URL}#doctors-team-photo`,
+        url: `${SITE_URL}doctors-team.jpeg`,
+        contentUrl: `${SITE_URL}doctors-team.jpeg`,
+        caption: 'Consultant Physicians & Critical Care Specialists Team of Pulse Hospital, Modasa',
+        description: 'Senior medical doctors at Pulse Hospital, 4th Floor, City Centre, Shamlaji Road, Modasa'
+      }
+    ],
     telephone,
     address,
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 23.4614,
+      longitude: 73.3031
+    },
     hasMap: HOSPITAL_INFO.mapsUrl,
     isAcceptingNewPatients: true,
     openingHoursSpecification: [
@@ -179,11 +214,53 @@ function physician(d) {
     name: d.name,
     alternateName: d.nameGujarati,
     url: `${SITE_URL}doctors/${d.slug}`,
-    description: `${d.qualification}, ${d.designation}. ${d.bio}`,
-    knowsAbout: d.specialties,
+    jobTitle: d.designation,
+    description: `${d.name} (${d.nameGujarati}): ${d.qualification}, ${d.designation}. ${d.bio} Experience: ${d.experience}. GMC: ${d.gmcNumber || 'Registered'}.`,
+    medicalSpecialty: d.specialties,
+    knowsAbout: [...d.specialties, ...(d.whatTheyDo || [])],
+    alumniOf: d.medicalCollege,
+    identifier: d.gmcNumber,
     hospitalAffiliation: { '@id': HOSPITAL_ID },
+    worksFor: { '@id': HOSPITAL_ID },
+    image: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}doctors-team.jpeg`,
+      contentUrl: `${SITE_URL}doctors-team.jpeg`,
+      caption: `${d.name} - ${d.designation} at Pulse Hospital & I.C.U Modasa`
+    },
     address,
-    telephone
+    telephone: d.mobileFormatted || telephone,
+    availableService: {
+      '@type': 'MedicalProcedure',
+      name: `Consultation with ${d.name}`,
+      description: `${d.timing}. Room: ${d.room}`
+    }
+  };
+}
+
+function siteNavigation() {
+  const links = [
+    { name: 'Doctors & Specialists', description: 'Consultant MD Physicians and Critical Care Specialists in Modasa', url: `${SITE_URL}doctors` },
+    { name: 'Facilities & Infrastructure', description: '30+ Bed ICU, In-house CT Scan, 24x7 Dialysis and Modular OTs', url: `${SITE_URL}facilities` },
+    { name: 'Clinical Departments', description: 'ICU Critical Care, Cardiology, Pulmonology, Nephrology and Emergency', url: `${SITE_URL}departments` },
+    { name: 'Book OPD Appointment', description: 'Book a 30-minute doctor consultation online with direct WhatsApp confirmation', url: `${SITE_URL}book-appointment` },
+    { name: 'About Pulse Hospital', description: '2000+ Critical patients treated in one year at City Centre, Modasa', url: `${SITE_URL}about` },
+    { name: 'Contact & 24x7 Emergency', description: '24x7 Emergency helpline 95120 45641, location map and directions', url: `${SITE_URL}contact` },
+    { name: 'Hospital Photo Tour', description: 'Real photography of ICU ward, operation theatre, rooms and reception', url: `${SITE_URL}gallery` }
+  ];
+
+  return {
+    '@type': 'ItemList',
+    '@id': `${SITE_URL}#sitelinks`,
+    name: 'Pulse Hospital Navigation & Sitelinks',
+    description: 'Quick links to main sections of Pulse Hospital & I.C.U Modasa website',
+    itemListElement: links.map((link, index) => ({
+      '@type': 'SiteNavigationElement',
+      position: index + 1,
+      name: link.name,
+      description: link.description,
+      url: link.url
+    }))
   };
 }
 
@@ -198,7 +275,7 @@ function breadcrumbs(items) {
 export function jsonLdFor(page, param) {
   const { title, description } = getPageMeta(page, param);
   const url = SITE_URL + pagePath(page, param);
-  const dateModified = '2026-10-23T12:00:00+05:30';
+  const dateModified = '2026-10-24T12:00:00+05:30';
 
   const graph = [
     hospital(),
@@ -216,7 +293,17 @@ export function jsonLdFor(page, param) {
   ];
 
   if (page === 'home') {
-    graph.push({ '@type': 'WebSite', '@id': `${SITE_URL}#website`, url: SITE_URL, name: HOSPITAL_INFO.name, inLanguage: ['en-IN', 'gu-IN'] });
+    graph.push({
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}#website`,
+      url: SITE_URL,
+      name: HOSPITAL_INFO.name,
+      alternateName: ['Pulse Hospital Modasa', 'પલ્સ હોસ્પિટલ મોડાસા', 'Pulse Hospital & ICU', 'Pulse Hospital'],
+      description: '24x7 Emergency, Critical Care ICU, CT Scan and Dialysis Hospital in Modasa, Arvalli, Gujarat.',
+      inLanguage: ['en-IN', 'gu-IN'],
+      publisher: { '@id': HOSPITAL_ID }
+    });
+    graph.push(siteNavigation());
     graph.push({
       '@type': 'FAQPage',
       mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
@@ -250,24 +337,39 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').repl
 export function seoHead({ page, param }, base = '/') {
   const { title, description, noindex } = getPageMeta(page, param);
   const url = SITE_URL + pagePath(page, param);
-  const dateModified = '2026-10-23T12:00:00+05:30';
+  const dateModified = '2026-10-24T12:00:00+05:30';
   const n = !param && HERO_PHOTO[page];
   const photo = (w) => `${base}photos/gallery-${n}${w ? `-${w}` : ''}.webp`;
   const preload = n
     ? `\n    <link rel="preload" as="image" href="${photo()}" imagesrcset="${photo(640)} 640w, ${photo(800)} 800w, ${photo()} 1100w" imagesizes="(max-width: 1023px) 100vw, 45vw" fetchpriority="high" />`
     : '';
   const jsonLd = JSON.stringify(jsonLdFor(page, param)).replace(/</g, '\u003c');
+  const ogImgUrl = `${SITE_URL}og-image.jpg`;
+  const ogImgAlt = 'Pulse Hospital & I.C.U Modasa - Specialist Doctors & 24x7 Critical Care Team';
+
   return `<!--seo:start-->
     <title>${esc(title)}</title>
     <meta name="description" content="${esc(description)}" />
-    <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}" />
+    <meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}" />
     <link rel="canonical" href="${url}" />
     <meta property="og:title" content="${esc(title)}" />
     <meta property="og:description" content="${esc(description)}" />
     <meta property="og:url" content="${url}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pulse Hospital & I.C.U Modasa" />
+    <meta property="og:image" content="${ogImgUrl}" />
+    <meta property="og:image:secure_url" content="${ogImgUrl}" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="${ogImgAlt}" />
     <meta property="article:modified_time" content="${dateModified}" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${esc(title)}" />
-    <meta name="twitter:description" content="${esc(description)}" />${preload}
+    <meta name="twitter:description" content="${esc(description)}" />
+    <meta name="twitter:image" content="${ogImgUrl}" />
+    <meta name="twitter:image:alt" content="${ogImgAlt}" />
+    <meta name="image" content="${ogImgUrl}" />${preload}
     <script type="application/ld+json">${jsonLd}</script>
     <!--seo:end-->`;
 }

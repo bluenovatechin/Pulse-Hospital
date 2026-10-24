@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText
+  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText,
+  HeartPulse, Activity, Scan, Droplets, Scissors, Sparkles, ShieldCheck
 } from 'lucide-react';
 import { SectionHead, Media, Icon, Photo, CountUp, delay } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
@@ -12,10 +13,27 @@ import {
 // Facilities featured in the home-page bento grid, in display order
 const FEATURED = ['icu', 'ot', 'ct', 'twin', 'dialysis', 'isolation'];
 
+// Background slider images showcasing real hospital infrastructure
+const HERO_SLIDES = [
+  { src: PHOTOS.icuHall, alt: 'Pulse Hospital ICU Hall' },
+  { src: PHOTOS.ot1, alt: 'Modular Operation Theatre' },
+  { src: PHOTOS.reception, alt: 'Hospital Reception City Centre' },
+  { src: PHOTOS.twinRoom, alt: 'Patient Care Rooms' }
+];
+
 export default function HomePage({ lang = 'en' }) {
   const [openFaq, setOpenFaq] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
+
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const featured = FEATURED.map(getFacility).filter(Boolean);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   const toggleFaq = (index) => {
     setOpenFaq((prev) => (prev === index ? -1 : index));
@@ -23,62 +41,122 @@ export default function HomePage({ lang = 'en' }) {
 
   return (
     <div>
-      {/* ---------- Hero ---------- */}
-      <section className="home-hero">
-        <div className="container-wide home-hero-grid">
-          <div className="page-enter">
-            <span className="status-pill">
+      {/* ---------- Hero with Background Slider (100% View Height on Mobile) ---------- */}
+      <section
+        className="home-hero home-hero--slider"
+        aria-label={t('Pulse Hospital Introduction', 'પલ્સ હોસ્પિટલ પરિચય')}
+      >
+        {/* Background Slides */}
+        <div className="hero-slider-bg" aria-hidden="true">
+          {HERO_SLIDES.map((slide, index) => (
+            <div
+              key={slide.src}
+              className={`hero-slide-item ${index === activeSlide ? 'is-active' : ''}`}
+            >
+              <Photo
+                src={slide.src}
+                alt={slide.alt}
+                eager={index === 0}
+                sizes="100vw"
+                className="hero-slide-img"
+              />
+            </div>
+          ))}
+          {/* Subtle balanced overlay for photo vibrancy and text contrast */}
+          <div className="hero-slider-overlay" />
+        </div>
+
+        {/* Foreground Content */}
+        <div className="container-wide home-hero-content">
+          <div className="hero-compact-wrap page-enter">
+            {/* Top Badge: Live Status & Location with Icon */}
+            <div className="hero-status-pill">
               <span className="live-beacon" aria-hidden="true" />
-              {t('Emergency & ICU open now · 24x7', 'ઇમરજન્સી & ICU હમણાં ખુલ્લું · ૨૪x૭')}
-            </span>
-            <h1>
-              {lang === 'en'
-                ? <>Critical care, <em>close to home</em> in Modasa</>
-                : <>મોડાસામાં જ, <em>ઘરની નજીક</em> ગંભીર સારવાર</>}
+              <HeartPulse size={14} className="hero-status-icon" aria-hidden="true" />
+              <span>{t('24x7 Emergency & ICU · Modasa', '૨૪x૭ ઇમરજન્સી & ICU · મોડાસા')}</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="hero-title">
+              {lang === 'en' ? (
+                <>Critical care, <span className="hero-title-accent">close to home</span> in Modasa</>
+              ) : (
+                <>મોડાસામાં જ, <span className="hero-title-accent">ઘરની નજીક</span> ગંભીર સારવાર</>
+              )}
             </h1>
-            <p className="lead">
+
+            {/* Lead text */}
+            <p className="hero-description">
               {t(
-                'Pulse Hospital & I.C.U brings a ventilator ICU, in-house CT scan, 24x7 dialysis, modular operation theatres and senior MD physicians together on one floor at City Centre, Shamlaji Road.',
-                'વેન્ટીલેટર ICU, ઈન-હાઉસ સીટી સ્કેન, ૨૪ કલાક ડાયાલીસીસ, મોડ્યુલર ઓપરેશન થીયેટર અને અનુભવી એમ.ડી. ડોક્ટરો: બધું સીટી સેન્ટર, શામળાજી રોડ પર એક જ માળે.'
+                'Ventilator ICU, in-house CT scan, 24x7 dialysis & senior MD physicians at City Centre, Modasa.',
+                'વેન્ટીલેટર ICU, ઈન-હાઉસ સીટી સ્કેન, ૨૪ કલાક ડાયાલીસીસ અને અનુભવી MD ફિઝિશિયન: સીટી સેન્ટર, મોડાસા.'
               )}
             </p>
-            <div className="hero-ctas">
-              <Link to="book-appointment" className="btn btn-primary btn-lg">
-                <Calendar size={18} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-              </Link>
-              <Link to="facilities" className="btn btn-secondary btn-lg">
-                {t('Explore facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={18} />
-              </Link>
-            </div>
-            <div className="milestones">
-              <span className="milestones-period">{t(MILESTONES.period, MILESTONES.periodGu)}</span>
-              <dl className="hero-facts">
-                {MILESTONES.items.map((m) => (
-                  <div key={m.en}><dt><CountUp value={m.value} /></dt><dd>{t(m.en, m.gu)}</dd></div>
-                ))}
-              </dl>
-              <p className="milestones-note gujarati-text">{MILESTONES.noteGu}</p>
-            </div>
-          </div>
 
-          <div className="hero-collage page-enter" style={{ animationDelay: '90ms' }}>
-            <div className="hero-frame">
-              <Photo src={PHOTOS.icuHall} alt={t('ICU hall with ventilators at Pulse Hospital, Modasa', 'પલ્સ હોસ્પિટલ, મોડાસાનું વેન્ટીલેટર ICU')} eager sizes="(max-width: 1023px) 100vw, 45vw" />
+            {/* Key Clinical Capabilities (Desktop only - hidden on mobile to guarantee 100% viewport fit) */}
+            <div className="hero-capabilities desktop-only" aria-label={t('Key hospital infrastructure', 'મુખ્ય સુવિધાઓ')}>
+              <div className="cap-pill">
+                <Activity size={13} className="cap-icon" />
+                <span>{t('30+ ICU & Ventilators', '૩૦+ ICU & વેન્ટિલેટર')}</span>
+              </div>
+              <div className="cap-pill">
+                <Scan size={13} className="cap-icon" />
+                <span>{t('In-house CT Scan', 'ઈન-હાઉસ CT સ્કેન')}</span>
+              </div>
+              <div className="cap-pill">
+                <Droplets size={13} className="cap-icon" />
+                <span>{t('24x7 Dialysis', '૨૪ કલાક ડાયાલિસીસ')}</span>
+              </div>
+              <div className="cap-pill">
+                <Scissors size={13} className="cap-icon" />
+                <span>{t('Modular OTs', 'મોડ્યુલર OT')}</span>
+              </div>
             </div>
-            <div className="hero-collage-inset">
-              <Photo src={PHOTOS.ot1} alt={t('Modular operation theatre', 'મોડ્યુલર ઓપરેશન થીયેટર')} sizes="20vw" />
-            </div>
-            <aside className="er-card" aria-label={t('Emergency contact', 'ઇમરજન્સી સંપર્ક')}>
-              <span className="er-top"><Siren size={16} /> {t('Emergency · 24x7', 'ઇમરજન્સી · ૨૪x૭')}</span>
-              <span className="er-num">{HOSPITAL_INFO.appointmentNumber}</span>
-              <small>{t('A doctor is on the floor day and night. No appointment needed.', 'ડૉક્ટર ૨૪ કલાક હાજર. એપોઇન્ટમેન્ટની જરૂર નથી.')}</small>
-              <a className="btn btn-emergency btn-block" href={HOSPITAL_INFO.phoneHref}>
-                <Phone size={17} /> {t('Call now', 'હમણાં કૉલ કરો')}
+
+            {/* Minimized, Streamlined Buttons (Zero horizontal overflow on mobile) */}
+            <div className="hero-action-buttons">
+              <Link to="book-appointment" className="btn btn-hero-primary">
+                <Calendar size={15} /> <span>{t('Book Appointment', 'એપોઇન્ટમેન્ટ')}</span>
+              </Link>
+              <a href={HOSPITAL_INFO.phoneHref} className="btn btn-hero-emergency">
+                <Phone size={14} /> <span>{t('24/7 Emergency', '૨૪x૭ ઇમરજન્સી')}</span>
               </a>
-            </aside>
+              <Link to="facilities" className="btn btn-hero-outline desktop-only">
+                {t('Explore facilities', 'સુવિધાઓ જુઓ')} <ArrowRight size={15} />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* ---------- Milestone Stats (Right Below Hero Fold) ---------- */}
+      <div className="hero-milestones-bar">
+        <div className="container-wide">
+          <div className="metrics-strip-card">
+            <div className="metrics-intro">
+              <span className="metrics-period-badge">
+                <Sparkles size={13} /> {t(MILESTONES.period, MILESTONES.periodGu)}
+              </span>
+              <p className="metrics-trust-label gujarati-text">{MILESTONES.noteGu}</p>
+            </div>
+            <div className="metrics-grid">
+              {MILESTONES.items.map((m, idx) => {
+                const icons = [HeartPulse, Users, ShieldCheck];
+                const IconCmp = icons[idx] || Activity;
+                return (
+                  <div key={m.en} className="metric-item">
+                    <div className="metric-icon-wrap"><IconCmp size={15} /></div>
+                    <div className="metric-info">
+                      <span className="metric-value"><CountUp value={m.value} /></span>
+                      <span className="metric-title">{t(m.en, m.gu)}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ---------- Quick actions ---------- */}
       <div className="container-wide quick-actions">
