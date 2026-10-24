@@ -1,0 +1,82 @@
+# Pulse Hospital & I.C.U, Modasa
+
+> Pulse Hospital & I.C.U (પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.) is a leading 24x7 multi-specialty critical care hospital located at City Centre, Shamlaji Road, Modasa, Arvalli district, Gujarat, India. It provides advanced ventilator ICU care, in-house spiral CT scanning, round-the-clock hemodialysis, and modular operation theatres led by senior MD physicians and critical care specialists.
+
+## Core Hospital Details
+- **Official Name**: Pulse Hospital & I.C.U
+- **Gujarati Name**: પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.
+- **Tagline**: Caring For Life (જીવનની સંભાળ, આપણો વિશ્વાસ)
+- **Address**: 4th Floor, A-Block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315, Gujarat, India
+- **Emergency Helpline & OPD Desk**: +91 95120 45641 / +91 95120 45642
+- **WhatsApp Appointment Booking**: +91 95120 45641 (https://wa.me/919512045641)
+- **Emergency & ICU Operations**: Open 24 hours a day, 7 days a week, 365 days a year
+- **Regular OPD Consultation Hours**: Monday to Saturday, 09:00 AM – 01:30 PM & 04:30 PM – 08:00 PM
+- **Official Website**: https://bluenovatechin.github.io/Pulse-Hospital/
+
+## Specialist Doctors & Medical Team
+1. **Dr. Nimesh S. Patel**
+   - **Qualification**: MD (Medicine), Sumandeep Vidyapeeth, Vadodara
+   - **Designation**: Consultant Physician & Critical Care Specialist
+   - **GMC Registration**: G-28880
+   - **Experience**: 14+ Years
+   - **Specialties**: General Internal Medicine, Diabetes & Thyroid Disorders, Hypertension (BP), Adult ICU Critical Care, Sepsis & Fever Management
+   - **OPD Timing**: Monday to Saturday (09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM)
+   - **Room**: OPD Suite 401, 4th Floor City Centre, Modasa
+
+2. **Dr. Naimuddin N. Kazi**
+   - **Qualification**: MD (Medicine), B.J. Medical College, Ahmedabad
+   - **Designation**: Consultant Physician & Intensive Care Specialist
+   - **GMC Registration**: G-20989
+   - **Experience**: 16+ Years
+   - **Specialties**: Multi-system Infectious Diseases, Liver Disease, Renal/Kidney Health, Septic Shock, Geriatric Medicine
+   - **OPD Timing**: Monday to Saturday (09:30 AM - 01:30 PM & 05:00 PM - 08:00 PM)
+   - **Room**: OPD Suite 402, 4th Floor City Centre, Modasa
+
+3. **Dr. Paras H. Patel**
+   - **Qualification**: MD (Medicine), GCS Medical College, Ahmedabad
+   - **Designation**: Consultant Physician & Cardio-Metabolic Expert
+   - **GMC Registration**: G-33212
+   - **Experience**: 12+ Years
+   - **Specialties**: Preventive Cardiology, Acute Hypertensive Crises, Stroke & Neuro Recovery, Metabolic Diseases, Emergency Trauma
+   - **OPD Timing**: Monday to Saturday (10:00 AM - 01:30 PM & 04:30 PM - 07:30 PM)
+   - **Room**: OPD Suite 403, 4th Floor City Centre, Modasa
+
+4. **Dr. Santosh J. Prajapati**
+   - **Qualification**: MBBS, DTCD, FICCM, B.J. Medical College, Ahmedabad
+   - **Designation**: Consultant Chest Physician & Pulmonologist
+   - **GMC Registration**: G-0421
+   - **Experience**: 15+ Years
+   - **Specialties**: Pulmonology, Fiberoptic Bronchoscopy, Asthma & COPD, Overnight Sleep Study (Polysomnography), Pleural Effusion Thoracentesis, ICU Ventilator Care
+   - **OPD Timing**: Monday to Saturday (09:00 AM - 01:00 PM & 04:00 PM - 07:00 PM)
+   - **Room**: Pulmonology Lab & OPD 404, 4th Floor City Centre, Modasa
+
+5. **Dr. Pulkit Pandya**
+   - **Qualification**: MBBS, CCEBDM
+   - **Designation**: Resident Medical Officer (Critical Care)
+   - **Experience**: 7+ Years
+   - **Specialties**: Trauma Resuscitation, Dialysis Monitoring, Post-Surgical ICU Recovery, Acute Poisoning & Antidote Protocols
+   - **Availability**: 24x7 in Emergency & ICU Rotation
+
+## Key Facilities & Medical Infrastructure
+- **30+ Bed Intensive Care Unit (ICU)**: Multi-parameter hemodynamic monitors, invasive and non-invasive mechanical ventilators, central oxygen, arterial line blood pressure monitoring, isolation cubicle for immunocompromised patients.
+- **In-House High-Speed CT Scan**: Available round-the-clock for stroke assessment within golden hour, polytrauma, abdominal pain, and thoracic emergencies.
+- **24x7 Hemodialysis Unit**: Modern dialysis machines with automated bicarbonate delivery, dedicated reverse osmosis (RO) ultra-pure water plant, and isolated station for seropositive patients.
+- **Twin Modular Operation Theatres**: Laminar airflow, HEPA filtration, C-arm fluoroscopy, harmonic scalpel, and advanced anesthesia workstations.
+- **In-House Pathology Laboratory**: Automated hematology, biochemistry, ABG (Arterial Blood Gas), electrolytes, and cardiac biomarker testing.
+- **In-House Pharmacy**: Open 24 hours for emergency and inpatient medications.
+- **Patient Rooms**: Air-conditioned deluxe private suites and semi-private twin sharing rooms.
+
+## Verified Yearly Milestones
+- **Critical Patients Treated in ICU**: 2,000+
+- **Outpatient (OPD) Consultations**: 5,000+
+- **Complicated Surgeries & Interventions**: 70+
+
+## Important Website URLs & Sitelinks
+- Home Page: https://bluenovatechin.github.io/Pulse-Hospital/
+- Specialist Doctors: https://bluenovatechin.github.io/Pulse-Hospital/doctors
+- Medical Facilities: https://bluenovatechin.github.io/Pulse-Hospital/facilities
+- Clinical Departments: https://bluenovatechin.github.io/Pulse-Hospital/departments
+- Book OPD Appointment: https://bluenovatechin.github.io/Pulse-Hospital/book-appointment
+- Hospital Photo Tour: https://bluenovatechin.github.io/Pulse-Hospital/gallery
+- About Pulse Hospital: https://bluenovatechin.github.io/Pulse-Hospital/about
+- Emergency & Contact: https://bluenovatechin.github.io/Pulse-Hospital/contact
