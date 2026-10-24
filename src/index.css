@@ -1478,9 +1478,9 @@ button.card {
   min-height: calc(100dvh - var(--header-h, 72px) - 34px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 32px 0;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 40px 0 64px;
   background-color: #041d20;
   color: #ffffff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1518,17 +1518,17 @@ button.card {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 35%;
+  object-position: center 50%;
   filter: saturate(1.1) brightness(0.96);
 }
 
-/* Balanced overlay: The hospital photography (ICU, OT, beds) is vibrantly visible while text stays 100% legible */
+/* Balanced overlay: Left-heavy gradient provides crisp text contrast on the left, while right side stays transparent for vibrant hospital photo */
 .hero-slider-overlay {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(3, 24, 26, 0.52) 0%, rgba(3, 24, 26, 0.32) 40%, rgba(3, 24, 26, 0.76) 100%),
-    radial-gradient(circle at center, transparent 35%, rgba(3, 24, 26, 0.55) 100%);
+    linear-gradient(90deg, rgba(3, 24, 26, 0.82) 0%, rgba(3, 24, 26, 0.62) 48%, rgba(3, 24, 26, 0.22) 100%),
+    linear-gradient(180deg, rgba(3, 24, 26, 0.4) 0%, transparent 40%, rgba(3, 24, 26, 0.75) 100%);
   pointer-events: none;
 }
 
@@ -1537,19 +1537,19 @@ button.card {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 860px;
+  max-width: var(--container-max, 1280px);
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 32px;
   box-sizing: border-box;
 }
 
 .hero-compact-wrap {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: 740px;
-  margin: 0 auto;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 680px;
+  margin: 0;
   width: 100%;
 }
 
@@ -1637,7 +1637,8 @@ button.card {
   line-height: 1.55;
   color: rgba(255, 255, 255, 0.94);
   max-width: 580px;
-  margin: 12px auto 0;
+  margin: 14px 0 0;
+  text-align: left;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -1645,9 +1646,9 @@ button.card {
 .hero-capabilities {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .cap-pill {
@@ -1682,11 +1683,11 @@ button.card {
 .hero-action-buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   width: 100%;
-  max-width: 480px;
-  margin: 22px auto 0;
+  max-width: 540px;
+  margin: 22px 0 0;
 }
 
 .hero-action-buttons .btn {
@@ -1760,37 +1761,43 @@ button.card {
   }
 
   .home-hero.home-hero--slider {
-    /* Exact 100% viewport height above the fold, perfectly centered */
+    /* Exact 100% viewport height, positioned in lower half on the left side */
     height: calc(100dvh - var(--header-h, 72px) - 34px);
     min-height: 440px;
     max-height: calc(100dvh - 100px);
-    padding: 0 16px;
+    padding: 24px 20px clamp(28px, 6vh, 46px) 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: left;
     overflow: hidden;
   }
 
-  /* Vibrant photo overlay on mobile */
+  /* Vibrant photo overlay on mobile with bottom-weighted shadow for crisp text contrast */
   .hero-slider-overlay {
     background:
-      linear-gradient(180deg, rgba(3, 24, 26, 0.5) 0%, rgba(3, 24, 26, 0.28) 40%, rgba(3, 24, 26, 0.74) 100%);
+      linear-gradient(180deg, rgba(3, 24, 26, 0.32) 0%, rgba(3, 24, 26, 0.52) 40%, rgba(3, 24, 26, 0.9) 100%),
+      linear-gradient(90deg, rgba(3, 24, 26, 0.65) 0%, rgba(3, 24, 26, 0.25) 100%);
   }
 
   .home-hero-content {
     padding: 0;
+    width: 100%;
   }
 
   .hero-compact-wrap {
-    padding: 0 4px;
+    align-items: flex-start;
+    text-align: left;
+    padding: 0;
+    max-width: 100%;
   }
 
   .hero-status-pill {
     padding: 5px 12px 5px 9px;
     font-size: 11.5px;
     margin-bottom: 10px;
+    align-self: flex-start;
   }
 
   .hero-status-pill .live-beacon {
@@ -1799,49 +1806,47 @@ button.card {
   }
 
   .hero-title {
-    font-size: clamp(22px, 6.2vw, 29px) !important;
+    font-size: clamp(23px, 6.4vw, 30px) !important;
     line-height: 1.2 !important;
+    text-align: left !important;
   }
 
   .hero-description {
     font-size: 13.5px;
     line-height: 1.48;
-    max-width: 320px;
-    margin: 10px auto 0;
+    max-width: 340px;
+    margin: 10px 0 0;
+    text-align: left;
   }
 
   .hero-capabilities {
     display: none !important;
   }
 
-  /* Compact side-by-side buttons: strictly fit within mobile width with zero overflow */
+  /* Compact side-by-side buttons aligned to the left */
   .hero-action-buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
     width: 100%;
-    max-width: 330px;
-    margin: 18px auto 0;
+    max-width: 360px;
+    margin: 18px 0 0;
   }
 
   .hero-action-buttons .btn {
     flex: 1 1 0;
     min-width: 0;
-    padding: 10px 8px;
+    padding: 11px 12px;
     font-size: 12.5px;
     letter-spacing: -0.01em;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   .hero-action-buttons .btn svg {
     flex-shrink: 0;
-  }
-
-  .hero-action-buttons .btn span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
