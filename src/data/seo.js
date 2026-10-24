@@ -164,8 +164,8 @@ function hospital() {
       {
         '@type': 'ImageObject',
         '@id': `${SITE_URL}#og-image`,
-        url: `${SITE_URL}og-image.jpg`,
-        contentUrl: `${SITE_URL}og-image.jpg`,
+        url: `${SITE_URL}og-image.png`,
+        contentUrl: `${SITE_URL}og-image.png`,
         caption: 'Specialist MD Doctors & 24x7 Critical Care Team at Pulse Hospital & I.C.U Modasa',
         description: 'Doctors team at Pulse Hospital & I.C.U Modasa: Dr. Nimesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya with 24x7 Ventilator ICU, In-house CT scan, Dialysis and Modular Operation Theatres.',
         width: 1200,
@@ -344,7 +344,7 @@ export function seoHead({ page, param }, base = '/') {
     ? `\n    <link rel="preload" as="image" href="${photo()}" imagesrcset="${photo(640)} 640w, ${photo(800)} 800w, ${photo()} 1100w" imagesizes="(max-width: 1023px) 100vw, 45vw" fetchpriority="high" />`
     : '';
   const jsonLd = JSON.stringify(jsonLdFor(page, param)).replace(/</g, '\u003c');
-  const ogImgUrl = `${SITE_URL}og-image.jpg`;
+  const ogImgUrl = `${SITE_URL}og-image.png`;
   const ogImgAlt = 'Pulse Hospital & I.C.U Modasa - Specialist Doctors & 24x7 Critical Care Team';
 
   return `<!--seo:start-->
@@ -359,7 +359,7 @@ export function seoHead({ page, param }, base = '/') {
     <meta property="og:site_name" content="Pulse Hospital & I.C.U Modasa" />
     <meta property="og:image" content="${ogImgUrl}" />
     <meta property="og:image:secure_url" content="${ogImgUrl}" />
-    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${ogImgAlt}" />
