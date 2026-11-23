@@ -25,7 +25,11 @@ export default function FacilityPage({ facility: f, lang = 'en' }) {
         text={t(f.summary, f.summaryGu || f.summary)}
         photo={f.photo}
         photoAlt={f.name}
-        aside={f.photo ? null : <Media icon={f.icon} className="hero-frame hero-art" iconSize={88} />}
+        aside={f.photo ? null : (
+          <Media icon={f.icon} className="hero-frame hero-art" iconSize={84}>
+            <span className="hero-art-label">{lang === 'en' ? f.name : f.nameGu}</span>
+          </Media>
+        )}
         facts={[
           { value: f.is24x7 ? '24x7' : 'OPD', label: f.is24x7 ? t('Open day and night', 'દિવસ-રાત ખુલ્લું') : t('Mon – Sat hours', 'સોમ – શનિ સમય') },
           { value: `${f.includes.length}`, label: t('Services included', 'સમાવિષ્ટ સેવાઓ') },

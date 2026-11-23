@@ -49,14 +49,12 @@ export default function DepartmentsPage({ lang = 'en' }) {
               const doctors = d.doctorIds.map(getDoctor).filter(Boolean);
               return (
                 <Link key={d.id} to="departments" param={d.id} className="card card-hover dept-card" data-reveal style={delay(i, 50)}>
-                  {d.photo ? (
-                    <span className="dept-card-photo">
-                      <Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" />
-                      <span className="icon-tile mint"><Icon name={d.icon} size={22} /></span>
-                    </span>
-                  ) : (
+                  <span className={`dept-card-photo ${d.photo ? '' : 'is-art'}`}>
+                    {d.photo
+                      ? <Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" />
+                      : <span className="dept-art" aria-hidden="true"><Icon name={d.icon} size={48} strokeWidth={1.3} /></span>}
                     <span className="icon-tile mint"><Icon name={d.icon} size={22} /></span>
-                  )}
+                  </span>
                   <h2>{lang === 'en' ? d.title : d.titleGujarati}</h2>
                   <span className="gujarati-text muted dept-card-sub">{lang === 'en' ? d.titleGujarati : d.title}</span>
                   <p>{d.intro}</p>

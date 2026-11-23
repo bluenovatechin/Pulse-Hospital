@@ -12,7 +12,8 @@ export default function DepartmentPage({ department: d, lang = 'en' }) {
   const title = lang === 'en' ? d.title : (d.titleGujarati || d.title);
   const doctors = d.doctorIds.map(getDoctor).filter(Boolean);
   const facilities = d.facilityIds.map(getFacility).filter(Boolean);
-  const photo = facilities.find((f) => f.photo)?.photo;
+  // Only a photo that really shows this department (see DEPARTMENTS[].photo)
+  const photo = d.photo;
   const bookable = doctors.find((doc) => doc.type === 'visiting');
   const isEmergency = d.id === 'emergency';
   const others = DEPARTMENTS.filter((x) => x.id !== d.id);
@@ -26,7 +27,11 @@ export default function DepartmentPage({ department: d, lang = 'en' }) {
         text={d.intro}
         photo={photo}
         photoAlt={d.title}
-        aside={photo ? null : <Media icon={d.icon} className="hero-frame hero-art" iconSize={88} />}
+        aside={photo ? null : (
+          <Media icon={d.icon} className="hero-frame hero-art" iconSize={84}>
+            <span className="hero-art-label">{lang === 'en' ? d.title : d.titleGujarati}</span>
+          </Media>
+        )}
         facts={[
           { value: `${d.conditions.length}`, label: t('Conditions treated', 'સારવાર થતી બીમારીઓ') },
           { value: `${doctors.length || '–'}`, label: t('Doctors', 'ડૉક્ટરો') },

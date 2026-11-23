@@ -13,7 +13,7 @@ export const NAV_LINKS = [
   { id: 'facilities', en: 'Facilities', gu: 'સુવિધાઓ', icon: Building2 },
   { id: 'departments', en: 'Departments', gu: 'વિભાગો', icon: Stethoscope },
   { id: 'doctors', en: 'Doctors', gu: 'ડૉક્ટરો', icon: Users },
-  { id: 'gallery', en: 'Hospital Tour', gu: 'ગેલેરી', icon: Images },
+  { id: 'gallery', en: 'Gallery', gu: 'ગેલેરી', icon: Images },
   { id: 'about', en: 'About', gu: 'અમારા વિશે', icon: Info },
   { id: 'contact', en: 'Contact', gu: 'સંપર્ક', icon: Mail }
 ];
@@ -26,11 +26,15 @@ const CLOSE_MS = 260;
 /** Compact doctor row used in the desktop dropdown and the mobile menu */
 function DoctorMenuCard({ d, lang, onClick }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
+  const hospName = d.hospital ? (lang === 'en' ? d.hospital.split(',')[0] : (d.hospitalGujarati || d.hospital).split(',')[0]) : null;
   return (
     <Link to="doctors" param={d.slug} className="menu-doc" onClick={onClick}>
       <Avatar doctor={d} size="sm" />
       <span className="menu-doc-text">
-        <strong>{lang === 'en' ? d.name : d.nameGujarati}</strong>
+        <span className="menu-doc-top">
+          <strong>{lang === 'en' ? d.name : d.nameGujarati}</strong>
+          {hospName && <span className="menu-doc-hosp">{hospName}</span>}
+        </span>
         {d.qualification && <span className="menu-doc-qual">{d.qualification}</span>}
         <span className="menu-doc-role">{t(d.designation, d.designationGujarati || d.designation)}</span>
         <span className="menu-doc-link">{t('View profile', 'પ્રોફાઇલ જુઓ')} <ArrowRight size={13} /></span>
@@ -39,20 +43,28 @@ function DoctorMenuCard({ d, lang, onClick }) {
   );
 }
 
-/** One collapsible section of the mobile menu */
-function MenuGroup({ id, label, icon: I, open, onToggle, style, children }) {
+/**
+ * One section of the mobile menu. Tapping the name opens that page
+ * (e.g. /doctors); the arrow button beside it shows the quick list.
+ */
+function MenuGroup({ id, label, icon: I, to, active, onNavigate, open, onToggle, style, showLabel, hideLabel, children }) {
   return (
     <div className={`mm-group ${open ? 'is-open' : ''}`} style={style}>
-      <button
-        type="button"
-        className="mm-item mm-toggle"
-        aria-expanded={open}
-        aria-controls={`mm-${id}`}
-        onClick={onToggle}
-      >
-        <I size={18} /> <span>{label}</span>
-        <ChevronDown size={18} className="mm-chev" aria-hidden="true" />
-      </button>
+      <div className={`mm-item mm-split ${active ? 'is-active' : ''}`}>
+        <Link to={to} className="mm-split-link" onClick={onNavigate} aria-current={active ? 'page' : undefined}>
+          <I size={18} /> <span>{label}</span>
+        </Link>
+        <button
+          type="button"
+          className="mm-split-toggle"
+          aria-expanded={open}
+          aria-controls={`mm-${id}`}
+          aria-label={open ? hideLabel : showLabel}
+          onClick={onToggle}
+        >
+          <ChevronDown size={20} className="mm-chev" aria-hidden="true" />
+        </button>
+      </div>
       <div className="mm-collapse" id={`mm-${id}`} role="region" aria-label={label}>
         <div className="mm-collapse-inner">{children}</div>
       </div>
@@ -172,6 +184,11 @@ export default function Navbar({ activePage, lang, setLang }) {
           </nav>
 
           <div className="header-actions">
+            <a href={HOSPITAL_INFO.phoneHref} className="btn-header-emergency hide-md" title={t('24x7 Emergency Call', '૨૪x૭ ઇમરજન્સી કૉલ')}>
+              <span className="live-beacon-red" aria-hidden="true" />
+              <Phone size={14} />
+              <span>{t('24×7 Emergency', '૨૪x૭ ઇમરજન્સી')}</span>
+            </a>
             <Link to="book-appointment" className="btn btn-primary header-book" style={{ padding: '11px 18px', fontSize: 14 }}>
               <Calendar size={16} />
               {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
@@ -207,24 +224,25 @@ export default function Navbar({ activePage, lang, setLang }) {
                 <Home size={18} /> <span>{t('Home', 'મુખ્ય પૃષ્ઠ')}</span>
               </Link>
 
-              <MenuGroup id="about" label={t('About Us', 'અમારા વિશે')} icon={Info} open={openGroup === 'about'} onToggle={() => toggleGroup('about')} style={stagger(1)}>
-                <ul className="mm-links">
-                  <li><Link to="about" onClick={close} aria-current={activePage === 'about' ? 'page' : undefined}><Info size={16} /> {t('About Pulse Hospital', 'પલ્સ હોસ્પિટલ વિશે')}</Link></li>
-                  <li><Link to="gallery" onClick={close} aria-current={activePage === 'gallery' ? 'page' : undefined}><Images size={16} /> {t('Hospital tour & photos', 'હોસ્પિટલ ટૂર અને ફોટા')}</Link></li>
-                  <li><Link to="contact" onClick={close} aria-current={activePage === 'contact' ? 'page' : undefined}><Mail size={16} /> {t('Contact & directions', 'સંપર્ક અને સરનામું')}</Link></li>
-                </ul>
-              </MenuGroup>
-
-              <MenuGroup id="doctors" label={t('Our Doctors', 'અમારા ડૉક્ટરો')} icon={Users} open={openGroup === 'doctors'} onToggle={() => toggleGroup('doctors')} style={stagger(2)}>
+              <MenuGroup
+                id="doctors" to="doctors" icon={Users} style={stagger(1)}
+                label={t('Our Doctors', 'અમારા ડૉક્ટરો')}
+                active={activePage === 'doctors'} onNavigate={close}
+                open={openGroup === 'doctors'} onToggle={() => toggleGroup('doctors')}
+                showLabel={t('Show doctors list', 'ડૉક્ટરોની યાદી બતાવો')} hideLabel={t('Hide doctors list', 'યાદી છુપાવો')}
+              >
                 <div className="mm-docs">
                   {DOCTORS.map((d) => <DoctorMenuCard key={d.id} d={d} lang={lang} onClick={close} />)}
                 </div>
-                <Link to="doctors" className="mm-all" onClick={close}>
-                  {t('View all doctors & timetable', 'બધા ડૉક્ટરો અને સમયપત્રક')} <ArrowRight size={15} />
-                </Link>
               </MenuGroup>
 
-              <MenuGroup id="facilities" label={t('Facilities', 'સુવિધાઓ')} icon={Building2} open={openGroup === 'facilities'} onToggle={() => toggleGroup('facilities')} style={stagger(3)}>
+              <MenuGroup
+                id="facilities" to="facilities" icon={Building2} style={stagger(2)}
+                label={t('Facilities', 'સુવિધાઓ')}
+                active={activePage === 'facilities'} onNavigate={close}
+                open={openGroup === 'facilities'} onToggle={() => toggleGroup('facilities')}
+                showLabel={t('Show facilities list', 'સુવિધાઓની યાદી બતાવો')} hideLabel={t('Hide facilities list', 'યાદી છુપાવો')}
+              >
                 <ul className="mm-links mm-links-2">
                   {MENU_FACILITIES.map((id) => FACILITIES.find((f) => f.id === id)).filter(Boolean).map((f) => (
                     <li key={f.id}>
@@ -233,11 +251,17 @@ export default function Navbar({ activePage, lang, setLang }) {
                   ))}
                 </ul>
                 <Link to="facilities" className="mm-all" onClick={close}>
-                  {t(`All ${FACILITIES.length} facilities`, 'બધી સુવિધાઓ')} <ArrowRight size={15} />
+                  {t(`See all ${FACILITIES.length} facilities`, 'બધી સુવિધાઓ જુઓ')} <ArrowRight size={15} />
                 </Link>
               </MenuGroup>
 
-              <MenuGroup id="departments" label={t('Departments', 'વિભાગો')} icon={Stethoscope} open={openGroup === 'departments'} onToggle={() => toggleGroup('departments')} style={stagger(4)}>
+              <MenuGroup
+                id="departments" to="departments" icon={Stethoscope} style={stagger(3)}
+                label={t('Departments', 'વિભાગો')}
+                active={activePage === 'departments'} onNavigate={close}
+                open={openGroup === 'departments'} onToggle={() => toggleGroup('departments')}
+                showLabel={t('Show departments list', 'વિભાગોની યાદી બતાવો')} hideLabel={t('Hide departments list', 'યાદી છુપાવો')}
+              >
                 <ul className="mm-links mm-links-2">
                   {DEPARTMENTS.map((d) => (
                     <li key={d.id}>
@@ -247,12 +271,21 @@ export default function Navbar({ activePage, lang, setLang }) {
                 </ul>
               </MenuGroup>
 
-              <Link to="my-appointments" className="mm-item" style={stagger(5)} aria-current={activePage === 'my-appointments' ? 'page' : undefined} onClick={close}>
+              <Link to="gallery" className="mm-item" style={stagger(4)} aria-current={activePage === 'gallery' ? 'page' : undefined} onClick={close}>
+                <Images size={18} /> <span>{t('Photo Gallery', 'ફોટો ગેલેરી')}</span>
+              </Link>
+              <Link to="about" className="mm-item" style={stagger(5)} aria-current={activePage === 'about' ? 'page' : undefined} onClick={close}>
+                <Info size={18} /> <span>{t('About Us', 'અમારા વિશે')}</span>
+              </Link>
+              <Link to="contact" className="mm-item" style={stagger(6)} aria-current={activePage === 'contact' ? 'page' : undefined} onClick={close}>
+                <Mail size={18} /> <span>{t('Contact & Directions', 'સંપર્ક અને સરનામું')}</span>
+              </Link>
+              <Link to="my-appointments" className="mm-item" style={stagger(7)} aria-current={activePage === 'my-appointments' ? 'page' : undefined} onClick={close}>
                 <UserCheck size={18} /> <span>{t('Check / Cancel My Booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}</span>
               </Link>
             </nav>
 
-            <div className="mm-actions" style={stagger(6)}>
+            <div className="mm-actions" style={stagger(8)}>
               <Link to="book-appointment" className="btn btn-primary btn-lg" onClick={close}>
                 <Calendar size={18} /> {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
               </Link>
