@@ -14,7 +14,7 @@
 - **Official Website**: https://bluenovatechin.github.io/Pulse-Hospital/
 
 ## Specialist Doctors & Medical Team
-1. **Dr. Nimesh S. Patel**
+1. **Dr. Dipesh S. Patel**
    - **Qualification**: MD (Medicine), Sumandeep Vidyapeeth, Vadodara
    - **Designation**: Consultant Physician & Critical Care Specialist
    - **GMC Registration**: G-28880
