@@ -61,6 +61,10 @@ export const HOSPITAL_INFO = {
 // --------------------------------------------------------
 const ASSET_BASE = import.meta.env?.BASE_URL ?? "/";
 const photo = (n) => `${ASSET_BASE}photos/gallery-${n}.webp`;
+// Doctor portraits: square 800x800 webp in public/doctors/<slug>.webp.
+// Set a doctor's `photo: doctorPhoto("<slug>")` once the file is added;
+// until then (or if it fails to load) the coloured initials are shown.
+const doctorPhoto = (slug) => `${ASSET_BASE}doctors/${slug}.webp`;
 
 // srcset for any PHOTOS url, so phones download the smaller file
 export const photoSrcSet = (src) =>
@@ -85,7 +89,45 @@ export const PHOTOS = {
   ot2: photo(14),
   consult1: photo(15),
   consult2: photo(16),
+  exterior: photo(17),
+  entrance: photo(18),
+  nursingStation: photo(19),
+  mainCorridor: photo(20),
+  xray: photo(21),
+  lab: photo(22),
+  labSamples: photo(23),
+  icuBays: photo(24),
+  ot3: photo(25),
+  otStore: photo(26),
+  wardBays: photo(27),
+  emergencyCart: photo(28),
+  iccuEntry: photo(29),
+  icuCentralAc: photo(30),
+  pharmacy: photo(31),
+  pharmacyFront: photo(32),
+  dialysis: photo(33),
   doctorsTeam: `${ASSET_BASE}doctors-team.jpeg`
+};
+
+// One-minute walkthrough filmed in the hospital (public/video). The patient
+// shot from the original recording is cut out. `at` = seconds into the video.
+export const HOSPITAL_TOUR = {
+  src: `${ASSET_BASE}video/hospital-tour.mp4`,
+  poster: `${ASSET_BASE}video/hospital-tour-poster.webp`,
+  durationIso: "PT59S",
+  chapters: [
+    { at: 0, en: "Hospital building", gu: "હોસ્પિટલ બિલ્ડિંગ" },
+    { at: 4, en: "Entrance & waiting area", gu: "પ્રવેશ અને વેઇટિંગ એરિયા" },
+    { at: 9.5, en: "Nursing station", gu: "નર્સિંગ સ્ટેશન" },
+    { at: 12.5, en: "X-ray room", gu: "એક્સ-રે રૂમ" },
+    { at: 16.5, en: "24x7 laboratory", gu: "૨૪ કલાક લેબોરેટરી" },
+    { at: 22.5, en: "Medical ICU", gu: "મેડિકલ આઈ.સી.યુ." },
+    { at: 27.4, en: "Operation theatre", gu: "ઓપરેશન થીયેટર" },
+    { at: 34.4, en: "Rooms & wards", gu: "રૂમ અને વોર્ડ" },
+    { at: 39.9, en: "Emergency room", gu: "ઇમરજન્સી રૂમ" },
+    { at: 45.4, en: "ICCU", gu: "આઈ.સી.સી.યુ." },
+    { at: 49.9, en: "24x7 pharmacy", gu: "૨૪ કલાક ફાર્મસી" }
+  ]
 };
 
 // --------------------------------------------------------
@@ -95,11 +137,12 @@ export const PHOTOS = {
 export const DOCTORS = [
   {
     id: 1,
-    slug: "dr-nimesh-patel", // alias kept for backwards compatibility: dr-dipesh-patel
-    aliasSlugs: ["dr-dipesh-patel"],
-    name: "Dr. Nimesh S. Patel",
-    nameGujarati: "ડૉ. નિમેષ એસ. પટેલ",
-    initials: "NP",
+    slug: "dr-dipesh-patel", // alias kept for backwards compatibility: dr-nimesh-patel
+    aliasSlugs: ["dr-nimesh-patel"],
+    name: "Dr. Dipesh S. Patel",
+    nameGujarati: "ડૉ. દિપેશ એસ. પટેલ",
+    initials: "DP",
+    photo: null, // portrait: public/doctors/dr-dipesh-patel.webp -> doctorPhoto("dr-dipesh-patel")
     colors: ["#0e655c", "#386e2e"],
     type: "visiting",
     qualification: "MD (Medicine)",
@@ -142,6 +185,7 @@ export const DOCTORS = [
     name: "Dr. Naimuddin N. Kazi",
     nameGujarati: "ડૉ. નઈમુદ્દીન એન. કાઝી",
     initials: "NK",
+    photo: null, // portrait: public/doctors/dr-naimuddin-kazi.webp -> doctorPhoto("dr-naimuddin-kazi")
     colors: ["#093437", "#0e655c"],
     type: "visiting",
     qualification: "MD (Medicine)",
@@ -186,6 +230,7 @@ export const DOCTORS = [
     name: "Dr. Paras H. Patel",
     nameGujarati: "ડૉ. પારસ એચ. પટેલ",
     initials: "PP",
+    photo: null, // portrait: public/doctors/dr-paras-patel.webp -> doctorPhoto("dr-paras-patel")
     colors: ["#be123c", "#f59e0b"],
     type: "visiting",
     qualification: "MD (Medicine)",
@@ -230,6 +275,7 @@ export const DOCTORS = [
     name: "Dr. Santosh J. Prajapati",
     nameGujarati: "ડૉ. સંતોષ જે. પ્રજાપતિ",
     initials: "SP",
+    photo: null, // portrait: public/doctors/dr-santosh-prajapati.webp -> doctorPhoto("dr-santosh-prajapati")
     colors: ["#0e655c", "#289672"],
     type: "visiting",
     qualification: "MBBS, DTCD, FICCM",
@@ -269,48 +315,12 @@ export const DOCTORS = [
     bioGujarati: "ફાઈબરઓપ્ટિક બ્રોન્કોસ્કોપી, PFT શ્વાસ ટેસ્ટ અને ક્રિટિકલ પલ્મોનરી સારવાર કરતા અનુભવી ચેસ્ટ ફિઝિશિયન."
   },
   {
-    id: 6,
-    slug: "dr-pulkit-pandya", // used in the page URL: /doctors/dr-pulkit-pandya
-    name: "Dr. Pulkit Pandya",
-    nameGujarati: "ડૉ. પુલકિત પંડ્યા",
-    initials: "PK",
-    colors: ["#093437", "#289672"],
-    type: "resident",
-    qualification: "",
-    designation: "Resident Medical Officer (Critical Care)",
-    designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
-    hospital: "Pulse Hospital & ICU",
-    hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
-    room: "Emergency & ICCU Floor",
-    roomGujarati: "ઇમરજન્સી અને ICCU ફ્લોર (૨૪ કલાક)",
-    experience: "7+ Years",
-    experienceGujarati: "૭+ વર્ષ અનુભવ",
-    specialties: ["Trauma Resuscitation", "Dialysis Monitoring", "Post-Surgical ICU Care"],
-    specialtiesGujarati: ["ટ્રોમા રીસસીટેશન", "ડાયાલિસિસ મોનિટરિંગ", "સર્જરી પછીની ICU કેર"],
-    whatTheyDo: [
-      "Resuscitates and stabilises accident and trauma patients",
-      "Monitors patients during dialysis",
-      "Looks after patients in the ICU after surgery",
-      "Runs antidote protocols for poisoning cases"
-    ],
-    whatTheyDoGujarati: [
-      "અકસ્માત અને ઇજા પામેલા દર્દીઓનું તાત્કાલિક સ્થિરીકરણ",
-      "ડાયાલિસિસ પ્રક્રિયા દરમિયાન દર્દીની સતત દેખરેખ",
-      "મોટી સર્જરી પછી દર્દીની આઈ.સી.યુ.માં ખાસ સંભાળ",
-      "ઝેર અથવા પોઈઝનિંગ કેસમાં એન્ટિડોટ પ્રોટોકોલનું અમલીકરણ"
-    ],
-    departmentIds: ["emergency", "critical-care", "kidney"],
-    timing: "Available 24x7 in Emergency & ICU Rotation",
-    timingGujarati: "ઇમરજન્સી અને ICU માં ૨૪x૭ ઉપલબ્ધ",
-    bio: "Specialised in emergency medicine and trauma stabilisation, continuous arterial line monitoring, and acute poison antidote protocols.",
-    bioGujarati: "ઇમરજન્સી મેડિસિન, ટ્રોમા સ્ટેબિલાઇઝેશન અને ડાયાલિસિસ મોનિટરિંગમાં નિપુણતા ધરાવતા રેસિડેન્ટ તબીબ."
-  },
-  {
     id: 5,
     slug: "dr-saurabh-goswami",
     name: "Dr. Saurabh Goswami",
     nameGujarati: "ડૉ. સૌરભ ગોસ્વામી",
     initials: "SG",
+    photo: null, // portrait: public/doctors/dr-saurabh-goswami.webp -> doctorPhoto("dr-saurabh-goswami")
     colors: ["#be123c", "#0e655c"],
     type: "visiting",
     qualification: "MBBS, MD, DM (Cardiology)",
@@ -345,6 +355,44 @@ export const DOCTORS = [
     timingGujarati: "સોમ - શનિ (એપોઇન્ટમેન્ટ મુજબ & કાર્ડિયાક ઇમરજન્સી)",
     bio: "Super-specialist Interventional Cardiologist with advanced DM training from B.J. Medical College, Ahmedabad, dedicated to acute coronary interventions, heart failure therapies, and preventive cardiology.",
     bioGujarati: "બી.જે. મેડિકલ કોલેજ, અમદાવાદમાંથી DM (કાર્ડિયોલોજી) પૂર્ણ કરેલ સુપર-સ્પેશિયાલિસ્ટ ઇન્ટરવેન્શનલ કાર્ડિયોલોજિસ્ટ, હાર્ટ એટેક, એન્જિયોપ્લાસ્ટી અને કાર્ડિયાક કેરના નિષ્ણાત."
+  },
+  {
+    id: 6,
+    slug: "dr-pulkit-pandya", // used in the page URL: /doctors/dr-pulkit-pandya
+    name: "Dr. Pulkit Pandya",
+    nameGujarati: "ડૉ. પુલકિત પંડ્યા",
+    initials: "PK",
+    photo: null, // portrait: public/doctors/dr-pulkit-pandya.webp -> doctorPhoto("dr-pulkit-pandya")
+    colors: ["#093437", "#289672"],
+    type: "resident",
+    qualification: "",
+    designation: "Resident Medical Officer (Critical Care)",
+    designationGujarati: "રેસિડેન્ટ મેડિકલ ઓફિસર (ક્રિટિકલ કેર)",
+    hospital: "Pulse Hospital & ICU",
+    hospitalGujarati: "પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.",
+    room: "Emergency & ICCU Floor",
+    roomGujarati: "ઇમરજન્સી અને ICCU ફ્લોર (૨૪ કલાક)",
+    experience: "7+ Years",
+    experienceGujarati: "૭+ વર્ષ અનુભવ",
+    specialties: ["Trauma Resuscitation", "Dialysis Monitoring", "Post-Surgical ICU Care"],
+    specialtiesGujarati: ["ટ્રોમા રીસસીટેશન", "ડાયાલિસિસ મોનિટરિંગ", "સર્જરી પછીની ICU કેર"],
+    whatTheyDo: [
+      "Resuscitates and stabilises accident and trauma patients",
+      "Monitors patients during dialysis",
+      "Looks after patients in the ICU after surgery",
+      "Runs antidote protocols for poisoning cases"
+    ],
+    whatTheyDoGujarati: [
+      "અકસ્માત અને ઇજા પામેલા દર્દીઓનું તાત્કાલિક સ્થિરીકરણ",
+      "ડાયાલિસિસ પ્રક્રિયા દરમિયાન દર્દીની સતત દેખરેખ",
+      "મોટી સર્જરી પછી દર્દીની આઈ.સી.યુ.માં ખાસ સંભાળ",
+      "ઝેર અથવા પોઈઝનિંગ કેસમાં એન્ટિડોટ પ્રોટોકોલનું અમલીકરણ"
+    ],
+    departmentIds: ["emergency", "critical-care", "kidney"],
+    timing: "Available 24x7 in Emergency & ICU Rotation",
+    timingGujarati: "ઇમરજન્સી અને ICU માં ૨૪x૭ ઉપલબ્ધ",
+    bio: "Specialised in emergency medicine and trauma stabilisation, continuous arterial line monitoring, and acute poison antidote protocols.",
+    bioGujarati: "ઇમરજન્સી મેડિસિન, ટ્રોમા સ્ટેબિલાઇઝેશન અને ડાયાલિસિસ મોનિટરિંગમાં નિપુણતા ધરાવતા રેસિડેન્ટ તબીબ."
   }
 ];
 
@@ -415,7 +463,7 @@ export const FACILITIES = [
     name: "Emergency & Trauma",
     nameGu: "ટ્રોમા & ઇમરજન્સી વિભાગ",
     icon: "Siren",
-    photo: null,
+    photo: PHOTOS.emergencyCart,
     is24x7: true,
     summary: "A casualty desk with an immediate doctor response for accidents, poisoning, snakebite, burns, stroke and high fever.",
     summaryGu: "અકસ્માત, ઝેર, સાપ કરડવો, બર્ન્સ અને સ્ટ્રોક માટે તાત્કાલિક ડોક્ટર સેવા સાથેનું કેઝ્યુઅલટી ડેસ્ક.",
@@ -428,7 +476,7 @@ export const FACILITIES = [
       "Triage on arrival with a doctor on the floor 24x7"
     ],
     goodFor: "Anyone who needs urgent medical attention. No appointment needed: come straight in or call ahead.",
-    doctorIds: [6, 3]
+    doctorIds: [3, 6]
   },
   {
     id: "nursing",
@@ -455,7 +503,7 @@ export const FACILITIES = [
     name: "24x7 Dialysis Unit",
     nameGu: "૨૪x૭ ડાયાલીસીસ યુનિટ",
     icon: "Droplets",
-    photo: null,
+    photo: PHOTOS.dialysis,
     is24x7: true,
     summary: "Emergency and scheduled haemodialysis, supported by high-grade dialysis machines and a dedicated RO water purification plant.",
     summaryGu: "તાત્કાલિક અને નિયમિત હિમોડાયાલિસિસ, અદ્યતન મશીનો અને સમર્પિત RO વોટર પ્લાન્ટ સાથે કાર્યરત.",
@@ -497,7 +545,7 @@ export const FACILITIES = [
     name: "24x7 Pathology Laboratory",
     nameGu: "૨૪ કલાક લેબોરેટરી",
     icon: "Microscope",
-    photo: null,
+    photo: PHOTOS.lab,
     is24x7: true,
     summary: "Automated blood testing machines, cell counter and sample counter operating 24 hours so treatment is never delayed.",
     summaryGu: "ઓટોમેટેડ બ્લડ ટેસ્ટિંગ મશીન, સેલ કાઉન્ટર અને સેમ્પલ કાઉન્ટર સાથે ૨૪ કલાક કાર્યરત લેબોરેટરી.",
@@ -518,7 +566,7 @@ export const FACILITIES = [
     name: "Digital X-Ray, 2D Echo & Sonography",
     nameGu: "ડિજિટલ એક્સ-રે, 2D ઇકો & સોનોગ્રાફી",
     icon: "HeartPulse",
-    photo: null,
+    photo: PHOTOS.xray,
     is24x7: true,
     summary: "Heart ultrasound, abdominal sonography and digital X-ray, including portable machines that come to the bed.",
     summaryGu: "હૃદયનું 2D ઇકો, સોનોગ્રાફી અને પોર્ટેબલ ડિજિટલ એક્સ-રે જે દર્દીના પલંગ સુધી પહોંચે છે.",
@@ -672,7 +720,7 @@ export const FACILITIES = [
     name: "24x7 Pharmacy",
     nameGu: "૨૪ કલાક મેડિકલ & ફાર્મસી",
     icon: "Pill",
-    photo: null,
+    photo: PHOTOS.pharmacy,
     is24x7: true,
     summary: "An in-house medical store that stays open all night, so prescriptions never wait for morning.",
     summaryGu: "૨૪ કલાક ખુલ્લો મેડિકલ સ્ટોર, જેથી દર્દીની દવાઓ માટે ક્યારેય રાહ ન જોવી પડે.",
@@ -721,7 +769,7 @@ export const FACILITIES = [
       "Direct 24x7 emergency helpline dispatch: 95120 45641"
     ],
     goodFor: "Accident victims, acute chest pain or stroke cases, non-ambulatory patients, and critical inter-facility emergency transfers.",
-    doctorIds: [6, 5]
+    doctorIds: [5, 6]
   },
   {
     id: "mineral-water",
@@ -749,7 +797,7 @@ export const FACILITIES = [
     name: "Centralized Air Conditioning (Central AC)",
     nameGu: "સેન્ટ્રલાઇઝ્ડ એર કન્ડિશનિંગ (સેન્ટ્રલ AC)",
     icon: "Snowflake",
-    photo: null,
+    photo: PHOTOS.icuCentralAc,
     is24x7: true,
     summary: "Hospital-wide centralized air conditioning ensuring optimal climate control, HEPA air filtration, and dust-free healing comfort across all floors.",
     summaryGu: "ICU, ઓપરેશન થિયેટર, OPD કન્સલ્ટેશન રૂમ અને વેઇટિંગ એરિયા સહિત સમગ્ર હોસ્પિટલમાં ૨૪ કલાક સેન્ટ્રલાઇઝ્ડ એર કન્ડિશનિંગ (AC) વાતાવરણ.",
@@ -802,6 +850,7 @@ export const DEPARTMENTS = [
     title: "Critical Care & ICU",
     titleGujarati: "ક્રિટિકલ કેર & આઈ.સી.યુ.",
     icon: "Activity",
+    photo: PHOTOS.icuHall,
     intro: "For patients whose life is at risk and who need round-the-clock monitoring, ventilator support or organ support.",
     conditions: ["Sepsis & septic shock", "Respiratory failure", "Multi-organ failure", "Post-surgery ICU care", "Severe poisoning"],
     conditionsGu: "કોમા, ગંભીર ઇન્ફેક્શન, શ્વાસ બંધ થવો, કોઈપણ જાતની ગંભીર બિમારી",
@@ -814,6 +863,7 @@ export const DEPARTMENTS = [
     title: "General & Internal Medicine",
     titleGujarati: "જનરલ મેડિસિન",
     icon: "Stethoscope",
+    photo: PHOTOS.consult1,
     intro: "The starting point for most adult illnesses: diagnosis, long-term disease control and fever care.",
     conditions: ["Uncontrolled diabetes", "Thyroid disorders", "High blood pressure", "Dengue with low platelets", "Malaria & typhoid", "Chikungunya"],
     conditionsGu: "તાવ: ઝેરી મેલેરીયા, ડેન્ગ્યુમાં પ્લેટલેટ ઘટી જવા, ટાઇફોઇડ, ચિકનગુનીયા · અનિયંત્રિત ડાયાબીટીસ, થાઇરોઇડ",
@@ -826,6 +876,7 @@ export const DEPARTMENTS = [
     title: "Heart & Cardio-Metabolic Care",
     titleGujarati: "હૃદય રોગો / એન્ડોક્રાઇન",
     icon: "HeartPulse",
+    photo: PHOTOS.icuBeds,
     intro: "Emergency and ongoing care for the heart, blood pressure and related metabolic conditions.",
     conditions: ["Heart attack", "Hypertensive crisis", "Heart failure", "Cholesterol & metabolic disease", "Arrhythmia & valve disorders"],
     conditionsGu: "હાર્ટ એટેક, બી.પી. (હાઈપરટેન્શન), થાઇરોઇડ, અનિયંત્રિત ડાયાબીટીસ, અનિયમિત ધબકારા",
@@ -838,6 +889,7 @@ export const DEPARTMENTS = [
     title: "Chest & Pulmonology",
     titleGujarati: "ફેફસાના રોગો (ચેસ્ટ & પલ્મોનોલોજી)",
     icon: "Wind",
+    photo: PHOTOS.icuWard,
     intro: "Everything to do with the lungs and breathing: from long-term asthma to ICU ventilation.",
     conditions: ["Breathlessness", "Pneumonia", "Fluid in the lungs", "Asthma", "COPD", "Sleep apnoea", "Post-COVID lung fibrosis"],
     conditionsGu: "શ્વાસ ચડવો, ન્યુમોનીયા, ફેફસામા પાણી ભરાવુ, અસ્થમા, સીઓપીડી (COPD)",
@@ -850,6 +902,7 @@ export const DEPARTMENTS = [
     title: "Kidney Care & Dialysis",
     titleGujarati: "કીડનીને લગતા રોગો",
     icon: "Droplets",
+    photo: PHOTOS.dialysis,
     intro: "Diagnosis and treatment of kidney disease, with a dialysis unit that is open around the clock.",
     conditions: ["Kidney stones", "Kidney swelling", "Urinary infection", "Acute renal failure"],
     conditionsGu: "પથરી, કીડની પર સોજો, પેશાબમાં રસી થવી, એક્યુટ રીનલ ફેલ્યોર",
@@ -862,6 +915,7 @@ export const DEPARTMENTS = [
     title: "Liver & Stomach (Gastro)",
     titleGujarati: "લીવર / પેટના રોગો",
     icon: "Soup",
+    photo: PHOTOS.ot2,
     intro: "Care for the digestive system and liver, supported by endoscopy.",
     conditions: ["Jaundice", "Diarrhoea & vomiting", "Bowel inflammation", "Bleeding in the stomach"],
     conditionsGu: "કમળો, ઝાડા-ઉલ્ટી, આંતરડાનો સોજો, પેટમાં રક્તસ્ત્રાવ",
@@ -874,6 +928,7 @@ export const DEPARTMENTS = [
     title: "Brain & Stroke Care",
     titleGujarati: "મગજના રોગો",
     icon: "Brain",
+    photo: PHOTOS.icuBays,
     intro: "Fast diagnosis and treatment for stroke and other brain emergencies; the in-house CT saves critical minutes.",
     conditions: ["Paralysis (stroke)", "Brain haemorrhage", "Fits / seizures", "Encephalitis (brain fever)"],
     conditionsGu: "લકવો (Paralysis), મગજનું હેમરેજ, ખેંચ (Fits), મગજનો તાવ (Encephalitis)",
@@ -886,18 +941,20 @@ export const DEPARTMENTS = [
     title: "Emergency, Trauma & Poisoning",
     titleGujarati: "ટ્રોમા / ઈમરજન્સી & પોઇઝનીંગ",
     icon: "Siren",
+    photo: PHOTOS.emergencyCart,
     intro: "Immediate care for accidents, bites and poisoning. Walk in any time: no appointment needed.",
     conditions: ["Road accident injuries", "Burns", "Electric shock", "Heat stroke", "Snakebite", "Insect bites", "Pesticide / drug poisoning"],
     conditionsGu: "અકસ્માત ઈજા, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક · સાપ કરડવો, ઝેરી દવાની અસર",
     services: ["24x7 casualty desk", "24x7 emergency ambulance", "Anti-snake venom", "Antidote protocols", "Trauma surgery"],
     facilityIds: ["emergency", "ambulance", "ct", "ot", "pharmacy"],
-    doctorIds: [6, 5]
+    doctorIds: [5, 6]
   },
   {
     id: "surgery",
     title: "Surgery",
     titleGujarati: "સર્જરી વિભાગ",
     icon: "Scissors",
+    photo: PHOTOS.ot3,
     intro: "Planned and emergency operations in modular theatres, including keyhole, orthopaedic, spine and jaw surgery.",
     conditions: ["Fractures", "Abdominal surgery", "Hernia & gallbladder", "Spine problems", "Jaw & dental surgery"],
     conditionsGu: "હાઈ રીસ્ક સર્જરી, ગેસ્ટ્રો અને લેપ્રોસ્કોપી સર્જરી, ન્યુરો સર્જરી, સ્પાઈન સર્જરી, પ્લાસ્ટીક સર્જરી",
@@ -942,7 +999,7 @@ export const TREATMENTS = [
 // --------------------------------------------------------
 // Photo gallery
 // --------------------------------------------------------
-export const GALLERY_CATEGORIES = ["All", "ICU", "Surgery", "Rooms", "OPD", "Arrival"];
+export const GALLERY_CATEGORIES = ["All", "ICU", "Surgery", "Rooms", "Diagnostics", "Pharmacy", "OPD", "Arrival"];
 
 export const GALLERY_IMAGES = [
   { id: 12, title: "ICU hall with ventilators", titleGujarati: "વેન્ટીલેટર સાથે આઈ.સી.યુ.", category: "ICU", src: PHOTOS.icuHall },
@@ -951,14 +1008,31 @@ export const GALLERY_IMAGES = [
   { id: 6, title: "Isolation ICU room", titleGujarati: "આઈસોલેશન રૂમ", category: "ICU", src: PHOTOS.isolation },
   { id: 8, title: "ICU nursing station", titleGujarati: "આઈ.સી.યુ. નર્સિંગ સ્ટેશન", category: "ICU", src: PHOTOS.icuStation },
   { id: 4, title: "Nursing station & isolation entry", titleGujarati: "નર્સિંગ સ્ટેશન", category: "ICU", src: PHOTOS.nursingIsolation },
+  { id: 24, title: "Medical ICU bays", titleGujarati: "મેડિકલ આઈ.સી.યુ.", category: "ICU", src: PHOTOS.icuBays },
+  { id: 30, title: "ICU with centralised AC", titleGujarati: "સેન્ટ્રલ AC સાથે આઈ.સી.યુ.", category: "ICU", src: PHOTOS.icuCentralAc },
+  { id: 33, title: "Dialysis machine at the ICU bedside", titleGujarati: "આઈ.સી.યુ.માં ડાયાલીસીસ મશીન", category: "ICU", src: PHOTOS.dialysis },
+  { id: 19, title: "Nursing station", titleGujarati: "નર્સિંગ સ્ટેશન", category: "ICU", src: PHOTOS.nursingStation },
+  { id: 29, title: "ICCU entrance", titleGujarati: "આઈ.સી.સી.યુ. પ્રવેશ", category: "ICU", src: PHOTOS.iccuEntry },
+  { id: 28, title: "Emergency room crash cart", titleGujarati: "ઇમરજન્સી રૂમ ક્રેશ કાર્ટ", category: "ICU", src: PHOTOS.emergencyCart },
   { id: 13, title: "Modular operation theatre", titleGujarati: "મોડ્યુલર ઓપરેશન થીયેટર", category: "Surgery", src: PHOTOS.ot1 },
   { id: 14, title: "Operation theatre with laminar airflow", titleGujarati: "લેમિનાર એરફ્લો ઓપરેશન થીયેટર", category: "Surgery", src: PHOTOS.ot2 },
+  { id: 25, title: "Operation theatre with OT table and anaesthesia workstation", titleGujarati: "ઓટી ટેબલ અને એનેસ્થેસિયા મશીન સાથે ઓપરેશન થીયેટર", category: "Surgery", src: PHOTOS.ot3 },
+  { id: 26, title: "Operation theatre supplies & crash cart", titleGujarati: "ઓપરેશન થીયેટર સ્ટોર અને ક્રેશ કાર્ટ", category: "Surgery", src: PHOTOS.otStore },
   { id: 11, title: "Surgical unit entrance", titleGujarati: "સર્જિકલ યુનિટ", category: "Surgery", src: PHOTOS.surgicalUnit },
   { id: 7, title: "Twin-sharing patient room", titleGujarati: "ટ્વીન શેરિંગ રૂમ", category: "Rooms", src: PHOTOS.twinRoom },
+  { id: 27, title: "Ward beds with privacy curtains", titleGujarati: "પડદા સાથે વોર્ડ બેડ", category: "Rooms", src: PHOTOS.wardBays },
   { id: 3, title: "Corridor to the deluxe rooms", titleGujarati: "ડીલક્ષ રૂમ કોરિડોર", category: "Rooms", src: PHOTOS.corridor },
+  { id: 22, title: "24x7 pathology laboratory", titleGujarati: "૨૪ કલાક લેબોરેટરી", category: "Diagnostics", src: PHOTOS.lab },
+  { id: 23, title: "Lab centrifuge and sample tubes", titleGujarati: "લેબ સેન્ટ્રીફ્યુજ અને સેમ્પલ ટ્યુબ", category: "Diagnostics", src: PHOTOS.labSamples },
+  { id: 21, title: "Digital X-ray room", titleGujarati: "ડિજિટલ એક્સ-રે રૂમ", category: "Diagnostics", src: PHOTOS.xray },
+  { id: 31, title: "24x7 pharmacy", titleGujarati: "૨૪ કલાક ફાર્મસી", category: "Pharmacy", src: PHOTOS.pharmacy },
+  { id: 32, title: "Pharmacy counter", titleGujarati: "ફાર્મસી કાઉન્ટર", category: "Pharmacy", src: PHOTOS.pharmacyFront },
   { id: 15, title: "Doctor consultation room", titleGujarati: "કન્સલ્ટિંગ રૂમ", category: "OPD", src: PHOTOS.consult1 },
   { id: 16, title: "Consultation room with exam couch", titleGujarati: "કન્સલ્ટિંગ રૂમ", category: "OPD", src: PHOTOS.consult2 },
+  { id: 17, title: "Pulse Hospital building at night", titleGujarati: "રાત્રે પલ્સ હોસ્પિટલ બિલ્ડિંગ", category: "Arrival", src: PHOTOS.exterior },
+  { id: 18, title: "Hospital entrance", titleGujarati: "હોસ્પિટલ પ્રવેશદ્વાર", category: "Arrival", src: PHOTOS.entrance },
   { id: 1, title: "Reception & help desk", titleGujarati: "રીસેપ્શન", category: "Arrival", src: PHOTOS.reception },
+  { id: 20, title: "Main corridor", titleGujarati: "મુખ્ય કોરિડોર", category: "Arrival", src: PHOTOS.mainCorridor },
   { id: 5, title: "Billing section", titleGujarati: "બિલિંગ સેક્શન", category: "Arrival", src: PHOTOS.billing },
   { id: 2, title: "Patient waiting lounge", titleGujarati: "વેઇટિંગ લાઉન્જ", category: "Arrival", src: PHOTOS.waiting }
 ];

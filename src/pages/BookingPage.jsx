@@ -23,7 +23,7 @@ export default function BookingPage({ doctor, lang = 'en' }) {
           <li key={d.id}>
             <Link to="book-appointment" param={d.slug}>
               <Avatar doctor={d} size="sm" />
-              <span><strong>{lang === 'en' ? d.name : d.nameGujarati}</strong><small>{d.qualification} · {d.designation}</small></span>
+              <span><strong>{lang === 'en' ? d.name : d.nameGujarati}</strong><small>{[d.qualification, d.designation].filter(Boolean).join(' · ')}</small></span>
             </Link>
           </li>
         ))}

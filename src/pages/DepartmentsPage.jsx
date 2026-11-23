@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Phone, ArrowRight, HeartPulse } from 'lucide-react';
-import { PageHero, Icon, Avatar, delay } from '../components/ui';
+import { PageHero, Icon, Avatar, Photo, delay } from '../components/ui';
 import { Link } from '../router';
 import { DEPARTMENTS, HOSPITAL_INFO, PHOTOS, getDoctor } from '../data/hospitalContent';
 
@@ -49,7 +49,14 @@ export default function DepartmentsPage({ lang = 'en' }) {
               const doctors = d.doctorIds.map(getDoctor).filter(Boolean);
               return (
                 <Link key={d.id} to="departments" param={d.id} className="card card-hover dept-card" data-reveal style={delay(i, 50)}>
-                  <span className="icon-tile mint"><Icon name={d.icon} size={22} /></span>
+                  {d.photo ? (
+                    <span className="dept-card-photo">
+                      <Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" />
+                      <span className="icon-tile mint"><Icon name={d.icon} size={22} /></span>
+                    </span>
+                  ) : (
+                    <span className="icon-tile mint"><Icon name={d.icon} size={22} /></span>
+                  )}
                   <h2>{lang === 'en' ? d.title : d.titleGujarati}</h2>
                   <span className="gujarati-text muted dept-card-sub">{lang === 'en' ? d.titleGujarati : d.title}</span>
                   <p>{d.intro}</p>

@@ -29,7 +29,7 @@ export default function NotFoundPage({ lang = 'en' }) {
     { title: 'Terms & Conditions', titleGu: 'નિયમો અને શરતો', path: 'terms', category: 'Legal', desc: 'Hospital service agreements and medical disclaimers' },
     // Index each doctor
     ...DOCTORS.map(doc => ({
-      title: `${doc.name} (${doc.qualification}) - ${doc.specialties.join(', ')}`,
+      title: `${doc.name}${doc.qualification ? ` (${doc.qualification})` : ''} - ${doc.specialties.join(', ')}`,
       titleGu: `${doc.nameGujarati} - ${doc.specialtiesGujarati ? doc.specialtiesGujarati.join(', ') : ''}`,
       path: `doctors/${doc.slug}`,
       category: 'Doctor',

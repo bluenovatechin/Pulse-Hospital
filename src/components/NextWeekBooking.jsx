@@ -232,7 +232,7 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
 *Appointment Booking Request*
 ───────────────────────────────
 📋 *Reference ID:* ${apptId}
-👨‍⚕️ *Doctor:* ${selectedDoctor.name} (${selectedDoctor.qualification})
+👨‍⚕️ *Doctor:* ${selectedDoctor.name}${selectedDoctor.qualification ? ` (${selectedDoctor.qualification})` : ''}
 🏢 *Room:* ${selectedDoctor.room}
 📅 *Date:* ${dayLabel}
 ⏰ *Time Slot:* ${selectedSlot}
@@ -365,7 +365,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                       </div>
 
                       <div style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 600, marginTop: '2px' }}>
-                        {doc.qualification} {doc.experience ? `• ${lang === 'en' ? doc.experience : (doc.experienceGujarati || doc.experience)}` : ''}
+                        {[doc.qualification, doc.experience && (lang === 'en' ? doc.experience : (doc.experienceGujarati || doc.experience))].filter(Boolean).join(' • ')}
                       </div>
 
                       <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>

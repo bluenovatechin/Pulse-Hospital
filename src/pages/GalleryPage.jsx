@@ -10,6 +10,8 @@ const GALLERY_CAT_MAP = {
   ICU: { en: 'ICU', gu: 'આઈ.સી.યુ.' },
   Surgery: { en: 'Surgery', gu: 'ઓપરેશન થિયેટર' },
   Rooms: { en: 'Rooms', gu: 'રૂમ' },
+  Diagnostics: { en: 'Diagnostics', gu: 'નિદાન' },
+  Pharmacy: { en: 'Pharmacy', gu: 'ફાર્મસી' },
   OPD: { en: 'OPD', gu: 'OPD' },
   Arrival: { en: 'Arrival', gu: 'રિસેપ્શન' }
 };

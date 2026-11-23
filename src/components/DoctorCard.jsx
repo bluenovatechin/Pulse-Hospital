@@ -16,7 +16,7 @@ export default function DoctorCard({ doctor, lang = 'en', compact = false }) {
           <span className={`type-tag ${doctor.type}`}>{t(DOCTOR_TYPES[doctor.type].label, DOCTOR_TYPES[doctor.type].labelGu)}</span>
           <h3><Link to="doctors" param={doctor.slug}>{lang === 'en' ? doctor.name : doctor.nameGujarati}</Link></h3>
           <div className="qual">
-            {doctor.qualification} · {t(doctor.experience, doctor.experienceGujarati || doctor.experience)}
+            {[doctor.qualification, t(doctor.experience, doctor.experienceGujarati || doctor.experience)].filter(Boolean).join(' · ')}
             {doctor.gmcNumber && (
               <span style={{ display: 'block', fontSize: 11.5, color: 'var(--primary)', fontWeight: 600, marginTop: 2 }}>
                 GMC: {doctor.gmcNumber}

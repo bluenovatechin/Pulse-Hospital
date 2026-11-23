@@ -121,7 +121,7 @@ export default function App({ url }) {
   useEffect(() => {
     const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1500));
     const cancel = window.cancelIdleCallback || clearTimeout;
-    const id = idle(() => PAGE_LOADERS.forEach((preload) => preload().catch(() => {})));
+    const id = idle(() => PAGE_LOADERS.forEach((preload) => preload().catch(() => { })));
     return () => cancel(id);
   }, []);
 

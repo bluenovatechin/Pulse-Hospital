@@ -3,6 +3,7 @@ import { CheckCircle, Printer, Calendar, Clock, ShieldCheck, Building2 } from 'l
 import PulseLogo from './PulseLogo';
 import { WhatsAppIcon } from './ui';
 import { Link } from '../router';
+import { HOSPITAL_INFO } from '../data/hospitalContent';
 
 // Printable appointment slip (shown on /my-appointments/<id>)
 export default function AppointmentSlip({ appointment, lang = 'en' }) {
@@ -28,7 +29,7 @@ export default function AppointmentSlip({ appointment, lang = 'en' }) {
       `*Important:* Please bring this file and previous medical reports on your visit.`
     );
     // Directly targeted to hospital WhatsApp number: 95120 45641
-    window.open(`https://api.whatsapp.com/send?phone=919512045641&text=${message}`, '_blank');
+    window.open(`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${message}`, '_blank');
   };
 
   return (

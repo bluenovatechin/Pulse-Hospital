@@ -74,12 +74,23 @@ export function Icon({ name, size = 20, ...rest }) {
   return <Cmp size={size} {...rest} />;
 }
 
-// Doctors have no portrait photos, so each gets a coloured monogram
+// Doctor portrait (doctor.photo) with the coloured monogram as a fallback,
+// shown while there is no photo or if the photo fails to load.
 export function Avatar({ doctor, size = '' }) {
+  const [failed, setFailed] = React.useState(false);
   const [c1, c2] = doctor.colors || [];
+  const showPhoto = doctor.photo && !failed;
   return (
-    <span className={`avatar ${size}`} style={{ '--av1': c1, '--av2': c2 }} aria-hidden="true">
-      {doctor.initials}
+    <span
+      className={`avatar ${size}${showPhoto ? ' has-photo' : ''}`}
+      style={{ '--av1': c1, '--av2': c2 }}
+      aria-hidden="true"
+    >
+      {showPhoto ? (
+        <img src={doctor.photo} alt="" loading="lazy" decoding="async" onError={() => setFailed(true)} />
+      ) : (
+        doctor.initials
+      )}
     </span>
   );
 }

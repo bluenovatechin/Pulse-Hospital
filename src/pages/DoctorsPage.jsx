@@ -115,7 +115,7 @@ export default function DoctorsPage({ lang = 'en' }) {
               <div style={{ height: '100%', minHeight: 280 }}>
                 <img
                   src={PHOTOS.doctorsTeam}
-                  alt={t('Pulse Hospital Modasa Doctors Team: Dr. Nimesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya', 'પલ્સ હોસ્પિટલ મોડાસા ડોક્ટર્સ ટીમ: ડૉ. નિમેષ પટેલ, ડૉ. નઈમુદ્દીન કાઝી, ડૉ. પારસ પટેલ, ડૉ. સંતોષ પ્રજાપતિ, ડૉ. પુલકિત પંડ્યા')}
+                  alt={t('Pulse Hospital Modasa Doctors Team: Dr. Dipesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya', 'પલ્સ હોસ્પિટલ મોડાસા ડોક્ટર્સ ટીમ: ડૉ. દિપેશ પટેલ, ડૉ. નઈમુદ્દીન કાઝી, ડૉ. પારસ પટેલ, ડૉ. સંતોષ પ્રજાપતિ, ડૉ. પુલકિત પંડ્યા')}
                   title={t('Specialist Doctors and Critical Care Physicians at Pulse Hospital & I.C.U Modasa', 'પલ્સ હોસ્પિટલ અને આઈસીયુ મોડાસાના નિષ્ણાત તબીબો')}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                   loading="lazy"
@@ -133,7 +133,7 @@ export default function DoctorsPage({ lang = 'en' }) {
                   )}
                 </p>
                 <div style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.6, background: '#fff', padding: '10px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-soft)' }}>
-                  <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Saurabh Goswami (DM Cardiology) · Dr. Nimesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel · Dr. Santosh J. Prajapati · Dr. Pulkit Pandya', 'ડૉ. સૌરભ ગોસ્વામી (DM કાર્ડિયોલોજી) · ડૉ. નિમેષ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. પુલકિત પંડ્યા')}
+                  <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Saurabh Goswami (DM Cardiology) · Dr. Dipesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel · Dr. Santosh J. Prajapati · Dr. Pulkit Pandya', 'ડૉ. સૌરભ ગોસ્વામી (DM કાર્ડિયોલોજી) · ડૉ. દિપેશ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. પુલકિત પંડ્યા')}
                 </div>
               </div>
             </div>

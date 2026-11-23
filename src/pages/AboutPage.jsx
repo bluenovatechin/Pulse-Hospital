@@ -17,8 +17,8 @@ export default function AboutPage({ lang = 'en' }) {
   return (
     <div>
       <PageHero
-        photo={PHOTOS.reception}
-        photoAlt={t('Reception and help desk at Pulse Hospital', 'પલ્સ હોસ્પિટલ રીસેપ્શન')}
+        photo={PHOTOS.exterior}
+        photoAlt={t('Pulse Hospital & I.C.U building at City Centre, Shamlaji Road, Modasa', 'સીટી સેન્ટર, શામળાજી રોડ, મોડાસા ખાતે પલ્સ હોસ્પિટલ & આઈ.સી.યુ. બિલ્ડિંગ')}
         crumbs={t('About', 'અમારા વિશે')}
         eyebrow={t('About Pulse Hospital & I.C.U', 'પલ્સ હોસ્પિટલ & આઈ.સી.યુ. વિશે')}
         title={t('Emergency and critical care for Arvalli', 'અરવલ્લી માટે ઇમરજન્સી અને ક્રિટિકલ કેર')}
@@ -96,8 +96,8 @@ export default function AboutPage({ lang = 'en' }) {
               </p>
               <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 20 }}>
                 {t(
-                  'From Left to Right: Dr. Pulkit Pandya, Dr. Santosh J. Prajapati, Dr. Nimesh S. Patel, Dr. Naimuddin N. Kazi, and Dr. Paras H. Patel.',
-                  'ડાબેથી જમણે: ડૉ. પુલકિત પંડ્યા, ડૉ. સંતોષ જે. પ્રજાપતિ, ડૉ. નિમેષ એસ. પટેલ, ડૉ. નઈમુદ્દીન એન. કાઝી અને ડૉ. પારસ એચ. પટેલ.'
+                  'From Left to Right: Dr. Pulkit Pandya, Dr. Santosh J. Prajapati, Dr. Dipesh S. Patel, Dr. Naimuddin N. Kazi, and Dr. Paras H. Patel.',
+                  'ડાબેથી જમણે: ડૉ. પુલકિત પંડ્યા, ડૉ. સંતોષ જે. પ્રજાપતિ, ડૉ. દિપેશ એસ. પટેલ, ડૉ. નઈમુદ્દીન એન. કાઝી અને ડૉ. પારસ એચ. પટેલ.'
                 )}
               </p>
               <Link to="doctors" className="btn btn-primary">

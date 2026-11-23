@@ -4,7 +4,7 @@
 // on navigation) and at build time (scripts/prerender.js writes a
 // complete HTML file for every page).
 // ========================================================
-import { HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, FAQS, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
+import { HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, FAQS, HOSPITAL_TOUR, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
 
 // Public address of the live site. Change this if the site moves
 // (e.g. to a custom domain); canonical links and the sitemap use it.
@@ -76,7 +76,7 @@ export const pagePath = (page, param) =>
 
 // Hero photo number (public/photos/gallery-N) at the top of each page, so
 // the pre-rendered HTML can preload it. Keep in step with the pages' heroes.
-export const HERO_PHOTO = { home: 12, facilities: 13, departments: 9, doctors: 15, gallery: 2, about: 1, contact: 5 };
+export const HERO_PHOTO = { home: 12, facilities: 13, departments: 9, doctors: 15, gallery: 2, about: 17, contact: 5 };
 
 /** Title, description and indexing rule for any route */
 export function getPageMeta(page, param) {
@@ -84,8 +84,8 @@ export function getPageMeta(page, param) {
     const d = getDoctor(param);
     if (d) {
       return {
-        title: `${d.name}, ${d.qualification} | ${d.designation.split(' & ')[0]} in Modasa | Pulse Hospital`,
-        description: `${d.name} (${d.nameGujarati}), ${d.qualification}: ${d.designation} at Pulse Hospital & I.C.U, Modasa. ${d.timing}. ${d.specialties.join(', ')}. Book an appointment online.`
+        title: `${[d.name, d.qualification].filter(Boolean).join(', ')} | ${d.designation.split(' & ')[0]} in Modasa | Pulse Hospital`,
+        description: `${d.name} (${d.nameGujarati})${d.qualification ? `, ${d.qualification}` : ''}: ${d.designation} at Pulse Hospital & I.C.U, Modasa. ${d.timing}. ${d.specialties.join(', ')}. Book an appointment online.`
       };
     }
   }
@@ -167,7 +167,7 @@ function hospital() {
         url: `${SITE_URL}og-image.png`,
         contentUrl: `${SITE_URL}og-image.png`,
         caption: 'Specialist MD Doctors & 24x7 Critical Care Team at Pulse Hospital & I.C.U Modasa',
-        description: 'Doctors team at Pulse Hospital & I.C.U Modasa: Dr. Nimesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya with 24x7 Ventilator ICU, In-house CT scan, Dialysis and Modular Operation Theatres.',
+        description: 'Doctors team at Pulse Hospital & I.C.U Modasa: Dr. Dipesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya with 24x7 Ventilator ICU, In-house CT scan, Dialysis and Modular Operation Theatres.',
         width: 1200,
         height: 630
       },
@@ -215,7 +215,7 @@ function physician(d) {
     alternateName: d.nameGujarati,
     url: `${SITE_URL}doctors/${d.slug}`,
     jobTitle: d.designation,
-    description: `${d.name} (${d.nameGujarati}): ${d.qualification}, ${d.designation}. ${d.bio} Experience: ${d.experience}. GMC: ${d.gmcNumber || 'Registered'}.`,
+    description: `${d.name} (${d.nameGujarati}): ${[d.qualification, d.designation].filter(Boolean).join(', ')}. ${d.bio} Experience: ${d.experience}.${d.gmcNumber ? ` GMC: ${d.gmcNumber}.` : ''}`,
     medicalSpecialty: d.specialties,
     knowsAbout: [...d.specialties, ...(d.whatTheyDo || [])],
     alumniOf: d.medicalCollege,
@@ -304,6 +304,23 @@ export function jsonLdFor(page, param) {
       publisher: { '@id': HOSPITAL_ID }
     });
     graph.push(siteNavigation());
+    graph.push({
+      '@type': 'VideoObject',
+      name: 'Pulse Hospital & I.C.U, Modasa: one-minute hospital tour',
+      description: 'Walkthrough of Pulse Hospital & I.C.U at City Centre, Shamlaji Road, Modasa: entrance, nursing station, X-ray, 24x7 laboratory, medical ICU, modular operation theatre, wards, emergency room, ICCU and 24x7 pharmacy.',
+      thumbnailUrl: `${SITE_URL}video/hospital-tour-poster.webp`,
+      contentUrl: `${SITE_URL}video/hospital-tour.mp4`,
+      uploadDate: '2026-11-23T12:00:00+05:30',
+      duration: HOSPITAL_TOUR.durationIso,
+      publisher: { '@id': HOSPITAL_ID },
+      hasPart: HOSPITAL_TOUR.chapters.map((c, i, all) => ({
+        '@type': 'Clip',
+        name: c.en,
+        startOffset: Math.floor(c.at),
+        endOffset: Math.floor(all[i + 1] ? all[i + 1].at : 59),
+        url: `${SITE_URL}#t=${Math.floor(c.at)}`
+      }))
+    });
     graph.push({
       '@type': 'FAQPage',
       mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))

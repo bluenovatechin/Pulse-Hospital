@@ -5,13 +5,14 @@ import {
 } from 'lucide-react';
 import { SectionHead, Media, Icon, Photo, CountUp, delay } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
+import { HospitalTour, EmergencySteps } from '../components/HomeExtras';
 import { Link } from '../router';
 import {
   HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, MILESTONES, getFacility
 } from '../data/hospitalContent';
 
 // Facilities featured in the home-page bento grid, in display order
-const FEATURED = ['icu', 'ot', 'ct', 'twin', 'dialysis', 'isolation'];
+const FEATURED = ['icu', 'ot', 'dialysis', 'lab', 'imaging', 'pharmacy'];
 
 // Background slider images showcasing real hospital infrastructure
 const HERO_SLIDES = [
@@ -180,6 +181,9 @@ export default function HomePage({ lang = 'en' }) {
         </div>
       </div>
 
+      {/* ---------- What to do in an emergency ---------- */}
+      <EmergencySteps lang={lang} />
+
       {/* ---------- Facilities bento ---------- */}
       <section className="section ">
         <div className="container-wide">
@@ -209,6 +213,9 @@ export default function HomePage({ lang = 'en' }) {
           </div>
         </div>
       </section>
+
+      {/* ---------- Video tour ---------- */}
+      <HospitalTour lang={lang} />
 
       {/* ---------- Doctors ---------- */}
       <section className="section section--white">
@@ -270,7 +277,12 @@ export default function HomePage({ lang = 'en' }) {
           />
           <div className="grid grid-3">
             {DEPARTMENTS.map((d, i) => (
-              <Link to="departments" param={d.id} key={d.id} className="cond-card" style={{ ...delay(i, 50), textAlign: 'left', color: 'inherit', font: 'inherit' }} data-reveal>
+              <Link to="departments" param={d.id} key={d.id} className={`cond-card ${d.photo ? 'has-photo' : ''}`} style={{ ...delay(i, 50), textAlign: 'left', color: 'inherit', font: 'inherit' }} data-reveal>
+                {d.photo && (
+                  <span className="cond-photo">
+                    <Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" />
+                  </span>
+                )}
                 <h3><span className="icon-tile dark" style={{ width: 36, height: 36 }}><Icon name={d.icon} size={18} /></span>{d.title}</h3>
                 <div className="gu gujarati-text">{d.titleGujarati}</div>
                 <p>{d.conditions.slice(0, 4).join(' · ')}</p>

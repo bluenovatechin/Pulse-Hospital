@@ -19,9 +19,16 @@ function parseNumber(val) {
   if (isNaN(target)) {
     return { prefix: '', target: 0, suffix: str, hasNumber: false, isFloat: false, decimals: 0, hasCommas: false };
   }
+  // Only count up real quantities ("2000+", "100%", "14+ Years", "30 min").
+  // Labels such as "24x7" or "4th floor" would read "3x7" / "1th floor"
+  // mid-animation, so they are shown as written.
+  if (!/^(\+|%|\s|$)/.test(suffix)) {
+    return { prefix: '', target: 0, suffix: str, hasNumber: false, isFloat: false, decimals: 0, hasCommas: false };
+  }
   const isFloat = rawNum.includes('.');
   const decimals = isFloat ? (rawNum.split('.')[1] || '').length : 0;
-  const hasCommas = match[2].includes(',') || target >= 1000;
+  // Keep the number formatted the way it is written (no "2000+" -> "2,000+" jump)
+  const hasCommas = match[2].includes(',');
   return { prefix, target, suffix, hasNumber: true, isFloat, decimals, hasCommas };
 }
 
@@ -80,8 +87,8 @@ export default function CountUp({ value, duration = 1600, className = '' }) {
           const finalNum = isFloat
             ? target.toFixed(decimals)
             : hasCommas
-            ? target.toLocaleString('en-IN')
-            : String(target);
+              ? target.toLocaleString('en-IN')
+              : String(target);
           setDisplay(`${prefix}${finalNum}${suffix}`);
         }
       };

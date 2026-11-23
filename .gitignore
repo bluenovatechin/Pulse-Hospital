@@ -21,3 +21,18 @@ npm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Raw material that is not part of the website
+# (source photos/videos, documents, notes). Keep the files locally.
+/pulse/
+/*.docx
+/*.doc
+/*.pdf
+/*.xlsx
+/Doctors.jpeg
+/*.MOV
+/*.mov
+/*.mp4
+
+# Claude Code local settings
+.claude/settings.local.json

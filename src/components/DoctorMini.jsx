@@ -13,7 +13,7 @@ export default function DoctorMini({ doctor: d, lang = 'en', style }) {
         <Avatar doctor={d} />
         <span className={`type-tag ${d.type}`}>{t(DOCTOR_TYPES[d.type].label, DOCTOR_TYPES[d.type].labelGu)}</span>
         <h3>{lang === 'en' ? d.name : d.nameGujarati}</h3>
-        <span className="qual">{d.qualification}</span>
+        {d.qualification && <span className="qual">{d.qualification}</span>}
         <span className="role">{t(d.designation, d.designationGujarati || d.designation)}</span>
       </Link>
       <Link to="book-appointment" param={d.slug} className="btn btn-primary btn-sm btn-block">

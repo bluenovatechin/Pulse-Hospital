@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Phone, MapPin, Calendar, Menu, X, Siren, UserCheck, Globe,
+  Phone, MapPin, Calendar, Menu, X, Siren, UserCheck, Globe, ChevronDown, ArrowRight,
   Home, Building2, Stethoscope, Users, Images, Info, Mail
 } from 'lucide-react';
-import { HOSPITAL_INFO } from '../data/hospitalContent';
-import { lockScroll, unlockScroll } from './ui';
+import { HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS } from '../data/hospitalContent';
+import { lockScroll, unlockScroll, Avatar, Icon, WhatsAppIcon } from './ui';
 import PulseLogo from './PulseLogo';
 import { Link } from '../router';
 
@@ -18,9 +18,54 @@ export const NAV_LINKS = [
   { id: 'contact', en: 'Contact', gu: 'સંપર્ક', icon: Mail }
 ];
 
+// Facilities listed in the mobile menu (the full list is one tap away)
+const MENU_FACILITIES = ['icu', 'emergency', 'dialysis', 'ct', 'lab', 'ot', 'pharmacy', 'ambulance'];
+
+const CLOSE_MS = 260;
+
+/** Compact doctor row used in the desktop dropdown and the mobile menu */
+function DoctorMenuCard({ d, lang, onClick }) {
+  const t = (en, gu) => (lang === 'en' ? en : gu);
+  return (
+    <Link to="doctors" param={d.slug} className="menu-doc" onClick={onClick}>
+      <Avatar doctor={d} size="sm" />
+      <span className="menu-doc-text">
+        <strong>{lang === 'en' ? d.name : d.nameGujarati}</strong>
+        {d.qualification && <span className="menu-doc-qual">{d.qualification}</span>}
+        <span className="menu-doc-role">{t(d.designation, d.designationGujarati || d.designation)}</span>
+        <span className="menu-doc-link">{t('View profile', 'પ્રોફાઇલ જુઓ')} <ArrowRight size={13} /></span>
+      </span>
+    </Link>
+  );
+}
+
+/** One collapsible section of the mobile menu */
+function MenuGroup({ id, label, icon: I, open, onToggle, style, children }) {
+  return (
+    <div className={`mm-group ${open ? 'is-open' : ''}`} style={style}>
+      <button
+        type="button"
+        className="mm-item mm-toggle"
+        aria-expanded={open}
+        aria-controls={`mm-${id}`}
+        onClick={onToggle}
+      >
+        <I size={18} /> <span>{label}</span>
+        <ChevronDown size={18} className="mm-chev" aria-hidden="true" />
+      </button>
+      <div className="mm-collapse" id={`mm-${id}`} role="region" aria-label={label}>
+        <div className="mm-collapse-inner">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function Navbar({ activePage, lang, setLang }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const [openGroup, setOpenGroup] = useState(null);
+  const closeTimer = useRef(null);
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
   useEffect(() => {
@@ -30,18 +75,40 @@ export default function Navbar({ activePage, lang, setLang }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const open = () => {
+    clearTimeout(closeTimer.current);
+    setClosing(false);
+    setOpenGroup(null); // every section starts closed; tap one to open it
+    setMenuOpen(true);
+  };
+
+  // Play the exit animation, then unmount
+  const close = () => {
+    if (closing) return;
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (reduce) { setMenuOpen(false); return; }
+    setClosing(true);
+    closeTimer.current = setTimeout(() => { setMenuOpen(false); setClosing(false); }, CLOSE_MS);
+  };
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+
   useEffect(() => {
     if (!menuOpen) return;
-    const onKey = (e) => e.key === 'Escape' && setMenuOpen(false);
+    const onKey = (e) => e.key === 'Escape' && close();
     document.addEventListener('keydown', onKey);
     lockScroll();
     return () => {
       document.removeEventListener('keydown', onKey);
       unlockScroll();
     };
+    // close() only reads state that is reset on each open
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuOpen]);
 
-  const close = () => setMenuOpen(false);
+  const toggleGroup = (id) => setOpenGroup((g) => (g === id ? null : id));
+  const whatsapp = `https://wa.me/${HOSPITAL_INFO.whatsappNumber}`;
+  const stagger = (i) => ({ '--i': i });
 
   return (
     <>
@@ -72,16 +139,36 @@ export default function Navbar({ activePage, lang, setLang }) {
           </Link>
 
           <nav className="main-nav" aria-label="Main">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.id}
-                to={l.id}
-                className="nav-link"
-                aria-current={activePage === l.id ? 'page' : undefined}
-              >
-                {t(l.en, l.gu)}
-              </Link>
-            ))}
+            {NAV_LINKS.map((l) =>
+              l.id === 'doctors' ? (
+                <div className="nav-item has-menu" key={l.id}>
+                  <Link to="doctors" className="nav-link" aria-current={activePage === 'doctors' ? 'page' : undefined}>
+                    {t(l.en, l.gu)} <ChevronDown size={14} className="nav-chev" aria-hidden="true" />
+                  </Link>
+                  <div className="nav-dropdown">
+                    <div className="nav-dd-head">
+                      <strong>{t('Our doctors', 'અમારા ડૉક્ટરો')}</strong>
+                      <span>{t('OPD Mon–Sat · Emergency & ICU 24x7', 'OPD સોમ–શનિ · ઇમરજન્સી & ICU ૨૪ કલાક')}</span>
+                    </div>
+                    <div className="nav-dd-grid">
+                      {DOCTORS.map((d) => <DoctorMenuCard key={d.id} d={d} lang={lang} />)}
+                    </div>
+                    <Link to="doctors" className="nav-dd-all">
+                      {t('View all doctors & OPD timetable', 'બધા ડૉક્ટરો અને OPD સમયપત્રક જુઓ')} <ArrowRight size={15} />
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={l.id}
+                  to={l.id}
+                  className="nav-link"
+                  aria-current={activePage === l.id ? 'page' : undefined}
+                >
+                  {t(l.en, l.gu)}
+                </Link>
+              )
+            )}
           </nav>
 
           <div className="header-actions">
@@ -89,7 +176,7 @@ export default function Navbar({ activePage, lang, setLang }) {
               <Calendar size={16} />
               {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
             </Link>
-            <button className="menu-toggle" onClick={() => setMenuOpen(true)} aria-label="Open menu" aria-expanded={menuOpen}>
+            <button className="menu-toggle" onClick={open} aria-label="Open menu" aria-expanded={menuOpen}>
               <Menu size={22} />
             </button>
           </div>
@@ -98,33 +185,84 @@ export default function Navbar({ activePage, lang, setLang }) {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="mobile-menu" onClick={() => setMenuOpen(false)}>
-          <div className="mobile-menu-panel" role="dialog" aria-modal="true" aria-label="Menu" onClick={(e) => e.stopPropagation()}>
-            <div className="row" style={{ justifyContent: 'space-between', marginBottom: 12 }}>
-              <PulseLogo size={32} />
-              <button className="menu-toggle" onClick={() => setMenuOpen(false)} aria-label="Close menu"><X size={22} /></button>
+        <div className={`mobile-menu ${closing ? 'is-closing' : ''}`} onClick={close}>
+          <div className="mobile-menu-panel" role="dialog" aria-modal="true" aria-label={t('Menu', 'મેનુ')} onClick={(e) => e.stopPropagation()}>
+            {/* Emergency strip */}
+            <div className="mm-strip">
+              <a href={HOSPITAL_INFO.phoneHref} className="mm-strip-call">
+                <span className="mm-dot" aria-hidden="true" /> 24x7: {HOSPITAL_INFO.appointmentNumber}
+              </a>
+              <a href={whatsapp} target="_blank" rel="noreferrer" className="mm-strip-wa">
+                <WhatsAppIcon size={15} /> WhatsApp
+              </a>
             </div>
 
-            {NAV_LINKS.map((l) => {
-              const I = l.icon;
-              return (
-                <Link key={l.id} to={l.id} className="nav-link" aria-current={activePage === l.id ? 'page' : undefined} onClick={close}>
-                  <I size={18} /> {t(l.en, l.gu)}
+            <div className="mm-head">
+              <Link to="home" onClick={close} aria-label="Home"><PulseLogo size={34} /></Link>
+              <button className="mm-close" onClick={close} aria-label={t('Close menu', 'મેનુ બંધ કરો')}><X size={22} /></button>
+            </div>
+
+            <nav className="mm-list" aria-label={t('Main', 'મુખ્ય')}>
+              <Link to="home" className="mm-item" style={stagger(0)} aria-current={activePage === 'home' ? 'page' : undefined} onClick={close}>
+                <Home size={18} /> <span>{t('Home', 'મુખ્ય પૃષ્ઠ')}</span>
+              </Link>
+
+              <MenuGroup id="about" label={t('About Us', 'અમારા વિશે')} icon={Info} open={openGroup === 'about'} onToggle={() => toggleGroup('about')} style={stagger(1)}>
+                <ul className="mm-links">
+                  <li><Link to="about" onClick={close} aria-current={activePage === 'about' ? 'page' : undefined}><Info size={16} /> {t('About Pulse Hospital', 'પલ્સ હોસ્પિટલ વિશે')}</Link></li>
+                  <li><Link to="gallery" onClick={close} aria-current={activePage === 'gallery' ? 'page' : undefined}><Images size={16} /> {t('Hospital tour & photos', 'હોસ્પિટલ ટૂર અને ફોટા')}</Link></li>
+                  <li><Link to="contact" onClick={close} aria-current={activePage === 'contact' ? 'page' : undefined}><Mail size={16} /> {t('Contact & directions', 'સંપર્ક અને સરનામું')}</Link></li>
+                </ul>
+              </MenuGroup>
+
+              <MenuGroup id="doctors" label={t('Our Doctors', 'અમારા ડૉક્ટરો')} icon={Users} open={openGroup === 'doctors'} onToggle={() => toggleGroup('doctors')} style={stagger(2)}>
+                <div className="mm-docs">
+                  {DOCTORS.map((d) => <DoctorMenuCard key={d.id} d={d} lang={lang} onClick={close} />)}
+                </div>
+                <Link to="doctors" className="mm-all" onClick={close}>
+                  {t('View all doctors & timetable', 'બધા ડૉક્ટરો અને સમયપત્રક')} <ArrowRight size={15} />
                 </Link>
-              );
-            })}
+              </MenuGroup>
 
-            <div className="menu-divider" />
+              <MenuGroup id="facilities" label={t('Facilities', 'સુવિધાઓ')} icon={Building2} open={openGroup === 'facilities'} onToggle={() => toggleGroup('facilities')} style={stagger(3)}>
+                <ul className="mm-links mm-links-2">
+                  {MENU_FACILITIES.map((id) => FACILITIES.find((f) => f.id === id)).filter(Boolean).map((f) => (
+                    <li key={f.id}>
+                      <Link to="facilities" param={f.id} onClick={close}><Icon name={f.icon} size={16} /> {lang === 'en' ? f.name : f.nameGu}</Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link to="facilities" className="mm-all" onClick={close}>
+                  {t(`All ${FACILITIES.length} facilities`, 'બધી સુવિધાઓ')} <ArrowRight size={15} />
+                </Link>
+              </MenuGroup>
 
-            <Link to="book-appointment" className="btn btn-primary btn-lg" onClick={close}>
-              <Calendar size={18} /> {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
-            </Link>
-            <Link to="my-appointments" className="btn btn-secondary" style={{ marginTop: 8 }} onClick={close}>
-              <UserCheck size={17} /> {t('Check / Cancel My Booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}
-            </Link>
-            <a className="btn btn-emergency" style={{ marginTop: 8 }} href={HOSPITAL_INFO.phoneHref}>
-              <Phone size={17} /> {t('Call Emergency', 'ઇમરજન્સી કૉલ')}
-            </a>
+              <MenuGroup id="departments" label={t('Departments', 'વિભાગો')} icon={Stethoscope} open={openGroup === 'departments'} onToggle={() => toggleGroup('departments')} style={stagger(4)}>
+                <ul className="mm-links mm-links-2">
+                  {DEPARTMENTS.map((d) => (
+                    <li key={d.id}>
+                      <Link to="departments" param={d.id} onClick={close}><Icon name={d.icon} size={16} /> {lang === 'en' ? d.title : d.titleGujarati}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </MenuGroup>
+
+              <Link to="my-appointments" className="mm-item" style={stagger(5)} aria-current={activePage === 'my-appointments' ? 'page' : undefined} onClick={close}>
+                <UserCheck size={18} /> <span>{t('Check / Cancel My Booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}</span>
+              </Link>
+            </nav>
+
+            <div className="mm-actions" style={stagger(6)}>
+              <Link to="book-appointment" className="btn btn-primary btn-lg" onClick={close}>
+                <Calendar size={18} /> {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}
+              </Link>
+              <a className="btn btn-emergency" href={HOSPITAL_INFO.phoneHref}>
+                <Phone size={17} /> {t('Call Emergency', 'ઇમરજન્સી કૉલ')}
+              </a>
+              <button type="button" className="mm-lang" onClick={() => setLang(lang === 'en' ? 'gu' : 'en')}>
+                <Globe size={15} /> {lang === 'en' ? 'ગુજરાતીમાં જુઓ' : 'View in English'}
+              </button>
+            </div>
           </div>
         </div>
       )}
