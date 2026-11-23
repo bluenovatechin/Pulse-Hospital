@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calendar, Phone, ArrowRight, HeartPulse } from 'lucide-react';
-import { PageHero, Icon, Avatar, Photo, delay } from '../components/ui';
+import { PageHero, Icon, Avatar, Photo, RepBadge, delay } from '../components/ui';
 import { Link } from '../router';
 import { DEPARTMENTS, HOSPITAL_INFO, PHOTOS, getDoctor } from '../data/hospitalContent';
 
@@ -51,7 +51,7 @@ export default function DepartmentsPage({ lang = 'en' }) {
                 <Link key={d.id} to="departments" param={d.id} className="card card-hover dept-card" data-reveal style={delay(i, 50)}>
                   <span className={`dept-card-photo ${d.photo ? '' : 'is-art'}`}>
                     {d.photo
-                      ? <Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" />
+                      ? <><Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" /><RepBadge src={d.photo} /></>
                       : <span className="dept-art" aria-hidden="true"><Icon name={d.icon} size={48} strokeWidth={1.3} /></span>}
                     <span className="icon-tile mint"><Icon name={d.icon} size={22} /></span>
                   </span>

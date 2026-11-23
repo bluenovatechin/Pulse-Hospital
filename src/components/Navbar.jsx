@@ -26,15 +26,11 @@ const CLOSE_MS = 260;
 /** Compact doctor row used in the desktop dropdown and the mobile menu */
 function DoctorMenuCard({ d, lang, onClick }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
-  const hospName = d.hospital ? (lang === 'en' ? d.hospital.split(',')[0] : (d.hospitalGujarati || d.hospital).split(',')[0]) : null;
   return (
     <Link to="doctors" param={d.slug} className="menu-doc" onClick={onClick}>
       <Avatar doctor={d} size="sm" />
       <span className="menu-doc-text">
-        <span className="menu-doc-top">
-          <strong>{lang === 'en' ? d.name : d.nameGujarati}</strong>
-          {hospName && <span className="menu-doc-hosp">{hospName}</span>}
-        </span>
+        <strong>{lang === 'en' ? d.name : d.nameGujarati}</strong>
         {d.qualification && <span className="menu-doc-qual">{d.qualification}</span>}
         <span className="menu-doc-role">{t(d.designation, d.designationGujarati || d.designation)}</span>
         <span className="menu-doc-link">{t('View profile', 'પ્રોફાઇલ જુઓ')} <ArrowRight size={13} /></span>
@@ -184,11 +180,6 @@ export default function Navbar({ activePage, lang, setLang }) {
           </nav>
 
           <div className="header-actions">
-            <a href={HOSPITAL_INFO.phoneHref} className="btn-header-emergency hide-md" title={t('24x7 Emergency Call', '૨૪x૭ ઇમરજન્સી કૉલ')}>
-              <span className="live-beacon-red" aria-hidden="true" />
-              <Phone size={14} />
-              <span>{t('24×7 Emergency', '૨૪x૭ ઇમરજન્સી')}</span>
-            </a>
             <Link to="book-appointment" className="btn btn-primary header-book" style={{ padding: '11px 18px', fontSize: 14 }}>
               <Calendar size={16} />
               {t('Book Appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}

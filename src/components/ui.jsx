@@ -8,7 +8,7 @@ import {
   Pill, Armchair, Soup, Brain, CheckCircle2, Accessibility, Bone,
   Ambulance, Snowflake, GlassWater
 } from 'lucide-react';
-import { photoSrcSet } from '../data/hospitalContent';
+import { photoSrcSet, isRepresentative } from '../data/hospitalContent';
 import { Link } from '../router';
 import CountUp from './CountUp';
 
@@ -95,12 +95,19 @@ export function Avatar({ doctor, size = '' }) {
   );
 }
 
+// Small honest label on illustrations that are not photos of this hospital
+export function RepBadge({ src }) {
+  if (!isRepresentative(src)) return null;
+  return <span className="rep-badge">Representative image</span>;
+}
+
 // Photo if we have one, illustrated icon tile otherwise
 export function Media({ photo, icon, alt = '', className = '', iconSize = 56, shade = false, children }) {
   if (photo) {
     return (
       <div className={`photo ${shade ? 'photo-shade' : ''} ${className}`}>
         <Photo src={photo} alt={alt} sizes="(max-width: 720px) 100vw, 33vw" />
+        <RepBadge src={photo} />
         {children}
       </div>
     );
@@ -185,6 +192,7 @@ export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, a
           <div className="page-hero-media page-enter" style={{ animationDelay: '90ms' }}>
             <div className="hero-frame">
               <Photo src={photo} alt={photoAlt} eager sizes="(max-width: 1023px) 100vw, 45vw" />
+              <RepBadge src={photo} />
             </div>
             {note && (
               <div className="hero-note">

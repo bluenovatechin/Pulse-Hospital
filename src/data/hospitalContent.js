@@ -106,8 +106,26 @@ export const PHOTOS = {
   pharmacy: photo(31),
   pharmacyFront: photo(32),
   dialysis: photo(33),
+  emergencyRoom: photo(34),
+  deluxeRoom: photo(42),
+  // AI-generated illustrations (shown with a "Representative image" label;
+  // replace with real photos when available, then remove from REPRESENTATIVE_PHOTOS)
+  ambulance: photo(35),
+  ctScan: photo(36),
+  cardiology: photo(37),
+  endoscopy: photo(38),
+  physio: photo(39),
+  pulmoLab: photo(40),
+  roPlant: photo(41),
   doctorsTeam: `${ASSET_BASE}doctors-team.jpeg`
 };
+
+// Photos that are illustrations, not pictures of this hospital
+export const REPRESENTATIVE_PHOTOS = new Set([
+  PHOTOS.ambulance, PHOTOS.ctScan, PHOTOS.cardiology, PHOTOS.endoscopy,
+  PHOTOS.physio, PHOTOS.pulmoLab, PHOTOS.roPlant
+]);
+export const isRepresentative = (src) => REPRESENTATIVE_PHOTOS.has(src);
 
 // One-minute walkthrough filmed in the hospital (public/video). The patient
 // shot from the original recording is cut out. `at` = seconds into the video.
@@ -463,7 +481,7 @@ export const FACILITIES = [
     name: "Emergency & Trauma",
     nameGu: "ટ્રોમા & ઇમરજન્સી વિભાગ",
     icon: "Siren",
-    photo: null, // needs a real photo
+    photo: PHOTOS.emergencyRoom,
     is24x7: true,
     summary: "A casualty desk with an immediate doctor response for accidents, poisoning, snakebite, burns, stroke and high fever.",
     summaryGu: "અકસ્માત, ઝેર, સાપ કરડવો, બર્ન્સ અને સ્ટ્રોક માટે તાત્કાલિક ડોક્ટર સેવા સાથેનું કેઝ્યુઅલટી ડેસ્ક.",
@@ -524,7 +542,7 @@ export const FACILITIES = [
     name: "In-House CT Scan",
     nameGu: "ઈન-હાઉસ સીટી સ્કેન",
     icon: "Scan",
-    photo: null,
+    photo: PHOTOS.ctScan,
     is24x7: true,
     summary: "Modasa CT Scan Centre on the same premises with high-precision gantry and technician workstation, requiring zero transfer delay.",
     summaryGu: "હોસ્પિટલ પરિસરમાં જ મોડાસા સીટી સ્કેન સેન્ટર, અદ્યતન ગેન્ટ્રી મશીન અને ટેકનિશિયન વર્કસ્ટેશન સાથે.",
@@ -585,7 +603,7 @@ export const FACILITIES = [
     name: "Lung Function & Bronchoscopy Lab",
     nameGu: "ફેફસાં તપાસ લેબ (બ્રોન્કોસ્કોપી, PFT)",
     icon: "Wind",
-    photo: null,
+    photo: PHOTOS.pulmoLab,
     is24x7: false,
     summary: "Specialist lung testing led by the chest physician: bronchoscopy, spirometry and sleep studies.",
     summaryGu: "ચેસ્ટ ફિઝિશિયન દ્વારા ફેફસાની વિશિષ્ટ તપાસ: બ્રોન્કોસ્કોપી, સ્પાઇરોમેટ્રી (PFT) અને સ્લીપ સ્ટડી.",
@@ -644,7 +662,7 @@ export const FACILITIES = [
     name: "Super Deluxe & Deluxe Rooms",
     nameGu: "સુપર ડીલક્ષ & ડીલક્ષ રૂમ (૩ રૂમ)",
     icon: "BedSingle",
-    photo: null, // needs a real photo
+    photo: PHOTOS.deluxeRoom,
     is24x7: true,
     summary: "3 private air-conditioned deluxe rooms for quiet recovery, with attached bathroom and dedicated attendant space.",
     summaryGu: "શાંત વાતાવરણ અને સ્વજનોના રહેવાની સુવિધા સાથે ૩ પ્રાઇવેટ એર-કન્ડિશન્ડ ડીલક્ષ રૂમ.",
@@ -701,7 +719,7 @@ export const FACILITIES = [
     name: "Physiotherapy Department",
     nameGu: "ફીઝીયોથેરાપી વિભાગ",
     icon: "Accessibility",
-    photo: null,
+    photo: PHOTOS.physio,
     is24x7: false,
     summary: "Rehabilitation that helps patients get moving again after surgery, a stroke, a fracture or a long ICU stay.",
     summaryGu: "સર્જરી, લકવો, ફ્રેક્ચર કે લાંબા ICU રોકાણ પછી દર્દીને ફરી હરતા-ફરતા કરવા માટે ફીઝીયોથેરાપી.",
@@ -757,7 +775,7 @@ export const FACILITIES = [
     name: "24x7 Emergency Ambulance Service",
     nameGu: "૨૪ કલાક ઇમરજન્સી એમ્બ્યુલન્સ સેવા",
     icon: "Ambulance",
-    photo: null,
+    photo: PHOTOS.ambulance,
     is24x7: true,
     summary: "Dedicated 24x7 patient pickup and transfer ambulance fitted with continuous medical oxygen, stretcher, emergency first-aid kit, and trained paramedical staff.",
     summaryGu: "ઓક્સિજન સિલિન્ડર, સ્ટ્રેચર, ફર્સ્ટ-એઇડ અને પેરામેડિક સ્ટાફ સાથે દર્દીઓને ઝડપી લાવવા-લઈ જવા માટે ૨૪ કલાક કાર્યરત એમ્બ્યુલન્સ.",
@@ -777,7 +795,7 @@ export const FACILITIES = [
     name: "24x7 Purified Mineral Water (RO Plant)",
     nameGu: "૨૪ કલાક શુદ્ધ RO મિનરલ વોટર સુવિધા",
     icon: "GlassWater",
-    photo: null,
+    photo: PHOTOS.roPlant,
     is24x7: true,
     summary: "Dedicated multi-stage commercial RO water purification plant providing 100% clean, hygienic, and safe mineral drinking water across all hospital floors.",
     summaryGu: "તમામ વોર્ડ, રૂમ અને વેઇટિંગ એરિયામાં દર્દીઓ તેમજ તેમના સ્વજનો માટે અદ્યતન RO પ્લાન્ટ દ્વારા ૨૪ કલાક શુદ્ધ પીવાનું મિનરલ પાણી.",
@@ -876,6 +894,7 @@ export const DEPARTMENTS = [
     title: "Heart & Cardio-Metabolic Care",
     titleGujarati: "હૃદય રોગો / એન્ડોક્રાઇન",
     icon: "HeartPulse",
+    photo: PHOTOS.cardiology,
     intro: "Emergency and ongoing care for the heart, blood pressure and related metabolic conditions.",
     conditions: ["Heart attack", "Hypertensive crisis", "Heart failure", "Cholesterol & metabolic disease", "Arrhythmia & valve disorders"],
     conditionsGu: "હાર્ટ એટેક, બી.પી. (હાઈપરટેન્શન), થાઇરોઇડ, અનિયંત્રિત ડાયાબીટીસ, અનિયમિત ધબકારા",
@@ -888,6 +907,7 @@ export const DEPARTMENTS = [
     title: "Chest & Pulmonology",
     titleGujarati: "ફેફસાના રોગો (ચેસ્ટ & પલ્મોનોલોજી)",
     icon: "Wind",
+    photo: PHOTOS.pulmoLab,
     intro: "Everything to do with the lungs and breathing: from long-term asthma to ICU ventilation.",
     conditions: ["Breathlessness", "Pneumonia", "Fluid in the lungs", "Asthma", "COPD", "Sleep apnoea", "Post-COVID lung fibrosis"],
     conditionsGu: "શ્વાસ ચડવો, ન્યુમોનીયા, ફેફસામા પાણી ભરાવુ, અસ્થમા, સીઓપીડી (COPD)",
@@ -913,6 +933,7 @@ export const DEPARTMENTS = [
     title: "Liver & Stomach (Gastro)",
     titleGujarati: "લીવર / પેટના રોગો",
     icon: "Soup",
+    photo: PHOTOS.endoscopy,
     intro: "Care for the digestive system and liver, supported by endoscopy.",
     conditions: ["Jaundice", "Diarrhoea & vomiting", "Bowel inflammation", "Bleeding in the stomach"],
     conditionsGu: "કમળો, ઝાડા-ઉલ્ટી, આંતરડાનો સોજો, પેટમાં રક્તસ્ત્રાવ",
@@ -925,6 +946,7 @@ export const DEPARTMENTS = [
     title: "Brain & Stroke Care",
     titleGujarati: "મગજના રોગો",
     icon: "Brain",
+    photo: PHOTOS.ctScan,
     intro: "Fast diagnosis and treatment for stroke and other brain emergencies; the in-house CT saves critical minutes.",
     conditions: ["Paralysis (stroke)", "Brain haemorrhage", "Fits / seizures", "Encephalitis (brain fever)"],
     conditionsGu: "લકવો (Paralysis), મગજનું હેમરેજ, ખેંચ (Fits), મગજનો તાવ (Encephalitis)",
@@ -937,6 +959,7 @@ export const DEPARTMENTS = [
     title: "Emergency, Trauma & Poisoning",
     titleGujarati: "ટ્રોમા / ઈમરજન્સી & પોઇઝનીંગ",
     icon: "Siren",
+    photo: PHOTOS.emergencyRoom,
     intro: "Immediate care for accidents, bites and poisoning. Walk in any time: no appointment needed.",
     conditions: ["Road accident injuries", "Burns", "Electric shock", "Heat stroke", "Snakebite", "Insect bites", "Pesticide / drug poisoning"],
     conditionsGu: "અકસ્માત ઈજા, દાઝી જવું, વીજ કરંટ લાગવો, હીટ સ્ટ્રોક · સાપ કરડવો, ઝેરી દવાની અસર",
@@ -1007,6 +1030,7 @@ export const GALLERY_IMAGES = [
   { id: 30, title: "ICU with centralised AC", titleGujarati: "સેન્ટ્રલ AC સાથે આઈ.સી.યુ.", category: "ICU", src: PHOTOS.icuCentralAc },
   { id: 33, title: "Dialysis machine at the ICU bedside", titleGujarati: "આઈ.સી.યુ.માં ડાયાલીસીસ મશીન", category: "ICU", src: PHOTOS.dialysis },
   { id: 19, title: "Nursing station", titleGujarati: "નર્સિંગ સ્ટેશન", category: "ICU", src: PHOTOS.nursingStation },
+  { id: 34, title: "Emergency room beds", titleGujarati: "ઇમરજન્સી રૂમ બેડ", category: "ICU", src: PHOTOS.emergencyRoom },
   { id: 29, title: "ICCU entrance", titleGujarati: "આઈ.સી.સી.યુ. પ્રવેશ", category: "ICU", src: PHOTOS.iccuEntry },
   { id: 13, title: "Modular operation theatre", titleGujarati: "મોડ્યુલર ઓપરેશન થીયેટર", category: "Surgery", src: PHOTOS.ot1 },
   { id: 14, title: "Operation theatre with laminar airflow", titleGujarati: "લેમિનાર એરફ્લો ઓપરેશન થીયેટર", category: "Surgery", src: PHOTOS.ot2 },
@@ -1015,6 +1039,7 @@ export const GALLERY_IMAGES = [
   { id: 11, title: "Surgical unit entrance", titleGujarati: "સર્જિકલ યુનિટ", category: "Surgery", src: PHOTOS.surgicalUnit },
   { id: 7, title: "Twin-sharing patient room", titleGujarati: "ટ્વીન શેરિંગ રૂમ", category: "Rooms", src: PHOTOS.twinRoom },
   { id: 27, title: "Ward beds with privacy curtains", titleGujarati: "પડદા સાથે વોર્ડ બેડ", category: "Rooms", src: PHOTOS.wardBays },
+  { id: 42, title: "Deluxe room", titleGujarati: "ડીલક્ષ રૂમ", category: "Rooms", src: PHOTOS.deluxeRoom },
   { id: 3, title: "Corridor to the deluxe rooms", titleGujarati: "ડીલક્ષ રૂમ કોરિડોર", category: "Rooms", src: PHOTOS.corridor },
   { id: 22, title: "24x7 pathology laboratory", titleGujarati: "૨૪ કલાક લેબોરેટરી", category: "Diagnostics", src: PHOTOS.lab },
   { id: 23, title: "Lab centrifuge and sample tubes", titleGujarati: "લેબ સેન્ટ્રીફ્યુજ અને સેમ્પલ ટ્યુબ", category: "Diagnostics", src: PHOTOS.labSamples },
