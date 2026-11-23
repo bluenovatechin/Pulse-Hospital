@@ -5,24 +5,19 @@ import AppointmentLookup from '../components/AppointmentLookup';
 import AppointmentSlip from '../components/AppointmentSlip';
 import { Link, navigateTo } from '../router';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
+import { getUnlocked, pruneOld } from '../lib/appointments';
 
-const STORAGE_KEY = 'pulse_hospital_appointments';
-
-// /my-appointments          bookings saved in this browser
-// /my-appointments/<id>     one printable slip
+// /my-appointments          private lookup (booking ID + mobile number)
+// /my-appointments/<id>     the slip, only if verified (or just booked) in this tab
 export default function AppointmentsPage({ appointmentId, lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
 
-  // Bookings live in this browser only, so read them after the page loads
+  // Read after the page loads (storage exists only in the browser)
   const [appointment, setAppointment] = useState(undefined); // undefined = not read yet
   useEffect(() => {
+    pruneOld();
     if (!appointmentId) return;
-    try {
-      const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      setAppointment(all.find((a) => a.id === appointmentId) || null);
-    } catch {
-      setAppointment(null);
-    }
+    setAppointment(getUnlocked(appointmentId));
   }, [appointmentId]);
 
   const actions = (
@@ -36,34 +31,31 @@ export default function AppointmentsPage({ appointmentId, lang = 'en' }) {
     </>
   );
 
+  const openSlip = (appt) => {
+    if (appt.id === appointmentId) setAppointment(appt);
+    else navigateTo('my-appointments', appt.id);
+  };
+
   if (appointmentId) {
     return (
       <div>
         <PageHero
-          crumbs={[{ label: t('My appointments', 'મારી એપોઇન્ટમેન્ટ'), to: 'my-appointments' }, { label: appointmentId }]}
+          crumbs={[{ label: t('My appointment', 'મારી એપોઇન્ટમેન્ટ'), to: 'my-appointments' }, { label: t('Slip', 'સ્લિપ') }]}
           eyebrow={t('Booking slip', 'બુકિંગ સ્લિપ')}
-          title={t(`Appointment ${appointmentId}`, `એપોઇન્ટમેન્ટ ${appointmentId}`)}
-          text={t(
-            'Print this slip or share it on WhatsApp. Please bring it, with your past reports, when you come for your visit.',
-            'આ સ્લિપ પ્રિન્ટ કરો અથવા વોટ્સએપ પર મેળવો. મુલાકાત વખતે જૂના રિપોર્ટ્સ સાથે લાવો.'
-          )}
+          title={appointment ? t(`Appointment ${appointment.id}`, `એપોઇન્ટમેન્ટ ${appointment.id}`) : t('Open your booking slip', 'તમારી બુકિંગ સ્લિપ ખોલો')}
+          text={appointment
+            ? t('Print this slip or share it as a PDF. Please bring it, with your past reports, when you come for your visit.', 'આ સ્લિપ પ્રિન્ટ કરો અથવા PDF તરીકે શેર કરો. મુલાકાત વખતે જૂના રિપોર્ટ્સ સાથે લાવો.')
+            : t('For privacy, confirm the mobile number used for this booking.', 'ગોપનીયતા માટે, આ બુકિંગ વખતે આપેલો મોબાઇલ નંબર લખો.')}
         />
         <section className="section">
           <div className="container-wide">
             {appointment === undefined && <div className="page-loading" style={{ minHeight: 320 }} aria-busy="true" />}
             {appointment === null && (
-              <div className="card page-card empty-state">
-                <h2>{t('We couldn’t find this booking on this device', 'આ ડિવાઇસ પર આ બુકિંગ મળી નહીં')}</h2>
-                <p className="muted">
-                  {t(
-                    'Booking slips are saved in the browser they were made on. If you booked on another phone, open the link there, or ask reception on WhatsApp.',
-                    'બુકિંગ સ્લિપ જે બ્રાઉઝરમાં બુકિંગ કર્યું હોય ત્યાં જ સચવાય છે. બીજા ફોન પરથી બુક કર્યું હોય તો ત્યાં ખોલો અથવા રિસેપ્શનને વોટ્સએપ કરો.'
-                  )}
-                </p>
-                <div className="row" style={{ marginTop: 16 }}>{actions}</div>
-              </div>
+              <AppointmentLookup lang={lang} presetId={appointmentId} onViewSlip={openSlip} />
             )}
-            {appointment && <AppointmentSlip appointment={appointment} lang={lang} />}
+            {appointment && (
+              <AppointmentSlip appointment={appointment} lang={lang} onChange={setAppointment} />
+            )}
           </div>
         </section>
       </div>
@@ -73,12 +65,12 @@ export default function AppointmentsPage({ appointmentId, lang = 'en' }) {
   return (
     <div>
       <PageHero
-        crumbs={t('My appointments', 'મારી એપોઇન્ટમેન્ટ')}
-        eyebrow={t('My appointments', 'મારી એપોઇન્ટમેન્ટ')}
-        title={t('Check, print or cancel a booking', 'બુકિંગ ચેક, પ્રિન્ટ અથવા રદ કરો')}
+        crumbs={t('My appointment', 'મારી એપોઇન્ટમેન્ટ')}
+        eyebrow={t('My appointment', 'મારી એપોઇન્ટમેન્ટ')}
+        title={t('Check, print or cancel your booking', 'તમારી બુકિંગ ચેક, પ્રિન્ટ અથવા રદ કરો')}
         text={t(
-          'Bookings made on this phone or computer are listed below. Search by mobile number or booking ID (e.g. PLS-920101).',
-          'આ ફોન કે કમ્પ્યુટર પરથી કરેલી બુકિંગ નીચે દેખાશે. મોબાઇલ નંબર અથવા બુકિંગ ID (દા.ત. PLS-920101) દ્વારા શોધો.'
+          'Enter your booking ID and mobile number to open your slip. Only you can see your booking.',
+          'તમારી સ્લિપ ખોલવા બુકિંગ ID અને મોબાઇલ નંબર લખો. તમારી બુકિંગ ફક્ત તમે જ જોઈ શકો છો.'
         )}
         actions={actions}
       />

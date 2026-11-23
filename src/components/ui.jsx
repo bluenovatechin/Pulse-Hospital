@@ -145,7 +145,7 @@ export function Photo({ src, alt = '', sizes = '(max-width: 720px) 100vw, 50vw',
  * `crumbs` is the trail after "Home": a string for a top-level page, or
  * [{ label, to, param }] for deeper pages (the last item is the current page).
  */
-export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, actions, facts = [], factsLabel, factsNote, note, aside }) {
+export function PageHero({ eyebrow, title, text, photo, photoAlt = '', photoPosition, crumbs, actions, facts = [], factsLabel, factsNote, note, aside }) {
   const trail = !crumbs ? [] : Array.isArray(crumbs) ? crumbs : [{ label: crumbs }];
   return (
     <section className="page-hero">
@@ -191,7 +191,7 @@ export function PageHero({ eyebrow, title, text, photo, photoAlt = '', crumbs, a
         {!aside && photo && (
           <div className="page-hero-media page-enter" style={{ animationDelay: '90ms' }}>
             <div className="hero-frame">
-              <Photo src={photo} alt={photoAlt} eager sizes="(max-width: 1023px) 100vw, 45vw" />
+              <Photo src={photo} alt={photoAlt} eager sizes="(max-width: 1023px) 100vw, 45vw" style={photoPosition ? { objectPosition: photoPosition } : undefined} />
               <RepBadge src={photo} />
             </div>
             {note && (

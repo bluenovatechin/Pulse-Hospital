@@ -1,11 +1,11 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { Phone, Calendar, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import CookieConsentBanner from './components/CookieConsentBanner';
 import HomePage from './pages/HomePage';
 import { WhatsAppIcon } from './components/ui';
-import { useRoute, navigateTo, Link } from './router';
+import { useRoute, navigateTo } from './router';
 import useReveal from './hooks/useReveal';
 import { HOSPITAL_INFO, getDoctor, getFacility, getDepartment } from './data/hospitalContent';
 import { SITE_URL, getPageMeta, pagePath } from './data/seo';
@@ -188,22 +188,6 @@ export default function App({ url }) {
         >
           <WhatsAppIcon size={28} />
         </a>
-        <a
-          className="fab er"
-          href={HOSPITAL_INFO.phoneHref}
-          aria-label={lang === 'en' ? 'Call emergency' : 'ઇમરજન્સી કૉલ'}
-          data-tooltip={lang === 'en' ? 'Emergency: 95120 45641' : 'ઇમરજન્સી: ૯૫૧૨૦ ૪૫૬૪૧'}
-        >
-          <Phone size={20} strokeWidth={2.2} />
-        </a>
-        <Link
-          to="book-appointment"
-          className="fab book"
-          aria-label={lang === 'en' ? 'Book appointment' : 'એપોઇન્ટમેન્ટ બુક કરો'}
-          data-tooltip={lang === 'en' ? 'Book Appointment' : 'સ્લોટ બુક કરો'}
-        >
-          <Calendar size={20} strokeWidth={2.2} />
-        </Link>
       </div>
     </div>
   );

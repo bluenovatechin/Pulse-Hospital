@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { CheckCircle2, LayoutGrid, Calendar, Phone, Scan, Eye } from 'lucide-react';
 import FacilityCard from '../components/FacilityCard';
-import { PageHero, SectionHead, Icon, delay } from '../components/ui';
+import { PageHero, SectionHead, Icon } from '../components/ui';
 import { Link } from '../router';
 import {
   FACILITIES, FACILITY_CATEGORIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS, BED_STATS
@@ -111,17 +111,22 @@ export default function FacilitiesPage({ lang = 'en' }) {
             title={t('The full facility checklist', 'હોસ્પિટલમાં ઉપલબ્ધ મુખ્ય સુવિધાઓ')}
             text={t('As printed in the Pulse Hospital brochure, in Gujarati and English.', 'પલ્સ હોસ્પિટલની બ્રોશર મુજબ.')}
           />
-          <div className="checklist">
-            {HOSPITAL_FACILITIES.map((f, i) => (
-              <div className="check-item" key={f.en} data-reveal style={delay(i, 30)}>
-                <CheckCircle2 size={18} />
-                <div>
-                  <strong className="gujarati-text">{f.gu}</strong>
-                  <span>{f.en}</span>
+          <details className="checklist-toggle" data-reveal>
+            <summary>
+              {t(`Show the full brochure checklist (${HOSPITAL_FACILITIES.length})`, `બ્રોશરની પૂરી યાદી જુઓ (${HOSPITAL_FACILITIES.length})`)}
+            </summary>
+            <div className="checklist">
+              {HOSPITAL_FACILITIES.map((f) => (
+                <div className="check-item" key={f.en}>
+                  <CheckCircle2 size={18} />
+                  <div>
+                    <strong className="gujarati-text">{f.gu}</strong>
+                    <span>{f.en}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </details>
         </div>
       </section>
 

@@ -98,7 +98,12 @@ export function navigateTo(page, param = null, { replace = false } = {}) {
   // Cross-fade between pages where the browser supports it; plain swap otherwise
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   if (!replace && !reduceMotion && document.startViewTransition) {
-    document.startViewTransition(go);
+    // While the browser cross-fades, skip the page's own entrance animation
+    // so the two don't stack (one smooth motion instead of two)
+    const html = document.documentElement;
+    html.classList.add('vt-nav');
+    const vt = document.startViewTransition(go);
+    vt.finished.finally(() => html.classList.remove('vt-nav'));
   } else {
     go();
   }

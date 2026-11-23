@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import {
-  Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText,
-  HeartPulse, Activity, Scan, Droplets, Scissors, Sparkles, ShieldCheck
+  Calendar, Phone, Siren, ArrowRight, Plus, Clock, FileText,
+  HeartPulse, Activity, Scan, Droplets, Scissors
 } from 'lucide-react';
-import { SectionHead, Media, Icon, Photo, RepBadge, CountUp, delay } from '../components/ui';
-import DoctorMini from '../components/DoctorMini';
-import { HeroVideo, EmergencySteps } from '../components/HomeExtras';
+import { Icon, Photo, CountUp, delay } from '../components/ui';
+import { HeroVideo } from '../components/HomeExtras';
 import { Link } from '../router';
 import {
-  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, MILESTONES, getFacility
+  HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, FAQS, MILESTONES, getFacility
 } from '../data/hospitalContent';
 
-// Facilities featured in the home-page bento grid, in display order
+// Facilities featured on the home page (all have real photos), in display order
 const FEATURED = ['icu', 'ot', 'dialysis', 'lab', 'imaging', 'pharmacy'];
 
 export default function HomePage({ lang = 'en' }) {
@@ -100,83 +99,49 @@ export default function HomePage({ lang = 'en' }) {
         </div>
       </section>
 
-      {/* ---------- Milestone Stats (Right Below Hero Fold) ---------- */}
-      <div className="hero-milestones-bar">
-        <div className="container-wide">
-          <div className="metrics-strip-card">
-            <div className="metrics-intro">
-              <span className="metrics-period-badge">
-                <Sparkles size={13} /> {t(MILESTONES.period, MILESTONES.periodGu)}
-              </span>
-              <p className="metrics-trust-label gujarati-text">{MILESTONES.noteGu}</p>
+      {/* ---------- Trust strip: real numbers, no boxes ---------- */}
+      <section className="hp-trust" aria-label={t('Pulse Hospital in numbers', 'આંકડામાં પલ્સ હોસ્પિટલ')}>
+        <div className="container-wide hp-trust-inner" data-reveal>
+          <p className="hp-trust-label">{t(MILESTONES.period, MILESTONES.periodGu)}</p>
+          <dl className="hp-trust-list">
+            {MILESTONES.items.map((m) => (
+              <div key={m.en} className="hp-trust-item">
+                <dt><CountUp value={m.value} /></dt>
+                <dd>{t(m.en, m.gu)}</dd>
+              </div>
+            ))}
+            <div className="hp-trust-item">
+              <dt>24×7</dt>
+              <dd>{t('Emergency, ICU & dialysis', 'ઇમરજન્સી, ICU અને ડાયાલિસિસ')}</dd>
             </div>
-            <div className="metrics-grid">
-              {MILESTONES.items.map((m, idx) => {
-                const icons = [HeartPulse, Users, ShieldCheck];
-                const IconCmp = icons[idx] || Activity;
-                return (
-                  <div key={m.en} className="metric-item">
-                    <div className="metric-icon-wrap"><IconCmp size={15} /></div>
-                    <div className="metric-info">
-                      <span className="metric-value"><CountUp value={m.value} /></span>
-                      <span className="metric-title">{t(m.en, m.gu)}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          </dl>
         </div>
-      </div>
+      </section>
 
-      {/* ---------- Quick actions ---------- */}
-      <div className="container-wide quick-actions">
-        <div className="quick-grid">
-          <Link to="book-appointment" className="quick-card" data-reveal style={delay(0)}>
-            <span className="icon-tile"><Calendar size={22} /></span>
-            <span><strong>{t('Book a slot', 'સ્લોટ બુક કરો')}</strong><small>{t('Pick a doctor, day & 30-min time', 'ડૉક્ટર, દિવસ અને સમય પસંદ કરો')}</small></span>
-          </Link>
-          <Link to="doctors" className="quick-card" data-reveal style={delay(1)}>
-            <span className="icon-tile mint"><Users size={22} /></span>
-            <span><strong>{t('Find a doctor', 'ડૉક્ટર શોધો')}</strong><small>{t('See who treats what, and when', 'કોણ શું સારવાર કરે છે')}</small></span>
-          </Link>
-          <Link to="my-appointments" className="quick-card" data-reveal style={delay(2)}>
-            <span className="icon-tile"><UserCheck size={22} /></span>
-            <span><strong>{t('My booking', 'મારી એપોઇન્ટમેન્ટ')}</strong><small>{t('View slip or cancel with your mobile no.', 'સ્લિપ જુઓ અથવા રદ કરો')}</small></span>
-          </Link>
-          <a className="quick-card is-er" href={HOSPITAL_INFO.phoneHref} data-reveal style={delay(3)}>
-            <span className="icon-tile"><Siren size={22} /></span>
-            <span><strong>{t('Emergency', 'ઇમરજન્સી')}</strong><small>{t('No appointment needed: call or walk in', 'એપોઇન્ટમેન્ટ જરૂરી નથી')}</small></span>
-          </a>
-        </div>
-      </div>
-
-      {/* ---------- What to do in an emergency ---------- */}
-      {/*   <EmergencySteps lang={lang} />*/}
-
-      {/* ---------- Facilities bento ---------- */}
-      <section className="section ">
+      {/* ---------- Key facilities: photo, then text (never text on photo) ---------- */}
+      <section className="hp-section">
         <div className="container-wide">
-          <div className="row-between" style={{ marginBottom: 32 }}>
-            <SectionHead
-              eyebrow={t('Facilities', 'સુવિધાઓ')}
-              title={t('Everything critical, under one roof', 'જરૂરી બધી સુવિધા, એક જ છત નીચે')}
-              text={t('Tap any facility to see what it includes, who it is for, and which doctors work there.', 'કોઈપણ સુવિધા પર ક્લિક કરી વિગત જુઓ.')}
-            />
-            <Link to="facilities" className="btn btn-outline" data-reveal>
+          <header className="hp-head" data-reveal>
+            <div>
+              <p className="hp-kicker">{t('Facilities', 'સુવિધાઓ')}</p>
+              <h2 className="hp-title">{t('Everything critical, under one roof', 'જરૂરી બધી સુવિધા, એક જ છત નીચે')}</h2>
+            </div>
+            <Link to="facilities" className="hp-link">
               {t(`All ${FACILITIES.length} facilities`, 'બધી સુવિધાઓ')} <ArrowRight size={16} />
             </Link>
-          </div>
+          </header>
 
-          <div className="bento">
+          <div className="hp-fac-grid">
             {featured.map((f, i) => (
-              <Link to="facilities" param={f.id} key={f.id} className="bento-tile" data-reveal style={delay(i)}>
-                <Media photo={f.photo} icon={f.icon} alt={f.name} iconSize={i === 0 ? 96 : 64} />
-                <span className="go" aria-hidden="true"><ArrowUpRight size={18} /></span>
-                <span className="inner">
-                  {f.is24x7 && <span className="chip chip-dark"><span className="live-dot" style={{ color: 'var(--mint)' }} /> 24x7</span>}
+              <Link to="facilities" param={f.id} key={f.id} className="hp-fac" data-reveal style={delay(i, 80)}>
+                <span className="hp-fac-img">
+                  <Photo src={f.photo} alt={lang === 'en' ? f.name : f.nameGu} sizes="(max-width: 720px) 100vw, 33vw" />
+                  {f.is24x7 && <span className="hp-fac-tag">24×7</span>}
+                </span>
+                <span className="hp-fac-body">
                   <h3>{lang === 'en' ? f.name : f.nameGu}</h3>
                   <p>{f.summary}</p>
+                  <span className="hp-more">{t('View details', 'વિગત જુઓ')} <ArrowRight size={15} /></span>
                 </span>
               </Link>
             ))}
@@ -185,163 +150,122 @@ export default function HomePage({ lang = 'en' }) {
       </section>
 
       {/* ---------- Doctors ---------- */}
-      <section className="section section--white">
+      <section className="hp-section hp-section--tint">
         <div className="container-wide">
-          <div className="row-between" style={{ marginBottom: 32 }}>
-            <SectionHead
-              eyebrow={t('Our doctors', 'અમારા ડૉક્ટરો')}
-              title={t('Know who is treating you', 'તમારી સારવાર કોણ કરે છે')}
-              text={t(`Our ${DOCTORS.length} doctors care for patients in the OPD, the ICU and Emergency, day and night.`, `અમારા ${DOCTORS.length} ડૉક્ટરો OPD, ICU અને ઇમરજન્સીમાં દિવસ-રાત દર્દીઓની સંભાળ રાખે છે.`)}
-            />
-            <Link to="doctors" className="btn btn-outline" data-reveal>
-              {t('All doctors & timetable', 'બધા ડૉક્ટરો')} <ArrowRight size={16} />
+          <header className="hp-head" data-reveal>
+            <div>
+              <p className="hp-kicker">{t('Our doctors', 'અમારા ડૉક્ટરો')}</p>
+              <h2 className="hp-title">{t('Know who is treating you', 'તમારી સારવાર કોણ કરે છે')}</h2>
+            </div>
+            <Link to="doctors" className="hp-link">
+              {t('All doctors & timetable', 'બધા ડૉક્ટરો અને સમયપત્રક')} <ArrowRight size={16} />
             </Link>
-          </div>
-          <div className="doc-row">
-            {DOCTORS.map((d, i) => <DoctorMini key={d.id} doctor={d} lang={lang} style={delay(i)} />)}
-          </div>
-        </div>
-      </section>
+          </header>
 
-      {/* ---------- How booking works ---------- */}
-      <section className="section how-to-book">
-        <div className="container-wide">
-          <SectionHead
-            center
-            eyebrow={t('Skip the queue', 'લાઈન વગર')}
-            title={t('Book your OPD visit in four steps', 'ચાર સ્ટેપમાં એપોઇન્ટમેન્ટ')}
-          />
-          <div className="steps">
-            {[
-              [t('Choose a doctor', 'ડૉક્ટર પસંદ કરો'), t('Pick the specialist you need, or start from a doctor’s profile.', 'તમને જરૂરી નિષ્ણાંત પસંદ કરો.')],
-              [t('Pick a day', 'દિવસ પસંદ કરો'), t('Today or any of the next 15 days.', 'આજે અથવા આગામી ૧૫ દિવસમાંથી કોઈપણ દિવસ.')],
-              [t('Select a 30-min slot', 'સમય સ્લોટ પસંદ કરો'), t('Morning or evening, whichever suits you.', 'સવાર કે સાંજ: ૩૦ મિનિટનો સ્લોટ.')],
-              [t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો'), t('Your request goes to reception, who confirm the slot. Keep the booking slip.', 'વિનંતી રિસેપ્શનને જશે અને તેઓ સ્લોટ કન્ફર્મ કરશે. બુકિંગ સ્લિપ સાચવો.')]
-            ].map(([h, p], i) => (
-              <div className="step" key={h} data-reveal style={delay(i)}>
-                <span className="num">{i + 1}</span>
-                <h3>{h}</h3>
-                <p>{p}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: 32 }} data-reveal>
-            <Link to="book-appointment" className="btn btn-primary btn-lg">
-              <Calendar size={18} /> {t('Start booking', 'બુકિંગ શરૂ કરો')}
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------- Conditions treated ---------- */}
-      <section className="section section--navy">
-        <div className="container-wide">
-          <SectionHead
-            center
-            eyebrow={t('What we treat', 'ઉપલબ્ધ સારવાર')}
-            title={t('Conditions treated at Pulse Hospital', 'હોસ્પિટલમાં ઉપલબ્ધ મુખ્ય સારવારો')}
-            text={t('Grouped by department. Tap one to see the doctors and facilities behind it.', 'વિભાગ પ્રમાણે. વિગત માટે ક્લિક કરો.')}
-          />
-          <div className="grid grid-3">
-            {DEPARTMENTS.map((d, i) => (
-              <Link to="departments" param={d.id} key={d.id} className="cond-card has-photo" style={{ ...delay(i, 50), textAlign: 'left', color: 'inherit', font: 'inherit' }} data-reveal>
-                {d.photo ? (
-                  <span className="cond-photo">
-                    <Photo src={d.photo} alt="" sizes="(max-width: 720px) 100vw, 33vw" />
-                    <RepBadge src={d.photo} />
-                  </span>
-                ) : (
-                  <span className="cond-photo is-art" aria-hidden="true"><Icon name={d.icon} size={44} strokeWidth={1.4} /></span>
-                )}
-                <h3><span className="icon-tile dark" style={{ width: 36, height: 36 }}><Icon name={d.icon} size={18} /></span>{d.title}</h3>
-                <div className="gu gujarati-text">{d.titleGujarati}</div>
-                <p>{d.conditions.slice(0, 4).join(' · ')}</p>
+          <div className="hp-doc-grid">
+            {DOCTORS.map((d, i) => (
+              <Link to="doctors" param={d.slug} key={d.id} className="hp-doc" data-reveal style={delay(i, 80)}>
+                <span className="hp-doc-photo">
+                  {d.photo
+                    ? <img src={d.photo} alt={d.name} loading="lazy" decoding="async" />
+                    : <span className="hp-doc-mono" aria-hidden="true">{d.initials}</span>}
+                </span>
+                <span className="hp-doc-body">
+                  <span className="hp-doc-type">{t(DOCTOR_TYPES[d.type].label, DOCTOR_TYPES[d.type].labelGu)}</span>
+                  <h3>{lang === 'en' ? d.name : d.nameGujarati}</h3>
+                  <span className="hp-doc-qual">{d.qualification || t(d.designation, d.designationGujarati || d.designation)}</span>
+                  {d.qualification && <span className="hp-doc-role">{t(d.designation, d.designationGujarati || d.designation)}</span>}
+                </span>
               </Link>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="treatments" data-reveal>
-            <h3>{t('Also treated here', 'ઉપલબ્ધ સારવાર')}</h3>
-            <ul>
-              {TREATMENTS.map((x) => (
-                <li key={x.en}><CheckCircle2 size={16} /> {lang === 'en' ? x.en : <span className="gujarati-text">{x.gu}</span>}</li>
-              ))}
-            </ul>
+      {/* ---------- What we treat: compact, scannable ---------- */}
+      <section className="hp-section">
+        <div className="container-wide">
+          <header className="hp-head" data-reveal>
+            <div>
+              <p className="hp-kicker">{t('What we treat', 'ઉપલબ્ધ સારવાર')}</p>
+              <h2 className="hp-title">{t('Care by department', 'વિભાગ પ્રમાણે સારવાર')}</h2>
+            </div>
+            <Link to="departments" className="hp-link">
+              {t('All departments', 'બધા વિભાગો')} <ArrowRight size={16} />
+            </Link>
+          </header>
+
+          <div className="hp-dept-grid">
+            {DEPARTMENTS.map((d, i) => (
+              <Link to="departments" param={d.id} key={d.id} className="hp-dept" data-reveal style={delay(i, 50)}>
+                <span className="hp-dept-icon"><Icon name={d.icon} size={20} /></span>
+                <span className="hp-dept-body">
+                  <h3>{lang === 'en' ? d.title : d.titleGujarati}</h3>
+                  <p>{lang === 'gu' && d.conditionsGu ? d.conditionsGu : d.conditions.slice(0, 3).join(' · ')}</p>
+                </span>
+                <ArrowRight size={17} className="hp-dept-arrow" aria-hidden="true" />
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ---------- Patient & Visitor Guide (Replaces Fake Reviews) ---------- */}
-      <section className="section">
+      {/* ---------- Plan your visit ---------- */}
+      <section className="hp-section hp-section--tint">
         <div className="container-wide">
-          <SectionHead
-            center
-            eyebrow={t('Patient & Visitor Guide', 'દર્દી & મુલાકાતી માર્ગદર્શિકા')}
-            title={t('Essential information before you visit', 'હોસ્પિટલ મુલાકાત વખતે ધ્યાનમાં રાખવા જેવી બાબતો')}
-            text={t('Clear clinical protocols designed to save critical minutes and ensure coordinated medical care.', 'ઇમરજન્સી અને ઓપીડી દરમિયાન દર્દીઓની સુવિધા માટેના નિયમો.')}
-          />
-          <div className="grid grid-3">
-            <div className="card card-hover" style={{ padding: 26, ...delay(0) }} data-reveal>
-              <span className="icon-tile red" style={{ width: 42, height: 42, marginBottom: 16 }}>
-                <Siren size={20} />
-              </span>
-              <h3 style={{ fontSize: 18, color: 'var(--brand-navy)', marginBottom: 8 }}>
-                {t('Emergency Protocol', 'ઇમરજન્સી પ્રોટોકોલ')}
-              </h3>
-              <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
-                {t(
-                  'No prior appointment needed for acute emergencies. Walk directly into the casualty bay on 4th Floor, City Centre or call ahead so our ICU and trauma team is alerted before arrival.',
-                  'તાત્કાલિક ઇમરજન્સીમાં એપોઇન્ટમેન્ટની જરૂર નથી. સીધા ૪થા માળે ઇમરજન્સી ડેસ્ક પર આવો અથવા આવતાં પહેલાં કૉલ કરો.'
-                )}
-              </p>
-              <div style={{ fontSize: 13, color: 'var(--pulse-red)', fontWeight: 700 }}>
-                {t('24x7 doctor on the floor', '૨૪ કલાક ડૉક્ટર હાજર')}
-              </div>
+          <header className="hp-head" data-reveal>
+            <div>
+              <p className="hp-kicker">{t('Plan your visit', 'મુલાકાતની તૈયારી')}</p>
+              <h2 className="hp-title">{t('Good to know before you come', 'આવતાં પહેલાં જાણવા જેવું')}</h2>
             </div>
+          </header>
 
-            <div className="card card-hover" style={{ padding: 26, ...delay(1) }} data-reveal>
-              <span className="icon-tile" style={{ width: 42, height: 42, marginBottom: 16 }}>
-                <Clock size={20} />
-              </span>
-              <h3 style={{ fontSize: 18, color: 'var(--brand-navy)', marginBottom: 8 }}>
-                {t('OPD Consultations', 'OPD કન્સલ્ટેશન')}
-              </h3>
-              <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
-                {t(
-                  'Senior visiting MD consultants consult Monday to Saturday in designated morning and evening sessions. Reserve a 30-minute advance slot to avoid prolonged waiting room delays.',
-                  'સોમવારથી શનિવાર એમ.ડી. ફિઝિશિયન ઉપલબ્ધ છે. લાઈનમાં રાહ જોવાનો સમય બચાવવા ૩૦ મિનિટનો એડવાન્સ સ્લોટ બુક કરો.'
-                )}
-              </p>
-              <div style={{ fontSize: 13, color: 'var(--primary)', fontWeight: 700 }}>
-                {t('Morning: 09:00 - 01:30 | Evening: 04:30 - 08:00', 'સવારે ૦૯:૦૦ - ૦૧:૩૦ | સાંજે ૦૪:૩૦ - ૦૮:૦૦')}
-              </div>
-            </div>
-
-            <div className="card card-hover" style={{ padding: 26, ...delay(2) }} data-reveal>
-              <span className="icon-tile mint" style={{ width: 42, height: 42, marginBottom: 16 }}>
-                <FileText size={20} />
-              </span>
-              <h3 style={{ fontSize: 18, color: 'var(--brand-navy)', marginBottom: 8 }}>
-                {t('What to Bring', 'સાથે લાવવાના દસ્તાવેજ')}
-              </h3>
-              <p style={{ color: 'var(--text-body)', fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
-                {t(
-                  'Please carry your past hospital file, recent blood test reports, prior ECG or CT scans, and a list of ongoing medications so the doctor can evaluate treatment continuity accurately.',
-                  'તબીબી તપાસ માટે જૂની હોસ્પિટલ ફાઇલ, અગાઉના રિપોર્ટ્સ અને હાલ ચાલતી દવાઓની યાદી સાથે લાવવી.'
-                )}
-              </p>
-              <div style={{ fontSize: 13, color: 'var(--mint-deep)', fontWeight: 700 }}>
-                {t('In-house CT, digital X-ray & lab on same floor', 'સીટી સ્કેન, એક્સ-રે અને લેબ એક જ જગ્યાએ')}
-              </div>
-            </div>
+          <div className="hp-visit-grid">
+            <article className="hp-visit is-er" data-reveal style={delay(0, 80)}>
+              <Siren size={22} />
+              <h3>{t('In an emergency', 'ઇમરજન્સીમાં')}</h3>
+              <p>{t('No appointment needed. Come straight to the 4th floor, City Centre, or call ahead so the ICU team is ready.', 'એપોઇન્ટમેન્ટની જરૂર નથી. સીધા ૪થા માળે, સીટી સેન્ટર આવો અથવા આવતાં પહેલાં કૉલ કરો જેથી ICU ટીમ તૈયાર રહે.')}</p>
+              <a href={HOSPITAL_INFO.phoneHref} className="hp-visit-link">{HOSPITAL_INFO.appointmentNumber} <ArrowRight size={15} /></a>
+            </article>
+            <article className="hp-visit" data-reveal style={delay(1, 80)}>
+              <Clock size={22} />
+              <h3>{t('OPD hours', 'OPD સમય')}</h3>
+              <p>{t('Monday to Saturday. Morning 09:00 – 01:30 and evening 04:30 – 08:00. Book a 30-minute slot to avoid waiting.', 'સોમવારથી શનિવાર. સવારે ૦૯:૦૦ – ૦૧:૩૦ અને સાંજે ૦૪:૩૦ – ૦૮:૦૦. રાહ ટાળવા ૩૦ મિનિટનો સ્લોટ બુક કરો.')}</p>
+              <Link to="book-appointment" className="hp-visit-link">{t('Book a slot', 'સ્લોટ બુક કરો')} <ArrowRight size={15} /></Link>
+            </article>
+            <article className="hp-visit" data-reveal style={delay(2, 80)}>
+              <FileText size={22} />
+              <h3>{t('What to bring', 'સાથે શું લાવવું')}</h3>
+              <p>{t('Your hospital file, recent reports, previous ECG or CT scans, and the list of medicines you take.', 'હોસ્પિટલ ફાઇલ, તાજેતરના રિપોર્ટ, અગાઉના ECG કે CT અને ચાલુ દવાઓની યાદી.')}</p>
+              <a href={HOSPITAL_INFO.mapsUrl} target="_blank" rel="noreferrer" className="hp-visit-link">{t('Get directions', 'રસ્તો જુઓ')} <ArrowRight size={15} /></a>
+            </article>
           </div>
+
+          <ol className="hp-steps" data-reveal>
+            {[
+              t('Choose a doctor', 'ડૉક્ટર પસંદ કરો'),
+              t('Pick a day', 'દિવસ પસંદ કરો'),
+              t('Select a 30-min slot', '૩૦ મિનિટનો સ્લોટ પસંદ કરો'),
+              t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો')
+            ].map((s, i) => (
+              <li key={s}><span>{i + 1}</span>{s}</li>
+            ))}
+            <li className="hp-steps-cta">
+              <Link to="book-appointment" className="btn btn-primary">
+                <Calendar size={17} /> {t('Start booking', 'બુકિંગ શરૂ કરો')}
+              </Link>
+            </li>
+          </ol>
         </div>
       </section>
 
       {/* ---------- FAQ ---------- */}
-      <section className="section section--white">
-        <div className="container-wide" style={{ maxWidth: 860 }}>
-          <SectionHead center eyebrow="FAQ" title={t('Questions patients often ask', 'વારંવાર પુછાતા પ્રશ્નો')} />
+      <section className="hp-section">
+        <div className="container-wide hp-faq-wrap">
+          <header className="hp-head hp-head--stack" data-reveal>
+            <p className="hp-kicker">FAQ</p>
+            <h2 className="hp-title">{t('Questions patients often ask', 'વારંવાર પુછાતા પ્રશ્નો')}</h2>
+          </header>
           <div className="faq" data-reveal role="region" aria-label="Frequently Asked Questions">
             {FAQS.map((f, i) => {
               const isOpen = openFaq === i;
@@ -362,12 +286,7 @@ export default function HomePage({ lang = 'en' }) {
                       <Plus size={18} />
                     </span>
                   </button>
-                  <div
-                    id={`faq-answer-${i}`}
-                    className="faq-collapse"
-                    role="region"
-                    aria-labelledby={`faq-question-${i}`}
-                  >
+                  <div id={`faq-answer-${i}`} className="faq-collapse" role="region" aria-labelledby={`faq-question-${i}`}>
                     <div className="faq-collapse-inner">
                       <div className="faq-answer-content">{answer}</div>
                     </div>
@@ -380,15 +299,15 @@ export default function HomePage({ lang = 'en' }) {
       </section>
 
       {/* ---------- Closing CTA ---------- */}
-      <section className="section" style={{ paddingTop: 0, background: 'var(--surface-white)' }}>
+      <section className="hp-cta-wrap">
         <div className="container-wide">
-          <div className="cta-band" data-reveal>
+          <div className="hp-cta" data-reveal>
             <div>
-              <h3>{t('Need a doctor this week?', 'આ અઠવાડિયે ડૉક્ટરની જરૂર છે?')}</h3>
-              <p>{t('Reserve a 30-minute slot now, or call the helpline if it’s urgent.', 'હમણાં જ ૩૦ મિનિટનો સ્લોટ બુક કરો, અથવા તાત્કાલિક હોય તો કૉલ કરો.')}</p>
+              <h2>{t('Need a doctor this week?', 'આ અઠવાડિયે ડૉક્ટરની જરૂર છે?')}</h2>
+              <p>{t('Reserve a 30-minute slot now, or call if it’s urgent.', 'હમણાં જ ૩૦ મિનિટનો સ્લોટ બુક કરો, અથવા તાત્કાલિક હોય તો કૉલ કરો.')}</p>
             </div>
-            <div className="row">
-              <Link to="book-appointment" className="btn btn-primary btn-lg" style={{ background: '#fff', color: 'var(--brand-navy)', borderColor: '#fff' }}>
+            <div className="hp-cta-actions">
+              <Link to="book-appointment" className="btn btn-lg hp-cta-primary">
                 <Calendar size={18} /> {t('Book a slot', 'સ્લોટ બુક કરો')}
               </Link>
               <a className="btn btn-lg btn-ghost-light" href={HOSPITAL_INFO.phoneHref}><Phone size={18} /> {HOSPITAL_INFO.appointmentNumber}</a>

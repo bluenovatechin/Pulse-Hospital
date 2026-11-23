@@ -110,18 +110,19 @@ export default function DoctorsPage({ lang = 'en' }) {
       {/* Leadership Team Showcase */}
       <section className="section" style={{ background: 'var(--cream)', borderTop: '1px solid var(--border-soft)', borderBottom: '1px solid var(--border-soft)' }}>
         <div className="container-wide">
-          <div className="card" style={{ padding: 0, overflow: 'hidden', border: 'none', boxShadow: 'var(--shadow-lg)' }} data-reveal>
-            <div className="grid grid-2" style={{ alignItems: 'center' }}>
-              <div style={{ height: '100%', minHeight: 280 }}>
+          {/* Same layout as the About page: the photo keeps its natural
+              (wide) shape so no doctor is cut off at the edges */}
+          <div className="grid grid-2" style={{ alignItems: 'center', gap: 40 }}>
+              <div className="photo" style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', boxShadow: 'var(--shadow-xl)' }} data-reveal>
                 <img
                   src={PHOTOS.doctorsTeam}
                   alt={t('Pulse Hospital Modasa Doctors Team: Dr. Dipesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya', 'પલ્સ હોસ્પિટલ મોડાસા ડોક્ટર્સ ટીમ: ડૉ. દિપેશ પટેલ, ડૉ. નઈમુદ્દીન કાઝી, ડૉ. પારસ પટેલ, ડૉ. સંતોષ પ્રજાપતિ, ડૉ. પુલકિત પંડ્યા')}
                   title={t('Specialist Doctors and Critical Care Physicians at Pulse Hospital & I.C.U Modasa', 'પલ્સ હોસ્પિટલ અને આઈસીયુ મોડાસાના નિષ્ણાત તબીબો')}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
                   loading="lazy"
                 />
               </div>
-              <div style={{ padding: '32px 36px' }}>
+              <div data-reveal>
                 <span className="eyebrow">{t('Our Medical Panel', 'અમારી મેડિકલ ટીમ')}</span>
                 <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 26px)', color: 'var(--brand-navy)', margin: '8px 0 12px' }}>
                   {t('Experienced Consultants & Critical Care Specialists', 'અનુભવી કન્સલ્ટન્ટ્સ અને ક્રિટિકલ કેર નિષ્ણાતો')}
@@ -136,7 +137,6 @@ export default function DoctorsPage({ lang = 'en' }) {
                   <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Saurabh Goswami (DM Cardiology) · Dr. Dipesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel · Dr. Santosh J. Prajapati · Dr. Pulkit Pandya', 'ડૉ. સૌરભ ગોસ્વામી (DM કાર્ડિયોલોજી) · ડૉ. દિપેશ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. પુલકિત પંડ્યા')}
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </section>

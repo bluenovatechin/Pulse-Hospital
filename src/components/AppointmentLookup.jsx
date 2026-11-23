@@ -1,267 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Calendar, 
-  Clock, 
-  User, 
-  AlertCircle, 
-  Building2, 
-  Trash2,
-  FileText
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Lock, AlertCircle } from 'lucide-react';
 import { WhatsAppIcon } from './ui';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
+import { findVerified, unlock } from '../lib/appointments';
 
-// "My appointments": bookings saved in this browser, with search, slip and cancel
-export default function AppointmentLookup({ onViewSlip, lang = 'en' }) {
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
-  const [localHistory, setLocalHistory] = useState([]);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [cancellingId, setCancellingId] = useState(null);
+/**
+ * "My appointments": private lookup.
+ * Nothing is listed. A booking opens only when BOTH its booking ID and the
+ * mobile number used for it match exactly, so on a shared phone or computer
+ * nobody can browse other people's bookings.
+ */
+export default function AppointmentLookup({ onViewSlip, lang = 'en', presetId = '' }) {
+  const t = (en, gu) => (lang === 'en' ? en : gu);
+  const [bookingId, setBookingId] = useState(presetId);
+  const [phone, setPhone] = useState('');
+  const [error, setError] = useState('');
 
-  // Load recent bookings from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('pulse_hospital_appointments') || '[]');
-      setLocalHistory(stored);
-      if (stored.length > 0 && results === null) {
-        setResults(stored);
-      }
-    } catch (e) {
-      setLocalHistory([]);
-    }
-  }, []);
-
-  const handleSearch = (e) => {
+  const submit = (e) => {
     e.preventDefault();
-    const q = query.trim().toLowerCase();
-    if (!q) {
-      setResults(localHistory);
+    setError('');
+    const id = bookingId.trim();
+    const mobile = phone.replace(/\D/g, '');
+    if (!id || mobile.length < 10) {
+      setError(t('Enter your booking ID and the 10-digit mobile number used for the booking.', 'બુકિંગ ID અને બુકિંગ વખતે આપેલો ૧૦ આંકડાનો મોબાઇલ નંબર લખો.'));
       return;
     }
-
-    setLoading(true);
-    setErrorMsg('');
-
-    try {
-      const stored = JSON.parse(localStorage.getItem('pulse_hospital_appointments') || '[]');
-      const matches = stored.filter(a => 
-        (a.id && a.id.toLowerCase().includes(q)) ||
-        (a.patientPhone && a.patientPhone.includes(q)) ||
-        (a.patientName && a.patientName.toLowerCase().includes(q))
-      );
-      setResults(matches);
-    } catch (err) {
-      setErrorMsg(err.message || 'Error looking up appointment.');
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancelAppointment = (id) => {
-    const confirmPrompt = lang === 'en'
-      ? 'Are you sure you want to cancel this appointment slot? We will also prepare a cancellation message for the hospital WhatsApp.'
-      : 'શું તમે ખરેખર આ એપોઇન્ટમેન્ટ સ્લોટ રદ કરવા માંગો છો? હોસ્પિટલ વોટ્સએપ માટે પણ રદ કરવાનો સંદેશ તૈયાર થશે.';
-
-    if (!window.confirm(confirmPrompt)) {
+    const appt = findVerified(id, mobile);
+    if (!appt) {
+      // Same message whether the ID or the number is wrong (reveals nothing)
+      setError(t('No booking matches these details on this device.', 'આ વિગતો સાથે આ ડિવાઇસ પર કોઈ બુકિંગ મળી નથી.'));
       return;
     }
-
-    setCancellingId(id);
-    try {
-      const stored = JSON.parse(localStorage.getItem('pulse_hospital_appointments') || '[]');
-      const updated = stored.map(a => a.id === id ? { ...a, status: 'Cancelled' } : a);
-      localStorage.setItem('pulse_hospital_appointments', JSON.stringify(updated));
-      setResults(prev => (prev || []).map(a => a.id === id ? { ...a, status: 'Cancelled' } : a));
-      setLocalHistory(updated);
-
-      // Notify hospital desk via WhatsApp
-      const cancelMsg = `Hello Pulse Hospital, I would like to inform that I am cancelling my appointment (ID: ${id}). Please release the slot.`;
-      const waUrl = `https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(cancelMsg)}`;
-      window.open(waUrl, '_blank');
-    } catch (err) {
-      alert(lang === 'en' ? 'Error updating appointment.' : 'એપોઇન્ટમેન્ટ રદ કરવામાં ક્ષતિ આવી.');
-    } finally {
-      setCancellingId(null);
-    }
+    unlock(appt.id);
+    onViewSlip(appt);
   };
-
 
   return (
-    <div className="card page-card">
-        {/* Search input form */}
-        <div style={{ padding: '24px' }}>
-          <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <div style={{ position: 'relative', flex: 1 }}>
-              <input
-                type="text"
-                className="form-input"
-                placeholder={lang === 'en' ? 'Mobile number or Booking ID...' : 'મોબાઇલ નંબર અથવા બુકિંગ ID...'}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                autoFocus
-                style={{ width: '100%' }}
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary"
-              style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-            >
-              <Search size={16} />
-              <span>{loading ? (lang === 'en' ? 'Searching...' : 'શોધાઈ રહ્યું છે...') : (lang === 'en' ? 'Search' : 'શોધો')}</span>
-            </button>
-          </form>
-
-          {/* Results list */}
-          {errorMsg && (
-            <div style={{ padding: '12px', background: '#fef2f2', color: '#dc2626', borderRadius: '8px', fontSize: '13px', marginBottom: '16px' }}>
-              {errorMsg}
-            </div>
-          )}
-
-          {results !== null && (
-            <div>
-              {results.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '28px 16px', color: 'var(--text-muted)' }}>
-                  <AlertCircle size={32} style={{ margin: '0 auto 8px', color: '#94a3b8' }} />
-                  <p style={{ fontWeight: 600 }}>
-                    {query 
-                      ? (lang === 'en' ? `No bookings found matching "${query}"` : `"${query}" માટે કોઈ બુકિંગ મળ્યું નથી`)
-                      : (lang === 'en' ? 'No saved bookings found on this device.' : 'આ ડિવાઇસ પર કોઈ બુકિંગ રેકોર્ડ મળ્યો નથી.')}
-                  </p>
-                  <p style={{ fontSize: '12px', marginTop: '6px', maxWidth: '380px', margin: '6px auto 16px' }}>
-                    {lang === 'en'
-                      ? 'Did you book through another phone or need help? You can directly chat with Pulse Hospital reception desk on WhatsApp.'
-                      : 'જો આપે અન્ય ફોનથી બુકિંગ કર્યું હોય તો સીધા હોસ્પિટલ રિસેપ્શન વોટ્સએપ પર સંપર્ક કરી શકો છો.'}
-                  </p>
-                  <a
-                    href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(query ? `Hello Pulse Hospital, I want to verify my appointment for: ${query}` : `Hello Pulse Hospital, I want to check my appointment status.`)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      background: '#16a34a',
-                      color: '#ffffff',
-                      padding: '10px 20px',
-                      borderRadius: 'var(--radius-md)',
-                      fontWeight: 700,
-                      fontSize: '13px',
-                      textDecoration: 'none'
-                    }}
-                  >
-                    <WhatsAppIcon size={18} />
-                    <span>{lang === 'en' ? 'Chat with Reception on WhatsApp' : 'વોટ્સએપ પર રિસેપ્શનનો સંપર્ક કરો'}</span>
-                  </a>
-                </div>
-              ) : (
-                <div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {query 
-                      ? (lang === 'en' ? `Search Results (${results.length})` : `પરિણામો (${results.length})`)
-                      : (lang === 'en' ? `Your Bookings on this Device (${results.length})` : `તમારી બુકિંગ્સ (${results.length})`)}
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxHeight: '380px', overflowY: 'auto' }}>
-                    {results.map((appt) => (
-                      <div
-                        key={appt.id}
-                        style={{
-                          border: '1.5px solid var(--border-color)',
-                          borderRadius: 'var(--radius-lg)',
-                          padding: '16px',
-                          background: appt.status === 'Cancelled' ? '#f8fafc' : '#ffffff',
-                          position: 'relative'
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                          <div>
-                            <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--primary)', letterSpacing: '0.05em' }}>
-                              {appt.id}
-                            </span>
-                            <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--brand-navy)' }}>
-                              {appt.patientName}
-                            </h4>
-                          </div>
-
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            padding: '3px 8px',
-                            borderRadius: '12px',
-                            backgroundColor: appt.status === 'Cancelled' ? '#fee2e2' : '#dcfce7',
-                            color: appt.status === 'Cancelled' ? '#b91c1c' : '#15803d'
-                          }}>
-                            {appt.status === 'Cancelled' ? (lang === 'en' ? 'CANCELLED' : 'રદ થયેલ') : (lang === 'en' ? 'REQUEST SENT' : 'વિનંતી મોકલાઈ')}
-                          </span>
-                        </div>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '8px', fontSize: '12.5px', color: 'var(--text-muted)', margin: '10px 0' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <Calendar size={14} color="var(--primary)" />
-                            <span>{appt.dayFormatted || appt.date}</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <Clock size={14} color="var(--accent)" />
-                            <span>{appt.timeSlot}</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <User size={14} />
-                            <span>{appt.doctorName}</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                            <Building2 size={14} />
-                            <span>{appt.room || 'OPD Room'}</span>
-                          </div>
-                        </div>
-
-                        {/* Action buttons */}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px', paddingTop: '10px', borderTop: '1px solid var(--border-color)' }}>
-                          {appt.status !== 'Cancelled' && (
-                            <button
-                              onClick={() => handleCancelAppointment(appt.id)}
-                              disabled={cancellingId === appt.id}
-                              style={{
-                                background: 'transparent',
-                                border: '1px solid #fca5a5',
-                                color: '#dc2626',
-                                padding: '6px 12px',
-                                borderRadius: '6px',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '5px'
-                              }}
-                            >
-                              <Trash2 size={13} />
-                              <span>{cancellingId === appt.id ? 'Cancelling...' : (lang === 'en' ? 'Cancel Slot' : 'સ્લોટ રદ કરો')}</span>
-                            </button>
-                          )}
-
-                          <button
-                            onClick={() => onViewSlip(appt)}
-                            className="btn-primary"
-                            style={{ padding: '6px 14px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '5px' }}
-                          >
-                            <FileText size={13} />
-                            <span>{lang === 'en' ? 'View Slip' : 'સ્લિપ જુઓ'}</span>
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+    <div className="card page-card lookup-card">
+      <form onSubmit={submit} className="lookup-form" noValidate>
+        <div className="lookup-head">
+          <span className="lookup-icon"><Lock size={18} /></span>
+          <div>
+            <h2>{t('Open your booking', 'તમારી બુકિંગ ખોલો')}</h2>
+            <p>{t('For privacy, enter both your booking ID and the mobile number used for it.', 'ગોપનીયતા માટે, બુકિંગ ID અને બુકિંગ વખતે આપેલો મોબાઇલ નંબર બંને લખો.')}</p>
+          </div>
         </div>
+
+        <div className="lookup-fields">
+          <label>
+            <span>{t('Booking ID', 'બુકિંગ ID')}</span>
+            <input
+              className="form-input"
+              value={bookingId}
+              onChange={(e) => setBookingId(e.target.value)}
+              placeholder="PLS-123456"
+              autoComplete="off"
+              autoCapitalize="characters"
+            />
+          </label>
+          <label>
+            <span>{t('Mobile number', 'મોબાઇલ નંબર')}</span>
+            <input
+              className="form-input"
+              type="tel"
+              inputMode="numeric"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder={t('10-digit number', '૧૦ આંકડાનો નંબર')}
+              autoComplete="tel"
+            />
+          </label>
+        </div>
+
+        {error && (
+          <p className="lookup-error" role="alert"><AlertCircle size={16} /> {error}</p>
+        )}
+
+        <button type="submit" className="btn btn-primary lookup-submit">
+          <Search size={16} /> {t('Open booking', 'બુકિંગ ખોલો')}
+        </button>
+
+        <p className="lookup-help">
+          {t('Bookings are saved only on the phone or computer they were made on. Booked on another device, or lost your ID? ', 'બુકિંગ માત્ર જે ફોન કે કમ્પ્યુટર પરથી કરી હોય તેમાં જ સચવાય છે. બીજા ડિવાઇસ પરથી બુક કર્યું હોય અથવા ID ખોવાઈ ગયું હોય તો ')}
+          <a
+            href={`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent('Hello Pulse Hospital, I want to check my appointment status.')}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <WhatsAppIcon size={14} /> {t('ask reception on WhatsApp', 'રિસેપ્શનને વોટ્સએપ કરો')}
+          </a>.
+        </p>
+      </form>
     </div>
   );
 }

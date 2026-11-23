@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import PulseLogo from './PulseLogo';
 import { DOCTORS, HOSPITAL_INFO } from '../data/hospitalContent';
+import { saveAppointment, deviceBookedSlots, STATUS } from '../lib/appointments';
 import { Avatar, WhatsAppIcon } from './ui';
 
 const GUJARATI_MONTHS_SHORT = ["જાન્યુ", "ફેબ્રુ", "માર્ચ", "એપ્રિલ", "મે", "જૂન", "જુલાઈ", "ઑગસ્ટ", "સપ્ટે", "ઑક્ટો", "નવે", "ડિસે"];
@@ -57,34 +58,78 @@ function generateUpcomingSchedule(lang = 'en') {
   return days;
 }
 
-// Generate slots based on doctor's available shifts
-function generateDoctorSlots(docId, date) {
-  const morningSlots = [
-    "09:00 AM - 09:30 AM", "09:30 AM - 10:00 AM", "10:00 AM - 10:30 AM",
-    "10:30 AM - 11:00 AM", "11:00 AM - 11:30 AM", "11:30 AM - 12:00 PM",
-    "12:00 PM - 12:30 PM", "12:30 PM - 01:00 PM"
-  ].map((slot) => ({
-    time: slot,
-    session: "Morning",
-    isAvailable: true
-  }));
+// ---- Slots: built from each doctor's real OPD hours (DOCTORS[].timing) ----
+const DEFAULT_RANGES = [['09:00 AM', '01:00 PM'], ['04:30 PM', '08:00 PM']];
 
-  const eveningSlots = [
-    "04:30 PM - 05:00 PM", "05:00 PM - 05:30 PM", "05:30 PM - 06:00 PM",
-    "06:00 PM - 06:30 PM", "06:30 PM - 07:00 PM", "07:00 PM - 07:30 PM",
-    "07:30 PM - 08:00 PM"
-  ].map((slot) => ({
-    time: slot,
-    session: "Evening",
-    isAvailable: true
-  }));
+const toMinutes = (t) => {
+  const m = String(t).trim().match(/(\d{1,2}):(\d{2})\s*([AP]M)/i);
+  if (!m) return null;
+  let h = Number(m[1]) % 12;
+  if (m[3].toUpperCase() === 'PM') h += 12;
+  return h * 60 + Number(m[2]);
+};
+
+const toLabel = (min) => {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return `${String(h % 12 || 12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
+};
+
+const localDate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+// "Mon - Sat (09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM)" -> two ranges.
+// Doctors without listed times use the hospital's standard OPD hours.
+function doctorRanges(doc) {
+  const found = [...String(doc?.timing || '').matchAll(/(\d{1,2}:\d{2}\s*[AP]M)\s*-\s*(\d{1,2}:\d{2}\s*[AP]M)/gi)]
+    .map((m) => [m[1], m[2]]);
+  return found.length ? found : DEFAULT_RANGES;
+}
+
+function generateDoctorSlots(docId, date) {
+  const doc = DOCTORS.find((d) => d.id === Number(docId));
+  const base = { doctorId: docId, date, morningSlots: [], eveningSlots: [] };
+
+  // OPD runs Monday to Saturday
+  if (new Date(`${date}T00:00:00`).getDay() === 0) {
+    return { ...base, isDoctorAvailable: false, closedSunday: true };
+  }
+
+  const now = new Date();
+  const isToday = date === localDate(now);
+  const nowMin = now.getHours() * 60 + now.getMinutes();
+  const slots = [];
+
+  const ranges = doctorRanges(doc);
+  ranges.forEach(([from, to], idx) => {
+    const start = toMinutes(from);
+    const end = toMinutes(to);
+    if (start == null || end == null) return;
+    // Session follows the doctor's own sittings (first = morning, second =
+    // evening), so a 12:30 PM slot in a 9:00–1:00 sitting stays "Morning"
+    const session = ranges.length > 1 ? (idx === 0 ? 'Morning' : 'Evening') : (start < 12 * 60 ? 'Morning' : 'Evening');
+    for (let t = start; t + 30 <= end; t += 30) {
+      slots.push({
+        time: `${toLabel(t)} - ${toLabel(t + 30)}`,
+        start: t,
+        session,
+        // Today: a slot that has already started can't be booked
+        isPast: isToday && t < nowMin
+      });
+    }
+  });
+
+  const morningSlots = slots.filter((s) => s.session === 'Morning');
+  const eveningSlots = slots.filter((s) => s.session === 'Evening');
+  const range = (list) => (list.length ? `${toLabel(list[0].start)} – ${toLabel(list[list.length - 1].start + 30)}` : '');
 
   return {
-    doctorId: docId,
-    date,
+    ...base,
     isDoctorAvailable: true,
     morningSlots,
-    eveningSlots
+    eveningSlots,
+    morningRange: range(morningSlots),
+    eveningRange: range(eveningSlots),
+    allPast: slots.length > 0 && slots.every((s) => s.isPast)
   };
 }
 
@@ -152,7 +197,24 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
     return () => clearTimeout(timer);
   }, [selectedDoctorId, selectedDate]);
 
+  // Keep "time passed" accurate while the page stays open
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlotsData(generateDoctorSlots(selectedDoctorId, selectedDate));
+    }, 60000);
+    return () => clearInterval(id);
+  }, [selectedDoctorId, selectedDate]);
+
+  // If the chosen slot's time passes while filling the form, clear it
+  useEffect(() => {
+    const all = [...(slotsData.morningSlots || []), ...(slotsData.eveningSlots || [])];
+    const chosen = all.find((x) => x.time === selectedSlot);
+    if (chosen && chosen.isPast) setSelectedSlot('');
+  }, [slotsData, selectedSlot]);
+
   const selectedDoctor = DOCTORS.find(d => d.id === parseInt(selectedDoctorId)) || DOCTORS[0];
+  // Slots this device has already booked (shown in colour, not bookable again)
+  const myDeviceSlots = deviceBookedSlots(selectedDoctorId, selectedDate);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -215,16 +277,13 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
       previousFileNo: formData.previousFileNo || '',
       symptoms: formData.symptoms || '',
       bookedAt: new Date().toISOString(),
-      status: 'Requested'
+      status: STATUS.PENDING
     };
 
-    // Save to localStorage for instant reference & retrieval in My Booking
-    try {
-      const existing = JSON.parse(localStorage.getItem('pulse_hospital_appointments') || '[]');
-      localStorage.setItem('pulse_hospital_appointments', JSON.stringify([appointment, ...existing]));
-    } catch (err) {
-      console.warn('LocalStorage save error', err);
-    }
+    // Save on this device only, and unlock it for this tab so the slip opens.
+    // Status starts as "Pending" until the patient confirms the WhatsApp
+    // message was actually sent.
+    saveAppointment(appointment);
 
     // Build structured WhatsApp message to hospital reception
     const waText = 
@@ -444,7 +503,7 @@ _Sent via Pulse Hospital Online Booking Portal_`;
 
                     {day.isSunday ? (
                       <span style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 700, marginTop: '4px' }}>
-                        {lang === 'en' ? 'Emergency OPD' : 'ઇમરજન્સી OPD'}
+                        {lang === 'en' ? 'OPD closed' : 'OPD બંધ'}
                       </span>
                     ) : (
                       <span style={{ fontSize: '10px', color: 'var(--success)', fontWeight: 700, marginTop: '4px' }}>
@@ -474,111 +533,80 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                 </div>
               </div>
 
-              {/* Slot Legend */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '12px', height: '12px', borderRadius: '3px', border: '1.5px solid #cbd5e1', background: '#ffffff' }} />
-                  <span style={{ color: 'var(--text-muted)' }}>{lang === 'en' ? 'Available' : 'ઉપલબ્ધ'}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: 'var(--primary)' }} />
-                  <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{lang === 'en' ? 'Selected' : 'પસંદ કરેલ'}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '12px', height: '12px', borderRadius: '3px', background: '#e2e8f0', textDecoration: 'line-through' }} />
-                  <span style={{ color: '#94a3b8' }}>{lang === 'en' ? 'Booked' : 'બુક થયેલ'}</span>
-                </div>
+              {/* Slot legend */}
+              <div className="slot-legend">
+                <span><i className="sl-dot available" />{lang === 'en' ? 'Available' : 'ઉપલબ્ધ'}</span>
+                <span><i className="sl-dot selected" />{lang === 'en' ? 'Selected' : 'પસંદ કરેલ'}</span>
+                <span><i className="sl-dot mine" />{lang === 'en' ? 'Your booking' : 'તમારી બુકિંગ'}</span>
+                <span><i className="sl-dot past" />{lang === 'en' ? 'Time passed' : 'સમય પૂરો'}</span>
               </div>
             </div>
 
             {loadingSlots ? (
               <div style={{ padding: '36px', textAlign: 'center', color: 'var(--text-muted)', background: '#f8fafc', borderRadius: 'var(--radius-lg)' }}>
-                <Clock size={28} className="animate-spin" style={{ margin: '0 auto 10px', color: 'var(--primary)' }} />
-                <p>{lang === 'en' ? 'Checking live slot availability with hospital schedule...' : 'હોસ્પિટલ શિડ્યુલ મુજબ સ્લોટ તપાસી રહ્યાં છીએ...'}</p>
+                <p>{lang === 'en' ? 'Loading the doctor’s OPD slots…' : 'ડૉક્ટરના OPD સ્લોટ લોડ થઈ રહ્યા છે…'}</p>
               </div>
             ) : !slotsData.isDoctorAvailable ? (
               <div style={{ padding: '24px', background: '#fffbeb', border: '1px solid #fef3c7', borderRadius: 'var(--radius-lg)', color: '#b45309', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <Info size={24} />
                 <div>
-                  <strong>{lang === 'en' ? 'Doctor Schedule Notice:' : 'ડૉક્ટર શિડ્યુલ સૂચના:'}</strong> {slotsData.message || (lang === 'en' ? 'Doctor is not available on this day. Please pick another day or doctor.' : 'આ દિવસે ડૉક્ટર ઉપલબ્ધ નથી. કૃપા કરીને અન્ય દિવસ અથવા ડૉક્ટર પસંદ કરો.')}
+                  {slotsData.closedSunday
+                    ? (lang === 'en'
+                      ? <><strong>OPD is closed on Sunday.</strong> Emergency and ICU are open 24×7: come straight to the 4th floor or call {HOSPITAL_INFO.appointmentNumber}. Please pick another day for an OPD slot.</>
+                      : <><strong>રવિવારે OPD બંધ છે.</strong> ઇમરજન્સી અને ICU ૨૪ કલાક ચાલુ છે: સીધા ૪થા માળે આવો અથવા {HOSPITAL_INFO.appointmentNumber} પર કૉલ કરો. OPD સ્લોટ માટે બીજો દિવસ પસંદ કરો.</>)
+                    : (lang === 'en' ? 'Doctor is not available on this day. Please pick another day or doctor.' : 'આ દિવસે ડૉક્ટર ઉપલબ્ધ નથી. કૃપા કરીને અન્ય દિવસ અથવા ડૉક્ટર પસંદ કરો.')}
                 </div>
               </div>
             ) : (
-              <div className="booking-sessions-grid">
-                
-                {/* Morning Slots Panel */}
-                <div className="booking-session-panel">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14px' }}>
-                    <Clock size={16} color="var(--primary)" />
-                    <span>{lang === 'en' ? 'Morning Session (09:00 AM – 01:00 PM)' : 'સવારનું સત્ર (સવારે ૦૯:૦૦ AM – ૦૧:૦૦ PM)'}</span>
+              <>
+                {slotsData.allPast && (
+                  <div className="slot-note">
+                    {lang === 'en'
+                      ? 'All of today’s OPD slots for this doctor have passed. Please choose tomorrow or another day.'
+                      : 'આજના આ ડૉક્ટરના બધા OPD સ્લોટનો સમય પૂરો થઈ ગયો છે. કૃપા કરીને આવતીકાલ અથવા બીજો દિવસ પસંદ કરો.'}
                   </div>
-
-                  <div className="booking-slots-grid">
-                    {slotsData.morningSlots && slotsData.morningSlots.map((s) => {
-                      const isSelected = selectedSlot === s.time;
-                      return (
-                        <div
-                          key={s.time}
-                          onClick={() => {
-                            if (s.isAvailable) setSelectedSlot(s.time);
-                          }}
-                          className={`slot-pill ${!s.isAvailable ? 'booked' : (isSelected ? 'selected' : 'available')}`}
-                        >
-                          <span>{s.time.split(' - ')[0]}</span>
-                          {isSelected ? (
-                            <CheckCircle2 size={15} />
-                          ) : !s.isAvailable ? (
-                            <span style={{ fontSize: '10px', textDecoration: 'none' }}>
-                              {lang === 'en' ? 'Reserved' : 'બુક થયેલ'}
-                            </span>
-                          ) : null}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Evening Slots Panel */}
-                <div className="booking-session-panel">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14px' }}>
-                    <Clock size={16} color="var(--accent)" />
-                    <span>{lang === 'en' ? 'Evening Session (04:30 PM – 08:00 PM)' : 'સાંજનું સત્ર (સાંજે ૦૪:૩૦ PM – ૦૮:૦૦ PM)'}</span>
-                  </div>
-
-                  {slotsData.eveningSlots && slotsData.eveningSlots.length > 0 ? (
-                    <div className="booking-slots-grid">
-                      {slotsData.eveningSlots.map((s) => {
-                        const isSelected = selectedSlot === s.time;
-                        return (
-                          <div
-                            key={s.time}
-                            onClick={() => {
-                              if (s.isAvailable) setSelectedSlot(s.time);
-                            }}
-                            className={`slot-pill ${!s.isAvailable ? 'booked' : (isSelected ? 'selected' : 'available')}`}
-                          >
-                            <span>{s.time.split(' - ')[0]}</span>
-                            {isSelected ? (
-                              <CheckCircle2 size={15} />
-                            ) : !s.isAvailable ? (
-                              <span style={{ fontSize: '10px', textDecoration: 'none' }}>
-                                {lang === 'en' ? 'Reserved' : 'બુક થયેલ'}
-                              </span>
-                            ) : null}
-                          </div>
-                        );
-                      })}
+                )}
+                <div className="booking-sessions-grid">
+                  {[
+                    { key: 'Morning', list: slotsData.morningSlots, range: slotsData.morningRange, en: 'Morning session', gu: 'સવારનું સત્ર', color: 'var(--primary)' },
+                    { key: 'Evening', list: slotsData.eveningSlots, range: slotsData.eveningRange, en: 'Evening session', gu: 'સાંજનું સત્ર', color: 'var(--accent)' }
+                  ].filter((sess) => sess.list && sess.list.length > 0).map((sess) => (
+                    <div className="booking-session-panel" key={sess.key}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--brand-navy)', fontWeight: 700, fontSize: '14px' }}>
+                        <Clock size={16} color={sess.color} />
+                        <span>{lang === 'en' ? sess.en : sess.gu} ({sess.range})</span>
+                      </div>
+                      <div className="booking-slots-grid">
+                        {sess.list.map((s) => {
+                          const mine = myDeviceSlots[s.time];
+                          const isSelected = selectedSlot === s.time;
+                          const state = s.isPast ? 'past' : mine ? `mine mine-${mine.toLowerCase()}` : isSelected ? 'selected' : 'available';
+                          const clickable = !s.isPast && !mine;
+                          const note = s.isPast
+                            ? (lang === 'en' ? 'Time passed' : 'સમય પૂરો')
+                            : mine === STATUS.CONFIRMED ? (lang === 'en' ? 'Confirmed' : 'કન્ફર્મ')
+                              : mine === STATUS.REQUESTED ? (lang === 'en' ? 'Awaiting' : 'રાહ જુઓ')
+                                : mine ? (lang === 'en' ? 'Not sent' : 'મોકલાયું નથી') : null;
+                          return (
+                            <button
+                              type="button"
+                              key={s.time}
+                              disabled={!clickable}
+                              onClick={() => clickable && setSelectedSlot(s.time)}
+                              className={`slot-pill ${state}`}
+                              aria-pressed={isSelected}
+                              title={note || undefined}
+                            >
+                              <span>{s.time.split(' - ')[0]}</span>
+                              {isSelected && clickable ? <CheckCircle2 size={15} /> : note ? <small className="slot-note-tag">{note}</small> : null}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  ) : (
-                    <div style={{ padding: '20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px' }}>
-                      {lang === 'en'
-                        ? 'Sunday evenings are reserved for Emergency & Trauma triage only.'
-                        : 'રવિવારે સાંજે માત્ર ઇમરજન્સી અને ટ્રોમા સારવાર જ ઉપલબ્ધ છે.'}
-                    </div>
-                  )}
+                  ))}
                 </div>
-
-              </div>
+              </>
             )}
           </div>
 

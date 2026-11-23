@@ -1,265 +1,252 @@
-import React from 'react';
-import { CheckCircle, Printer, Calendar, Clock, ShieldCheck, Building2 } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Printer, Calendar, Clock, ShieldCheck, Building2, FileDown, Share2, CheckCircle2, Send, XCircle, Search } from 'lucide-react';
 import PulseLogo from './PulseLogo';
 import { WhatsAppIcon } from './ui';
 import { Link } from '../router';
 import { HOSPITAL_INFO } from '../data/hospitalContent';
+import { setStatus, cancelAppointment, STATUS } from '../lib/appointments';
 
-// Printable appointment slip (shown on /my-appointments/<id>)
-export default function AppointmentSlip({ appointment, lang = 'en' }) {
+// Message the patient sends to reception to request the slot
+function requestText(a) {
+  return [
+    '🏥 *PULSE HOSPITAL & I.C.U: MODASA*',
+    '*Appointment Booking Request*',
+    '───────────────────────────────',
+    `📋 *Reference ID:* ${a.id}`,
+    `👨‍⚕️ *Doctor:* ${a.doctorName}`,
+    `🏢 *Room:* ${a.room}`,
+    `📅 *Date:* ${a.dayFormatted || a.date}`,
+    `⏰ *Time Slot:* ${a.timeSlot}`,
+    '───────────────────────────────',
+    `👤 *Patient Name:* ${a.patientName}`,
+    `📞 *Phone Number:* ${a.patientPhone}`,
+    `🎂 *Age / Gender:* ${a.patientAge && a.patientAge !== 'N/A' ? `${a.patientAge} yrs` : 'N/A'}, ${a.patientGender}`,
+    `📍 *City / Area:* ${a.city || 'Modasa'}`,
+    a.previousFileNo ? `📁 *Past File No:* ${a.previousFileNo}` : '',
+    a.symptoms ? `📝 *Symptoms / Problem:* ${a.symptoms}` : '',
+    '───────────────────────────────',
+    '_Sent via Pulse Hospital Online Booking Portal_'
+  ].filter(Boolean).join('\n');
+}
+
+// Status shown on the slip, with the next step for the patient
+const STATUS_UI = {
+  [STATUS.PENDING]: { tone: 'pending', en: 'Not sent yet', gu: 'હજુ મોકલાયું નથી' },
+  [STATUS.REQUESTED]: { tone: 'requested', en: 'Awaiting confirmation', gu: 'કન્ફર્મેશનની રાહ' },
+  [STATUS.CONFIRMED]: { tone: 'confirmed', en: 'Confirmed by reception', gu: 'રિસેપ્શન દ્વારા કન્ફર્મ' },
+  [STATUS.CANCELLED]: { tone: 'cancelled', en: 'Cancelled', gu: 'રદ થયેલ' }
+};
+
+// Make an A4 PDF of the slip (libraries load only when needed)
+async function makePdf(node, fileName) {
+  const [{ default: html2canvas }, { jsPDF }] = await Promise.all([import('html2canvas'), import('jspdf')]);
+  const canvas = await html2canvas(node, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false });
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const margin = 10;
+  let w = pageW - margin * 2;
+  let h = (canvas.height * w) / canvas.width;
+  if (h > pageH - margin * 2) {
+    h = pageH - margin * 2;
+    w = (canvas.width * h) / canvas.height;
+  }
+  pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', (pageW - w) / 2, margin, w, h);
+  const blob = pdf.output('blob');
+  return new File([blob], fileName, { type: 'application/pdf' });
+}
+
+function download(file) {
+  const url = URL.createObjectURL(file);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = file.name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+// Printable appointment slip (shown on /my-appointments/<id> after verification)
+export default function AppointmentSlip({ appointment, lang = 'en', onChange }) {
+  const t = (en, gu) => (lang === 'en' ? en : gu);
+  const slipRef = useRef(null);
+  const [busy, setBusy] = useState('');
+  const [note, setNote] = useState('');
   if (!appointment) return null;
 
-  const handlePrint = () => {
-    window.print();
+  const a = appointment;
+  const status = STATUS_UI[a.status] || STATUS_UI[STATUS.REQUESTED];
+  const fileName = `Pulse-Hospital-${a.id}.pdf`;
+
+  const update = (next) => next && onChange && onChange(next);
+
+  const sendRequest = () => {
+    window.open(`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(requestText(a))}`, '_blank');
   };
 
-  const handleWhatsAppShare = () => {
-    const message = encodeURIComponent(
-      `*Pulse Hospital & I.C.U - Appointment Confirmation*\n` +
-      `-----------------------------------------\n` +
-      `*Token ID:* ${appointment.id}\n` +
-      `*Patient:* ${appointment.patientName}\n` +
-      `*Doctor:* ${appointment.doctorName}\n` +
-      `*Date:* ${appointment.date}\n` +
-      `*Slot:* ${appointment.timeSlot}\n` +
-      `*Room:* ${appointment.room}\n` +
-      `*Location:* 4th Floor, City Centre, Shamlaji Road, Modasa\n` +
-      `*Appointment / WhatsApp Desk:* +91 95120 45641\n` +
-      `-----------------------------------------\n` +
-      `*Important:* Please bring this file and previous medical reports on your visit.`
-    );
-    // Directly targeted to hospital WhatsApp number: 95120 45641
-    window.open(`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${message}`, '_blank');
+  const handlePdf = async () => {
+    setBusy('pdf');
+    setNote('');
+    try {
+      download(await makePdf(slipRef.current, fileName));
+    } catch {
+      setNote(t('Could not create the PDF. Please use Print instead.', 'PDF બનાવી શકાઈ નહીં. કૃપા કરીને પ્રિન્ટ વાપરો.'));
+    } finally {
+      setBusy('');
+    }
   };
+
+  // Phones: share sheet with the PDF attached (pick WhatsApp, then any contact).
+  // Computers: download the PDF and open WhatsApp to attach it.
+  const handleShare = async () => {
+    setBusy('share');
+    setNote('');
+    const text = t(
+      `Appointment slip ${a.id}: ${a.doctorName}, ${a.dayFormatted || a.date}, ${a.timeSlot}. Pulse Hospital & I.C.U, 4th Floor, City Centre, Shamlaji Road, Modasa.`,
+      `એપોઇન્ટમેન્ટ સ્લિપ ${a.id}: ${a.doctorName}, ${a.dayFormatted || a.date}, ${a.timeSlot}. પલ્સ હોસ્પિટલ & આઈ.સી.યુ., ૪થો માળ, સીટી સેન્ટર, શામળાજી રોડ, મોડાસા.`
+    );
+    try {
+      const file = await makePdf(slipRef.current, fileName);
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: `Pulse Hospital ${a.id}`, text });
+      } else {
+        download(file);
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        setNote(t('The PDF was downloaded. In WhatsApp, choose the contact and attach the downloaded PDF.', 'PDF ડાઉનલોડ થઈ ગઈ છે. વોટ્સએપમાં સંપર્ક પસંદ કરી ડાઉનલોડ થયેલી PDF જોડો.'));
+      }
+    } catch (err) {
+      if (err && err.name !== 'AbortError') {
+        setNote(t('Could not share the PDF. Please download it and attach it in WhatsApp.', 'PDF શેર થઈ શકી નહીં. કૃપા કરીને ડાઉનલોડ કરી વોટ્સએપમાં જોડો.'));
+      }
+    } finally {
+      setBusy('');
+    }
+  };
+
+  const handleCancel = () => {
+    if (!window.confirm(t('Cancel this appointment? A cancellation message for reception will open in WhatsApp.', 'આ એપોઇન્ટમેન્ટ રદ કરવી છે? રિસેપ્શન માટે રદ કરવાનો સંદેશ વોટ્સએપમાં ખુલશે.'))) return;
+    update(cancelAppointment(a.id));
+    const msg = `Hello Pulse Hospital, I am cancelling my appointment (ID: ${a.id}, ${a.doctorName}, ${a.dayFormatted || a.date}, ${a.timeSlot}). Please release the slot.`;
+    window.open(`https://wa.me/${HOSPITAL_INFO.whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+  };
+
+  const row = (label, value, extra = {}) => (
+    <div className="slip-row" style={extra}>
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
+  );
 
   return (
     <div className="card page-card slip-card">
-        {/* Top bar */}
-        <div className="no-print" style={{ 
-          flexShrink: 0,
-          background: 'linear-gradient(135deg, var(--brand-navy) 0%, var(--primary) 100%)',
-          color: '#ffffff',
-          padding: '20px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <CheckCircle size={22} color="#ffffff" />
-            </div>
-            <div>
-              <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
-                {lang === 'en' ? 'Booking request sent' : 'બુકિંગ વિનંતી મોકલાઈ'}
-              </h3>
-              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)' }}>
-                {lang === 'en' ? 'Reception will confirm your slot on WhatsApp. Keep this slip.' : 'રિસેપ્શન વોટ્સએપ પર સ્લોટ કન્ફર્મ કરશે. આ સ્લિપ સાચવો.'}
-              </p>
+      {/* Status and next step (not printed) */}
+      <div className={`slip-status no-print is-${status.tone}`}>
+        <div className="slip-status-text">
+          <strong>{t(status.en, status.gu)}</strong>
+          <span>
+            {a.status === STATUS.PENDING && t('Your slot is requested only after you send the WhatsApp message to reception.', 'રિસેપ્શનને વોટ્સએપ સંદેશ મોકલ્યા પછી જ સ્લોટની વિનંતી થાય છે.')}
+            {a.status === STATUS.REQUESTED && t('Reception will confirm your slot on WhatsApp.', 'રિસેપ્શન વોટ્સએપ પર તમારો સ્લોટ કન્ફર્મ કરશે.')}
+            {a.status === STATUS.CONFIRMED && t('Please arrive 15 minutes early at the 4th floor reception.', 'કૃપા કરીને ૧૫ મિનિટ વહેલા ૪થા માળે રિસેપ્શન પર આવો.')}
+            {a.status === STATUS.CANCELLED && t('This booking was cancelled.', 'આ બુકિંગ રદ કરવામાં આવી છે.')}
+          </span>
+        </div>
+        <div className="slip-status-actions">
+          {a.status === STATUS.PENDING && (
+            <>
+              <button type="button" className="btn slip-wa" onClick={sendRequest}><WhatsAppIcon size={17} /> {t('Send on WhatsApp', 'વોટ્સએપ પર મોકલો')}</button>
+              <button type="button" className="btn btn-secondary" onClick={() => update(setStatus(a.id, STATUS.REQUESTED))}><Send size={16} /> {t('I’ve sent it', 'મેં મોકલી દીધું')}</button>
+            </>
+          )}
+          {a.status === STATUS.REQUESTED && (
+            <>
+              <button type="button" className="btn btn-secondary" onClick={() => update(setStatus(a.id, STATUS.CONFIRMED))}><CheckCircle2 size={16} /> {t('Reception confirmed', 'રિસેપ્શને કન્ફર્મ કર્યું')}</button>
+              <button type="button" className="btn btn-ghost" onClick={sendRequest}><WhatsAppIcon size={16} /> {t('Send again', 'ફરી મોકલો')}</button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Printable / PDF content */}
+      <div className="printable-appointment-slip" ref={slipRef}>
+        <div className="slip-top">
+          <div className="slip-brand">
+            <PulseLogo size={44} />
+            <div className="slip-addr">
+              <span>4th Floor, A-block, City Centre, Shamlaji Road, Modasa</span>
+              <span>Helpline & WhatsApp: {HOSPITAL_INFO.appointmentNumber} · 24x7 Emergency</span>
             </div>
           </div>
-
+          <div className="slip-ref">
+            <small>{t('Booking reference', 'બુકિંગ સંદર્ભ નંબર')}</small>
+            <strong>{a.id}</strong>
+            <span className={`slip-chip is-${status.tone}`}>{t(status.en, status.gu)}</span>
+          </div>
         </div>
 
-        {/* Printable Hospital Receipt Content */}
-        <div className="printable-appointment-slip slip-scroll" style={{ padding: '28px' }}>
-          
-          {/* Hospital Header */}
-          <div style={{ borderBottom: '2px solid var(--border-color)', paddingBottom: '16px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-              <PulseLogo size={46} />
-              <div style={{ borderLeft: '1.5px solid var(--border-color)', paddingLeft: '14px' }}>
-                <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                  4th Floor, A-block, City Centre, Shamlaji Road, Modasa
-                </div>
-                <div style={{ fontSize: '11px', color: 'var(--brand-olive)', fontWeight: 700 }}>
-                  Helpline & WhatsApp: +91 95120 45641 • 24x7 Emergency Care
-                </div>
-              </div>
-            </div>
-
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ display: 'inline-block', border: '2px dashed var(--primary)', borderRadius: '10px', padding: '8px 16px', background: '#f1f8f4' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, display: 'block', textTransform: 'uppercase' }}>
-                  {lang === 'en' ? 'Booking Reference' : 'બુકિંગ સંદર્ભ નંબર'}
-                </span>
-                <span style={{ fontSize: '20px', fontWeight: 900, color: 'var(--primary)', letterSpacing: '0.05em' }}>
-                  {appointment.id}
-                </span>
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                {lang === 'en' ? 'Status: ' : 'સ્થિતિ: '}<span style={{ color: 'var(--success)', fontWeight: 700 }}>{lang === 'en' ? 'REQUEST SENT' : 'વિનંતી મોકલાઈ'}</span>
-              </div>
-            </div>
+        <div className="slip-when">
+          <div>
+            <small>{t('Date of visit', 'મુલાકાતની તારીખ')}</small>
+            <strong><Calendar size={16} /> {a.dayFormatted || a.date}</strong>
           </div>
-
-          {/* Appointment Schedule Box */}
-          <div style={{ background: '#f8fafc', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-lg)', padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
-            <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
-                {lang === 'en' ? 'Date of Visit (Next Week)' : 'મુલાકાતની તારીખ (આગામી સપ્તાહ)'}
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '16px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
-                <Calendar size={18} color="var(--primary)" />
-                <span>{appointment.date}</span>
-              </div>
-            </div>
-
-            <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
-                {lang === 'en' ? 'Scheduled Slot Time' : 'નિયત સમય સ્લોટ'}
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '16px', fontWeight: 800, color: 'var(--primary)', marginTop: '2px' }}>
-                <Clock size={18} />
-                <span>{appointment.timeSlot}</span>
-              </div>
-            </div>
-
-            <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
-                {lang === 'en' ? 'Consulting Doctor' : 'કન્સલ્ટિંગ તબીબ'}
-              </span>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
-                {appointment.doctorName}
-              </div>
-              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                {appointment.doctorSpecialty}
-              </span>
-            </div>
-
-            <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, display: 'block' }}>
-                {lang === 'en' ? 'Assigned Consultation Room' : 'ઓપીડી રૂમ નંબર'}
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px', fontWeight: 800, color: 'var(--brand-navy)', marginTop: '2px' }}>
-                <Building2 size={16} color="var(--accent)" />
-                <span>{appointment.room}</span>
-              </div>
-            </div>
+          <div>
+            <small>{t('Time slot', 'સમય સ્લોટ')}</small>
+            <strong><Clock size={16} /> {a.timeSlot}</strong>
           </div>
-
-          {/* Patient Details Table */}
-          <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ fontSize: '13px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)', letterSpacing: '0.05em', marginBottom: '8px' }}>
-              {lang === 'en' ? 'Patient Record' : 'દર્દીનો રેકોર્ડ'}
-            </h4>
-            <div style={{ border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
-                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{lang === 'en' ? 'Patient Name:' : 'દર્દીનું નામ:'}</span>
-                <span style={{ fontWeight: 700, color: 'var(--brand-navy)' }}>{appointment.patientName}</span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px', background: '#f8fafc' }}>
-                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{lang === 'en' ? 'Booking Origin:' : 'બુકિંગ માધ્યમ:'}</span>
-                <span style={{ fontWeight: 700, color: appointment.bookedBy === 'Staff' ? 'var(--primary)' : appointment.bookedBy === 'Doctor' ? '#059669' : 'var(--primary)' }}>
-                  {appointment.bookedBy === 'Staff'
-                    ? (lang === 'en' ? 'Hospital Reception Desk' : 'હોસ્પિટલ રિસેપ્શન કાઉન્ટર')
-                    : appointment.bookedBy === 'Doctor'
-                    ? (lang === 'en' ? 'Doctor / OPD Follow-up' : 'ડૉક્ટર / OPD ફોલો-અપ')
-                    : (lang === 'en' ? 'Patient Self-Booking (Online)' : 'દર્દી પોતે (ઓનલાઈન વેબસાઇટ)')}
-                  {appointment.bookedByName && appointment.bookedByName !== 'Self (Online)' ? ` • ${appointment.bookedByName}` : ''}
-                </span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
-                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{lang === 'en' ? 'Mobile Number:' : 'મોબાઇલ નંબર:'}</span>
-                <span style={{ fontWeight: 700 }}>+91 {appointment.patientPhone}</span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
-                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{lang === 'en' ? 'Age / Gender:' : 'ઉંમર અને જાતિ:'}</span>
-                <span>
-                  {appointment.patientAge ? `${appointment.patientAge} ${lang === 'en' ? 'Years' : 'વર્ષ'}` : (lang === 'en' ? 'N/A' : '-')} • {
-                    appointment.patientGender === 'Male'
-                      ? (lang === 'en' ? 'Male' : 'પુરુષ')
-                      : appointment.patientGender === 'Female'
-                      ? (lang === 'en' ? 'Female' : 'સ્ત્રી')
-                      : (lang === 'en' ? appointment.patientGender : 'અન્ય')
-                  }
-                </span>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', borderBottom: '1px solid var(--border-color)', padding: '8px 12px', fontSize: '13.5px' }}>
-                <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{lang === 'en' ? 'City / Area:' : 'ગામ / શહેર:'}</span>
-                <span>{appointment.city || 'Modasa'}</span>
-              </div>
-              {appointment.previousFileNo && (
-                <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', borderBottom: appointment.symptoms ? '1px solid var(--border-color)' : 'none', padding: '8px 12px', fontSize: '13.5px', background: '#fefce8' }}>
-                  <span style={{ color: '#854d0e', fontWeight: 600 }}>{lang === 'en' ? 'Hospital File No:' : 'હોસ્પિટલ ફાઇલ નંબર:'}</span>
-                  <span style={{ fontWeight: 800, color: '#854d0e' }}>{appointment.previousFileNo}</span>
-                </div>
-              )}
-              {appointment.symptoms && (
-                <div style={{ display: 'grid', gridTemplateColumns: '150px 1fr', padding: '8px 12px', fontSize: '13.5px' }}>
-                  <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>{lang === 'en' ? 'Reason / Symptoms:' : 'મુલાકાતનું કારણ / લક્ષણો:'}</span>
-                  <span>{appointment.symptoms}</span>
-                </div>
-              )}
-            </div>
+          <div>
+            <small>{t('Doctor', 'ડૉક્ટર')}</small>
+            <strong>{lang === 'en' ? a.doctorName : (a.doctorNameGujarati || a.doctorName)}</strong>
           </div>
-
-          {/* Mandatory Brochure Notice Highlight */}
-          <div style={{ 
-            background: 'linear-gradient(135deg, rgba(14, 101, 92, 0.08) 0%, rgba(245, 158, 11, 0.08) 100%)',
-            borderLeft: '4px solid var(--primary)',
-            padding: '12px 16px',
-            borderRadius: '0 8px 8px 0',
-            marginBottom: '20px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-              <ShieldCheck size={18} color="var(--primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-              <div>
-                <p style={{ fontSize: '12.5px', fontWeight: 700, color: 'var(--brand-navy)' }}>
-                  {lang === 'en' ? 'Important Instructions (સૂચના):' : 'મહત્વપૂર્ણ સૂચનાઓ:'}
-                </p>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                  {lang === 'en' 
-                    ? '• Please arrive 15 minutes prior to your allocated slot at the 4th Floor reception.' 
-                    : '• કૃપા કરીને આપના ફાળવેલ સમય સ્લોટ કરતાં ૧૫ મિનિટ વહેલા ૪થા માળે રિસેપ્શન પર પહોંચવું.'}
-                </p>
-                <p style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 700, marginTop: '2px' }}>
-                  {lang === 'en'
-                    ? '• "Please bring this file and previous medical reports on your next visit."'
-                    : '• "કૃપા કરીને આ ફાઇલ અને તમામ જૂના રિપોર્ટ્સ તમારી મુલાકાત વખતે સાથે લાવવા વિનંતી."'}
-                </p>
-              </div>
-            </div>
+          <div>
+            <small>{t('Room', 'રૂમ')}</small>
+            <strong><Building2 size={16} /> {a.room}</strong>
           </div>
-
         </div>
 
-        {/* Modal Action Footer */}
-        <div className="slip-footer no-print">
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button
-              onClick={handlePrint}
-              className="btn-outline"
-              style={{ padding: '8px 16px', fontSize: '13px' }}
-            >
-              <Printer size={15} />
-              <span>{lang === 'en' ? 'Print Slip' : 'સ્લિપ પ્રિન્ટ કરો'}</span>
-            </button>
+        <h4 className="slip-subhead">{t('Patient details', 'દર્દીની વિગત')}</h4>
+        <div className="slip-table">
+          {row(t('Patient name', 'દર્દીનું નામ'), a.patientName)}
+          {row(t('Mobile number', 'મોબાઇલ નંબર'), `+91 ${a.patientPhone}`)}
+          {row(t('Age / gender', 'ઉંમર / જાતિ'), `${a.patientAge && a.patientAge !== 'N/A' ? `${a.patientAge} ${t('years', 'વર્ષ')}` : '–'} · ${a.patientGender === 'Female' ? t('Female', 'સ્ત્રી') : a.patientGender === 'Male' ? t('Male', 'પુરુષ') : a.patientGender || '–'}`)}
+          {row(t('City / area', 'ગામ / શહેર'), a.city || 'Modasa')}
+          {a.previousFileNo && row(t('Hospital file no.', 'હોસ્પિટલ ફાઇલ નંબર'), a.previousFileNo)}
+          {a.symptoms && row(t('Reason / symptoms', 'કારણ / લક્ષણો'), a.symptoms)}
+        </div>
 
-            <button
-              onClick={handleWhatsAppShare}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                background: '#25D366',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: 'var(--radius-md)',
-                padding: '8px 16px',
-                fontSize: '13px',
-                fontWeight: 700,
-                cursor: 'pointer'
-              }}
-            >
-              <WhatsAppIcon size={18} />
-              <span>{lang === 'en' ? 'Share to WhatsApp' : 'વ્હોટ્સએપ પર મેળવો'}</span>
-            </button>
+        <div className="slip-notice">
+          <ShieldCheck size={18} />
+          <div>
+            <p>{t('Please arrive 15 minutes before your slot at the 4th floor reception.', 'કૃપા કરીને તમારા સ્લોટથી ૧૫ મિનિટ વહેલા ૪થા માળે રિસેપ્શન પર આવો.')}</p>
+            <p>{t('Please bring this slip and your previous medical reports.', 'કૃપા કરીને આ સ્લિપ અને જૂના તબીબી રિપોર્ટ્સ સાથે લાવો.')}</p>
           </div>
+        </div>
+      </div>
 
-          <Link to="my-appointments" className="btn btn-primary" style={{ padding: '8px 24px', fontSize: '13px' }}>
-            {lang === 'en' ? 'All my appointments' : 'મારી બધી એપોઇન્ટમેન્ટ'}
+      {/* Actions (not printed) */}
+      <div className="slip-footer no-print">
+        <div className="slip-actions">
+          <button type="button" className="btn btn-secondary" onClick={() => window.print()}>
+            <Printer size={16} /> {t('Print', 'પ્રિન્ટ')}
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={handlePdf} disabled={!!busy}>
+            <FileDown size={16} /> {busy === 'pdf' ? t('Preparing…', 'તૈયાર થાય છે…') : t('Download PDF', 'PDF ડાઉનલોડ')}
+          </button>
+          <button type="button" className="btn slip-wa" onClick={handleShare} disabled={!!busy}>
+            <Share2 size={16} /> {busy === 'share' ? t('Preparing…', 'તૈયાર થાય છે…') : t('Share PDF on WhatsApp', 'PDF વોટ્સએપ પર શેર કરો')}
+          </button>
+        </div>
+        <div className="slip-actions">
+          {a.status !== STATUS.CANCELLED && (
+            <button type="button" className="btn btn-ghost slip-cancel" onClick={handleCancel}>
+              <XCircle size={16} /> {t('Cancel booking', 'બુકિંગ રદ કરો')}
+            </button>
+          )}
+          <Link to="my-appointments" className="btn btn-ghost">
+            <Search size={16} /> {t('Open another booking', 'બીજી બુકિંગ ખોલો')}
           </Link>
         </div>
+        {note && <p className="slip-note" role="status">{note}</p>}
+      </div>
     </div>
   );
 }

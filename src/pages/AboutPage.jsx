@@ -18,6 +18,7 @@ export default function AboutPage({ lang = 'en' }) {
     <div>
       <PageHero
         photo={PHOTOS.exterior}
+        photoPosition="center 12%"
         photoAlt={t('Pulse Hospital & I.C.U building at City Centre, Shamlaji Road, Modasa', 'સીટી સેન્ટર, શામળાજી રોડ, મોડાસા ખાતે પલ્સ હોસ્પિટલ & આઈ.સી.યુ. બિલ્ડિંગ')}
         crumbs={t('About', 'અમારા વિશે')}
         eyebrow={t('About Pulse Hospital & I.C.U', 'પલ્સ હોસ્પિટલ & આઈ.સી.યુ. વિશે')}
