@@ -1,40 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Calendar, Phone, Siren, Users, UserCheck, ArrowRight, ArrowUpRight, CheckCircle2, Plus, Clock, FileText,
   HeartPulse, Activity, Scan, Droplets, Scissors, Sparkles, ShieldCheck
 } from 'lucide-react';
 import { SectionHead, Media, Icon, Photo, CountUp, delay } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
-import { HospitalTour, EmergencySteps } from '../components/HomeExtras';
+import { HeroVideo, EmergencySteps } from '../components/HomeExtras';
 import { Link } from '../router';
 import {
-  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, PHOTOS, MILESTONES, getFacility
+  HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, TREATMENTS, FAQS, MILESTONES, getFacility
 } from '../data/hospitalContent';
 
 // Facilities featured in the home-page bento grid, in display order
 const FEATURED = ['icu', 'ot', 'dialysis', 'lab', 'imaging', 'pharmacy'];
 
-// Background slider images showcasing real hospital infrastructure
-const HERO_SLIDES = [
-  { src: PHOTOS.icuHall, alt: 'Pulse Hospital ICU Hall' },
-  { src: PHOTOS.ot1, alt: 'Modular Operation Theatre' },
-  { src: PHOTOS.reception, alt: 'Hospital Reception City Centre' },
-  { src: PHOTOS.twinRoom, alt: 'Patient Care Rooms' }
-];
-
 export default function HomePage({ lang = 'en' }) {
   const [openFaq, setOpenFaq] = useState(0);
-  const [activeSlide, setActiveSlide] = useState(0);
 
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const featured = FEATURED.map(getFacility).filter(Boolean);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
 
   const toggleFaq = (index) => {
     setOpenFaq((prev) => (prev === index ? -1 : index));
@@ -44,31 +28,17 @@ export default function HomePage({ lang = 'en' }) {
     <div>
       {/* ---------- Hero with Background Slider (100% View Height on Mobile) ---------- */}
       <section
-        className="home-hero home-hero--slider"
+        className="home-hero home-hero--slider home-hero--video"
         aria-label={t('Pulse Hospital Introduction', 'પલ્સ હોસ્પિટલ પરિચય')}
       >
-        {/* Background Slides */}
+        {/* Blurred ambient layer + overlay (the video itself sits beside the text) */}
         <div className="hero-slider-bg" aria-hidden="true">
-          {HERO_SLIDES.map((slide, index) => (
-            <div
-              key={slide.src}
-              className={`hero-slide-item ${index === activeSlide ? 'is-active' : ''}`}
-            >
-              <Photo
-                src={slide.src}
-                alt={slide.alt}
-                eager={index === 0}
-                sizes="100vw"
-                className="hero-slide-img"
-              />
-            </div>
-          ))}
-          {/* Subtle balanced overlay for photo vibrancy and text contrast */}
           <div className="hero-slider-overlay" />
         </div>
 
         {/* Foreground Content */}
-        <div className="container-wide home-hero-content">
+        <div className="container-wide home-hero-content hero-video-layout">
+          <HeroVideo lang={lang} />
           <div className="hero-compact-wrap page-enter">
             {/* Top Badge: Live Status & Location with Icon */}
             <div className="hero-status-pill">
@@ -182,7 +152,7 @@ export default function HomePage({ lang = 'en' }) {
       </div>
 
       {/* ---------- What to do in an emergency ---------- */}
-      <EmergencySteps lang={lang} />
+      {/*   <EmergencySteps lang={lang} />*/}
 
       {/* ---------- Facilities bento ---------- */}
       <section className="section ">
@@ -213,9 +183,6 @@ export default function HomePage({ lang = 'en' }) {
           </div>
         </div>
       </section>
-
-      {/* ---------- Video tour ---------- */}
-      <HospitalTour lang={lang} />
 
       {/* ---------- Doctors ---------- */}
       <section className="section section--white">

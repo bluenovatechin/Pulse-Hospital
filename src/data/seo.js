@@ -76,7 +76,8 @@ export const pagePath = (page, param) =>
 
 // Hero photo number (public/photos/gallery-N) at the top of each page, so
 // the pre-rendered HTML can preload it. Keep in step with the pages' heroes.
-export const HERO_PHOTO = { home: 12, facilities: 13, departments: 9, doctors: 15, gallery: 2, about: 17, contact: 5 };
+// Home has no hero photo: it opens with the walkthrough video (its poster is preloaded)
+export const HERO_PHOTO = { facilities: 13, departments: 9, doctors: 15, gallery: 2, about: 17, contact: 5 };
 
 /** Title, description and indexing rule for any route */
 export function getPageMeta(page, param) {
@@ -359,7 +360,9 @@ export function seoHead({ page, param }, base = '/') {
   const photo = (w) => `${base}photos/gallery-${n}${w ? `-${w}` : ''}.webp`;
   const preload = n
     ? `\n    <link rel="preload" as="image" href="${photo()}" imagesrcset="${photo(640)} 640w, ${photo(800)} 800w, ${photo()} 1100w" imagesizes="(max-width: 1023px) 100vw, 45vw" fetchpriority="high" />`
-    : '';
+    : page === 'home' && !param
+      ? `\n    <link rel="preload" as="image" href="${base}video/hospital-tour-poster.webp" fetchpriority="high" />`
+      : '';
   const jsonLd = JSON.stringify(jsonLdFor(page, param)).replace(/</g, '\u003c');
   const ogImgUrl = `${SITE_URL}og-image.png`;
   const ogImgAlt = 'Pulse Hospital & I.C.U Modasa - Specialist Doctors & 24x7 Critical Care Team';

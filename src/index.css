@@ -6649,7 +6649,7 @@ button.card {
 }
 
 /* ========================================================
-   Home: emergency steps, video tour, department photos
+   Home: emergency steps, department photos
 ======================================================== */
 .er-steps-wrap {
   padding: 8px 0 12px;
@@ -6769,116 +6769,6 @@ button.card {
   width: 100%;
 }
 
-/* Video tour */
-.tour-grid {
-  display: grid;
-  gap: 32px;
-  align-items: center;
-}
-
-@media (min-width: 900px) {
-  .tour-grid {
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 56px;
-  }
-}
-
-.tour-chapters {
-  list-style: none;
-  margin: 22px 0 0;
-  padding: 0;
-  display: grid;
-  gap: 6px;
-}
-
-@media (min-width: 520px) {
-  .tour-chapters {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.tour-chapters button {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 11px 14px;
-  border-radius: 12px;
-  border: 1px solid var(--border-light);
-  background: var(--surface-alt);
-  font: inherit;
-  font-size: 14.5px;
-  font-weight: 600;
-  color: var(--text-body);
-  text-align: left;
-  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
-}
-
-.tour-chapters button:hover {
-  border-color: var(--border-color);
-  background: #fff;
-}
-
-.tour-chapters button.is-current {
-  border-color: var(--primary-light);
-  background: var(--primary-subtle);
-  color: var(--primary);
-}
-
-.tour-time {
-  flex-shrink: 0;
-  min-width: 38px;
-  font-variant-numeric: tabular-nums;
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-light);
-}
-
-.tour-chapters button.is-current .tour-time {
-  color: var(--primary);
-}
-
-.tour-play {
-  margin-left: auto;
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-}
-
-.tour-chapters button:hover .tour-play,
-.tour-chapters button.is-current .tour-play {
-  opacity: 1;
-}
-
-.tour-media {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.tour-phone {
-  width: min(330px, 82vw);
-  aspect-ratio: 9 / 16;
-  padding: 10px;
-  border-radius: 34px;
-  background: var(--brand-navy-dark);
-  box-shadow: 0 30px 60px rgba(5, 34, 36, 0.28), inset 0 0 0 2px rgba(255, 255, 255, 0.06);
-}
-
-.tour-phone video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 26px;
-  background: #000;
-  display: block;
-}
-
-.tour-note {
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
 /* Department photos (home "conditions" cards + departments page) */
 .cond-card.has-photo {
   padding-top: 0;
@@ -6952,4 +6842,338 @@ button.card {
 html,
 body {
   overflow-x: clip;
+}
+
+/* ========================================================
+   Home hero with the hospital walkthrough video.
+   The video is portrait (9:16). Tablet/desktop: shown whole in a
+   frame beside the text, with a blurred live copy as background.
+   Phones: fills the hero behind the text.
+======================================================== */
+.home-hero--video .hero-video-layout {
+  position: static;
+  /* lets the ambient canvas and phone video cover the whole section */
+}
+
+.home-hero--video .hero-slider-bg {
+  z-index: 1;
+}
+
+.home-hero--video .hero-compact-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-ambient {
+  display: none;
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  z-index: 0;
+  filter: blur(46px) saturate(1.35) brightness(0.62);
+  pointer-events: none;
+}
+
+.hero-video {
+  margin: 0;
+  overflow: hidden;
+  background: #041d20;
+}
+
+.hero-video video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Caption: names the place on screen */
+.hero-scene {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 40px 16px 14px;
+  background: linear-gradient(180deg, transparent, rgba(3, 20, 22, 0.82));
+  color: #fff;
+  pointer-events: none;
+}
+
+.hero-scene-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8ee3d2;
+}
+
+.hero-scene-name {
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  animation: hero-scene-in 0.5s var(--ease-out) both;
+}
+
+.hero-scene-bar {
+  display: flex;
+  gap: 3px;
+  margin-top: 8px;
+}
+
+.hero-scene-seg {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.hero-scene-seg>span {
+  display: block;
+  height: 100%;
+  background: #fff;
+  transform-origin: left center;
+  transition: transform 0.25s linear;
+}
+
+.hero-video-toggle {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(3, 20, 22, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform 0.25s var(--ease-out);
+}
+
+.hero-video-toggle:hover {
+  background: rgba(3, 20, 22, 0.8);
+  transform: scale(1.06);
+}
+
+/* Paused / not started: a big, obvious play button */
+.hero-video:not(.is-playing) .hero-video-toggle {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  width: 68px;
+  height: 68px;
+  transform: translate(-50%, -50%);
+  background: rgba(14, 101, 92, 0.85);
+}
+
+.hero-video:not(.is-playing) .hero-video-toggle svg {
+  width: 26px;
+  height: 26px;
+}
+
+@keyframes hero-scene-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- Phones: video on top, fading into a solid panel that holds the
+   text. Text never sits on the bright video, so it always reads clearly. ---- */
+@media (max-width: 699px) {
+  .home-hero.home-hero--video {
+    height: auto;
+    max-height: none;
+    min-height: calc(100dvh - var(--header-h, 72px) - 34px);
+    padding: 0;
+    justify-content: flex-start;
+    background: #041d20;
+  }
+
+  /* No full-screen shading needed: the text has its own panel */
+  .home-hero--video .hero-slider-bg {
+    display: none;
+  }
+
+  .home-hero--video .hero-video-layout {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .hero-video {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 46vh;
+  }
+
+  .hero-video video {
+    position: absolute;
+    inset: 0;
+    object-position: center 40%;
+  }
+
+  /* Fade the bottom of the video into the text panel */
+  .hero-video::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 42%;
+    background: linear-gradient(180deg, rgba(4, 29, 32, 0) 0%, rgba(4, 29, 32, 0.75) 60%, #041d20 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .home-hero--video .hero-compact-wrap {
+    margin-top: -56px;
+    padding: 0 20px 26px;
+  }
+
+  .home-hero--video .hero-status-pill {
+    margin-bottom: 12px;
+  }
+
+  .home-hero--video .hero-title {
+    font-size: clamp(27px, 7.6vw, 32px) !important;
+    line-height: 1.18 !important;
+    text-shadow: none;
+  }
+
+  .home-hero--video .hero-description {
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 100%;
+    margin-top: 10px;
+    color: rgba(255, 255, 255, 0.88);
+    text-shadow: none;
+  }
+
+  .home-hero--video .hero-action-buttons {
+    max-width: 100%;
+    margin-top: 18px;
+    gap: 10px;
+  }
+
+  .home-hero--video .hero-action-buttons .btn {
+    padding: 13px 12px;
+    font-size: 14px;
+  }
+
+  /* Caption moves to the top so it never sits under the headline */
+  .hero-scene {
+    top: 0;
+    bottom: auto;
+    padding: 14px 64px 26px 16px;
+    background: linear-gradient(180deg, rgba(3, 20, 22, 0.75), transparent);
+  }
+
+  .hero-scene-name {
+    font-size: 16px;
+  }
+
+  .hero-scene-bar {
+    margin-top: 6px;
+  }
+}
+
+/* ---- Tablet & desktop: whole video in a frame beside the text ---- */
+@media (min-width: 700px) {
+  .home-hero.home-hero--video {
+    justify-content: center;
+    padding-top: 36px;
+    padding-bottom: 36px;
+  }
+
+  .hero-ambient {
+    display: block;
+  }
+
+  .home-hero--video .hero-video-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(28px, 5vw, 80px);
+  }
+
+  .home-hero--video .hero-compact-wrap {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* Narrow text column (tablets): let the buttons wrap instead of
+     running under the video frame */
+  .home-hero--video .hero-action-buttons {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+
+  .hero-video {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    z-index: 2;
+    /* As tall as the hero allows, never cropped: exact 9:16 frame */
+    height: clamp(340px, calc(100dvh - var(--header-h, 72px) - 34px - 80px), 560px);
+    aspect-ratio: 9 / 16;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 6px rgba(255, 255, 255, 0.05);
+  }
+
+  /* The right side no longer needs darkening: the frame is its own panel */
+  .home-hero--video .hero-slider-overlay {
+    background:
+      linear-gradient(90deg, rgba(3, 24, 26, 0.7) 0%, rgba(3, 24, 26, 0.45) 55%, rgba(3, 24, 26, 0.25) 100%);
+  }
+}
+
+@media (min-width: 1100px) {
+  .hero-video {
+    height: clamp(420px, calc(100dvh - var(--header-h, 72px) - 34px - 80px), 680px);
+  }
+}
+
+/* Keep the frame clear of the floating WhatsApp / call / booking buttons
+   (fixed, 24px from the right, shown from 900px up) */
+@media (min-width: 900px) and (max-width: 1023px) {
+  .hero-video {
+    margin-right: 76px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-video {
+    margin-right: max(0px, calc(100px - max(0px, (100vw - 1280px) / 2) - 32px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene-name {
+    animation: none;
+  }
+
+  .hero-scene-seg>span {
+    transition: none;
+  }
 }

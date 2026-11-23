@@ -1,101 +1,140 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Phone, MapPin, FileText, Siren, Play, Navigation } from 'lucide-react';
-import { SectionHead, WhatsAppIcon } from './ui';
+import { Phone, MapPin, FileText, Siren, Play, Pause, Navigation } from 'lucide-react';
+import { WhatsAppIcon } from './ui';
 import { HOSPITAL_INFO, HOSPITAL_TOUR } from '../data/hospitalContent';
 
-const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+// Index of the chapter playing at time `s`
+const chapterAt = (chapters, s) => {
+  let idx = 0;
+  chapters.forEach((c, i) => { if (s >= c.at - 0.05) idx = i; });
+  return idx;
+};
 
 /**
- * Walkthrough video with chapters. Plays muted only while on screen,
- * never autoplays for people who prefer reduced motion, and downloads
- * nothing until it is near the viewport.
+ * Hero walkthrough video. The video is portrait (9:16), so on tablets and
+ * desktops it is shown whole in a frame (nothing cropped) while a blurred,
+ * live copy fills the background. On phones it fills the hero behind the text.
+ * - plays muted, loops, pauses when scrolled away
+ * - no autoplay for reduced-motion or data-saver users (play button instead)
+ * - a caption names each place as it appears
  */
-export function HospitalTour({ lang = 'en' }) {
+export function HeroVideo({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const videoRef = useRef(null);
-  const [current, setCurrent] = useState(0);
-  const [started, setStarted] = useState(false);
+  const canvasRef = useRef(null);
+  const userPaused = useRef(false);
+  const [playing, setPlaying] = useState(false);
+  const [chapter, setChapter] = useState(0);
+  const [progress, setProgress] = useState(0);
   const chapters = HOSPITAL_TOUR.chapters;
 
+  // Autoplay when allowed and on screen; pause when scrolled away
   useEffect(() => {
     const v = videoRef.current;
-    if (!v || typeof IntersectionObserver === 'undefined') return;
+    if (!v) return;
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        if (v.preload === 'none') v.preload = 'metadata';
-        if (!reduce) v.play().then(() => setStarted(true)).catch(() => {});
-      } else if (!v.paused) {
-        v.pause();
-      }
-    }, { threshold: 0.45 });
+    const saveData = navigator.connection?.saveData;
+    if (reduce || saveData) {
+      userPaused.current = true;
+      v.preload = 'metadata';
+    }
+    const tryPlay = () => { if (!userPaused.current) v.play().catch(() => {}); };
+    if (typeof IntersectionObserver === 'undefined') { tryPlay(); return; }
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) tryPlay();
+      else if (!v.paused) v.pause();
+    }, { threshold: 0.25 });
     io.observe(v);
     return () => io.disconnect();
+  }, []);
+
+  // Blurred ambient background: copy the video into a tiny canvas a few
+  // times a second (tablet/desktop only). Starts with the poster image.
+  useEffect(() => {
+    const v = videoRef.current;
+    const c = canvasRef.current;
+    if (!v || !c) return;
+    const wide = window.matchMedia?.('(min-width: 700px)');
+    const ctx = c.getContext('2d');
+    if (!ctx) return;
+    const poster = new Image();
+    poster.onload = () => ctx.drawImage(poster, 0, 0, c.width, c.height);
+    poster.src = HOSPITAL_TOUR.poster;
+
+    let raf = 0;
+    let last = 0;
+    const draw = (now) => {
+      raf = requestAnimationFrame(draw);
+      if (!wide?.matches || v.paused || v.readyState < 2 || now - last < 120) return;
+      last = now;
+      ctx.drawImage(v, 0, 0, c.width, c.height);
+    };
+    raf = requestAnimationFrame(draw);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   const onTime = () => {
     const v = videoRef.current;
     if (!v) return;
-    let idx = 0;
-    chapters.forEach((c, i) => { if (v.currentTime >= c.at - 0.05) idx = i; });
-    setCurrent(idx);
+    const i = chapterAt(chapters, v.currentTime);
+    const start = chapters[i].at;
+    const end = chapters[i + 1] ? chapters[i + 1].at : v.duration || 59;
+    setChapter(i);
+    setProgress(Math.min(1, Math.max(0, (v.currentTime - start) / (end - start))));
   };
 
-  const jump = (i) => {
+  const toggle = () => {
     const v = videoRef.current;
     if (!v) return;
-    v.currentTime = chapters[i].at;
-    setCurrent(i);
-    v.play().then(() => setStarted(true)).catch(() => {});
+    if (v.paused) {
+      userPaused.current = false;
+      v.play().catch(() => {});
+    } else {
+      userPaused.current = true;
+      v.pause();
+    }
   };
 
-  return (
-    <section className="section section--white tour" aria-labelledby="tour-title">
-      <div className="container-wide tour-grid">
-        <div className="tour-text">
-          <SectionHead
-            eyebrow={t('Hospital tour', 'હોસ્પિટલ ટૂર')}
-            title={<span id="tour-title">{t('Walk through Pulse Hospital in one minute', 'એક મિનિટમાં પલ્સ હોસ્પિટલ જુઓ')}</span>}
-            text={t('Filmed inside the hospital on the 4th floor of City Centre. Tap a place to jump to it.', 'સીટી સેન્ટરના ૪થા માળે આવેલી હોસ્પિટલની અંદરનો વિડિયો. કોઈ જગ્યા પર ક્લિક કરી સીધું ત્યાં જુઓ.')}
-          />
-          <ol className="tour-chapters">
-            {chapters.map((c, i) => (
-              <li key={c.at}>
-                <button
-                  type="button"
-                  className={i === current && started ? 'is-current' : ''}
-                  aria-current={i === current && started ? 'step' : undefined}
-                  onClick={() => jump(i)}
-                >
-                  <span className="tour-time">{fmt(c.at)}</span>
-                  <span>{t(c.en, c.gu)}</span>
-                  <Play size={13} className="tour-play" aria-hidden="true" />
-                </button>
-              </li>
-            ))}
-          </ol>
-        </div>
+  const c = chapters[chapter];
 
-        <div className="tour-media">
-          <div className="tour-phone">
-            <video
-              ref={videoRef}
-              src={HOSPITAL_TOUR.src}
-              poster={HOSPITAL_TOUR.poster}
-              muted
-              loop
-              playsInline
-              controls
-              preload="none"
-              onTimeUpdate={onTime}
-              onPlay={() => setStarted(true)}
-              aria-label={t('Video tour of Pulse Hospital & I.C.U, Modasa', 'પલ્સ હોસ્પિટલ & આઈ.સી.યુ., મોડાસાનો વિડિયો ટૂર')}
-            />
-          </div>
-          <p className="tour-note">{t('No sound · 59 seconds', 'અવાજ વગર · ૫૯ સેકન્ડ')}</p>
-        </div>
-      </div>
-    </section>
+  return (
+    <>
+      <canvas ref={canvasRef} className="hero-ambient" width="36" height="64" aria-hidden="true" />
+      <figure className={`hero-video ${playing ? 'is-playing' : ''}`}>
+        <video
+          ref={videoRef}
+          src={HOSPITAL_TOUR.src}
+          poster={HOSPITAL_TOUR.poster}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          onTimeUpdate={onTime}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          aria-label={t('Video walkthrough of Pulse Hospital & I.C.U, Modasa', 'પલ્સ હોસ્પિટલ & આઈ.સી.યુ., મોડાસાનો વિડિયો')}
+        />
+        <figcaption className="hero-scene" aria-live="off">
+          <span className="hero-scene-kicker">{t('Inside Pulse Hospital', 'પલ્સ હોસ્પિટલની અંદર')}</span>
+          <span className="hero-scene-name" key={`${chapter}-${lang}`}>{t(c.en, c.gu)}</span>
+          <span className="hero-scene-bar" aria-hidden="true">
+            {chapters.map((x, i) => (
+              <span key={x.at} className="hero-scene-seg">
+                <span style={{ transform: `scaleX(${i < chapter ? 1 : i === chapter ? progress : 0})` }} />
+              </span>
+            ))}
+          </span>
+        </figcaption>
+        <button
+          type="button"
+          className="hero-video-toggle"
+          onClick={toggle}
+          aria-label={playing ? t('Pause video', 'વિડિયો રોકો') : t('Play video', 'વિડિયો ચલાવો')}
+        >
+          {playing ? <Pause size={18} /> : <Play size={18} />}
+        </button>
+      </figure>
+    </>
   );
 }
 
