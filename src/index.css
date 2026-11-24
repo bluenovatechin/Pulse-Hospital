@@ -8860,3 +8860,18 @@ button.slot-pill {
   border-color: #32d583;
   background: #ecfdf3;
 }
+
+.booking-done-resend {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+
+.booking-done-resend a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

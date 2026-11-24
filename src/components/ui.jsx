@@ -87,7 +87,7 @@ export function Avatar({ doctor, size = '' }) {
       aria-hidden="true"
     >
       {showPhoto ? (
-        <img src={doctor.photo} alt="" loading="lazy" decoding="async" onError={() => setFailed(true)} />
+        <img src={doctor.photoSmall || doctor.photo} alt="" loading="lazy" decoding="async" onError={() => setFailed(true)} />
       ) : (
         doctor.initials
       )}

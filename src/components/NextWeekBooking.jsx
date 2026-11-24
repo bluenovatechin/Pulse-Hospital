@@ -838,12 +838,12 @@ _Sent via Pulse Hospital Online Booking Portal_`;
               {submitting ? (
                 <>
                   <Clock size={18} className="animate-spin" />
-                  <span>{lang === 'en' ? 'Preparing WhatsApp Booking...' : 'વોટ્સએપ બુકિંગ તૈયાર થઈ રહ્યું છે...'}</span>
+                  <span>{lang === 'en' ? 'Booking…' : 'બુક થઈ રહ્યું છે…'}</span>
                 </>
               ) : (
                 <>
                   <WhatsAppIcon size={20} />
-                  <span>{lang === 'en' ? 'Book Slot via WhatsApp' : 'વોટ્સએપ દ્વારા સ્લોટ બુક કરો'}</span>
+                  <span>{lang === 'en' ? 'Book Appointment' : 'એપોઇન્ટમેન્ટ બુક કરો'}</span>
                 </>
               )}
             </button>

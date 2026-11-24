@@ -65,6 +65,8 @@ const photo = (n) => `${ASSET_BASE}photos/gallery-${n}.webp`;
 // Set a doctor's `photo: doctorPhoto("<slug>")` once the file is added;
 // until then (or if it fails to load) the coloured initials are shown.
 const doctorPhoto = (slug) => `${ASSET_BASE}doctors/${slug}.webp`;
+// Small copy for round avatars in menus, cards and lists
+const doctorPhotoSmall = (slug) => `${ASSET_BASE}doctors/${slug}-sm.webp`;
 
 // srcset for any PHOTOS url, so phones download the smaller file
 export const photoSrcSet = (src) =>
@@ -160,7 +162,8 @@ export const DOCTORS = [
     name: "Dr. Dipesh S. Patel",
     nameGujarati: "ડૉ. દિપેશ એસ. પટેલ",
     initials: "DP",
-    photo: null, // portrait: public/doctors/dr-dipesh-patel.webp -> doctorPhoto("dr-dipesh-patel")
+    photo: doctorPhoto("dr-dipesh-patel"),
+    photoSmall: doctorPhotoSmall("dr-dipesh-patel"),
     colors: ["#0e655c", "#386e2e"],
     type: "visiting",
     qualification: "MD (Medicine)",
@@ -203,7 +206,8 @@ export const DOCTORS = [
     name: "Dr. Naimuddin N. Kazi",
     nameGujarati: "ડૉ. નઈમુદ્દીન એન. કાઝી",
     initials: "NK",
-    photo: null, // portrait: public/doctors/dr-naimuddin-kazi.webp -> doctorPhoto("dr-naimuddin-kazi")
+    photo: doctorPhoto("dr-naimuddin-kazi"),
+    photoSmall: doctorPhotoSmall("dr-naimuddin-kazi"),
     colors: ["#093437", "#0e655c"],
     type: "visiting",
     qualification: "MD (Medicine)",
@@ -248,7 +252,8 @@ export const DOCTORS = [
     name: "Dr. Paras H. Patel",
     nameGujarati: "ડૉ. પારસ એચ. પટેલ",
     initials: "PP",
-    photo: null, // portrait: public/doctors/dr-paras-patel.webp -> doctorPhoto("dr-paras-patel")
+    photo: doctorPhoto("dr-paras-patel"),
+    photoSmall: doctorPhotoSmall("dr-paras-patel"),
     colors: ["#be123c", "#f59e0b"],
     type: "visiting",
     qualification: "MD (Medicine)",
@@ -293,7 +298,8 @@ export const DOCTORS = [
     name: "Dr. Santosh J. Prajapati",
     nameGujarati: "ડૉ. સંતોષ જે. પ્રજાપતિ",
     initials: "SP",
-    photo: null, // portrait: public/doctors/dr-santosh-prajapati.webp -> doctorPhoto("dr-santosh-prajapati")
+    photo: doctorPhoto("dr-santosh-prajapati"),
+    photoSmall: doctorPhotoSmall("dr-santosh-prajapati"),
     colors: ["#0e655c", "#289672"],
     type: "visiting",
     qualification: "MBBS, DTCD, FICCM",
@@ -338,7 +344,8 @@ export const DOCTORS = [
     name: "Dr. Saurabh Goswami",
     nameGujarati: "ડૉ. સૌરભ ગોસ્વામી",
     initials: "SG",
-    photo: null, // portrait: public/doctors/dr-saurabh-goswami.webp -> doctorPhoto("dr-saurabh-goswami")
+    photo: doctorPhoto("dr-saurabh-goswami"),
+    photoSmall: doctorPhotoSmall("dr-saurabh-goswami"),
     colors: ["#be123c", "#0e655c"],
     type: "visiting",
     qualification: "MBBS, MD, DM (Cardiology)",
@@ -380,7 +387,8 @@ export const DOCTORS = [
     name: "Dr. Pulkit Pandya",
     nameGujarati: "ડૉ. પુલકિત પંડ્યા",
     initials: "PK",
-    photo: null, // portrait: public/doctors/dr-pulkit-pandya.webp -> doctorPhoto("dr-pulkit-pandya")
+    photo: doctorPhoto("dr-pulkit-pandya"),
+    photoSmall: doctorPhotoSmall("dr-pulkit-pandya"),
     colors: ["#093437", "#289672"],
     type: "resident",
     qualification: "",
