@@ -9,6 +9,7 @@ import { Link } from '../router';
 import {
   HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, FAQS, MILESTONES, getFacility
 } from '../data/hospitalContent';
+import { departmentLink, facilityLink } from '../data/siteStructure';
 
 // Facilities featured on the home page (all have real photos), in display order
 const FEATURED = ['icu', 'ot', 'dialysis', 'lab', 'imaging', 'pharmacy'];
@@ -133,7 +134,7 @@ export default function HomePage({ lang = 'en' }) {
 
           <div className="hp-fac-grid">
             {featured.map((f, i) => (
-              <Link to="facilities" param={f.id} key={f.id} className="hp-fac" data-reveal style={delay(i, 80)}>
+              <Link {...facilityLink(f.id)} key={f.id} className="hp-fac" data-reveal style={delay(i, 80)}>
                 <span className="hp-fac-img">
                   <Photo src={f.photo} alt={lang === 'en' ? f.name : f.nameGu} sizes="(max-width: 720px) 100vw, 33vw" />
                   {f.is24x7 && <span className="hp-fac-tag">24×7</span>}
@@ -197,7 +198,7 @@ export default function HomePage({ lang = 'en' }) {
 
           <div className="hp-dept-grid">
             {DEPARTMENTS.map((d, i) => (
-              <Link to="departments" param={d.id} key={d.id} className="hp-dept" data-reveal style={delay(i, 50)}>
+              <Link {...departmentLink(d.id)} key={d.id} className="hp-dept" data-reveal style={delay(i, 50)}>
                 <span className="hp-dept-icon"><Icon name={d.icon} size={20} /></span>
                 <span className="hp-dept-body">
                   <h3>{lang === 'en' ? d.title : d.titleGujarati}</h3>

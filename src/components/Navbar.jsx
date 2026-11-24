@@ -7,6 +7,7 @@ import { HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS } from '../data/hospita
 import { lockScroll, unlockScroll, Avatar, Icon, WhatsAppIcon } from './ui';
 import PulseLogo from './PulseLogo';
 import { Link } from '../router';
+import { departmentLink, facilityLink } from '../data/siteStructure';
 
 export const NAV_LINKS = [
   { id: 'home', en: 'Home', gu: 'મુખ્ય પૃષ્ઠ', icon: Home },
@@ -237,7 +238,7 @@ export default function Navbar({ activePage, lang, setLang }) {
                 <ul className="mm-links mm-links-2">
                   {MENU_FACILITIES.map((id) => FACILITIES.find((f) => f.id === id)).filter(Boolean).map((f) => (
                     <li key={f.id}>
-                      <Link to="facilities" param={f.id} onClick={close}><Icon name={f.icon} size={16} /> {lang === 'en' ? f.name : f.nameGu}</Link>
+                      <Link {...facilityLink(f.id)} onClick={close}><Icon name={f.icon} size={16} /> {lang === 'en' ? f.name : f.nameGu}</Link>
                     </li>
                   ))}
                 </ul>
@@ -256,7 +257,7 @@ export default function Navbar({ activePage, lang, setLang }) {
                 <ul className="mm-links mm-links-2">
                   {DEPARTMENTS.map((d) => (
                     <li key={d.id}>
-                      <Link to="departments" param={d.id} onClick={close}><Icon name={d.icon} size={16} /> {lang === 'en' ? d.title : d.titleGujarati}</Link>
+                      <Link {...departmentLink(d.id)} onClick={close}><Icon name={d.icon} size={16} /> {lang === 'en' ? d.title : d.titleGujarati}</Link>
                     </li>
                   ))}
                 </ul>

@@ -5,10 +5,11 @@ import Footer from './components/Footer';
 import CookieConsentBanner from './components/CookieConsentBanner';
 import HomePage from './pages/HomePage';
 import { WhatsAppIcon } from './components/ui';
-import { useRoute, navigateTo } from './router';
+import { useRoute, navigateTo, scrollToId, currentSection } from './router';
 import useReveal from './hooks/useReveal';
 import { HOSPITAL_INFO, getDoctor, getFacility, getDepartment } from './data/hospitalContent';
 import { SITE_URL, getPageMeta, pagePath } from './data/seo';
+import { facilityPageId } from './data/siteStructure';
 
 // Everything except the home page loads on demand, keeping the first download small.
 // At build time every page is pre-rendered to HTML (scripts/prerender.js).
@@ -30,7 +31,6 @@ function lazyPage(loader) {
 const FacilitiesPage = lazyPage(() => import('./pages/FacilitiesPage'));
 const FacilityPage = lazyPage(() => import('./pages/FacilityPage'));
 const DepartmentsPage = lazyPage(() => import('./pages/DepartmentsPage'));
-const DepartmentPage = lazyPage(() => import('./pages/DepartmentPage'));
 const DoctorsPage = lazyPage(() => import('./pages/DoctorsPage'));
 const DoctorPage = lazyPage(() => import('./pages/DoctorPage'));
 const GalleryPage = lazyPage(() => import('./pages/GalleryPage'));
@@ -72,13 +72,16 @@ function renderPage(page, param, props) {
     }
     case 'facilities': {
       if (!param) return <FacilitiesPage {...props} />;
-      const facility = getFacility(param);
-      return facility ? <FacilityPage {...props} facility={facility} /> : <NotFoundPage {...props} />;
+      // A facility shown as a section of another page renders that page
+      // (the address is then tidied to /facilities/<page>#<section>)
+      const owner = facilityPageId(param);
+      if (owner) return <FacilityPage {...props} facility={getFacility(owner)} />;
+      return getFacility(param) ? <FacilitiesPage {...props} /> : <NotFoundPage {...props} />;
     }
     case 'departments': {
-      if (!param) return <DepartmentsPage {...props} />;
-      const department = getDepartment(param);
-      return department ? <DepartmentPage {...props} department={department} /> : <NotFoundPage {...props} />;
+      // All departments are on one page; /departments/<id> jumps to its section
+      if (!param || getDepartment(param)) return <DepartmentsPage {...props} />;
+      return <NotFoundPage {...props} />;
     }
     case 'book-appointment':
       return <BookingPage {...props} doctor={param ? getDoctor(param) : null} />;
@@ -106,16 +109,41 @@ export default function App({ url }) {
   const [showTop, setShowTop] = useState(false);
   const { page, param } = route;
 
-  // Old links such as /doctors/4 move to the doctor's name URL
+  // Old links move to their current address:
+  //   /doctors/4                 -> /doctors/<name>
+  //   /departments/kidney        -> /departments#kidney
+  //   /facilities/isolation      -> /facilities/icu#isolation
+  //   /facilities/pharmacy       -> /facilities#pharmacy
   useEffect(() => {
     if (page === 'doctors' && param) {
       const d = getDoctor(param);
       if (d && d.slug !== param) navigateTo('doctors', d.slug, { replace: true });
     }
+    if (page === 'departments' && param && getDepartment(param)) {
+      navigateTo('departments', null, { replace: true, hash: param });
+    }
+    if (page === 'facilities' && param && getFacility(param)) {
+      const owner = facilityPageId(param);
+      if (!owner) navigateTo('facilities', null, { replace: true, hash: param });
+      else if (owner !== param) navigateTo('facilities', owner, { replace: true, hash: param });
+    }
   }, [page, param]);
 
-  // Start each new page at the top
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [page, param]);
+  // Start each new page at the top, or at the section in the address (#id)
+  useEffect(() => {
+    const section = currentSection();
+    if (!section) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      return;
+    }
+    // On a first visit the page code finishes loading a moment later and
+    // re-renders, so repeat the jump once the page has settled
+    scrollToId(section, false);
+    const timers = [350, 900].map((ms) => setTimeout(() => {
+      if (currentSection() === section) scrollToId(section, false);
+    }, ms));
+    return () => timers.forEach(clearTimeout);
+  }, [page, param]);
 
   // Once the browser is idle, fetch the other pages so later clicks switch instantly
   useEffect(() => {

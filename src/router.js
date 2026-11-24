@@ -3,9 +3,10 @@
 //
 //   /                               home
 //   /facilities                     all facilities
-//   /facilities/icu                 one facility (full page)
-//   /departments                    all departments
-//   /departments/chest              one department (full page)
+//   /facilities/icu                 one facility page (related ones as sections)
+//   /facilities/icu#isolation       ...jumping to a section
+//   /departments                    all departments on one page
+//   /departments#chest              ...jumping to one department
 //   /doctors                        all doctors
 //   /doctors/dr-santosh-prajapati   one doctor's profile (full page)
 //   /book-appointment               booking form
@@ -78,13 +79,65 @@ export function buildPath(page, param) {
 // Custom event so every useRoute() stays in sync
 const NAV_EVENT = 'pulse-hospital-navigate';
 
-/** Navigate without a full page load */
-export function navigateTo(page, param = null, { replace = false } = {}) {
-  const next = buildPath(page, param);
+/**
+ * Height of everything that stays stuck to the top of the screen while
+ * scrolling: the site header plus any visible bar marked `data-sticky`
+ * that sits above the target (e.g. the department chips on phones).
+ */
+export function stickyOffset(target) {
+  let h = 0;
+  const header = document.querySelector('.site-header');
+  if (header) h += header.getBoundingClientRect().height;
+  document.querySelectorAll('[data-sticky]').forEach((bar) => {
+    if (getComputedStyle(bar).display === 'none') return;
+    // Only bars that come before the target in the page will be stuck above it
+    if (target && !(bar.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING)) return;
+    h += bar.getBoundingClientRect().height;
+  });
+  return h;
+}
 
-  // Already on this page (e.g. logo clicked on the home page): glide back to the top
-  if (next === window.location.pathname && !window.location.hash) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+/**
+ * Scroll to a section by id, just below the sticky header. Retries for a
+ * moment because lazily loaded pages render the section slightly later.
+ */
+export function scrollToId(id, smooth = true) {
+  if (!id || typeof window === 'undefined') return;
+  const started = Date.now();
+  const tryScroll = () => {
+    const el = document.getElementById(id);
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - stickyOffset(el) - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'instant' });
+      return;
+    }
+    if (Date.now() - started < 2000) requestAnimationFrame(tryScroll);
+  };
+  tryScroll();
+}
+
+/** Section id from the address bar (#kidney), ignoring legacy '#/page' links */
+export const currentSection = () =>
+  typeof window !== 'undefined' && window.location.hash && !window.location.hash.startsWith('#/')
+    ? decodeURIComponent(window.location.hash.slice(1))
+    : '';
+
+/** Navigate without a full page load; `hash` jumps to a section on that page */
+export function navigateTo(page, param = null, { replace = false, hash = '' } = {}) {
+  const path = buildPath(page, param);
+  const next = hash ? `${path}#${encodeURIComponent(hash)}` : path;
+
+  // Already on this page: glide to the section, or back to the top
+  if (path === window.location.pathname) {
+    if (hash) {
+      window.history[replace ? 'replaceState' : 'pushState'](null, '', next);
+      scrollToId(hash);
+    } else if (!window.location.hash) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.history.pushState(null, '', next);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     return;
   }
 
@@ -92,7 +145,8 @@ export function navigateTo(page, param = null, { replace = false } = {}) {
     window.history[replace ? 'replaceState' : 'pushState'](null, '', next);
     // Render the new page synchronously so it can be captured for the transition
     flushSync(() => window.dispatchEvent(new Event(NAV_EVENT)));
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (hash) scrollToId(hash, false);
+    else window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // Cross-fade between pages where the browser supports it; plain swap otherwise
@@ -143,13 +197,13 @@ export function useRoute(initialUrl) {
  * A real <a href> link (so search engines can follow it) that navigates
  * in-app on a normal click. Ctrl/Cmd-click still opens a new tab.
  */
-export function Link({ to = 'home', param = null, onClick, children, ...rest }) {
-  const href = buildPath(to, param);
+export function Link({ to = 'home', param = null, hash = '', onClick, children, ...rest }) {
+  const href = buildPath(to, param) + (hash ? `#${encodeURIComponent(hash)}` : '');
   const handle = (e) => {
     onClick?.(e);
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
-    navigateTo(to, param);
+    navigateTo(to, param, { hash });
   };
   return createElement('a', { href, onClick: handle, ...rest }, children);
 }

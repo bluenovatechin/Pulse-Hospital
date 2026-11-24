@@ -1,137 +1,129 @@
-import React from 'react';
-import { Phone, MapPin, Clock, FileText } from 'lucide-react';
+import React, { useState } from 'react';
+import { Phone, MapPin, Clock, FileText, ChevronDown, Calendar } from 'lucide-react';
 import { HOSPITAL_INFO, FACILITIES, DOCTORS, DEPARTMENTS } from '../data/hospitalContent';
 import { Link } from '../router';
 import { NAV_LINKS } from './Navbar';
 import PulseLogo from './PulseLogo';
+import { departmentLink, facilityLink } from '../data/siteStructure';
+
+/**
+ * A footer link group. Desktop: always-open column with a heading.
+ * Phones: a compact row that folds open when tapped.
+ */
+function Group({ id, title, open, onToggle, children }) {
+  return (
+    <div className={`fgroup ${open ? 'is-open' : ''}`}>
+      <h4>
+        <button type="button" className="fgroup-toggle" aria-expanded={open} aria-controls={`fg-${id}`} onClick={onToggle}>
+          <span>{title}</span>
+          <ChevronDown size={18} className="fgroup-chev" aria-hidden="true" />
+        </button>
+      </h4>
+      <div className="fgroup-body" id={`fg-${id}`}>
+        <div className="fgroup-inner">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function Footer({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const topFacilities = FACILITIES.filter((f) => f.is24x7).slice(0, 6);
+  const [open, setOpen] = useState(null);
+  const toggle = (id) => setOpen((o) => (o === id ? null : id));
 
   return (
     <footer className="site-footer">
       <div className="container-wide">
         <div className="footer-grid">
-          <div>
-            <div style={{ marginBottom: 16 }}>
-              <PulseLogo size={44} variant="light" />
-            </div>
-            <p style={{ lineHeight: 1.65 }}>
+          {/* Brand */}
+          <div className="f-brand">
+            <PulseLogo size={44} variant="light" />
+            <p>
               {t(
                 "Modasa's 24x7 emergency and critical care hospital: ICU, in-house CT scan, dialysis, modular operation theatres and senior MD physicians under one roof.",
                 'મોડાસામાં ૨૪ કલાક કાર્યરત આઈ.સી.યુ., સીટી સ્કેન, ડાયાલીસીસ અને અનુભવી એમ.ડી. ફિઝિશિયન ડોક્ટરોની ટીમ.'
               )}
             </p>
-            <h4 style={{ marginTop: 22 }}>{t('Departments', 'વિભાગો')}</h4>
-            <ul className="footer-inline">
-              {DEPARTMENTS.map((d) => (
-                <li key={d.id}><Link to="departments" param={d.id}>{lang === 'en' ? d.title : (d.titleGujarati || d.title)}</Link></li>
-              ))}
-            </ul>
           </div>
 
-          <div>
-            <h4>{t('Explore', 'પૃષ્ઠો')}</h4>
-            <ul>
-              {NAV_LINKS.map((l) => (
-                <li key={l.id}><Link to={l.id}>{t(l.en, l.gu)}</Link></li>
-              ))}
-              <li><Link to="book-appointment">{t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4>{t('Our doctors', 'અમારા ડૉક્ટરો')}</h4>
-            <ul>
-              {DOCTORS.map((d) => (
-                <li key={d.id}><Link to="doctors" param={d.slug}>{lang === 'en' ? d.name : d.nameGujarati}</Link></li>
-              ))}
-            </ul>
-            <h4 style={{ marginTop: 22 }}>{t('Open 24x7', '૨૪ કલાક ઉપલબ્ધ')}</h4>
-            <ul>
-              {topFacilities.map((f) => (
-                <li key={f.id}><Link to="facilities" param={f.id}>{lang === 'en' ? f.name : (f.nameGu || f.name)}</Link></li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4>{t('Visit & Contact', 'સંપર્ક')}</h4>
-            <div className="footer-contact">
-              <div>
-                <MapPin size={17} />
-                <span>{lang === 'en' ? HOSPITAL_INFO.address.full : HOSPITAL_INFO.addressGujarati.full}</span>
-              </div>
-              <div>
-                <Phone size={17} />
-                <span>
-                  <a href={HOSPITAL_INFO.phoneHref} style={{ color: '#fff', fontWeight: 700 }}>{HOSPITAL_INFO.appointmentNumber}</a>
-                  <br />{t('Appointments, WhatsApp & emergency', 'એપોઇન્ટમેન્ટ, વોટ્સએપ & ઇમરજન્સી')}
-                </span>
-              </div>
-              <div>
-                <Clock size={17} />
-                <span>
-                  <strong style={{ color: '#fff' }}>{t('Emergency: 24 hours, 365 days', 'ઇમરજન્સી: ૨૪ કલાક')}</strong>
-                  <br />{t('OPD: ', 'OPD: ')}{lang === 'en' ? HOSPITAL_INFO.opdHours : (HOSPITAL_INFO.opdHoursGujarati || HOSPITAL_INFO.opdHours)}
-                </span>
-              </div>
-              <ul style={{ marginTop: 4 }}>
-                <li><Link to="book-appointment" style={{ color: 'var(--primary-light)', fontWeight: 700 }}>{t('Book an appointment →', 'એપોઇન્ટમેન્ટ બુક કરો →')}</Link></li>
-                <li><Link to="my-appointments">{t('Check or cancel my booking', 'મારી એપોઇન્ટમેન્ટ ચેક કરો')}</Link></li>
-              </ul>
+          {/* Contact (first thing on phones) */}
+          <div className="f-contact">
+            <h4 className="f-contact-title">{t('Visit & Contact', 'સંપર્ક')}</h4>
+            <a className="f-call" href={HOSPITAL_INFO.phoneHref}>
+              <Phone size={18} />
+              <span>
+                <strong>{HOSPITAL_INFO.appointmentNumber}</strong>
+                <small>{t('Appointments, WhatsApp & emergency', 'એપોઇન્ટમેન્ટ, વોટ્સએપ & ઇમરજન્સી')}</small>
+              </span>
+            </a>
+            <div className="f-line">
+              <MapPin size={16} />
+              <span>{lang === 'en' ? HOSPITAL_INFO.address.full : HOSPITAL_INFO.addressGujarati.full}</span>
             </div>
+            <div className="f-line">
+              <Clock size={16} />
+              <span>
+                <strong>{t('Emergency: 24 hours, 365 days', 'ઇમરજન્સી: ૨૪ કલાક')}</strong>
+                <br />{t('OPD: ', 'OPD: ')}{lang === 'en' ? HOSPITAL_INFO.opdHours : (HOSPITAL_INFO.opdHoursGujarati || HOSPITAL_INFO.opdHours)}
+              </span>
+            </div>
+            <div className="f-actions">
+              <Link to="book-appointment" className="f-book"><Calendar size={15} /> {t('Book an appointment', 'એપોઇન્ટમેન્ટ બુક કરો')}</Link>
+              <Link to="my-appointments" className="f-mine">{t('My booking', 'મારી એપોઇન્ટમેન્ટ')}</Link>
+            </div>
+          </div>
+
+          {/* Link groups */}
+          <div className="f-links">
+            <Group id="departments" title={t('Departments', 'વિભાગો')} open={open === 'departments'} onToggle={() => toggle('departments')}>
+              <ul>
+                {DEPARTMENTS.map((d) => (
+                  <li key={d.id}><Link {...departmentLink(d.id)}>{lang === 'en' ? d.title : (d.titleGujarati || d.title)}</Link></li>
+                ))}
+              </ul>
+            </Group>
+            <Group id="pages" title={t('Explore', 'પૃષ્ઠો')} open={open === 'pages'} onToggle={() => toggle('pages')}>
+              <ul>
+                {NAV_LINKS.map((l) => (
+                  <li key={l.id}><Link to={l.id}>{t(l.en, l.gu)}</Link></li>
+                ))}
+              </ul>
+            </Group>
+            <Group id="doctors" title={t('Our doctors', 'અમારા ડૉક્ટરો')} open={open === 'doctors'} onToggle={() => toggle('doctors')}>
+              <ul>
+                {DOCTORS.map((d) => (
+                  <li key={d.id}><Link to="doctors" param={d.slug}>{lang === 'en' ? d.name : d.nameGujarati}</Link></li>
+                ))}
+              </ul>
+            </Group>
+            <Group id="open247" title={t('Open 24x7', '૨૪ કલાક ઉપલબ્ધ')} open={open === 'open247'} onToggle={() => toggle('open247')}>
+              <ul>
+                {topFacilities.map((f) => (
+                  <li key={f.id}><Link {...facilityLink(f.id)}>{lang === 'en' ? f.name : (f.nameGu || f.name)}</Link></li>
+                ))}
+              </ul>
+            </Group>
           </div>
         </div>
 
         <div className="footer-notice">
-          <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center', color: '#fff' }}>
-            <FileText size={16} /> {HOSPITAL_INFO.noticeEnglish}
-          </span>
-          <span className="gujarati-text" style={{ color: 'var(--primary-light)' }}>{HOSPITAL_INFO.noticeGujarati}</span>
+          <span className="footer-notice-en"><FileText size={16} /> {HOSPITAL_INFO.noticeEnglish}</span>
+          <span className="gujarati-text footer-notice-gu">{HOSPITAL_INFO.noticeGujarati}</span>
         </div>
 
-        <div className="footer-bottom">
-          <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-            <span>© {new Date().getFullYear()} Pulse Hospital & I.C.U, Modasa. {t('All rights reserved.', 'સર્વાધિકાર સુરક્ષિત.')}</span>
-            <span style={{ opacity: 0.4 }}>|</span>
-            <Link to="privacy" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
-              {t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}
-            </Link>
-            <span style={{ opacity: 0.4 }}>|</span>
-            <Link to="terms" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
-              {t('Terms & Conditions', 'નિયમો અને શરતો')}
-            </Link>
-            <span style={{ opacity: 0.4 }}>|</span>
-            <button
-              type="button"
-              onClick={() => typeof window !== 'undefined' && window.openPulseCookieSettings && window.openPulseCookieSettings()}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'rgba(255,255,255,0.7)',
-                fontSize: 13,
-                cursor: 'pointer',
-                padding: 0,
-                textDecoration: 'underline'
-              }}
-            >
+        <div className="footer-bottom f-bottom">
+          <span>© {new Date().getFullYear()} Pulse Hospital & I.C.U, Modasa. {t('All rights reserved.', 'સર્વાધિકાર સુરક્ષિત.')}</span>
+          <nav className="f-legal" aria-label={t('Legal', 'કાનૂની')}>
+            <Link to="privacy">{t('Privacy Policy', 'પ્રાઇવસી પોલિસી')}</Link>
+            <Link to="terms">{t('Terms & Conditions', 'નિયમો અને શરતો')}</Link>
+            <button type="button" onClick={() => typeof window !== 'undefined' && window.openPulseCookieSettings && window.openPulseCookieSettings()}>
               {t('Cookie Settings', 'કુકીઝ પસંદગી')}
             </button>
-            <span style={{ opacity: 0.4 }}>|</span>
-            <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>
-              {t('Maintained by', 'સંચાલિત:')}{' '}
-              <a
-                href="https://github.com/Vyom1912"
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: 'var(--primary-light)', fontWeight: 600, textDecoration: 'underline' }}
-              >
-                Vyom1912
-              </a>
+            <span>
+              {t('Maintained by', 'સંચાલિત:')} <strong className="f-credit">BlueNova Tech</strong>
             </span>
-          </div>
+          </nav>
         </div>
       </div>
     </footer>

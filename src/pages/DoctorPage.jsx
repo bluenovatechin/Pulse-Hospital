@@ -7,6 +7,7 @@ import { Icon, SectionHead, WhatsAppIcon, delay } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
 import { Link } from '../router';
 import { DOCTORS, DOCTOR_TYPES, DEPARTMENTS, FACILITIES, HOSPITAL_INFO } from '../data/hospitalContent';
+import { departmentLink, facilityLink } from '../data/siteStructure';
 
 const unique = (list) => [...new Set(list.filter(Boolean))];
 
@@ -180,12 +181,12 @@ export default function DoctorPage({ doctor: d, lang = 'en' }) {
               <div className="docp-where-list">
                 <span className="docp-focus-label">{t('Works in', 'સેવા વિભાગો')}:</span>
                 {departments.map((x) => (
-                  <Link key={x.id} to="departments" param={x.id} className="docp-chip link">
+                  <Link key={x.id} {...departmentLink(x.id)} className="docp-chip link">
                     <Icon name={x.icon} size={14} /> {gu ? x.titleGujarati : x.title}
                   </Link>
                 ))}
                 {facilities.map((f) => (
-                  <Link key={f.id} to="facilities" param={f.id} className="docp-chip link">
+                  <Link key={f.id} {...facilityLink(f.id)} className="docp-chip link">
                     <Building2 size={14} /> {gu ? f.nameGu : f.name}
                   </Link>
                 ))}

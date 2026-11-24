@@ -1,23 +1,17 @@
-import React, { useMemo, useState } from 'react';
-import { CheckCircle2, LayoutGrid, Calendar, Phone, Scan, Eye } from 'lucide-react';
+import React from 'react';
+import { CheckCircle2, Calendar, Phone, Scan, Eye } from 'lucide-react';
 import FacilityCard from '../components/FacilityCard';
 import { PageHero, SectionHead, Icon } from '../components/ui';
 import { Link } from '../router';
 import {
-  FACILITIES, FACILITY_CATEGORIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS, BED_STATS
+  FACILITIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS, BED_STATS, getFacility
 } from '../data/hospitalContent';
+import { FACILITY_PAGE_IDS, AMENITY_IDS } from '../data/siteStructure';
 
 export default function FacilitiesPage({ lang = 'en' }) {
-  const [category, setCategory] = useState('all');
   const t = (en, gu) => (lang === 'en' ? en : gu);
-
-  const counts = useMemo(() => {
-    const c = { all: FACILITIES.length };
-    FACILITIES.forEach((f) => { c[f.category] = (c[f.category] || 0) + 1; });
-    return c;
-  }, []);
-
-  const shown = category === 'all' ? FACILITIES : FACILITIES.filter((f) => f.category === category);
+  const mainFacilities = FACILITY_PAGE_IDS.map(getFacility);
+  const amenities = AMENITY_IDS.map(getFacility);
   const open24 = FACILITIES.filter((f) => f.is24x7).length;
 
   return (
@@ -54,25 +48,34 @@ export default function FacilitiesPage({ lang = 'en' }) {
         }
       />
 
+      {/* Main facilities: each has its own page */}
       <section className="section">
         <div className="container-wide">
-          {/* Category filter */}
-          <div className="filter-bar" role="toolbar" aria-label="Filter facilities" style={{ marginBottom: 28 }}>
-            <button className="filter-btn" aria-pressed={category === 'all'} onClick={() => setCategory('all')}>
-              <LayoutGrid size={15} /> {t('All', 'બધી')} <span className="count">{counts.all}</span>
-            </button>
-            {FACILITY_CATEGORIES.map((c) => (
-              <button key={c.id} className="filter-btn" aria-pressed={category === c.id} onClick={() => setCategory(c.id)}>
-                <Icon name={c.icon} size={15} /> {t(c.label, c.labelGu)} <span className="count">{counts[c.id] || 0}</span>
-              </button>
-            ))}
+          <div className="grid grid-3">
+            {mainFacilities.map((f) => <FacilityCard key={f.id} facility={f} lang={lang} />)}
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-3" key={category}>
-            {shown.map((f, i) => (
-              <div key={f.id} className="page-enter" style={{ animationDelay: `${Math.min(i, 8) * 45}ms` }}>
-                <FacilityCard facility={f} lang={lang} />
-              </div>
+      {/* Smaller services: shown here only */}
+      <section className="section section--white">
+        <div className="container-wide">
+          <SectionHead
+            eyebrow={t('Patient services', 'દર્દી સેવાઓ')}
+            title={t('Everyday comforts and services', 'રોજિંદી સુવિધાઓ અને સેવાઓ')}
+          />
+          <div className="amenity-grid">
+            {amenities.map((f) => (
+              <article key={f.id} id={f.id} className="amenity" data-reveal>
+                <span className="amenity-icon"><Icon name={f.icon} size={20} /></span>
+                <div>
+                  <h3>
+                    {lang === 'en' ? f.name : f.nameGu}
+                    {f.is24x7 && !/24\s*x\s*7/i.test(f.name) && <span className="fp-tag">24×7</span>}
+                  </h3>
+                  <p>{lang === 'en' ? f.summary : (f.summaryGu || f.summary)}</p>
+                </div>
+              </article>
             ))}
           </div>
         </div>

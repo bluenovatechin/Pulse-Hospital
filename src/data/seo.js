@@ -4,7 +4,8 @@
 // on navigation) and at build time (scripts/prerender.js writes a
 // complete HTML file for every page).
 // ========================================================
-import { HOSPITAL_INFO, DOCTORS, FACILITIES, DEPARTMENTS, FAQS, HOSPITAL_TOUR, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
+import { FACILITY_PAGE_IDS } from './siteStructure.js';
+import { HOSPITAL_INFO, DOCTORS, DEPARTMENTS, FAQS, HOSPITAL_TOUR, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
 
 // Public address of the live site. Change this if the site moves
 // (e.g. to a custom domain); canonical links and the sitemap use it.
@@ -121,8 +122,9 @@ export function allRoutes() {
   return [
     ...main.map((page) => ({ page, param: null, index: true })),
     ...DOCTORS.map((d) => ({ page: 'doctors', param: d.slug, index: true })),
-    ...DEPARTMENTS.map((d) => ({ page: 'departments', param: d.id, index: true })),
-    ...FACILITIES.map((f) => ({ page: 'facilities', param: f.id, index: true })),
+    // Departments are sections of /departments; only the main facility
+    // groups have their own pages (see data/siteStructure.js)
+    ...FACILITY_PAGE_IDS.map((id) => ({ page: 'facilities', param: id, index: true })),
     ...DOCTORS.map((d) => ({ page: 'book-appointment', param: d.slug, index: false })),
     { page: 'my-appointments', param: null, index: false }
   ];
