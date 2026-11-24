@@ -7,8 +7,10 @@ import { Icon, Photo, CountUp, delay } from '../components/ui';
 import { HeroVideo } from '../components/HomeExtras';
 import { Link } from '../router';
 import {
-  HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, FAQS, MILESTONES, getFacility
+  HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, FAQS, MILESTONES, PHOTOS, photoSrcSet, getFacility
 } from '../data/hospitalContent';
+
+const guDigits = (n) => String(n).replace(/\d/g, (d) => '૦૧૨૩૪૫૬૭૮૯'[d]);
 import { departmentLink, facilityLink } from '../data/siteStructure';
 
 // Facilities featured on the home page (all have real photos), in display order
@@ -38,7 +40,35 @@ export default function HomePage({ lang = 'en' }) {
 
         {/* Foreground Content */}
         <div className="container-wide home-hero-content hero-video-layout">
-          <HeroVideo lang={lang} />
+          {/* Tablet/desktop: video framed between two real photos, with two
+              small floating cards. Phones: only the video (the rest is hidden). */}
+          <div className="hero-stage">
+            <HeroVideo lang={lang} />
+            <span className="hero-shot hero-shot--a" aria-hidden="true">
+              <img src={PHOTOS.icuWard} srcSet={photoSrcSet(PHOTOS.icuWard)} sizes="260px" alt="" decoding="async" />
+            </span>
+            <span className="hero-shot hero-shot--b" aria-hidden="true">
+              <img src={PHOTOS.ot1} srcSet={photoSrcSet(PHOTOS.ot1)} sizes="260px" alt="" decoding="async" />
+            </span>
+            <div className="hero-float hero-float--open">
+              <span className="live-beacon" aria-hidden="true" />
+              <span>
+                <strong>{t('Open now', 'હમણાં ખુલ્લું')}</strong>
+                <small>{t('Emergency · ICU · Dialysis, 24x7', 'ઇમરજન્સી · ICU · ડાયાલિસિસ, ૨૪x૭')}</small>
+              </span>
+            </div>
+            <Link to="doctors" className="hero-float hero-float--docs">
+              <span className="hero-float-faces" aria-hidden="true">
+                {DOCTORS.map((d) => (
+                  <img key={d.id} src={d.photoSmall || d.photo} alt="" decoding="async" />
+                ))}
+              </span>
+              <span>
+                <strong>{t(`${DOCTORS.length} specialist doctors`, `${guDigits(DOCTORS.length)} નિષ્ણાત ડૉક્ટરો`)}</strong>
+                <small>{t('MD physicians & chest specialist', 'MD ફિઝિશિયન અને છાતીના નિષ્ણાત')}</small>
+              </span>
+            </Link>
+          </div>
           <div className="hero-compact-wrap page-enter">
             {/* Top Badge: Live Status & Location with Icon */}
             <div className="hero-status-pill">

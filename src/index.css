@@ -9696,3 +9696,336 @@ button.slot-pill {
   max-width: 560px;
   color: var(--text-muted);
 }
+
+/* ========================================================
+   Home hero, option A (tablet & desktop only):
+   light background, video framed between two real photos,
+   two small floating cards. Phones keep the video hero above.
+======================================================== */
+.hero-shot,
+.hero-float {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  /* The stage wrapper disappears; the video behaves exactly as before */
+  .hero-stage {
+    display: contents;
+  }
+}
+
+@media (min-width: 700px) {
+  .home-hero.home-hero--video {
+    background: linear-gradient(180deg, #f6fbfa 0%, #eef7f4 100%);
+    color: var(--ink, #093437);
+    border-bottom: 1px solid var(--hairline, #e3ecea);
+  }
+
+  .home-hero--video .hero-slider-overlay {
+    background:
+      radial-gradient(60% 70% at 85% 40%, rgba(127, 220, 202, 0.28) 0%, transparent 70%),
+      radial-gradient(40% 50% at 8% 90%, rgba(14, 101, 92, 0.08) 0%, transparent 70%);
+  }
+
+  .hero-ambient {
+    display: none !important;
+  }
+
+  /* Text on light */
+  .home-hero--video .hero-title {
+    color: #093437 !important;
+    text-shadow: none;
+  }
+
+  .home-hero--video .hero-title-accent {
+    color: #0e655c;
+  }
+
+  .home-hero--video .hero-description {
+    color: #3d5c5a;
+    text-shadow: none;
+  }
+
+  .home-hero--video .hero-status-pill {
+    background: #ffffff;
+    border-color: #cde9e1;
+    color: #0e655c;
+    box-shadow: 0 4px 14px rgba(9, 52, 55, 0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .home-hero--video .hero-status-pill .hero-status-icon,
+  .home-hero--video .cap-icon {
+    color: #0e655c;
+  }
+
+  .home-hero--video .cap-pill {
+    background: #ffffff;
+    border-color: #dfeae7;
+    color: #173f41;
+    box-shadow: none;
+  }
+
+  .home-hero--video .cap-pill:hover {
+    background: #ffffff;
+    border-color: #0e655c;
+  }
+
+  .home-hero--video .btn-hero-primary,
+  .home-hero--video .btn-hero-emergency {
+    border-color: transparent;
+    box-shadow: 0 8px 20px -8px rgba(9, 52, 55, 0.45);
+  }
+
+  .home-hero--video .btn-hero-outline {
+    background: #ffffff;
+    color: #093437 !important;
+    border-color: #d5e3e0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .home-hero--video .btn-hero-outline:hover {
+    background: #ffffff;
+    border-color: #0e655c;
+  }
+
+  /* ---- The stage ---- */
+  .hero-stage {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    width: clamp(420px, 37vw, 540px);
+  }
+
+  .hero-stage .hero-video {
+    grid-column: auto;
+    grid-row: auto;
+    margin: 0 !important;
+    z-index: 2;
+    border: 0;
+    box-shadow: 0 0 0 6px #ffffff, 0 34px 70px -20px rgba(9, 52, 55, 0.45);
+  }
+
+  .hero-shot {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 40%;
+    aspect-ratio: 4 / 5;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #dfeeea;
+    box-shadow: 0 0 0 5px #ffffff, 0 24px 50px -22px rgba(9, 52, 55, 0.45);
+  }
+
+  .hero-shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-shot--a {
+    left: 0;
+    top: 9%;
+  }
+
+  .hero-shot--b {
+    right: 0;
+    bottom: 9%;
+  }
+
+  /* Floating cards */
+  .hero-float {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 10px 12px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid #e3ecea;
+    box-shadow: 0 14px 34px -14px rgba(9, 52, 55, 0.35);
+    color: #093437;
+    text-decoration: none;
+    line-height: 1.25;
+  }
+
+  .hero-float strong {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+
+  .hero-float small {
+    display: block;
+    font-size: 11.5px;
+    color: #5b7774;
+  }
+
+  .hero-float--open {
+    top: 27%;
+    right: -7%;
+  }
+
+  .hero-float--open .live-beacon {
+    position: relative;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #16a34a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+    flex-shrink: 0;
+  }
+
+  .hero-float--docs {
+    left: -7%;
+    bottom: 15%;
+    transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+  }
+
+  .hero-float--docs:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px -14px rgba(9, 52, 55, 0.45);
+  }
+
+  .hero-float-faces {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .hero-float-faces img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 20%;
+    border: 2px solid #ffffff;
+    background: #dfeeea;
+  }
+
+  .hero-float-faces img + img {
+    margin-left: -9px;
+  }
+
+  /* One calm entrance, then everything stays still */
+  .hero-stage .hero-video,
+  .hero-shot,
+  .hero-float {
+    animation: hero-stage-in 0.8s var(--ease-out, ease-out) both;
+  }
+
+  .hero-shot--a { animation-delay: 0.12s; }
+  .hero-shot--b { animation-delay: 0.22s; }
+  .hero-float--open { animation-delay: 0.45s; }
+  .hero-float--docs { animation-delay: 0.55s; }
+}
+
+@keyframes hero-stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-stage .hero-video,
+  .hero-shot,
+  .hero-float {
+    animation: none;
+  }
+}
+
+/* Tablets: visuals on top, text below, hero only as tall as its content */
+@media (min-width: 700px) and (max-width: 1023px) {
+  .home-hero.home-hero--video {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 40px 32px 48px;
+  }
+
+  .home-hero--video .hero-video-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .hero-stage {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: center;
+    width: min(560px, 100%);
+  }
+
+  .hero-stage .hero-video {
+    height: clamp(380px, 52vw, 500px);
+  }
+
+  .home-hero--video .hero-compact-wrap {
+    grid-row: 2;
+    max-width: 620px;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .home-hero--video .hero-title,
+  .home-hero--video .hero-description {
+    text-align: center !important;
+  }
+
+  .home-hero--video .hero-status-pill {
+    align-self: center;
+  }
+
+  .home-hero--video .hero-description {
+    max-width: 520px;
+  }
+
+  .home-hero--video .hero-action-buttons {
+    justify-content: center;
+    max-width: none;
+  }
+
+  .hero-float--open {
+    right: -2%;
+  }
+
+  .hero-float--docs {
+    left: -2%;
+    bottom: 27%;
+  }
+}
+
+/* Desktop: keep the stage clear of the floating WhatsApp button */
+@media (min-width: 1024px) {
+  .hero-stage {
+    margin-right: max(0px, calc(100px - max(0px, (100vw - 1280px) / 2) - 32px));
+  }
+}
+
+/* Large screens: collage width follows the video height, so the side
+   photos always show the same share */
+@media (min-width: 1100px) {
+  .hero-stage {
+    --hv: clamp(420px, calc(100dvh - var(--header-h, 72px) - 34px - 120px), 620px);
+    width: calc(var(--hv) * 0.95);
+  }
+
+  .hero-stage .hero-video {
+    height: var(--hv);
+  }
+}
