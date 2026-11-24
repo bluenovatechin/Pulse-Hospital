@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, Phone, CheckCircle2, AlertTriangle, ArrowRight, ShieldCheck, Info, FileWarning } from 'lucide-react';
 import { PageHero, Media, Icon } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
+import Slider from '../components/Slider';
 import { Link } from '../router';
 import { HOSPITAL_INFO, getDoctor, getFacility, getDepartment } from '../data/hospitalContent';
 import { CONDITIONS, isPublished } from '../data/conditions';
@@ -134,9 +135,9 @@ export default function ConditionPage({ condition: c, lang = 'en' }) {
             {doctors.length > 0 && (
               <article className="detail-block" data-reveal>
                 <h2>{t('Doctors who treat it', 'સારવાર કરતા ડૉક્ટરો')}</h2>
-                <div className="doc-row doc-row--compact">
+                <Slider className="doc-row doc-row--compact" lang={lang} label={t('Doctors', 'ડૉક્ટરો')}>
                   {doctors.map((d) => <DoctorMini key={d.id} doctor={d} lang={lang} />)}
-                </div>
+                </Slider>
               </article>
             )}
 

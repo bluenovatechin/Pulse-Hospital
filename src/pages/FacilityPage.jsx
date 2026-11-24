@@ -3,6 +3,7 @@ import { Calendar, Phone, CheckCircle2, Info, ArrowRight } from 'lucide-react';
 import { PageHero, Media, Icon, Photo, RepBadge, SectionHead } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
 import FacilityCard from '../components/FacilityCard';
+import Slider from '../components/Slider';
 import { Link } from '../router';
 import { FACILITY_CATEGORIES, DEPARTMENTS, HOSPITAL_INFO, getDoctor, getFacility } from '../data/hospitalContent';
 import { FACILITY_PAGES, FACILITY_PAGE_IDS, departmentLink } from '../data/siteStructure';
@@ -114,9 +115,9 @@ export default function FacilityPage({ facility: f, lang = 'en' }) {
             {doctors.length > 0 && (
               <article className="detail-block" data-reveal>
                 <h2>{t('Doctors who work here', 'અહીં કાર્યરત ડૉક્ટરો')}</h2>
-                <div className="doc-row doc-row--compact">
+                <Slider className="doc-row doc-row--compact" lang={lang} label={t('Doctors', 'ડૉક્ટરો')}>
                   {doctors.map((d) => <DoctorMini key={d.id} doctor={d} lang={lang} />)}
-                </div>
+                </Slider>
               </article>
             )}
           </div>

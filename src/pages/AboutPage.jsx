@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Clock, HeartPulse, ShieldCheck, Users, FileText, Calendar, ArrowRight, Phone } from 'lucide-react';
 import { PageHero, SectionHead, delay } from '../components/ui';
+import Slider from '../components/Slider';
 import { Link } from '../router';
 import { HOSPITAL_INFO, PHOTOS, MILESTONES, DOCTORS } from '../data/hospitalContent';
 
@@ -96,7 +97,7 @@ export default function AboutPage({ lang = 'en' }) {
             </Link>
           </header>
 
-          <div className="hp-doc-grid">
+          <Slider className="hp-doc-grid" lang={lang} label={t('Medical team', 'તબીબી ટીમ')}>
             {DOCTORS.map((d, i) => (
               <Link to="doctors" param={d.slug} key={d.id} className="hp-doc" data-reveal style={delay(i, 80)}>
                 <span className="hp-doc-photo">
@@ -111,7 +112,7 @@ export default function AboutPage({ lang = 'en' }) {
                 </span>
               </Link>
             ))}
-          </div>
+          </Slider>
         </div>
       </section>
 

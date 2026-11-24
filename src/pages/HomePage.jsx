@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Icon, Photo, CountUp, delay } from '../components/ui';
 import { HeroVideo } from '../components/HomeExtras';
+import Slider from '../components/Slider';
 import { Link } from '../router';
 import {
   HOSPITAL_INFO, DOCTORS, DOCTOR_TYPES, FACILITIES, DEPARTMENTS, FAQS, MILESTONES, PHOTOS, photoSrcSet, getFacility
@@ -162,7 +163,7 @@ export default function HomePage({ lang = 'en' }) {
             </Link>
           </header>
 
-          <div className="hp-fac-grid">
+          <Slider className="hp-fac-grid" lang={lang} label={t('Facilities', 'સુવિધાઓ')}>
             {featured.map((f, i) => (
               <Link {...facilityLink(f.id)} key={f.id} className="hp-fac" data-reveal style={delay(i, 80)}>
                 <span className="hp-fac-img">
@@ -171,12 +172,12 @@ export default function HomePage({ lang = 'en' }) {
                 </span>
                 <span className="hp-fac-body">
                   <h3>{lang === 'en' ? f.name : f.nameGu}</h3>
-                  <p>{f.summary}</p>
+                  <p>{lang === 'en' ? f.summary : (f.summaryGu || f.summary)}</p>
                   <span className="hp-more">{t('View details', 'વિગત જુઓ')} <ArrowRight size={15} /></span>
                 </span>
               </Link>
             ))}
-          </div>
+          </Slider>
         </div>
       </section>
 
@@ -193,7 +194,7 @@ export default function HomePage({ lang = 'en' }) {
             </Link>
           </header>
 
-          <div className="hp-doc-grid">
+          <Slider className="hp-doc-grid" lang={lang} label={t('Our doctors', 'અમારા ડૉક્ટરો')}>
             {DOCTORS.map((d, i) => (
               <Link to="doctors" param={d.slug} key={d.id} className="hp-doc" data-reveal style={delay(i, 80)}>
                 <span className="hp-doc-photo">
@@ -209,7 +210,7 @@ export default function HomePage({ lang = 'en' }) {
                 </span>
               </Link>
             ))}
-          </div>
+          </Slider>
         </div>
       </section>
 

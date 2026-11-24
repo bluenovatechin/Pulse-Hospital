@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Icon, SectionHead, WhatsAppIcon, delay } from '../components/ui';
 import DoctorMini from '../components/DoctorMini';
+import Slider from '../components/Slider';
 import { Link } from '../router';
 import { DOCTORS, DOCTOR_TYPES, DEPARTMENTS, FACILITIES, HOSPITAL_INFO } from '../data/hospitalContent';
 import { departmentLink, facilityLink } from '../data/siteStructure';
@@ -222,9 +223,9 @@ export default function DoctorPage({ doctor: d, lang = 'en' }) {
       <section className="section section--white">
         <div className="container-wide">
           <SectionHead eyebrow={t('Our doctors', 'અમારા ડૉક્ટરો')} title={t('Other doctors at Pulse Hospital', 'પલ્સ હોસ્પિટલના અન્ય ડૉક્ટરો')} />
-          <div className="doc-row">
+          <Slider className="doc-row" lang={lang} label={t('Other doctors', 'અન્ય ડૉક્ટરો')}>
             {others.map((o) => <DoctorMini key={o.id} doctor={o} lang={lang} />)}
-          </div>
+          </Slider>
           <div style={{ marginTop: 24 }}>
             <Link to="doctors" className="btn btn-outline">{t('All doctors & timetable', 'બધા ડૉક્ટરો અને સમયપત્રક')} <ArrowRight size={16} /></Link>
           </div>

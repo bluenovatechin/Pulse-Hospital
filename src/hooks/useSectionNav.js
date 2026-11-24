@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { scrollToId } from '../router';
+import useSwipeHints from './useSwipeHints';
 
 /**
  * In-page section navigation (Departments and Facilities pages):
@@ -15,6 +16,8 @@ export default function useSectionNav(ids) {
   const [active, setActive] = useState(ids[0]);
   const chipsRef = useRef(null);
   const jumping = useRef(false);
+  // Phones: fade the chip row's edge and nudge it once, so it reads as swipeable
+  useSwipeHints(chipsRef);
 
   const centreChip = (chip) => {
     const row = chipsRef.current;
