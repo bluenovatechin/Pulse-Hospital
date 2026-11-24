@@ -20,7 +20,7 @@ function DoctorPortrait({ d, badge }) {
   return (
     <div className={`docp-photo ${showPhoto ? 'has-photo' : ''}`} style={{ '--av1': c1, '--av2': c2 }}>
       {showPhoto ? (
-        <img src={d.photo} alt={d.name} onError={() => setFailed(true)} fetchPriority="high" />
+        <img src={d.photo} alt={`${d.name}${d.qualification ? `, ${d.qualification}` : ''}, ${d.designation}, Pulse Hospital & I.C.U, Modasa`} onError={() => setFailed(true)} fetchPriority="high" />
       ) : (
         <div className="docp-monogram" aria-hidden="true">
           <Stethoscope className="docp-monogram-icon" strokeWidth={1.1} />

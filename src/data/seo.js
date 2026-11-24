@@ -5,7 +5,7 @@
 // complete HTML file for every page).
 // ========================================================
 import { FACILITY_PAGE_IDS, facilityLink } from './siteStructure.js';
-import { HOSPITAL_INFO, DOCTORS, DEPARTMENTS, FACILITIES, FAQS, HOSPITAL_TOUR, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
+import { HOSPITAL_INFO, DOCTORS, DEPARTMENTS, FACILITIES, FAQS, HOSPITAL_TOUR, GALLERY_IMAGES, isRepresentative, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
 import { CONDITIONS, PUBLISHED_CONDITIONS, getCondition, isPublished } from './conditions.js';
 
 /**
@@ -111,7 +111,7 @@ export function getPageMeta(page, param) {
     if (d) {
       return {
         title: `${[d.name, d.qualification].filter(Boolean).join(', ')} | ${d.designation.split(' & ')[0]} in Modasa | Pulse Hospital`,
-        description: `${d.name} (${d.nameGujarati})${d.qualification ? `, ${d.qualification}` : ''}: ${d.designation} at Pulse Hospital & I.C.U, Modasa. ${d.timing}. ${d.specialties.join(', ')}. Book an appointment online.`
+        description: `${d.name} (${d.nameGujarati})${d.qualification ? `, ${d.qualification}` : ''}${d.medicalCollege ? ` (${d.medicalCollege})` : ''}: ${d.designation} at Pulse Hospital & I.C.U, Modasa${d.experience ? `, ${d.experience.toLowerCase()} of experience` : ''}. Treats ${d.specialties.join(', ')}. OPD: ${d.timing}. Book an appointment online.`
       };
     }
   }
@@ -169,26 +169,65 @@ export function allRoutes() {
   ];
 }
 
+// Absolute address of a photo / portrait / video file (works whatever the
+// sub-folder the site is built for)
+const absUrl = (src) => (src ? SITE_URL + src.replace(/^.*?(photos|doctors|video)\//, '$1/') : null);
+
+/** Caption used for a doctor's portrait (image search, share previews) */
+const doctorCaption = (d) =>
+  `${d.name}${d.qualification ? `, ${d.qualification}` : ''}, ${d.designation} at Pulse Hospital & I.C.U, Modasa`;
+
+// Real photos only: AI illustrations ("Representative image") are never
+// offered to image search as pictures of this hospital
+const realFacilityPhotos = () => {
+  const seen = new Set();
+  return FACILITIES.filter((f) => f.photo && !isRepresentative(f.photo) && !seen.has(f.photo) && seen.add(f.photo));
+};
+
 /** Images to list for a route in the sitemap (absolute URLs) */
 export function routeImages({ page, param }) {
   const photoUrl = (n) => `${SITE_URL}photos/gallery-${n}.webp`;
-  const abs = (src) => (src ? SITE_URL + src.replace(/^.*?(photos|doctors)\//, '$1/') : null);
+  const doctorImages = () => DOCTORS.filter((d) => d.photo).map((d) => ({ loc: absUrl(d.photo), title: doctorCaption(d) }));
   if (page === 'doctors' && param) {
     const d = getDoctor(param);
-    return d && d.photo ? [{ loc: abs(d.photo), title: `${d.name}, ${d.designation}, Pulse Hospital Modasa` }] : [];
+    return d && d.photo ? [{ loc: absUrl(d.photo), title: doctorCaption(d) }] : [];
   }
   if (page === 'facilities' && param) {
     const f = getFacility(param);
-    return f && f.photo ? [{ loc: abs(f.photo), title: `${f.name}, Pulse Hospital Modasa` }] : [];
+    return f && f.photo && !isRepresentative(f.photo) ? [{ loc: absUrl(f.photo), title: `${f.name}, Pulse Hospital & I.C.U, Modasa` }] : [];
   }
-  if (page === 'home') return [{ loc: `${SITE_URL}video/hospital-tour-poster.webp`, title: 'Pulse Hospital & I.C.U, Modasa' }];
-  if (page === 'doctors') return DOCTORS.filter((d) => d.photo).map((d) => ({ loc: abs(d.photo), title: `${d.name}, Pulse Hospital Modasa` }));
+  if (page === 'home') return [{ loc: `${SITE_URL}video/hospital-tour-poster.webp`, title: 'Pulse Hospital & I.C.U, Modasa' }, ...doctorImages()];
+  if (page === 'doctors') return doctorImages();
+  if (page === 'gallery') {
+    return GALLERY_IMAGES.filter((g) => !isRepresentative(g.src)).map((g) => ({ loc: absUrl(g.src), title: `${g.title}, Pulse Hospital & I.C.U, Modasa` }));
+  }
+  if (page === 'facilities') {
+    return realFacilityPhotos().map((f) => ({ loc: absUrl(f.photo), title: `${f.name}, Pulse Hospital & I.C.U, Modasa` }));
+  }
   const n = !param && HERO_PHOTO[page];
-  return n ? [{ loc: photoUrl(n), title: `Pulse Hospital & I.C.U, Modasa` }] : [];
+  const hero = n ? [{ loc: photoUrl(n), title: 'Pulse Hospital & I.C.U, Modasa' }] : [];
+  return page === 'about' ? [...hero, ...doctorImages()] : hero;
 }
 
 // ---------- schema.org structured data ----------
 const HOSPITAL_ID = `${SITE_URL}#hospital`;
+
+/** A photo described for search engines and AI tools: what it shows, where, and whose it is */
+function imageObject(src, caption, extra = {}) {
+  const url = absUrl(src);
+  return {
+    '@type': 'ImageObject',
+    url,
+    contentUrl: url,
+    name: caption,
+    caption,
+    creditText: HOSPITAL_INFO.name,
+    copyrightNotice: `© ${HOSPITAL_INFO.name}, Modasa`,
+    creator: { '@id': HOSPITAL_ID },
+    contentLocation: { '@id': HOSPITAL_ID },
+    ...extra
+  };
+}
 
 const address = {
   '@type': 'PostalAddress',
@@ -262,25 +301,43 @@ function hospital() {
 
 function physician(d) {
   return {
-    '@type': 'Physician',
+    // A doctor (Person) who practises medicine (Physician)
+    '@type': ['Physician', 'Person'],
     '@id': `${SITE_URL}doctors/${d.slug}#physician`,
     name: d.name,
+    honorificPrefix: 'Dr.',
     alternateName: d.nameGujarati,
     url: `${SITE_URL}doctors/${d.slug}`,
     jobTitle: d.designation,
     description: `${d.name} (${d.nameGujarati}): ${[d.qualification, d.designation].filter(Boolean).join(', ')}. ${d.bio} Experience: ${d.experience}.${d.gmcNumber ? ` GMC: ${d.gmcNumber}.` : ''}`,
     medicalSpecialty: d.specialties,
     knowsAbout: [...d.specialties, ...(d.whatTheyDo || [])],
-    alumniOf: d.medicalCollege,
+    ...(d.medicalCollege ? { alumniOf: { '@type': 'CollegeOrUniversity', name: d.medicalCollege } } : {}),
     identifier: d.gmcNumber,
+    hasCredential: [
+      d.qualification && {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'degree',
+        name: d.qualification,
+        ...(d.medicalCollege ? { recognizedBy: { '@type': 'CollegeOrUniversity', name: d.medicalCollege } } : {})
+      },
+      d.gmcNumber && {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'license',
+        name: `Gujarat Medical Council registration ${d.gmcNumber}`,
+        identifier: d.gmcNumber,
+        recognizedBy: { '@type': 'Organization', name: 'Gujarat Medical Council' }
+      }
+    ].filter(Boolean),
+    hasOccupation: {
+      '@type': 'Occupation',
+      name: d.designation,
+      occupationLocation: { '@type': 'City', name: 'Modasa' },
+      ...(d.experience ? { description: `${d.experience.toLowerCase()} of experience` } : {})
+    },
     hospitalAffiliation: { '@id': HOSPITAL_ID },
     worksFor: { '@id': HOSPITAL_ID },
-    image: {
-      '@type': 'ImageObject',
-      url: `${SITE_URL}doctors/${d.slug}.webp`,
-      contentUrl: `${SITE_URL}doctors/${d.slug}.webp`,
-      caption: `${d.name} - ${d.designation} at Pulse Hospital & I.C.U Modasa`
-    },
+    ...(d.photo ? { image: imageObject(d.photo, doctorCaption(d), { '@id': `${SITE_URL}doctors/${d.slug}#portrait`, width: 800, height: 1000 }) } : {}),
     address,
     telephone: d.mobileFormatted || telephone,
     availableService: {
@@ -381,10 +438,22 @@ export function jsonLdFor(page, param) {
     });
   } else if (page === 'doctors') {
     const d = param && getDoctor(param);
+    if (d) {
+      // A doctor's own page is their profile page (how Google and AI tools
+      // tell that the page is about this person)
+      graph[1] = {
+        ...graph[1],
+        '@type': ['MedicalWebPage', 'ProfilePage'],
+        mainEntity: { '@id': `${SITE_URL}doctors/${d.slug}#physician` },
+        ...(d.photo ? { primaryImageOfPage: { '@id': `${SITE_URL}doctors/${d.slug}#portrait` } } : {})
+      };
+    }
     graph.push(...(d ? [d] : DOCTORS).map(physician));
     graph.push(breadcrumbs([['Home', ''], ['Doctors', 'doctors'], ...(d ? [[d.name, `doctors/${d.slug}`]] : [])]));
   } else if (page === 'facilities') {
     const f = param && getFacility(param);
+    const shown = f ? (f.photo && !isRepresentative(f.photo) ? [f] : []) : realFacilityPhotos();
+    if (shown.length) graph[1] = { ...graph[1], image: shown.map((x) => imageObject(x.photo, `${x.name}, Pulse Hospital & I.C.U, Modasa`)) };
     graph.push(breadcrumbs([['Home', ''], ['Facilities', 'facilities'], ...(f ? [[f.name, `facilities/${f.id}`]] : [])]));
   } else if (page === 'departments') {
     const d = param && getDepartment(param);
@@ -415,6 +484,16 @@ export function jsonLdFor(page, param) {
     }
     graph.push(breadcrumbs([['Home', ''], ['Health conditions', 'conditions'], ...(c ? [[c.name, `conditions/${c.slug}`]] : [])]));
   } else if (page === 'about' || page === 'contact' || page === 'gallery' || page === 'privacy' || page === 'terms') {
+    if (page === 'gallery') {
+      // Every real photo with what it shows, for Google Images and AI tools
+      graph[1] = {
+        ...graph[1],
+        '@type': ['MedicalWebPage', 'ImageGallery'],
+        associatedMedia: GALLERY_IMAGES.filter((g) => !isRepresentative(g.src)).map((g) =>
+          imageObject(g.src, `${g.title}, Pulse Hospital & I.C.U, Modasa`, { alternateName: g.titleGujarati, keywords: g.category })
+        )
+      };
+    }
     const label = title.split(' | ')[0];
     graph.push(breadcrumbs([['Home', ''], [label, pagePath(page, param)]]));
   }
@@ -442,8 +521,22 @@ export function seoHead({ page, param }, base = '/') {
       ? `\n    <link rel="preload" as="image" href="${base}video/hospital-tour-poster.webp" fetchpriority="high" />`
       : '';
   const jsonLd = JSON.stringify(jsonLdFor(page, param)).replace(/</g, '\u003c');
-  const ogImgUrl = `${SITE_URL}og-image.png`;
-  const ogImgAlt = 'Pulse Hospital & I.C.U Modasa - Specialist Doctors & 24x7 Critical Care Team';
+  // Share preview (WhatsApp, Facebook, AI tools): a doctor's page shows the
+  // doctor, a facility page its photo, every other page the hospital card
+  const doc = page === 'doctors' && param && getDoctor(param);
+  const fac = page === 'facilities' && param && getFacility(param);
+  const share = doc && doc.photo
+    ? { url: absUrl(doc.photo), type: 'image/webp', w: 800, h: 1000, alt: doctorCaption(doc) }
+    : fac && fac.photo && !isRepresentative(fac.photo)
+      ? { url: absUrl(fac.photo), type: 'image/webp', alt: `${fac.name}, Pulse Hospital & I.C.U, Modasa` }
+      : null;
+  const ogImgUrl = share ? share.url : `${SITE_URL}og-image.png`;
+  const ogImgAlt = share ? share.alt : 'Pulse Hospital & I.C.U Modasa - Specialist Doctors & 24x7 Critical Care Team';
+  const ogImgType = share ? share.type : 'image/png';
+  const ogSize = (w, h) => `\n    <meta property="og:image:width" content="${w}" />\n    <meta property="og:image:height" content="${h}" />`;
+  const ogImgSize = share ? (share.w ? ogSize(share.w, share.h) : '') : ogSize(1200, 630);
+  // Apps that cannot show the first image fall back to the hospital card
+  const ogFallback = share ? `\n    <meta property="og:image" content="${SITE_URL}og-image.png" />` : '';
 
   return `<!--seo:start-->
     <title>${esc(title)}</title>
@@ -459,16 +552,14 @@ export function seoHead({ page, param }, base = '/') {
     <meta property="og:locale:alternate" content="gu_IN" />
     <meta property="og:image" content="${ogImgUrl}" />
     <meta property="og:image:secure_url" content="${ogImgUrl}" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="${ogImgAlt}" />
+    <meta property="og:image:type" content="${ogImgType}" />${ogImgSize}
+    <meta property="og:image:alt" content="${esc(ogImgAlt)}" />${ogFallback}
     <meta property="article:modified_time" content="${dateModified}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${esc(title)}" />
     <meta name="twitter:description" content="${esc(description)}" />
     <meta name="twitter:image" content="${ogImgUrl}" />
-    <meta name="twitter:image:alt" content="${ogImgAlt}" />
+    <meta name="twitter:image:alt" content="${esc(ogImgAlt)}" />
     <meta name="image" content="${ogImgUrl}" />${preload}
     <script type="application/ld+json">${jsonLd}</script>
     <!--seo:end-->`;
@@ -518,6 +609,7 @@ export function llmsText(full = false) {
     if (d.experience) lines.push(`- Experience: ${d.experience}`);
     if (d.specialties?.length) lines.push(`- Treats: ${d.specialties.join(', ')}`);
     if (d.timing) lines.push(`- OPD: ${d.timing}`);
+    if (d.photo) lines.push(`- Photo: ${absUrl(d.photo)}`);
     lines.push(`- Profile: ${SITE_URL}doctors/${d.slug}`, '');
   });
   lines.push('## Departments and conditions treated', '');

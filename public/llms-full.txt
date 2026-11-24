@@ -31,6 +31,7 @@
 - Experience: 14+ Years
 - Treats: General Medicine, Diabetes & Thyroid, Hypertension, ICU Care
 - OPD: Mon - Sat (09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM)
+- Photo: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-dipesh-patel.webp
 - Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-dipesh-patel
 
 ### Dr. Naimuddin N. Kazi (ડૉ. નઈમુદ્દીન એન. કાઝી)
@@ -40,6 +41,7 @@
 - Experience: 16+ Years
 - Treats: Diabetes & Thyroid, Hypertension (BP), Infectious Diseases, Liver & Renal Health, Intensive Care
 - OPD: Mon - Sat (09:30 AM - 01:30 PM & 05:00 PM - 08:00 PM)
+- Photo: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-naimuddin-kazi.webp
 - Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-naimuddin-kazi
 
 ### Dr. Paras H. Patel (ડૉ. પારસ એચ. પટેલ)
@@ -49,6 +51,7 @@
 - Experience: 12+ Years
 - Treats: Diabetes & Thyroid, Cardiac Care, Hypertension & BP, Stroke & Neuro Recovery, Metabolic Diseases
 - OPD: Mon - Sat (10:00 AM - 01:30 PM & 04:30 PM - 07:30 PM)
+- Photo: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-paras-patel.webp
 - Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-paras-patel
 
 ### Dr. Santosh J. Prajapati (ડૉ. સંતોષ જે. પ્રજાપતિ)
@@ -58,6 +61,7 @@
 - Experience: 15+ Years
 - Treats: Pulmonology / Lungs, Bronchoscopy, Asthma & COPD, Sleep Study (Polysomnography)
 - OPD: Mon - Sat (09:00 AM - 01:00 PM & 04:00 PM - 07:00 PM)
+- Photo: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-santosh-prajapati.webp
 - Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-santosh-prajapati
 
 ### Dr. Saurabh Goswami (ડૉ. સૌરભ ગોસ્વામી)
@@ -66,6 +70,7 @@
 - Experience: 10+ Years
 - Treats: Interventional Cardiology, Angiography & Angioplasty, Heart Failure & Arrhythmia, Preventive Heart Care
 - OPD: Mon - Sat (By Appointment & Cardiac Emergency Call)
+- Photo: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-saurabh-goswami.webp
 - Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-saurabh-goswami
 
 ### Dr. Pulkit Pandya (ડૉ. પુલકિત પંડ્યા)
@@ -73,6 +78,7 @@
 - Experience: 7+ Years
 - Treats: Trauma Resuscitation, Dialysis Monitoring, Post-Surgical ICU Care
 - OPD: Available 24x7 in Emergency & ICU Rotation
+- Photo: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-pulkit-pandya.webp
 - Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-pulkit-pandya
 
 ## Departments and conditions treated
