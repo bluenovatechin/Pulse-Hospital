@@ -107,40 +107,6 @@ export default function DoctorsPage({ lang = 'en' }) {
         </div>
       </section>
 
-      {/* Leadership Team Showcase */}
-      <section className="section" style={{ background: 'var(--cream)', borderTop: '1px solid var(--border-soft)', borderBottom: '1px solid var(--border-soft)' }}>
-        <div className="container-wide">
-          {/* Same layout as the About page: the photo keeps its natural
-              (wide) shape so no doctor is cut off at the edges */}
-          <div className="grid grid-2" style={{ alignItems: 'center', gap: 40 }}>
-              <div className="photo" style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', boxShadow: 'var(--shadow-xl)' }} data-reveal>
-                <img
-                  src={PHOTOS.doctorsTeam}
-                  alt={t('Pulse Hospital Modasa Doctors Team: Dr. Dipesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya', 'પલ્સ હોસ્પિટલ મોડાસા ડોક્ટર્સ ટીમ: ડૉ. દિપેશ પટેલ, ડૉ. નઈમુદ્દીન કાઝી, ડૉ. પારસ પટેલ, ડૉ. સંતોષ પ્રજાપતિ, ડૉ. પુલકિત પંડ્યા')}
-                  title={t('Specialist Doctors and Critical Care Physicians at Pulse Hospital & I.C.U Modasa', 'પલ્સ હોસ્પિટલ અને આઈસીયુ મોડાસાના નિષ્ણાત તબીબો')}
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                  loading="lazy"
-                />
-              </div>
-              <div data-reveal>
-                <span className="eyebrow">{t('Our Medical Panel', 'અમારી મેડિકલ ટીમ')}</span>
-                <h3 style={{ fontSize: 'clamp(20px, 2.5vw, 26px)', color: 'var(--brand-navy)', margin: '8px 0 12px' }}>
-                  {t('Experienced Consultants & Critical Care Specialists', 'અનુભવી કન્સલ્ટન્ટ્સ અને ક્રિટિકલ કેર નિષ્ણાતો')}
-                </h3>
-                <p style={{ color: 'var(--text-body)', fontSize: 14.5, lineHeight: 1.6, marginBottom: 14 }}>
-                  {t(
-                    'Our specialist consultants and critical care doctors work closely together to ensure continuous inpatient care, ICU resuscitation, and daily OPD clinics for patients across Arvalli.',
-                    'અમારા નિષ્ણાત કન્સલ્ટન્ટ્સ અને ક્રિટિકલ કેર ડોક્ટરો અરવલ્લી અને આસપાસના દર્દીઓ માટે ઇનપેશન્ટ કેર, ICU સારવાર અને દૈનિક OPD માં સાથે મળીને કાર્ય કરે છે.'
-                  )}
-                </p>
-                <div style={{ fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.6, background: '#fff', padding: '10px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-soft)' }}>
-                  <strong>{t('Team', 'ટીમ')}:</strong> {t('Dr. Saurabh Goswami (DM Cardiology) · Dr. Dipesh S. Patel · Dr. Naimuddin N. Kazi · Dr. Paras H. Patel · Dr. Santosh J. Prajapati · Dr. Pulkit Pandya', 'ડૉ. સૌરભ ગોસ્વામી (DM કાર્ડિયોલોજી) · ડૉ. દિપેશ એસ. પટેલ · ડૉ. નઈમુદ્દીન એન. કાઝી · ડૉ. પારસ એચ. પટેલ · ડૉ. સંતોષ જે. પ્રજાપતિ · ડૉ. પુલકિત પંડ્યા')}
-                </div>
-              </div>
-          </div>
-        </div>
-      </section>
-
       {/* Weekly timetable */}
       <section className="section section--white">
         <div className="container-wide">

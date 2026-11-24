@@ -9685,3 +9685,14 @@ button.slot-pill {
   font-weight: 600;
   color: var(--primary-light);
 }
+
+/* About page: medical team */
+.about-team {
+  background: var(--warm, #f7f5f0);
+}
+
+.about-team-text {
+  margin-top: 12px;
+  max-width: 560px;
+  color: var(--text-muted);
+}

@@ -170,17 +170,9 @@ function hospital() {
         url: `${SITE_URL}og-image.png`,
         contentUrl: `${SITE_URL}og-image.png`,
         caption: 'Specialist MD Doctors & 24x7 Critical Care Team at Pulse Hospital & I.C.U Modasa',
-        description: 'Doctors team at Pulse Hospital & I.C.U Modasa: Dr. Dipesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Pulkit Pandya with 24x7 Ventilator ICU, In-house CT scan, Dialysis and Modular Operation Theatres.',
+        description: 'Doctors at Pulse Hospital & I.C.U Modasa: Dr. Dipesh Patel, Dr. Naimuddin Kazi, Dr. Paras Patel, Dr. Santosh Prajapati, Dr. Saurabh Goswami and Dr. Pulkit Pandya, with 24x7 ICU, in-house CT scan, dialysis and modular operation theatres.',
         width: 1200,
         height: 630
-      },
-      {
-        '@type': 'ImageObject',
-        '@id': `${SITE_URL}#doctors-team-photo`,
-        url: `${SITE_URL}doctors-team.jpeg`,
-        contentUrl: `${SITE_URL}doctors-team.jpeg`,
-        caption: 'Consultant Physicians & Critical Care Specialists Team of Pulse Hospital, Modasa',
-        description: 'Senior medical doctors at Pulse Hospital, 4th Floor, City Centre, Shamlaji Road, Modasa'
       }
     ],
     telephone,
@@ -227,8 +219,8 @@ function physician(d) {
     worksFor: { '@id': HOSPITAL_ID },
     image: {
       '@type': 'ImageObject',
-      url: `${SITE_URL}doctors-team.jpeg`,
-      contentUrl: `${SITE_URL}doctors-team.jpeg`,
+      url: `${SITE_URL}doctors/${d.slug}.webp`,
+      contentUrl: `${SITE_URL}doctors/${d.slug}.webp`,
       caption: `${d.name} - ${d.designation} at Pulse Hospital & I.C.U Modasa`
     },
     address,

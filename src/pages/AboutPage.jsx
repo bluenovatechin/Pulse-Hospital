@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin, Clock, HeartPulse, ShieldCheck, Users, FileText, Calendar, ArrowRight, Phone } from 'lucide-react';
 import { PageHero, SectionHead, delay } from '../components/ui';
 import { Link } from '../router';
-import { HOSPITAL_INFO, PHOTOS, MILESTONES } from '../data/hospitalContent';
+import { HOSPITAL_INFO, PHOTOS, MILESTONES, DOCTORS } from '../data/hospitalContent';
 
 export default function AboutPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
@@ -77,34 +77,40 @@ export default function AboutPage({ lang = 'en' }) {
         </div>
       </section>
 
-      {/* Leadership & Medical Team */}
-      <section className="section" style={{ background: 'var(--cream)', borderTop: '1px solid var(--border-soft)', borderBottom: '1px solid var(--border-soft)' }}>
+      {/* Medical team: each doctor's own portrait */}
+      <section className="section about-team">
         <div className="container-wide">
-          <div className="grid grid-2" style={{ alignItems: 'center', gap: 40 }}>
-            <div className="photo" style={{ borderRadius: 'var(--radius-xl)', overflow: 'hidden', boxShadow: 'var(--shadow-xl)' }} data-reveal>
-              <img src={PHOTOS.doctorsTeam} alt={t('Pulse Hospital doctors team', 'પલ્સ હોસ્પિટલના ડોક્ટરોની ટીમ')} loading="lazy" />
-            </div>
-            <div data-reveal>
-              <span className="eyebrow">{t('Medical Leadership', 'તબીબી નેતૃત્વ')}</span>
-              <h2 style={{ fontSize: 'clamp(22px, 3.5vw, 34px)', margin: '10px 0 14px', lineHeight: 1.25 }}>
-                {t('Dedicated physicians & intensive care specialists', 'સમર્પિત ફિઝિશિયન અને ક્રિટિકલ કેર નિષ્ણાતો')}
-              </h2>
-              <p style={{ color: 'var(--text-body)', marginBottom: 12 }}>
+          <header className="hp-head" data-reveal>
+            <div>
+              <p className="hp-kicker">{t('Medical team', 'તબીબી ટીમ')}</p>
+              <h2 className="hp-title">{t('Dedicated physicians & intensive care specialists', 'સમર્પિત ફિઝિશિયન અને ક્રિટિકલ કેર નિષ્ણાતો')}</h2>
+              <p className="about-team-text">
                 {t(
-                  'Our senior MD consultants and emergency physicians work as one united unit across the OPD, 41-bed inpatient care, and the 30-bed critical care department.',
+                  'Our senior MD consultants and emergency physicians work as one team across the OPD, 41-bed inpatient care and the 30-bed critical care department.',
                   'અમારા સિનિયર એમ.ડી. કન્સલ્ટન્ટ્સ અને ઇમરજન્સી ફિઝિશિયનો OPD, ૪૧-બેડના ઇનપેશન્ટ વોર્ડ અને ૩૦-બેડના ક્રિટિકલ કેર વિભાગમાં એક ટીમ તરીકે સતત સેવા આપે છે.'
                 )}
               </p>
-              <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 20 }}>
-                {t(
-                  'From Left to Right: Dr. Pulkit Pandya, Dr. Santosh J. Prajapati, Dr. Dipesh S. Patel, Dr. Naimuddin N. Kazi, and Dr. Paras H. Patel.',
-                  'ડાબેથી જમણે: ડૉ. પુલકિત પંડ્યા, ડૉ. સંતોષ જે. પ્રજાપતિ, ડૉ. દિપેશ એસ. પટેલ, ડૉ. નઈમુદ્દીન એન. કાઝી અને ડૉ. પારસ એચ. પટેલ.'
-                )}
-              </p>
-              <Link to="doctors" className="btn btn-primary">
-                {t('View doctor profiles & timings', 'ડૉક્ટરોની પ્રોફાઇલ અને સમય જુઓ')} <ArrowRight size={16} />
-              </Link>
             </div>
+            <Link to="doctors" className="hp-link">
+              {t('Doctor profiles & timings', 'ડૉક્ટરોની પ્રોફાઇલ અને સમય')} <ArrowRight size={16} />
+            </Link>
+          </header>
+
+          <div className="hp-doc-grid">
+            {DOCTORS.map((d, i) => (
+              <Link to="doctors" param={d.slug} key={d.id} className="hp-doc" data-reveal style={delay(i, 80)}>
+                <span className="hp-doc-photo">
+                  {d.photo
+                    ? <img src={d.photo} alt={d.name} loading="lazy" decoding="async" />
+                    : <span className="hp-doc-mono" aria-hidden="true">{d.initials}</span>}
+                </span>
+                <span className="hp-doc-body">
+                  <h3>{lang === 'en' ? d.name : d.nameGujarati}</h3>
+                  <span className="hp-doc-qual">{d.qualification || t(d.designation, d.designationGujarati || d.designation)}</span>
+                  {d.qualification && <span className="hp-doc-role">{t(d.designation, d.designationGujarati || d.designation)}</span>}
+                </span>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

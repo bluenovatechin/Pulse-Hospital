@@ -118,8 +118,7 @@ export const PHOTOS = {
   endoscopy: photo(38),
   physio: photo(39),
   pulmoLab: photo(40),
-  roPlant: photo(41),
-  doctorsTeam: `${ASSET_BASE}doctors-team.jpeg`
+  roPlant: photo(41)
 };
 
 // Photos that are illustrations, not pictures of this hospital
