@@ -10365,8 +10365,9 @@ button.slot-pill {
   .slider--centred .slider-track {
     /* side space = half of what is left beside one card, so the first and
        last cards can also come to the middle */
-    padding-inline: calc((100% - var(--slide-w, 66%)) / 2);
-    grid-auto-columns: var(--slide-w, 66%);
+    --slide-w: min(58vw, 300px);
+    padding-inline: calc((100% - var(--slide-w)) / 2);
+    grid-auto-columns: var(--slide-w);
     scroll-padding-inline: 0;
   }
 
