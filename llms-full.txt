@@ -1,93 +1,172 @@
 # Pulse Hospital & I.C.U, Modasa
 
-> Pulse Hospital & I.C.U (પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.) is a leading 24x7 multi-specialty critical care hospital located at City Centre, Shamlaji Road, Modasa, Arvalli district, Gujarat, India. It provides advanced ventilator ICU care, in-house spiral CT scanning, round-the-clock hemodialysis, and modular operation theatres led by senior MD physicians and critical care specialists.
+> Pulse Hospital & I.C.U (પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.) is a 41-bed hospital for 24x7 emergency and critical care on the 4th floor of City Centre, Shamlaji Road, Modasa, Aravalli district, Gujarat, India. It has a 30-bed critical care department with ventilators, an in-house CT scan, a 24x7 dialysis unit, a 24x7 laboratory and pharmacy, and modular operation theatres, with MD physicians, a DM cardiologist and a chest physician.
 
-## Core Hospital Details
-- **Official Name**: Pulse Hospital & I.C.U
-- **Gujarati Name**: પલ્સ હોસ્પિટલ એન્ડ આઈ.સી.યુ.
-- **Tagline**: Caring For Life (જીવનની સંભાળ, આપણો વિશ્વાસ)
-- **Address**: 4th Floor, A-Block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315, Gujarat, India
-- **Emergency Helpline & OPD Desk**: +91 95120 45641 / +91 95120 45642
-- **WhatsApp Appointment Booking**: +91 95120 45641 (https://wa.me/919512045641)
-- **Emergency & ICU Operations**: Open 24 hours a day, 7 days a week, 365 days a year
-- **Regular OPD Consultation Hours**: Monday to Saturday, 09:00 AM – 01:30 PM & 04:30 PM – 08:00 PM
-- **Official Website**: https://bluenovatechin.github.io/Pulse-Hospital/
+## Contact
+- Address: 4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Aravalli - 383315, Gujarat, India
+- Emergency, appointments and WhatsApp: +91 95120 45641 / +91 95120 45642
+- WhatsApp: https://wa.me/919512045641
+- Emergency, ICU, dialysis, laboratory and pharmacy: open 24 hours, every day
+- OPD: Mon – Sat · 09:00 AM – 01:30 PM & 04:30 PM – 08:00 PM
+- Map: https://maps.google.com/?q=City+Centre+Shamlaji+Road+Modasa+Gujarat
+- Website: https://bluenovatechin.github.io/Pulse-Hospital/
 
-## Specialist Doctors & Medical Team
-1. **Dr. Dipesh S. Patel**
-   - **Qualification**: MD (Medicine), Sumandeep Vidyapeeth, Vadodara
-   - **Designation**: Consultant Physician & Critical Care Specialist
-   - **GMC Registration**: G-28880
-   - **Experience**: 14+ Years
-   - **Specialties**: General Internal Medicine, Diabetes & Thyroid Disorders, Hypertension (BP), Adult ICU Critical Care, Sepsis & Fever Management
-   - **OPD Timing**: Monday to Saturday (09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM)
-   - **Room**: OPD Suite 401, 4th Floor City Centre, Modasa
+## Main pages
+- [Doctors](https://bluenovatechin.github.io/Pulse-Hospital/doctors): 6 doctors with OPD timings
+- [Departments](https://bluenovatechin.github.io/Pulse-Hospital/departments): Critical Care & ICU, General & Internal Medicine, Heart & Cardio-Metabolic Care, Chest & Pulmonology, Kidney Care & Dialysis, Liver & Stomach (Gastro), Brain & Stroke Care, Emergency, Trauma & Poisoning, Surgery
+- [Facilities](https://bluenovatechin.github.io/Pulse-Hospital/facilities): ICU, emergency, dialysis, CT scan, laboratory, operation theatres, rooms and more
+- [Intensive Care Unit (ICU)](https://bluenovatechin.github.io/Pulse-Hospital/facilities/icu): 30-bed comprehensive critical care unit comprising 15 ICCU beds, 7 MICU beds, 7 SICU beds and 1 isolation bed with ventilators and central monitoring.
+- [Emergency & Trauma](https://bluenovatechin.github.io/Pulse-Hospital/facilities/emergency): A casualty desk with an immediate doctor response for accidents, poisoning, snakebite, burns, stroke and high fever.
+- [24x7 Dialysis Unit](https://bluenovatechin.github.io/Pulse-Hospital/facilities/dialysis): Emergency and scheduled haemodialysis, supported by high-grade dialysis machines and a dedicated RO water purification plant.
+- [In-House CT Scan](https://bluenovatechin.github.io/Pulse-Hospital/facilities/ct): Modasa CT Scan Centre on the same premises with high-precision gantry and technician workstation, requiring zero transfer delay.
+- [Book an appointment](https://bluenovatechin.github.io/Pulse-Hospital/book-appointment): choose a doctor, day and time; the request is sent on WhatsApp
+- [Contact and directions](https://bluenovatechin.github.io/Pulse-Hospital/contact)
 
-2. **Dr. Naimuddin N. Kazi**
-   - **Qualification**: MD (Medicine), B.J. Medical College, Ahmedabad
-   - **Designation**: Consultant Physician & Intensive Care Specialist
-   - **GMC Registration**: G-20989
-   - **Experience**: 16+ Years
-   - **Specialties**: Long-term care for diabetes, thyroid and blood pressure, Multi-system Infectious Diseases, Liver Disease, Renal/Kidney Health, Septic Shock, Geriatric Medicine
-   - **OPD Timing**: Monday to Saturday (09:30 AM - 01:30 PM & 05:00 PM - 08:00 PM)
-   - **Room**: OPD Suite 402, 4th Floor City Centre, Modasa
+## Doctors
 
-3. **Dr. Paras H. Patel**
-   - **Qualification**: MD (Medicine), GCS Medical College, Ahmedabad
-   - **Designation**: Consultant Physician & Cardio-Metabolic Expert
-   - **GMC Registration**: G-33212
-   - **Experience**: 12+ Years
-   - **Specialties**: Long-term care for diabetes, thyroid and blood pressure, Preventive Cardiology, Acute Hypertensive Crises, Stroke & Neuro Recovery, Metabolic Diseases, Emergency Trauma
-   - **OPD Timing**: Monday to Saturday (10:00 AM - 01:30 PM & 04:30 PM - 07:30 PM)
-   - **Room**: OPD Suite 403, 4th Floor City Centre, Modasa
+### Dr. Dipesh S. Patel (ડૉ. દિપેશ એસ. પટેલ)
+- Qualification: MD (Medicine), Sumandeep Vidyapeeth, Vadodara
+- Role: Consultant Physician & Critical Care Specialist
+- Gujarat Medical Council registration: G-28880
+- Experience: 14+ Years
+- Treats: General Medicine, Diabetes & Thyroid, Hypertension, ICU Care
+- OPD: Mon - Sat (09:00 AM - 01:00 PM & 04:30 PM - 07:30 PM)
+- Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-dipesh-patel
 
-4. **Dr. Santosh J. Prajapati**
-   - **Qualification**: MBBS, DTCD, FICCM, B.J. Medical College, Ahmedabad
-   - **Designation**: Consultant Chest Physician & Pulmonologist
-   - **GMC Registration**: G-0421
-   - **Experience**: 15+ Years
-   - **Specialties**: Pulmonology, Fiberoptic Bronchoscopy, Asthma & COPD, Overnight Sleep Study (Polysomnography), Pleural Effusion Thoracentesis, ICU Ventilator Care
-   - **OPD Timing**: Monday to Saturday (09:00 AM - 01:00 PM & 04:00 PM - 07:00 PM)
-   - **Room**: Pulmonology Lab & OPD 404, 4th Floor City Centre, Modasa
+### Dr. Naimuddin N. Kazi (ડૉ. નઈમુદ્દીન એન. કાઝી)
+- Qualification: MD (Medicine), B.J. Medical College, Ahmedabad
+- Role: Consultant Physician & Intensive Care Specialist
+- Gujarat Medical Council registration: G-20989
+- Experience: 16+ Years
+- Treats: Diabetes & Thyroid, Hypertension (BP), Infectious Diseases, Liver & Renal Health, Intensive Care
+- OPD: Mon - Sat (09:30 AM - 01:30 PM & 05:00 PM - 08:00 PM)
+- Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-naimuddin-kazi
 
-5. **Dr. Saurabh Goswami**
-   - **Qualification**: MBBS, MD, DM (Cardiology), B.J. Medical College, Ahmedabad
-   - **Designation**: Consultant Interventional Cardiologist
-   - **Experience**: 10+ Years
-   - **Specialties**: Interventional Cardiology, Angiography & Angioplasty, Acute Heart Attack & Coronary Care, Heart Failure, Arrhythmia, Preventive Cardiology
-   - **OPD Timing**: Monday to Saturday (By Appointment & Cardiac Emergency)
-   - **Room**: Cardiology Suite 405, 4th Floor City Centre, Modasa
+### Dr. Paras H. Patel (ડૉ. પારસ એચ. પટેલ)
+- Qualification: MD (Medicine), GCS Medical College, Ahmedabad
+- Role: Consultant Physician & Cardio-Metabolic Expert
+- Gujarat Medical Council registration: G-33212
+- Experience: 12+ Years
+- Treats: Diabetes & Thyroid, Cardiac Care, Hypertension & BP, Stroke & Neuro Recovery, Metabolic Diseases
+- OPD: Mon - Sat (10:00 AM - 01:30 PM & 04:30 PM - 07:30 PM)
+- Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-paras-patel
 
-6. **Dr. Pulkit Pandya**
-   - **Qualification**: MBBS, CCEBDM
-   - **Designation**: Resident Medical Officer (Critical Care)
-   - **Experience**: 7+ Years
-   - **Specialties**: Trauma Resuscitation, Dialysis Monitoring, Post-Surgical ICU Recovery, Acute Poisoning & Antidote Protocols
-   - **Availability**: 24x7 in Emergency & ICU Rotation
+### Dr. Santosh J. Prajapati (ડૉ. સંતોષ જે. પ્રજાપતિ)
+- Qualification: MBBS, DTCD, FICCM, B.J. Medical College, Ahmedabad
+- Role: Chest Physician & Critical Care Specialist
+- Gujarat Medical Council registration: G-0421
+- Experience: 15+ Years
+- Treats: Pulmonology / Lungs, Bronchoscopy, Asthma & COPD, Sleep Study (Polysomnography)
+- OPD: Mon - Sat (09:00 AM - 01:00 PM & 04:00 PM - 07:00 PM)
+- Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-santosh-prajapati
 
-## Key Facilities & Medical Infrastructure
-- **30+ Bed Intensive Care Unit (ICU)**: Multi-parameter hemodynamic monitors, invasive and non-invasive mechanical ventilators, central oxygen, arterial line blood pressure monitoring, isolation cubicle for immunocompromised patients.
-- **In-House High-Speed CT Scan**: Available round-the-clock for stroke assessment within golden hour, polytrauma, abdominal pain, and thoracic emergencies.
-- **24x7 Hemodialysis Unit**: Modern dialysis machines with automated bicarbonate delivery, dedicated reverse osmosis (RO) ultra-pure water plant, and isolated station for seropositive patients.
-- **24x7 Emergency Ambulance Service**: Fully equipped rapid-response emergency ambulance with continuous oxygen support, stretcher, emergency first-aid kit, and trained paramedical escort across Modasa and Arvalli.
-- **Centralized Air Conditioning (Central AC)**: Complete climate control and advanced HEPA air filtration maintaining comfortable, sterile healing conditions throughout all ICUs, OTs, OPDs, and rooms.
-- **24x7 Purified Mineral Water (RO Plant)**: In-house commercial multi-stage RO water plant providing free, hygienic, safe mineral drinking water at dispensing stations on all floors.
-- **Twin Modular Operation Theatres**: Laminar airflow, HEPA filtration, C-arm fluoroscopy, harmonic scalpel, and advanced anesthesia workstations.
-- **In-House Pathology Laboratory**: Automated hematology, biochemistry, ABG (Arterial Blood Gas), electrolytes, and cardiac biomarker testing.
-- **In-House Pharmacy**: Open 24 hours for emergency and inpatient medications.
-- **Patient Rooms**: Air-conditioned deluxe private suites and semi-private twin sharing rooms.
+### Dr. Saurabh Goswami (ડૉ. સૌરભ ગોસ્વામી)
+- Qualification: MBBS, MD, DM (Cardiology), B.J. Medical College, Ahmedabad
+- Role: Consultant Interventional Cardiologist
+- Experience: 10+ Years
+- Treats: Interventional Cardiology, Angiography & Angioplasty, Heart Failure & Arrhythmia, Preventive Heart Care
+- OPD: Mon - Sat (By Appointment & Cardiac Emergency Call)
+- Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-saurabh-goswami
 
-## Verified Yearly Milestones
-- **Critical Patients Treated in ICU**: 2,000+
-- **Outpatient (OPD) Consultations**: 5,000+
-- **Complicated Surgeries & Interventions**: 70+
+### Dr. Pulkit Pandya (ડૉ. પુલકિત પંડ્યા)
+- Role: Resident Medical Officer (Critical Care)
+- Experience: 7+ Years
+- Treats: Trauma Resuscitation, Dialysis Monitoring, Post-Surgical ICU Care
+- OPD: Available 24x7 in Emergency & ICU Rotation
+- Profile: https://bluenovatechin.github.io/Pulse-Hospital/doctors/dr-pulkit-pandya
 
-## Important Website URLs & Sitelinks
-- Home Page: https://bluenovatechin.github.io/Pulse-Hospital/
-- Specialist Doctors: https://bluenovatechin.github.io/Pulse-Hospital/doctors
-- Medical Facilities: https://bluenovatechin.github.io/Pulse-Hospital/facilities
-- Clinical Departments: https://bluenovatechin.github.io/Pulse-Hospital/departments
-- Book OPD Appointment: https://bluenovatechin.github.io/Pulse-Hospital/book-appointment
-- Hospital Photo Tour: https://bluenovatechin.github.io/Pulse-Hospital/gallery
-- About Pulse Hospital: https://bluenovatechin.github.io/Pulse-Hospital/about
-- Emergency & Contact: https://bluenovatechin.github.io/Pulse-Hospital/contact
+## Departments and conditions treated
+
+### Critical Care & ICU
+For patients whose life is at risk and who need round-the-clock monitoring, ventilator support or organ support.
+- Conditions: Sepsis & septic shock, Respiratory failure, Multi-organ failure, Post-surgery ICU care, Severe poisoning
+- Services: Ventilator support, Central monitoring, Bedside dialysis, Isolation ICU
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#critical-care
+
+### General & Internal Medicine
+The starting point for most adult illnesses: diagnosis, long-term disease control and fever care.
+- Conditions: Uncontrolled diabetes, Thyroid disorders, High blood pressure, Dengue with low platelets, Malaria & typhoid, Chikungunya
+- Services: OPD consultation, Lab work-ups, Admission if needed
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#medicine
+
+### Heart & Cardio-Metabolic Care
+Emergency and ongoing care for the heart, blood pressure and related metabolic conditions.
+- Conditions: Heart attack, Hypertensive crisis, Heart failure, Cholesterol & metabolic disease, Arrhythmia & valve disorders
+- Services: Consultation with DM Cardiologist, 2D Echo & Doppler, I.C.C.U. (cardiac ICU), Cardiac troponin testing, Angiography guidance
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#cardiac
+
+### Chest & Pulmonology
+Everything to do with the lungs and breathing: from long-term asthma to ICU ventilation.
+- Conditions: Breathlessness, Pneumonia, Fluid in the lungs, Asthma, COPD, Sleep apnoea, Post-COVID lung fibrosis
+- Services: Bronchoscopy, PFT / spirometry, Sleep study, HRCT chest
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#chest
+
+### Kidney Care & Dialysis
+Diagnosis and treatment of kidney disease, with a dialysis unit that is open around the clock.
+- Conditions: Kidney stones, Kidney swelling, Urinary infection, Acute renal failure
+- Services: Emergency dialysis, Maintenance dialysis, ICU bedside dialysis
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#kidney
+
+### Liver & Stomach (Gastro)
+Care for the digestive system and liver, supported by endoscopy.
+- Conditions: Jaundice, Diarrhoea & vomiting, Bowel inflammation, Bleeding in the stomach
+- Services: Endoscopy, Gastroenterology & hepatology, Abdominal CT & sonography
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#gastro
+
+### Brain & Stroke Care
+Fast diagnosis and treatment for stroke and other brain emergencies; the in-house CT saves critical minutes.
+- Conditions: Paralysis (stroke), Brain haemorrhage, Fits / seizures, Encephalitis (brain fever)
+- Services: Emergency brain CT, Stroke thrombolysis, Neuro / spine surgery
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#neuro
+
+### Emergency, Trauma & Poisoning
+Immediate care for accidents, bites and poisoning. Walk in any time: no appointment needed.
+- Conditions: Road accident injuries, Burns, Electric shock, Heat stroke, Snakebite, Insect bites, Pesticide / drug poisoning
+- Services: 24x7 casualty desk, 24x7 emergency ambulance, Anti-snake venom, Antidote protocols, Trauma surgery
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#emergency
+
+### Surgery
+Planned and emergency operations in modular theatres, including keyhole, orthopaedic, spine and jaw surgery.
+- Conditions: Fractures, Abdominal surgery, Hernia & gallbladder, Spine problems, Jaw & dental surgery
+- Services: General surgery, High-risk surgery, Laparoscopic surgery, Orthopaedic surgery with IITV, Neuro & spine surgery, Plastic surgery, Maxillofacial surgery
+- Page: https://bluenovatechin.github.io/Pulse-Hospital/departments#surgery
+
+## Facilities
+
+- Intensive Care Unit (ICU) (24x7): 30-bed comprehensive critical care unit comprising 15 ICCU beds, 7 MICU beds, 7 SICU beds and 1 isolation bed with ventilators and central monitoring.
+- Isolation ICU (24x7): A dedicated 1-bed glass-walled, separately entered isolation ICU room protecting contagious patients and hospital surroundings.
+- Emergency & Trauma (24x7): A casualty desk with an immediate doctor response for accidents, poisoning, snakebite, burns, stroke and high fever.
+- Nursing Station & Central Monitoring (24x7): Experienced ICU nurses watch every bed's vitals on a central screen and respond within moments.
+- 24x7 Dialysis Unit: Emergency and scheduled haemodialysis, supported by high-grade dialysis machines and a dedicated RO water purification plant.
+- In-House CT Scan (24x7): Modasa CT Scan Centre on the same premises with high-precision gantry and technician workstation, requiring zero transfer delay.
+- 24x7 Pathology Laboratory: Automated blood testing machines, cell counter and sample counter operating 24 hours so treatment is never delayed.
+- Digital X-Ray, 2D Echo & Sonography (24x7): Heart ultrasound, abdominal sonography and digital X-ray, including portable machines that come to the bed.
+- Lung Function & Bronchoscopy Lab: Specialist lung testing led by the chest physician: bronchoscopy, spirometry and sleep studies.
+- Modular Operation Theatre (24x7): Sterile modular theatres with laminar airflow, LED surgical lights and a full anaesthesia workstation.
+- Laparoscopy, Endoscopy & Specialty Surgery: Keyhole surgery and camera procedures, plus neuro/spine and maxillofacial (dental) surgical wings.
+- Super Deluxe & Deluxe Rooms (24x7): 3 private air-conditioned deluxe rooms for quiet recovery, with attached bathroom and dedicated attendant space.
+- Special & Twin-Sharing Rooms (24x7): 3 curtained twin-sharing patient rooms with the same central medical fittings and motorised beds as private rooms.
+- Consultation Rooms (OPD): Private consulting rooms with an examination couch, where you meet your doctor for a booked 30-minute slot.
+- Physiotherapy Department: Rehabilitation that helps patients get moving again after surgery, a stroke, a fracture or a long ICU stay.
+- 24x7 Pharmacy: An in-house medical store that stays open all night, so prescriptions never wait for morning.
+- Reception, Billing & Waiting Lounge (24x7): A calm, air-conditioned arrival area with a help desk, a separate billing counter and a spacious waiting lounge.
+- 24x7 Emergency Ambulance Service: Dedicated 24x7 patient pickup and transfer ambulance fitted with continuous medical oxygen, stretcher, emergency first-aid kit, and trained paramedical staff.
+- 24x7 Purified Mineral Water (RO Plant): Dedicated multi-stage commercial RO water purification plant providing 100% clean, hygienic, and safe mineral drinking water across all hospital floors.
+- Centralized Air Conditioning (Central AC) (24x7): Hospital-wide centralized air conditioning ensuring optimal climate control, HEPA air filtration, and dust-free healing comfort across all floors.
+
+## Frequently asked questions
+
+### How does advance slot booking work?
+Choose a doctor, pick any day in the coming week and a 30-minute morning or evening slot. Your request opens in WhatsApp addressed to the hospital reception, and you get a booking ID (e.g. PLS-920101) and a printable slip. Reception confirms the slot on WhatsApp.
+
+### Do I need an appointment for an emergency?
+No. The emergency desk, ICU, CT scan, lab, pharmacy and dialysis run 24x7. Come straight to the 4th floor, City Centre, or call ahead so the team is ready.
+
+### Can I check or cancel my booking?
+Yes. Use “My Booking” and search with your mobile number or booking ID. It lists bookings made from this phone or computer; you can reopen the slip, or cancel, which prepares a WhatsApp message to reception so the slot can be released.
+
+### What should I bring to my appointment?
+Please bring your hospital file and all previous medical reports, any recent lab tests and prescriptions, and a photo ID.
+
+### Where is Pulse Hospital located?
+4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Aravalli - 383315. Lift access, wheelchair assistance and ample parking are available.
