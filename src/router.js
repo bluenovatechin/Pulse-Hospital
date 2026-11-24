@@ -26,6 +26,7 @@ export const PAGES = [
   'home',
   'facilities',
   'departments',
+  'conditions',
   'doctors',
   'gallery',
   'about',
@@ -45,7 +46,9 @@ const ALIASES = {
   'privacy-policy': 'privacy',
   'terms-and-conditions': 'terms',
   'terms-conditions': 'terms',
-  'cashless-mediclaim': 'facilities'
+  'cashless-mediclaim': 'facilities',
+  diseases: 'conditions',
+  treatments: 'conditions'
 };
 
 export const ROUTE_BASE = (import.meta.env.BASE_URL || '/').replace(/\/$/, '');
@@ -104,14 +107,38 @@ export function stickyOffset(target) {
 export function scrollToId(id, smooth = true) {
   if (!id || typeof window === 'undefined') return;
   const started = Date.now();
+  const targetTop = (el) => Math.max(0, el.getBoundingClientRect().top + window.scrollY - stickyOffset(el) - 12);
   const tryScroll = () => {
     const el = document.getElementById(id);
     if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - stickyOffset(el) - 12;
-      window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'instant' });
+      window.scrollTo({ top: targetTop(el), behavior: smooth ? 'smooth' : 'instant' });
+      if (smooth) settle(el);
       return;
     }
     if (Date.now() - started < 2000) requestAnimationFrame(tryScroll);
+  };
+  // On a long glide, content above the section can still change height
+  // (images loading, sections fading in). When the glide ends, check the
+  // landing spot once and correct it if it is off.
+  const settle = (el) => {
+    let done = false;
+    const inputs = ['wheel', 'touchstart', 'keydown'];
+    const cancel = () => { done = true; cleanup(); };
+    const cleanup = () => {
+      window.removeEventListener('scrollend', check);
+      inputs.forEach((ev) => window.removeEventListener(ev, cancel));
+    };
+    inputs.forEach((ev) => window.addEventListener(ev, cancel, { passive: true, once: true }));
+    const check = () => {
+      if (done) return;
+      done = true;
+      cleanup();
+      const top = targetTop(el);
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (Math.abs(window.scrollY - Math.min(top, maxScroll)) > 6) window.scrollTo({ top, behavior: 'smooth' });
+    };
+    window.addEventListener('scrollend', check);
+    setTimeout(check, 2500);
   };
   tryScroll();
 }

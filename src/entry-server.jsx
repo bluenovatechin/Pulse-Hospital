@@ -4,7 +4,7 @@ import React from 'react';
 import { prerenderToNodeStream } from 'react-dom/static';
 import App from './App';
 
-export { allRoutes, seoHead, SEO_BLOCK, pagePath, SITE_URL } from './data/seo';
+export { allRoutes, seoHead, SEO_BLOCK, pagePath, SITE_URL, routeImages, legacyRedirects, llmsText } from './data/seo';
 export const BASE = import.meta.env.BASE_URL;
 
 /** Render the app for one URL, waiting for lazily loaded pages to finish */

@@ -16,10 +16,10 @@ export const HOSPITAL_INFO = {
   address: {
     line1: "4th Floor, A-block, City Centre, Shamlaji Road",
     city: "Modasa",
-    district: "Arvalli",
+    district: "Aravalli",
     pincode: "383315",
     state: "Gujarat",
-    full: "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315"
+    full: "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Aravalli - 383315"
   },
   addressGujarati: {
     line1: "ચોથો માળ, એ-બ્લોક, સીટી સેન્ટર, શામળાજી રોડ",
@@ -42,6 +42,10 @@ export const HOSPITAL_INFO = {
   opdHours: "Mon – Sat · 09:00 AM – 01:30 PM & 04:30 PM – 08:00 PM",
   noticeEnglish: "Please bring this file and all past medical reports on your next visit.",
   noticeGujarati: "કૃપા કરીને આગલી મુલાકાતે આ ફાઇલ અને જુના રિપોર્ટ્સ સાથે લાવવા વિનંતી.",
+  // Official profiles (Google Business Profile, Facebook, Instagram, ...).
+  // Add the real links here; they are told to search engines as the
+  // hospital's own profiles. Leave empty until confirmed.
+  sameAs: [],
   bedCount: {
     total: 41,
     iccu: 15,
@@ -787,7 +791,7 @@ export const FACILITIES = [
     summary: "Dedicated 24x7 patient pickup and transfer ambulance fitted with continuous medical oxygen, stretcher, emergency first-aid kit, and trained paramedical staff.",
     summaryGu: "ઓક્સિજન સિલિન્ડર, સ્ટ્રેચર, ફર્સ્ટ-એઇડ અને પેરામેડિક સ્ટાફ સાથે દર્દીઓને ઝડપી લાવવા-લઈ જવા માટે ૨૪ કલાક કાર્યરત એમ્બ્યુલન્સ.",
     includes: [
-      "Rapid response patient transport across Modasa and Arvalli district",
+      "Rapid response patient transport across Modasa and Aravalli district",
       "Piped medical oxygen cylinder and emergency suction apparatus",
       "Emergency folding stretcher and wheelchair boarding facility",
       "Emergency resuscitation kit, splints, and vital medicines on board",
@@ -1094,7 +1098,7 @@ export const FAQS = [
   {
     q: "Where is Pulse Hospital located?",
     qGu: "પલ્સ હોસ્પિટલ ક્યાં આવેલી છે?",
-    a: "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Arvalli - 383315. Lift access, wheelchair assistance and ample parking are available.",
+    a: "4th Floor, A-block, City Centre, Shamlaji Road, Modasa, Aravalli - 383315. Lift access, wheelchair assistance and ample parking are available.",
     aGu: "૪થો માળ, એ-બ્લોક, સિટી સેન્ટર, શામળાજી રોડ, મોડાસા, અરવલ્લી - ૩૮૩૩૧૫. દર્દીઓ માટે લિફ્ટ, વ્હીલચેર સુવિધા અને વિશાળ પાર્કિંગ ઉપલબ્ધ છે."
   }
 ];

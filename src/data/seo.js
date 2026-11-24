@@ -4,8 +4,25 @@
 // on navigation) and at build time (scripts/prerender.js writes a
 // complete HTML file for every page).
 // ========================================================
-import { FACILITY_PAGE_IDS } from './siteStructure.js';
-import { HOSPITAL_INFO, DOCTORS, DEPARTMENTS, FAQS, HOSPITAL_TOUR, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
+import { FACILITY_PAGE_IDS, facilityLink } from './siteStructure.js';
+import { HOSPITAL_INFO, DOCTORS, DEPARTMENTS, FACILITIES, FAQS, HOSPITAL_TOUR, getDoctor, getFacility, getDepartment } from './hospitalContent.js';
+import { CONDITIONS, PUBLISHED_CONDITIONS, getCondition, isPublished } from './conditions.js';
+
+/**
+ * Old addresses that are now sections of another page. The build writes a
+ * small forwarding file for each, so old links and search results still
+ * land in the right place: { from: 'facilities/lab', page: 'facilities', hash: 'lab' }
+ */
+export function legacyRedirects() {
+  const list = [];
+  FACILITIES.forEach((f) => {
+    if (FACILITY_PAGE_IDS.includes(f.id)) return;
+    const l = facilityLink(f.id);
+    list.push({ from: `facilities/${f.id}`, page: 'facilities', param: l.param || null, hash: l.hash || '' });
+  });
+  DEPARTMENTS.forEach((d) => list.push({ from: `departments/${d.id}`, page: 'departments', param: null, hash: d.id }));
+  return list;
+}
 
 // Public address of the live site. Change this if the site moves
 // (e.g. to a custom domain); canonical links and the sitemap use it.
@@ -22,12 +39,19 @@ const PAGE_META = {
   facilities: {
     title: `Facilities: ICU, CT Scan, Dialysis & Operation Theatre | ${BRAND}`,
     description:
-      'ICU with ventilators, isolation ICU, in-house CT scan, 24x7 dialysis, lab and pharmacy, modular OT, physiotherapy and private rooms at Pulse Hospital, Modasa.'
+      'ICU with ventilators, 24x7 emergency, in-house CT scan, 24x7 dialysis, pathology lab, modular operation theatre, lung function lab, physiotherapy, pharmacy and private rooms at Pulse Hospital, Modasa, Aravalli.'
   },
   departments: {
     title: `Departments & Treatments | ${BRAND}`,
     description:
       'Critical care, medicine, heart, chest, kidney, liver, brain & stroke, emergency and surgery departments at Pulse Hospital, Modasa, with the conditions each one treats.'
+  },
+  conditions: {
+    title: `Diseases & Conditions Treated in Modasa | ${BRAND}`,
+    description:
+      'Symptoms, warning signs, tests, treatment and prevention for dengue, malaria, typhoid, diabetes, high BP, heart attack, stroke, kidney failure, asthma, pneumonia, snakebite and poisoning, treated at Pulse Hospital, Modasa, Aravalli.',
+    // Hidden from search engines until at least one page is doctor-reviewed
+    noindex: PUBLISHED_CONDITIONS.length === 0
   },
   doctors: {
     title: `Doctors in Modasa: Physicians & Critical Care Specialists | ${BRAND}`,
@@ -41,7 +65,7 @@ const PAGE_META = {
   about: {
     title: `About Us | ${BRAND}`,
     description:
-      'Pulse Hospital & I.C.U brings 24x7 emergency and critical care, dialysis, CT and specialist doctors to Modasa and the Arvalli district: 2000+ critical patients, 5000+ OPD consultations and 70+ complicated surgeries in one year.'
+      'Pulse Hospital & I.C.U brings 24x7 emergency and critical care, dialysis, CT and specialist doctors to Modasa and the Aravalli district: 2000+ critical patients, 5000+ OPD consultations and 70+ complicated surgeries in one year.'
   },
   contact: {
     title: `Contact, Address & Directions | ${BRAND}`,
@@ -78,7 +102,7 @@ export const pagePath = (page, param) =>
 // Hero photo number (public/photos/gallery-N) at the top of each page, so
 // the pre-rendered HTML can preload it. Keep in step with the pages' heroes.
 // Home has no hero photo: it opens with the walkthrough video (its poster is preloaded)
-export const HERO_PHOTO = { facilities: 13, departments: 9, doctors: 15, gallery: 2, about: 17, contact: 5 };
+export const HERO_PHOTO = { facilities: 13, departments: 9, conditions: 15, doctors: 15, gallery: 2, about: 17, contact: 5 };
 
 /** Title, description and indexing rule for any route */
 export function getPageMeta(page, param) {
@@ -104,6 +128,17 @@ export function getPageMeta(page, param) {
       };
     }
   }
+  if (page === 'conditions' && param) {
+    const c = getCondition(param);
+    if (c) {
+      return {
+        title: `${c.name} Treatment in Modasa: Symptoms, Tests & Care | Pulse Hospital`,
+        description: `${c.summary} Treated at Pulse Hospital & I.C.U, Modasa, Aravalli.`,
+        // Drafts stay out of search results until a doctor has reviewed them
+        noindex: !isPublished(c)
+      };
+    }
+  }
   if (page === 'book-appointment' && param) {
     const d = getDoctor(param);
     if (d) {
@@ -112,7 +147,7 @@ export function getPageMeta(page, param) {
     }
   }
   if (page === 'my-appointments' && param) return { ...PAGE_META['my-appointments'], title: `Appointment ${param} | ${BRAND}` };
-  if ((page === 'doctors' || page === 'facilities' || page === 'departments') && param) return PAGE_META.notfound;
+  if ((page === 'doctors' || page === 'facilities' || page === 'departments' || page === 'conditions') && param) return PAGE_META.notfound;
   return PAGE_META[page] || PAGE_META.notfound;
 }
 
@@ -121,13 +156,35 @@ export function allRoutes() {
   const main = ['home', 'doctors', 'departments', 'facilities', 'book-appointment', 'gallery', 'about', 'contact', 'privacy', 'terms'];
   return [
     ...main.map((page) => ({ page, param: null, index: true })),
+    // Condition pages are pre-rendered for review, but only doctor-reviewed
+    // ones are indexed and listed in the sitemap
+    { page: 'conditions', param: null, index: PUBLISHED_CONDITIONS.length > 0 },
+    ...CONDITIONS.map((c) => ({ page: 'conditions', param: c.slug, index: isPublished(c) })),
     ...DOCTORS.map((d) => ({ page: 'doctors', param: d.slug, index: true })),
-    // Departments are sections of /departments; only the main facility
-    // groups have their own pages (see data/siteStructure.js)
+    // Departments are sections of /departments; ICU, Emergency, Dialysis and
+    // CT also have their own pages (see data/siteStructure.js)
     ...FACILITY_PAGE_IDS.map((id) => ({ page: 'facilities', param: id, index: true })),
     ...DOCTORS.map((d) => ({ page: 'book-appointment', param: d.slug, index: false })),
     { page: 'my-appointments', param: null, index: false }
   ];
+}
+
+/** Images to list for a route in the sitemap (absolute URLs) */
+export function routeImages({ page, param }) {
+  const photoUrl = (n) => `${SITE_URL}photos/gallery-${n}.webp`;
+  const abs = (src) => (src ? SITE_URL + src.replace(/^.*?(photos|doctors)\//, '$1/') : null);
+  if (page === 'doctors' && param) {
+    const d = getDoctor(param);
+    return d && d.photo ? [{ loc: abs(d.photo), title: `${d.name}, ${d.designation}, Pulse Hospital Modasa` }] : [];
+  }
+  if (page === 'facilities' && param) {
+    const f = getFacility(param);
+    return f && f.photo ? [{ loc: abs(f.photo), title: `${f.name}, Pulse Hospital Modasa` }] : [];
+  }
+  if (page === 'home') return [{ loc: `${SITE_URL}video/hospital-tour-poster.webp`, title: 'Pulse Hospital & I.C.U, Modasa' }];
+  if (page === 'doctors') return DOCTORS.filter((d) => d.photo).map((d) => ({ loc: abs(d.photo), title: `${d.name}, Pulse Hospital Modasa` }));
+  const n = !param && HERO_PHOTO[page];
+  return n ? [{ loc: photoUrl(n), title: `Pulse Hospital & I.C.U, Modasa` }] : [];
 }
 
 // ---------- schema.org structured data ----------
@@ -183,6 +240,7 @@ function hospital() {
       longitude: 73.3031
     },
     hasMap: HOSPITAL_INFO.mapsUrl,
+    ...(HOSPITAL_INFO.sameAs?.length ? { sameAs: HOSPITAL_INFO.sameAs } : {}),
     isAcceptingNewPatients: true,
     openingHoursSpecification: [
       {
@@ -241,6 +299,7 @@ function siteNavigation() {
     { name: 'Book OPD Appointment', description: 'Book a 30-minute doctor consultation online with direct WhatsApp confirmation', url: `${SITE_URL}book-appointment` },
     { name: 'About Pulse Hospital', description: '2000+ Critical patients treated in one year at City Centre, Modasa', url: `${SITE_URL}about` },
     { name: 'Contact & 24x7 Emergency', description: '24x7 Emergency helpline 95120 45641, location map and directions', url: `${SITE_URL}contact` },
+    ...(PUBLISHED_CONDITIONS.length ? [{ name: 'Diseases & Conditions', description: 'Symptoms, tests and treatment for conditions treated at Pulse Hospital, Modasa', url: `${SITE_URL}conditions` }] : []),
     { name: 'Hospital Photo Tour', description: 'Real photography of ICU ward, operation theatre, rooms and reception', url: `${SITE_URL}gallery` }
   ];
 
@@ -294,7 +353,7 @@ export function jsonLdFor(page, param) {
       url: SITE_URL,
       name: HOSPITAL_INFO.name,
       alternateName: ['Pulse Hospital Modasa', 'પલ્સ હોસ્પિટલ મોડાસા', 'Pulse Hospital & ICU', 'Pulse Hospital'],
-      description: '24x7 Emergency, Critical Care ICU, CT Scan and Dialysis Hospital in Modasa, Arvalli, Gujarat.',
+      description: '24x7 Emergency, Critical Care ICU, CT Scan and Dialysis Hospital in Modasa, Aravalli, Gujarat.',
       inLanguage: ['en-IN', 'gu-IN'],
       publisher: { '@id': HOSPITAL_ID }
     });
@@ -330,6 +389,31 @@ export function jsonLdFor(page, param) {
   } else if (page === 'departments') {
     const d = param && getDepartment(param);
     graph.push(breadcrumbs([['Home', ''], ['Departments', 'departments'], ...(d ? [[d.title, `departments/${d.id}`]] : [])]));
+  } else if (page === 'conditions') {
+    const c = param && getCondition(param);
+    if (c) {
+      const reviewer = c.review?.by && getDoctor(c.review.by);
+      const dept = getDepartment(c.department);
+      graph[1] = {
+        ...graph[1],
+        about: {
+          '@type': 'MedicalCondition',
+          name: c.name,
+          alternateName: [c.nameGu, ...c.alt],
+          description: c.summary,
+          signOrSymptom: c.symptoms.map((x) => ({ '@type': 'MedicalSignOrSymptom', name: x })),
+          possibleTreatment: { '@type': 'MedicalTherapy', name: `${c.name} treatment`, description: c.treatment },
+          ...(dept ? { relevantSpecialty: dept.title } : {})
+        },
+        audience: { '@type': 'Patient' },
+        ...(reviewer ? { lastReviewed: c.review.date, reviewedBy: { '@id': `${SITE_URL}doctors/${reviewer.slug}#physician` } } : {})
+      };
+      graph.push({
+        '@type': 'FAQPage',
+        mainEntity: c.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))
+      });
+    }
+    graph.push(breadcrumbs([['Home', ''], ['Health conditions', 'conditions'], ...(c ? [[c.name, `conditions/${c.slug}`]] : [])]));
   } else if (page === 'about' || page === 'contact' || page === 'gallery' || page === 'privacy' || page === 'terms') {
     const label = title.split(' | ')[0];
     graph.push(breadcrumbs([['Home', ''], [label, pagePath(page, param)]]));
@@ -371,6 +455,8 @@ export function seoHead({ page, param }, base = '/') {
     <meta property="og:url" content="${url}" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Pulse Hospital & I.C.U Modasa" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:locale:alternate" content="gu_IN" />
     <meta property="og:image" content="${ogImgUrl}" />
     <meta property="og:image:secure_url" content="${ogImgUrl}" />
     <meta property="og:image:type" content="image/png" />
@@ -389,3 +475,66 @@ export function seoHead({ page, param }, base = '/') {
 }
 
 export const SEO_BLOCK = /<!--seo:start-->[\s\S]*?<!--seo:end-->/;
+
+// ---------- llms.txt (plain summary for AI search tools) ----------
+// Built from the same data as the website at every build, so it never
+// says anything the site itself does not.
+export function llmsText(full = false) {
+  const H = HOSPITAL_INFO;
+  const lines = [
+    `# ${H.name}, Modasa`,
+    '',
+    `> ${H.name} (${H.nameGujarati}) is a ${H.bedCount.total}-bed hospital for 24x7 emergency and critical care on the 4th floor of City Centre, Shamlaji Road, Modasa, Aravalli district, Gujarat, India. It has a ${H.bedCount.icuTotal}-bed critical care department with ventilators, an in-house CT scan, a 24x7 dialysis unit, a 24x7 laboratory and pharmacy, and modular operation theatres, with MD physicians, a DM cardiologist and a chest physician.`,
+    '',
+    '## Contact',
+    `- Address: ${H.address.full}, Gujarat, India`,
+    `- Emergency, appointments and WhatsApp: +91 ${H.appointmentLines.join(' / +91 ')}`,
+    `- WhatsApp: https://wa.me/${H.whatsappNumber}`,
+    '- Emergency, ICU, dialysis, laboratory and pharmacy: open 24 hours, every day',
+    `- OPD: ${H.opdHours}`,
+    `- Map: ${H.mapsUrl}`,
+    `- Website: ${SITE_URL}`,
+    '',
+    '## Main pages',
+    `- [Doctors](${SITE_URL}doctors): ${DOCTORS.length} doctors with OPD timings`,
+    `- [Departments](${SITE_URL}departments): ${DEPARTMENTS.map((d) => d.title).join(', ')}`,
+    `- [Facilities](${SITE_URL}facilities): ICU, emergency, dialysis, CT scan, laboratory, operation theatres, rooms and more`,
+    ...FACILITY_PAGE_IDS.map((id) => { const f = getFacility(id); return `- [${f.name}](${SITE_URL}facilities/${id}): ${f.summary}`; }),
+    ...(PUBLISHED_CONDITIONS.length ? [`- [Health conditions](${SITE_URL}conditions): patient guides reviewed by the hospital's doctors`] : []),
+    `- [Book an appointment](${SITE_URL}book-appointment): choose a doctor, day and time; the request is sent on WhatsApp`,
+    `- [Contact and directions](${SITE_URL}contact)`,
+    ''
+  ];
+  if (!full) {
+    lines.push(`Full details: ${SITE_URL}llms-full.txt`, '');
+    return lines.join('\n');
+  }
+  lines.push('## Doctors', '');
+  DOCTORS.forEach((d) => {
+    lines.push(`### ${d.name} (${d.nameGujarati})`);
+    if (d.qualification) lines.push(`- Qualification: ${d.qualification}${d.medicalCollege ? `, ${d.medicalCollege}` : ''}`);
+    lines.push(`- Role: ${d.designation}`);
+    if (d.gmcNumber) lines.push(`- Gujarat Medical Council registration: ${d.gmcNumber}`);
+    if (d.experience) lines.push(`- Experience: ${d.experience}`);
+    if (d.specialties?.length) lines.push(`- Treats: ${d.specialties.join(', ')}`);
+    if (d.timing) lines.push(`- OPD: ${d.timing}`);
+    lines.push(`- Profile: ${SITE_URL}doctors/${d.slug}`, '');
+  });
+  lines.push('## Departments and conditions treated', '');
+  DEPARTMENTS.forEach((d) => {
+    lines.push(`### ${d.title}`, d.intro, `- Conditions: ${d.conditions.join(', ')}`, `- Services: ${d.services.join(', ')}`, `- Page: ${SITE_URL}departments#${d.id}`, '');
+  });
+  lines.push('## Facilities', '');
+  FACILITIES.forEach((f) => {
+    lines.push(`- ${f.name}${f.is24x7 && !/24\s*x\s*7/i.test(f.name) ? ' (24x7)' : ''}: ${f.summary}`);
+  });
+  lines.push('');
+  if (PUBLISHED_CONDITIONS.length) {
+    lines.push('## Patient guides', '');
+    PUBLISHED_CONDITIONS.forEach((c) => lines.push(`- [${c.name}](${SITE_URL}conditions/${c.slug}): ${c.summary}`));
+    lines.push('');
+  }
+  lines.push('## Frequently asked questions', '');
+  FAQS.forEach((f) => lines.push(`### ${f.q}`, f.a, ''));
+  return lines.join('\n');
+}

@@ -22,7 +22,7 @@ export default function AboutPage({ lang = 'en' }) {
         photoAlt={t('Pulse Hospital & I.C.U building at City Centre, Shamlaji Road, Modasa', 'સીટી સેન્ટર, શામળાજી રોડ, મોડાસા ખાતે પલ્સ હોસ્પિટલ & આઈ.સી.યુ. બિલ્ડિંગ')}
         crumbs={t('About', 'અમારા વિશે')}
         eyebrow={t('About Pulse Hospital & I.C.U', 'પલ્સ હોસ્પિટલ & આઈ.સી.યુ. વિશે')}
-        title={t('Emergency and critical care for Arvalli', 'અરવલ્લી માટે ઇમરજન્સી અને ક્રિટિકલ કેર')}
+        title={t('Emergency and critical care for Aravalli', 'અરવલ્લી માટે ઇમરજન્સી અને ક્રિટિકલ કેર')}
         text={t(
           'Pulse Hospital & I.C.U is on the 4th floor of City Centre, Shamlaji Road, bringing ICU, dialysis, CT and specialist care to Modasa and the villages around it.',
           'સીટી સેન્ટર, શામળાજી રોડના ૪થા માળે આવેલી પલ્સ હોસ્પિટલ મોડાસા અને આસપાસના ગામો માટે ICU, ડાયાલીસીસ, CT અને નિષ્ણાત સારવાર લાવે છે.'

@@ -143,7 +143,7 @@ export default function TermsPage({ lang = 'en' }) {
               </h4>
               <p style={{ color: 'var(--text-body)', fontSize: 14.5, lineHeight: 1.7, marginBottom: 14 }}>
                 {t(
-                  'These terms and all hospital services are governed by the laws of India. Any disputes arising in connection with services rendered shall fall under the exclusive jurisdiction of the competent courts in Modasa, Arvalli District, Gujarat.',
+                  'These terms and all hospital services are governed by the laws of India. Any disputes arising in connection with services rendered shall fall under the exclusive jurisdiction of the competent courts in Modasa, Aravalli District, Gujarat.',
                   'તમામ સેવાઓ અને નિયમો ભારતીય કાયદા અનુસાર સંચાલિત થાય છે અને તેનું અધિકારક્ષેત્ર મોડાસા, જિલ્લો અરવલ્લી, ગુજરાત રહેશે.'
                 )}
               </p>

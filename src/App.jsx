@@ -10,6 +10,8 @@ import useReveal from './hooks/useReveal';
 import { HOSPITAL_INFO, getDoctor, getFacility, getDepartment } from './data/hospitalContent';
 import { SITE_URL, getPageMeta, pagePath } from './data/seo';
 import { facilityPageId } from './data/siteStructure';
+import { getCondition } from './data/conditions';
+import { initAnalytics, trackPageView } from './lib/analytics';
 
 // Everything except the home page loads on demand, keeping the first download small.
 // At build time every page is pre-rendered to HTML (scripts/prerender.js).
@@ -31,6 +33,8 @@ function lazyPage(loader) {
 const FacilitiesPage = lazyPage(() => import('./pages/FacilitiesPage'));
 const FacilityPage = lazyPage(() => import('./pages/FacilityPage'));
 const DepartmentsPage = lazyPage(() => import('./pages/DepartmentsPage'));
+const ConditionsPage = lazyPage(() => import('./pages/ConditionsPage'));
+const ConditionPage = lazyPage(() => import('./pages/ConditionPage'));
 const DoctorsPage = lazyPage(() => import('./pages/DoctorsPage'));
 const DoctorPage = lazyPage(() => import('./pages/DoctorPage'));
 const GalleryPage = lazyPage(() => import('./pages/GalleryPage'));
@@ -72,8 +76,8 @@ function renderPage(page, param, props) {
     }
     case 'facilities': {
       if (!param) return <FacilitiesPage {...props} />;
-      // A facility shown as a section of another page renders that page
-      // (the address is then tidied to /facilities/<page>#<section>)
+      // A facility shown as a section renders the page it is on (its own
+      // page or /facilities); the address is then tidied to <page>#<section>
       const owner = facilityPageId(param);
       if (owner) return <FacilityPage {...props} facility={getFacility(owner)} />;
       return getFacility(param) ? <FacilitiesPage {...props} /> : <NotFoundPage {...props} />;
@@ -82,6 +86,11 @@ function renderPage(page, param, props) {
       // All departments are on one page; /departments/<id> jumps to its section
       if (!param || getDepartment(param)) return <DepartmentsPage {...props} />;
       return <NotFoundPage {...props} />;
+    }
+    case 'conditions': {
+      if (!param) return <ConditionsPage {...props} />;
+      const condition = getCondition(param);
+      return condition ? <ConditionPage {...props} condition={condition} /> : <NotFoundPage {...props} />;
     }
     case 'book-appointment':
       return <BookingPage {...props} doctor={param ? getDoctor(param) : null} />;
@@ -113,7 +122,7 @@ export default function App({ url }) {
   //   /doctors/4                 -> /doctors/<name>
   //   /departments/kidney        -> /departments#kidney
   //   /facilities/isolation      -> /facilities/icu#isolation
-  //   /facilities/pharmacy       -> /facilities#pharmacy
+  //   /facilities/lab, /pharmacy -> /facilities#lab, /facilities#pharmacy
   useEffect(() => {
     if (page === 'doctors' && param) {
       const d = getDoctor(param);
@@ -152,6 +161,13 @@ export default function App({ url }) {
     const id = idle(() => PAGE_LOADERS.forEach((preload) => preload().catch(() => { })));
     return () => cancel(id);
   }, []);
+
+  // Optional Google Analytics (only with an ID set and the visitor's consent)
+  useEffect(() => { initAnalytics(); }, []);
+  useEffect(() => {
+    const id = setTimeout(trackPageView, 0); // after the title has updated
+    return () => clearTimeout(id);
+  }, [page, param]);
 
   useReveal(page, param);
   useDocumentMeta(page, param);

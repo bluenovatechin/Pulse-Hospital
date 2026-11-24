@@ -5,6 +5,7 @@ import { Link } from '../router';
 import { NAV_LINKS } from './Navbar';
 import PulseLogo from './PulseLogo';
 import { departmentLink, facilityLink } from '../data/siteStructure';
+import { PUBLISHED_CONDITIONS } from '../data/conditions';
 
 /**
  * A footer link group. Desktop: always-open column with a heading.
@@ -88,6 +89,9 @@ export default function Footer({ lang = 'en' }) {
                 {NAV_LINKS.map((l) => (
                   <li key={l.id}><Link to={l.id}>{t(l.en, l.gu)}</Link></li>
                 ))}
+                {PUBLISHED_CONDITIONS.length > 0 && (
+                  <li><Link to="conditions">{t('Health conditions', 'રોગો અને સારવાર')}</Link></li>
+                )}
               </ul>
             </Group>
             <Group id="doctors" title={t('Our doctors', 'અમારા ડૉક્ટરો')} open={open === 'doctors'} onToggle={() => toggle('doctors')}>

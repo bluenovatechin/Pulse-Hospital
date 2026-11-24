@@ -1,72 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Calendar, Phone, HeartPulse, CheckCircle2, ArrowRight } from 'lucide-react';
 import { PageHero, Icon, Avatar, Photo, RepBadge } from '../components/ui';
-import { Link, scrollToId } from '../router';
+import { Link } from '../router';
+import useSectionNav from '../hooks/useSectionNav';
 import { DEPARTMENTS, HOSPITAL_INFO, PHOTOS, getDoctor, getFacility } from '../data/hospitalContent';
 import { facilityLink } from '../data/siteStructure';
+import { PUBLISHED_CONDITIONS } from '../data/conditions';
 
 // All departments on one page. Each has its own section (#critical-care,
 // #kidney, ...); a side list (desktop) or chips (phone) jump between them.
 export default function DepartmentsPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const gu = lang === 'gu';
-  const [active, setActive] = useState(DEPARTMENTS[0].id);
-  const chipsRef = useRef(null);
-  // True while the page glides to a department after a tap. Chrome stops a
-  // page's smooth scroll if another area (the chip row) starts scrolling, so
-  // the chip row and the highlight wait until the page has arrived.
-  const jumping = useRef(false);
-
-  // Keep the active chip in view inside the chip row (phones)
-  useEffect(() => {
-    if (jumping.current) return;
-    const row = chipsRef.current;
-    const chip = row && row.querySelector('[aria-current="true"]');
-    if (!row || !chip || getComputedStyle(row).display === 'none') return;
-    const left = chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2;
-    row.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
-  }, [active]);
-
-  // Highlight the department being read
-  useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0] && !jumping.current) setActive(visible[0].target.id);
-      },
-      { rootMargin: '-30% 0px -60% 0px' }
-    );
-    DEPARTMENTS.forEach((d) => {
-      const el = document.getElementById(d.id);
-      if (el) io.observe(el);
-    });
-    return () => io.disconnect();
-  }, []);
-
-  const jump = (e, id) => {
-    e.preventDefault();
-    window.history.replaceState(null, '', `#${id}`);
-    jumping.current = true;
-    setActive(id);
-    scrollToId(id);
-    // Release once the page stops moving (scrollend, with a fallback)
-    let done = false;
-    const finish = () => {
-      if (done) return;
-      done = true;
-      window.removeEventListener('scrollend', finish);
-      jumping.current = false;
-      setActive((a) => a);
-      const row = chipsRef.current;
-      const chip = row && row.querySelector(`a[href="#${id}"]`);
-      if (row && chip && getComputedStyle(row).display !== 'none') {
-        row.scrollTo({ left: Math.max(0, chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2), behavior: 'smooth' });
-      }
-    };
-    window.addEventListener('scrollend', finish);
-    setTimeout(finish, 1200);
-  };
+  const { active, chipsRef, jump } = useSectionNav(DEPARTMENTS.map((d) => d.id));
 
   return (
     <div>
@@ -131,6 +77,7 @@ export default function DepartmentsPage({ lang = 'en' }) {
               const facilities = d.facilityIds.map(getFacility).filter(Boolean);
               const bookable = doctors.find((doc) => doc.type === 'visiting');
               const isEmergency = d.id === 'emergency';
+              const guides = PUBLISHED_CONDITIONS.filter((c) => c.department === d.id);
               return (
                 <article key={d.id} id={d.id} className="dp-card" data-reveal>
                   <header className="dp-head">
@@ -172,6 +119,18 @@ export default function DepartmentsPage({ lang = 'en' }) {
                             {facilities.map((f) => (
                               <li key={f.id}>
                                 <Link {...facilityLink(f.id)}>{gu ? f.nameGu : f.name} <ArrowRight size={13} /></Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                      {guides.length > 0 && (
+                        <>
+                          <h3 className="dp-sub">{t('Patient guides', 'દર્દીઓ માટે માહિતી')}</h3>
+                          <ul className="dp-links">
+                            {guides.map((c) => (
+                              <li key={c.slug}>
+                                <Link to="conditions" param={c.slug}>{gu ? c.nameGu : c.name} <ArrowRight size={13} /></Link>
                               </li>
                             ))}
                           </ul>

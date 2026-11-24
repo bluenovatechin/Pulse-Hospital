@@ -1,17 +1,26 @@
 import React from 'react';
-import { CheckCircle2, Calendar, Phone, Scan, Eye } from 'lucide-react';
-import FacilityCard from '../components/FacilityCard';
-import { PageHero, SectionHead, Icon } from '../components/ui';
+import { CheckCircle2, Calendar, Phone, Scan, Eye, ArrowRight, Sparkles } from 'lucide-react';
+import { PageHero, SectionHead, Icon, Avatar, Photo, RepBadge } from '../components/ui';
 import { Link } from '../router';
+import useSectionNav from '../hooks/useSectionNav';
 import {
-  FACILITIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS, BED_STATS, getFacility
+  FACILITIES, HOSPITAL_FACILITIES, HOSPITAL_INFO, PHOTOS, BED_STATS, getFacility, getDoctor
 } from '../data/hospitalContent';
-import { FACILITY_PAGE_IDS, AMENITY_IDS } from '../data/siteStructure';
+import { FACILITY_PAGES, FACILITY_GROUP_IDS, FACILITY_PAGE_IDS, AMENITY_IDS } from '../data/siteStructure';
 
+const unique = (list) => [...new Map(list.map((x) => [x.id, x])).values()];
+
+// All facilities on one page, like the Departments page: each facility group
+// is a section (#icu, #lab, ...) with a side list (desktop) or chips (phone).
+// ICU, Emergency, Dialysis and CT also have a detailed page of their own.
 export default function FacilitiesPage({ lang = 'en' }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
-  const mainFacilities = FACILITY_PAGE_IDS.map(getFacility);
+  const gu = lang === 'gu';
+  const groups = FACILITY_GROUP_IDS.map(getFacility);
   const amenities = AMENITY_IDS.map(getFacility);
+  const { active, chipsRef, jump } = useSectionNav([...FACILITY_GROUP_IDS, 'more-services']);
+  // Short label for the side list and chips
+  const short = (f) => (gu ? f.nameGu : f.name.replace(/\s*\(.*\)$/, ''));
   const open24 = FACILITIES.filter((f) => f.is24x7).length;
 
   return (
@@ -48,35 +57,145 @@ export default function FacilitiesPage({ lang = 'en' }) {
         }
       />
 
-      {/* Main facilities: each has its own page */}
-      <section className="section">
-        <div className="container-wide">
-          <div className="grid grid-3">
-            {mainFacilities.map((f) => <FacilityCard key={f.id} facility={f} lang={lang} />)}
-          </div>
+      {/* Phone: facility chips */}
+      <nav className="dp-chips" data-sticky aria-label={t('Facilities', 'સુવિધાઓ')}>
+        <div className="container-wide dp-chips-row" ref={chipsRef}>
+          {groups.map((f) => (
+            <a key={f.id} href={`#${f.id}`} onClick={(e) => jump(e, f.id)} aria-current={active === f.id ? 'true' : undefined}>
+              <Icon name={f.icon} size={15} /> {short(f)}
+            </a>
+          ))}
+          <a href="#more-services" onClick={(e) => jump(e, 'more-services')} aria-current={active === 'more-services' ? 'true' : undefined}>
+            <Sparkles size={15} /> {t('More services', 'અન્ય સેવાઓ')}
+          </a>
         </div>
-      </section>
+      </nav>
 
-      {/* Smaller services: shown here only */}
-      <section className="section section--white">
-        <div className="container-wide">
-          <SectionHead
-            eyebrow={t('Patient services', 'દર્દી સેવાઓ')}
-            title={t('Everyday comforts and services', 'રોજિંદી સુવિધાઓ અને સેવાઓ')}
-          />
-          <div className="amenity-grid">
-            {amenities.map((f) => (
-              <article key={f.id} id={f.id} className="amenity" data-reveal>
-                <span className="amenity-icon"><Icon name={f.icon} size={20} /></span>
-                <div>
-                  <h3>
-                    {lang === 'en' ? f.name : f.nameGu}
-                    {f.is24x7 && !/24\s*x\s*7/i.test(f.name) && <span className="fp-tag">24×7</span>}
-                  </h3>
-                  <p>{lang === 'en' ? f.summary : (f.summaryGu || f.summary)}</p>
-                </div>
-              </article>
+      <section className="section dp-wrap">
+        <div className="container-wide dp-layout">
+          {/* Desktop: sticky side list */}
+          <nav className="dp-side" aria-label={t('Facilities', 'સુવિધાઓ')}>
+            <p className="dp-side-label">{t('Facilities', 'સુવિધાઓ')}</p>
+            {groups.map((f) => (
+              <a key={f.id} href={`#${f.id}`} onClick={(e) => jump(e, f.id)} aria-current={active === f.id ? 'true' : undefined}>
+                <Icon name={f.icon} size={17} /> <span>{short(f)}</span>
+              </a>
             ))}
+            <a href="#more-services" onClick={(e) => jump(e, 'more-services')} aria-current={active === 'more-services' ? 'true' : undefined}>
+              <Sparkles size={17} /> <span>{t('More services', 'અન્ય સેવાઓ')}</span>
+            </a>
+          </nav>
+
+          <div className="dp-list">
+            {groups.map((f) => {
+              const members = (FACILITY_PAGES[f.id] || []).map(getFacility).filter(Boolean);
+              const all = [f, ...members];
+              const doctors = unique(all.flatMap((x) => x.doctorIds.map(getDoctor).filter(Boolean)));
+              const ownPage = FACILITY_PAGE_IDS.includes(f.id);
+              const isEmergency = f.id === 'emergency';
+              return (
+                <article key={f.id} id={f.id} className="dp-card fac-card" data-reveal>
+                  <header className="dp-head">
+                    <div className="dp-head-text">
+                      <span className="dp-icon"><Icon name={f.icon} size={22} /></span>
+                      <div>
+                        <h2>
+                          {gu ? f.nameGu : f.name}
+                          {f.is24x7 && !/24\s*x\s*7/i.test(f.name) && <span className="fp-tag">24×7</span>}
+                        </h2>
+                        <p>{gu ? (f.summaryGu || f.summary) : f.summary}</p>
+                      </div>
+                    </div>
+                    {f.photo && (
+                      <span className="dp-photo">
+                        <Photo src={f.photo} alt={f.name} sizes="(max-width: 720px) 100vw, 280px" />
+                        <RepBadge src={f.photo} />
+                      </span>
+                    )}
+                  </header>
+
+                  <div className="dp-body">
+                    <div>
+                      <h3>{t("What's included", 'શું સમાવિષ્ટ છે')}</h3>
+                      <ul className="dp-ticks">
+                        {f.includes.map((i) => <li key={i}><CheckCircle2 size={16} /> {i}</li>)}
+                      </ul>
+                    </div>
+                    <div>
+                      {f.goodFor && (
+                        <>
+                          <h3>{t("Who it's for", 'કોના માટે ઉપયોગી')}</h3>
+                          <p className="fac-for">{f.goodFor}</p>
+                        </>
+                      )}
+                      {members.map((m) => (
+                        <div key={m.id} id={m.id} className="fac-member">
+                          <h3 className="dp-sub">
+                            <Icon name={m.icon} size={16} /> {gu ? m.nameGu : m.name}
+                            {m.is24x7 && !/24\s*x\s*7/i.test(m.name) && <span className="fp-tag">24×7</span>}
+                          </h3>
+                          <p>{gu ? (m.summaryGu || m.summary) : m.summary}</p>
+                          {m.includes.length > 0 && (
+                            <ul className="dp-tags">
+                              {m.includes.slice(0, 6).map((i) => <li key={i}>{i}</li>)}
+                            </ul>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <footer className="dp-foot">
+                    <div className="dp-docs">
+                      {doctors.map((doc) => (
+                        <Link key={doc.id} to="doctors" param={doc.slug} className="dp-doc">
+                          <Avatar doctor={doc} size="sm" />
+                          <span>
+                            <strong>{gu ? doc.nameGujarati : doc.name}</strong>
+                            <small>{doc.qualification || t(doc.designation, doc.designationGujarati || doc.designation)}</small>
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="fac-actions">
+                      {ownPage && (
+                        <Link to="facilities" param={f.id} className="btn btn-secondary">
+                          {t('Full details', 'વધુ વિગત')} <ArrowRight size={16} />
+                        </Link>
+                      )}
+                      {isEmergency || f.is24x7 ? (
+                        <a className={`btn ${isEmergency ? 'btn-emergency' : 'btn-primary'}`} href={HOSPITAL_INFO.phoneHref}>
+                          <Phone size={16} /> {isEmergency ? t('Call emergency', 'ઇમરજન્સી કૉલ') : t('Call the hospital', 'હોસ્પિટલને કૉલ કરો')}
+                        </a>
+                      ) : (
+                        <Link to="book-appointment" className="btn btn-primary">
+                          <Calendar size={16} /> {t('Book a consultation', 'એપોઇન્ટમેન્ટ બુક કરો')}
+                        </Link>
+                      )}
+                    </div>
+                  </footer>
+                </article>
+              );
+            })}
+
+            {/* Smaller services */}
+            <section id="more-services" className="fac-more" aria-labelledby="more-services-title">
+              <h2 id="more-services-title">{t('Everyday comforts and services', 'રોજિંદી સુવિધાઓ અને સેવાઓ')}</h2>
+              <div className="amenity-grid">
+                {amenities.map((f) => (
+                  <article key={f.id} id={f.id} className="amenity" data-reveal>
+                    <span className="amenity-icon"><Icon name={f.icon} size={20} /></span>
+                    <div>
+                      <h3>
+                        {lang === 'en' ? f.name : f.nameGu}
+                        {f.is24x7 && !/24\s*x\s*7/i.test(f.name) && <span className="fp-tag">24×7</span>}
+                      </h3>
+                      <p>{lang === 'en' ? f.summary : (f.summaryGu || f.summary)}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </section>

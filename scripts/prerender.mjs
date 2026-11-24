@@ -17,7 +17,7 @@ const root = path.resolve(import.meta.dirname, '..');
 const dist = path.join(root, 'dist');
 const ssrDir = path.join(root, 'dist-ssr');
 
-const { render, allRoutes, seoHead, SEO_BLOCK, pagePath, SITE_URL, BASE } = await import(
+const { render, allRoutes, seoHead, SEO_BLOCK, pagePath, SITE_URL, BASE, routeImages, legacyRedirects, llmsText } = await import(
   pathToFileURL(path.join(ssrDir, 'entry-server.js')).href
 );
 
@@ -51,17 +51,36 @@ for (const route of routes) {
 // (and still boots the app, so appointment slip links keep working).
 write('404.html', await page({ page: 'notfound', param: null }));
 
+// Old addresses that are now sections of another page: a tiny file that
+// forwards to the right section and points search engines at the new page
+const xml = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+for (const r of legacyRedirects()) {
+  const target = pagePath(r.page, r.param);
+  const url = `${BASE}${target}${r.hash ? `#${r.hash}` : ''}`;
+  write(`${r.from}.html`, `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved | Pulse Hospital & I.C.U, Modasa</title><meta name="robots" content="noindex, follow"><link rel="canonical" href="${SITE_URL}${target}"><meta http-equiv="refresh" content="0; url=${url}"><script>location.replace(${JSON.stringify(url)})</script></head><body><p><a href="${url}">Continue to Pulse Hospital & I.C.U</a></p></body></html>\n`);
+}
+
 const today = new Date().toISOString().slice(0, 10);
 const urls = routes
   .filter((r) => r.index)
-  .map((r) => `  <url><loc>${SITE_URL}${pagePath(r.page, r.param)}</loc><lastmod>${today}</lastmod></url>`)
+  .map((r) => {
+    const images = routeImages(r)
+      .map((img) => `<image:image><image:loc>${xml(img.loc)}</image:loc><image:title>${xml(img.title)}</image:title></image:image>`)
+      .join('');
+    return `  <url><loc>${SITE_URL}${pagePath(r.page, r.param)}</loc><lastmod>${today}</lastmod>${images}</url>`;
+  })
   .join('\n');
-const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n${urls}\n</urlset>\n`;
 const robotsTxt = `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`;
 write('sitemap.xml', sitemapXml);
 write('robots.txt', robotsTxt);
 fs.writeFileSync(path.join(root, 'public', 'sitemap.xml'), sitemapXml);
 fs.writeFileSync(path.join(root, 'public', 'robots.txt'), robotsTxt);
+// Plain summaries for AI search tools, built from the site data
+for (const [file, text] of [['llms.txt', llmsText(false)], ['llms-full.txt', llmsText(true)]]) {
+  write(file, text);
+  fs.writeFileSync(path.join(root, 'public', file), text);
+}
 
 fs.rmSync(ssrDir, { recursive: true, force: true });
-console.log(`Pre-rendered ${routes.length + 1} pages (${routes.filter((r) => r.index).length} in sitemap.xml)`);
+console.log(`Pre-rendered ${routes.length + 1} pages (${routes.filter((r) => r.index).length} in sitemap.xml), ${legacyRedirects().length} forwarding files`);
