@@ -10394,3 +10394,36 @@ button.slot-pill {
     font-size: 12px;
   }
 }
+
+/* Slider rows move sideways only. Without this, a slightly diagonal swipe
+   on iPhone also scrolled the row up and down inside itself. */
+.slider-track {
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+}
+
+/* Cards inside a slider don't run their own rise-in animation (cards that
+   were off to the side used to rise into place while being swiped); the
+   slider as a whole fades in instead. */
+.js .slider-track > [data-reveal],
+.js .slider-track > [data-reveal] .hp-fac-img img {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Touch screens: no hover "lift" left behind after tapping or dragging */
+@media (hover: none) {
+  .doc-mini:hover,
+  .card-hover:hover,
+  .hp-fac:hover,
+  .hp-doc:hover {
+    transform: none;
+  }
+
+  .hp-doc:hover .hp-doc-photo img,
+  .hp-fac:hover .hp-fac-img img {
+    transform: none;
+  }
+}

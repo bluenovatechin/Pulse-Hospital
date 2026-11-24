@@ -21,7 +21,9 @@ export default function Slider({ className = '', children, lang = 'en', label, c
   const show = scrollable && count > 1;
 
   return (
-    <div className={`slider${centred ? ' slider--centred' : ''}`}>
+    // The whole row fades in once as it comes into view (its cards don't
+    // animate one by one, so nothing rises while the row is being swiped)
+    <div className={`slider${centred ? ' slider--centred' : ''}`} data-reveal>
       <div className="slider-stage">
         <div ref={ref} className={`${className} slider-track`} role="region" aria-label={label} tabIndex={scrollable ? 0 : undefined}>
           {children}
