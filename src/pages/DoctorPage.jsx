@@ -223,7 +223,7 @@ export default function DoctorPage({ doctor: d, lang = 'en' }) {
       <section className="section section--white">
         <div className="container-wide">
           <SectionHead eyebrow={t('Our doctors', 'અમારા ડૉક્ટરો')} title={t('Other doctors at Pulse Hospital', 'પલ્સ હોસ્પિટલના અન્ય ડૉક્ટરો')} />
-          <Slider className="doc-row" lang={lang} label={t('Other doctors', 'અન્ય ડૉક્ટરો')}>
+          <Slider className="doc-row" centred lang={lang} label={t('Other doctors', 'અન્ય ડૉક્ટરો')}>
             {others.map((o) => <DoctorMini key={o.id} doctor={o} lang={lang} />)}
           </Slider>
           <div style={{ marginTop: 24 }}>

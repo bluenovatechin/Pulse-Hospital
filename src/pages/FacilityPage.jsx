@@ -115,7 +115,7 @@ export default function FacilityPage({ facility: f, lang = 'en' }) {
             {doctors.length > 0 && (
               <article className="detail-block" data-reveal>
                 <h2>{t('Doctors who work here', 'અહીં કાર્યરત ડૉક્ટરો')}</h2>
-                <Slider className="doc-row doc-row--compact" lang={lang} label={t('Doctors', 'ડૉક્ટરો')}>
+                <Slider className="doc-row doc-row--compact" centred lang={lang} label={t('Doctors', 'ડૉક્ટરો')}>
                   {doctors.map((d) => <DoctorMini key={d.id} doctor={d} lang={lang} />)}
                 </Slider>
               </article>

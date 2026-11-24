@@ -163,7 +163,7 @@ export default function HomePage({ lang = 'en' }) {
             </Link>
           </header>
 
-          <Slider className="hp-fac-grid" lang={lang} label={t('Facilities', 'સુવિધાઓ')}>
+          <Slider className="hp-fac-grid" centred lang={lang} label={t('Facilities', 'સુવિધાઓ')}>
             {featured.map((f, i) => (
               <Link {...facilityLink(f.id)} key={f.id} className="hp-fac" data-reveal style={delay(i, 80)}>
                 <span className="hp-fac-img">

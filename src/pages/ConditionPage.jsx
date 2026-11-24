@@ -135,7 +135,7 @@ export default function ConditionPage({ condition: c, lang = 'en' }) {
             {doctors.length > 0 && (
               <article className="detail-block" data-reveal>
                 <h2>{t('Doctors who treat it', 'સારવાર કરતા ડૉક્ટરો')}</h2>
-                <Slider className="doc-row doc-row--compact" lang={lang} label={t('Doctors', 'ડૉક્ટરો')}>
+                <Slider className="doc-row doc-row--compact" centred lang={lang} label={t('Doctors', 'ડૉક્ટરો')}>
                   {doctors.map((d) => <DoctorMini key={d.id} doctor={d} lang={lang} />)}
                 </Slider>
               </article>

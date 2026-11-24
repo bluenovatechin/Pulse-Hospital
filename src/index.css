@@ -10359,18 +10359,14 @@ button.slot-pill {
   }
 }
 
-/* Centred slider (home page doctors on phones): the doctor in view sits in
-   the middle with the neighbours peeking in on both sides; dots centred */
+/* Centred sliders on phones (every card slider on the site). Card sizes
+   are unchanged; only where a card stops changes:
+   - the first card sits at the left edge, as before
+   - the cards in between stop in the middle, neighbours peeking both sides
+   - the last card sits at the right edge
+   (snapping to the centre with no extra side space gives exactly this:
+   the first and last cards cannot pass the row's edges). Dots centred. */
 @media (max-width: 639px) {
-  .slider--centred .slider-track {
-    /* side space = half of what is left beside one card, so the first and
-       last cards can also come to the middle */
-    --slide-w: min(58vw, 300px);
-    padding-inline: calc((100% - var(--slide-w)) / 2);
-    grid-auto-columns: var(--slide-w);
-    scroll-padding-inline: 0;
-  }
-
   .slider--centred .slider-track > * {
     scroll-snap-align: center;
   }
@@ -10391,6 +10387,33 @@ button.slot-pill {
   }
 
   .slider--centred .slider-hint {
+    font-size: 12px;
+  }
+}
+
+/* Doctor rows on inner pages (doctor, facility, condition pages) scroll up
+   to 719px: same centred stops as above, dots centred below */
+@media (max-width: 719px) {
+  .slider--centred .doc-row.slider-track > * {
+    scroll-snap-align: center;
+  }
+
+  .slider--centred:has(.doc-row) .slider-arrow--prev {
+    left: 2px;
+  }
+
+  .slider--centred:has(.doc-row) .slider-arrow--next {
+    right: 2px;
+  }
+
+  .slider--centred:has(.doc-row) .slider-ui {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .slider--centred:has(.doc-row) .slider-hint {
     font-size: 12px;
   }
 }

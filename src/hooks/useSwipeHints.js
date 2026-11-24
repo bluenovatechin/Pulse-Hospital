@@ -28,7 +28,8 @@ export default function useSwipeHints(ref, { nudge = true } = {}) {
     const items = [...row.children];
     const centred = isCentred(row);
     let index = 0;
-    if (atEnd && !centred) index = items.length - 1;
+    if (atEnd) index = items.length - 1;
+    else if (atStart) index = 0;
     else {
       // The card nearest the row's start (or its middle, for centred sliders)
       const r = row.getBoundingClientRect();
