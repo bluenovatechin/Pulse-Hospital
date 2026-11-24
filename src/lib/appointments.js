@@ -90,21 +90,9 @@ export function cancelAppointment(id) {
   return all.find((a) => sameId(a.id, id)) || null;
 }
 
-/**
- * Booking status, in order:
- *   Pending    - slip made, WhatsApp message not confirmed as sent yet
- *   Requested  - patient says the WhatsApp message was sent; waiting for reception
- *   Confirmed  - patient says reception confirmed the slot
- *   Cancelled
- * Older bookings saved before this change used "Requested" from the start.
- */
-export const STATUS = { PENDING: 'Pending', REQUESTED: 'Requested', CONFIRMED: 'Confirmed', CANCELLED: 'Cancelled' };
-
-export function setStatus(id, status) {
-  const all = readAll().map((a) => (sameId(a.id, id) ? { ...a, status } : a));
-  writeAll(all);
-  return all.find((a) => sameId(a.id, id)) || null;
-}
+// Booking status: a new booking is "Requested" (sent to reception on
+// WhatsApp); it can be "Cancelled" by the patient.
+export const STATUS = { REQUESTED: 'Requested', CANCELLED: 'Cancelled' };
 
 /** Slots this device has already booked for a doctor on a date: { "09:00 AM - 09:30 AM": status } */
 export function deviceBookedSlots(doctorId, date) {

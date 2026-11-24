@@ -1,10 +1,11 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { Phone, CalendarCheck } from 'lucide-react';
 import { PageHero, Avatar, WhatsAppIcon } from '../components/ui';
-import { Link, navigateTo } from '../router';
+import { Link } from '../router';
 import { DOCTORS, HOSPITAL_INFO } from '../data/hospitalContent';
 
 const NextWeekBooking = lazy(() => import('../components/NextWeekBooking'));
+const BookingDone = lazy(() => import('../components/BookingDone'));
 
 // Full booking page: /book-appointment (optionally /book-appointment/<doctor-slug>)
 export default function BookingPage({ doctor, lang = 'en' }) {
@@ -14,6 +15,12 @@ export default function BookingPage({ doctor, lang = 'en' }) {
   // browser; the pre-rendered page shows the doctor list in its place.
   const [ready, setReady] = useState(false);
   useEffect(() => setReady(true), []);
+
+  // After "Send on WhatsApp": show the success panel here (no new page)
+  const [done, setDone] = useState(null);
+  const showDone = (appt) => {
+    setDone(appt);
+  };
 
   const placeholder = (
     <div className="card booking-placeholder">
@@ -65,13 +72,17 @@ export default function BookingPage({ doctor, lang = 'en' }) {
         <div className="container-wide booking-page-body">
           {ready ? (
             <Suspense fallback={placeholder}>
-              <NextWeekBooking
-                key={doctor?.id || 'any'}
-                preselectedDoctorId={doctor?.id || null}
-                onBookingSuccess={(appt) => navigateTo('my-appointments', appt.id)}
-                lang={lang}
-                showHeader={false}
-              />
+              {done ? (
+                <BookingDone appointment={done} lang={lang} onBookAnother={() => setDone(null)} />
+              ) : (
+                <NextWeekBooking
+                  key={doctor?.id || 'any'}
+                  preselectedDoctorId={doctor?.id || null}
+                  onBookingSuccess={showDone}
+                  lang={lang}
+                  showHeader={false}
+                />
+              )}
             </Suspense>
           ) : placeholder}
         </div>

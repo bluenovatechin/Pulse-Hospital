@@ -262,6 +262,9 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
       id: apptId,
       doctorId: selectedDoctor.id,
       doctorName: selectedDoctor.name,
+      doctorQualification: selectedDoctor.qualification || '',
+      bookedBy: formData.bookedBy,
+      bookedByName: formData.bookedByName,
       doctorNameGujarati: selectedDoctor.nameGujarati,
       specialties: selectedDoctor.specialties,
       room: selectedDoctor.room,
@@ -277,12 +280,10 @@ export default function NextWeekBooking({ preselectedDoctorId = null, onBookingS
       previousFileNo: formData.previousFileNo || '',
       symptoms: formData.symptoms || '',
       bookedAt: new Date().toISOString(),
-      status: STATUS.PENDING
+      status: STATUS.REQUESTED
     };
 
-    // Save on this device only, and unlock it for this tab so the slip opens.
-    // Status starts as "Pending" until the patient confirms the WhatsApp
-    // message was actually sent.
+    // Save on this device only (for reprinting the slip later)
     saveAppointment(appointment);
 
     // Build structured WhatsApp message to hospital reception
@@ -580,13 +581,11 @@ _Sent via Pulse Hospital Online Booking Portal_`;
                         {sess.list.map((s) => {
                           const mine = myDeviceSlots[s.time];
                           const isSelected = selectedSlot === s.time;
-                          const state = s.isPast ? 'past' : mine ? `mine mine-${mine.toLowerCase()}` : isSelected ? 'selected' : 'available';
+                          const state = s.isPast ? 'past' : mine ? 'mine' : isSelected ? 'selected' : 'available';
                           const clickable = !s.isPast && !mine;
                           const note = s.isPast
                             ? (lang === 'en' ? 'Time passed' : 'સમય પૂરો')
-                            : mine === STATUS.CONFIRMED ? (lang === 'en' ? 'Confirmed' : 'કન્ફર્મ')
-                              : mine === STATUS.REQUESTED ? (lang === 'en' ? 'Awaiting' : 'રાહ જુઓ')
-                                : mine ? (lang === 'en' ? 'Not sent' : 'મોકલાયું નથી') : null;
+                            : mine ? (lang === 'en' ? 'Your booking' : 'તમારી બુકિંગ') : null;
                           return (
                             <button
                               type="button"
