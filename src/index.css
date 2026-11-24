@@ -10358,3 +10358,38 @@ button.slot-pill {
     animation: none;
   }
 }
+
+/* Centred slider (home page doctors on phones): the doctor in view sits in
+   the middle with the neighbours peeking in on both sides; dots centred */
+@media (max-width: 639px) {
+  .slider--centred .slider-track {
+    /* side space = half of what is left beside one card, so the first and
+       last cards can also come to the middle */
+    padding-inline: calc((100% - var(--slide-w, 66%)) / 2);
+    grid-auto-columns: var(--slide-w, 66%);
+    scroll-padding-inline: 0;
+  }
+
+  .slider--centred .slider-track > * {
+    scroll-snap-align: center;
+  }
+
+  .slider--centred .slider-arrow--prev {
+    left: 2px;
+  }
+
+  .slider--centred .slider-arrow--next {
+    right: 2px;
+  }
+
+  .slider--centred .slider-ui {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .slider--centred .slider-hint {
+    font-size: 12px;
+  }
+}

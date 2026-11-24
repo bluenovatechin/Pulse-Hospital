@@ -10,8 +10,10 @@ import useSwipeHints from '../hooks/useSwipeHints';
  *   - dots for the cards, with the one in view highlighted
  *   - a "Swipe for more" label until the visitor first swipes
  * On wider screens the row fits, and none of this is shown.
+ * `centred`: the card in view sits in the middle, with its neighbours
+ * peeking in on both sides, and the dots are centred below.
  */
-export default function Slider({ className = '', children, lang = 'en', label }) {
+export default function Slider({ className = '', children, lang = 'en', label, centred = false }) {
   const t = (en, gu) => (lang === 'en' ? en : gu);
   const ref = useRef(null);
   const { scrollable, atStart, atEnd, index, count, touched, goTo } = useSwipeHints(ref);
@@ -19,7 +21,7 @@ export default function Slider({ className = '', children, lang = 'en', label })
   const show = scrollable && count > 1;
 
   return (
-    <div className="slider">
+    <div className={`slider${centred ? ' slider--centred' : ''}`}>
       <div className="slider-stage">
         <div ref={ref} className={`${className} slider-track`} role="region" aria-label={label} tabIndex={scrollable ? 0 : undefined}>
           {children}

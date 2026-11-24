@@ -9,6 +9,12 @@ import { useCallback, useEffect, useState } from 'react';
  * - the index of the item in view, for dots
  * Does nothing while the row fits on screen (tablets / desktops).
  */
+// Centred sliders snap each card to the middle (scroll-snap-align: center)
+const isCentred = (row) => {
+  const first = row.firstElementChild;
+  return !!first && getComputedStyle(first).scrollSnapAlign.includes('center');
+};
+
 export default function useSwipeHints(ref, { nudge = true } = {}) {
   const [state, setState] = useState({ scrollable: false, atStart: true, atEnd: false, index: 0, count: 0, touched: false });
 
@@ -20,13 +26,17 @@ export default function useSwipeHints(ref, { nudge = true } = {}) {
     const atStart = row.scrollLeft <= 4;
     const atEnd = row.scrollLeft >= max - 4;
     const items = [...row.children];
+    const centred = isCentred(row);
     let index = 0;
-    if (atEnd) index = items.length - 1;
+    if (atEnd && !centred) index = items.length - 1;
     else {
-      const left = row.getBoundingClientRect().left;
+      // The card nearest the row's start (or its middle, for centred sliders)
+      const r = row.getBoundingClientRect();
+      const anchor = centred ? r.left + r.width / 2 : r.left;
       let best = Infinity;
       items.forEach((el, i) => {
-        const d = Math.abs(el.getBoundingClientRect().left - left);
+        const b = el.getBoundingClientRect();
+        const d = Math.abs((centred ? b.left + b.width / 2 : b.left) - anchor);
         if (d < best) { best = d; index = i; }
       });
     }
@@ -92,7 +102,11 @@ export default function useSwipeHints(ref, { nudge = true } = {}) {
     const el = row?.children[Math.max(0, Math.min(i, row.children.length - 1))];
     if (!row || !el) return;
     setState((s) => ({ ...s, touched: true }));
-    const left = el.getBoundingClientRect().left - row.getBoundingClientRect().left + row.scrollLeft;
+    const r = row.getBoundingClientRect();
+    const b = el.getBoundingClientRect();
+    const left = isCentred(row)
+      ? b.left + b.width / 2 - (r.left + r.width / 2) + row.scrollLeft
+      : b.left - r.left + row.scrollLeft;
     row.scrollTo({ left, behavior: 'smooth' });
   }, [ref]);
 

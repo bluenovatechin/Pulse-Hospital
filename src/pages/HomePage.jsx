@@ -194,7 +194,7 @@ export default function HomePage({ lang = 'en' }) {
             </Link>
           </header>
 
-          <Slider className="hp-doc-grid" lang={lang} label={t('Our doctors', 'અમારા ડૉક્ટરો')}>
+          <Slider className="hp-doc-grid" centred lang={lang} label={t('Our doctors', 'અમારા ડૉક્ટરો')}>
             {DOCTORS.map((d, i) => (
               <Link to="doctors" param={d.slug} key={d.id} className="hp-doc" data-reveal style={delay(i, 80)}>
                 <span className="hp-doc-photo">
