@@ -10450,3 +10450,60 @@ button.slot-pill {
     transform: none;
   }
 }
+
+/* Home page doctors, tablet & desktop: smaller cards. All six doctors sit
+   in one row on desktop (three per row on tablet), so the portraits are
+   no longer poster-sized. Phones keep their slider unchanged. */
+@media (min-width: 640px) {
+  .hp-doc-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px 18px;
+  }
+
+  .hp-doc-photo {
+    border-radius: var(--radius-lg, 16px);
+  }
+
+  .hp-doc-body {
+    gap: 3px;
+    padding: 12px 2px 0;
+  }
+
+  .hp-doc-type {
+    font-size: 11px;
+  }
+
+  .hp-doc-body h3 {
+    font-size: 16px;
+    line-height: 1.3;
+  }
+
+  .hp-doc-qual,
+  .hp-doc-role {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .hp-doc-mono {
+    font-size: clamp(36px, 4vw, 52px);
+  }
+}
+
+/* Tablet: three per row across the full width, with square portraits so
+   the cards stay short */
+@media (min-width: 640px) and (max-width: 1099px) {
+  .hp-doc-photo {
+    aspect-ratio: 1 / 1;
+  }
+
+  .hp-doc-photo img {
+    object-position: center 15%;
+  }
+}
+
+@media (min-width: 1100px) {
+  .hp-doc-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+  }
+}
