@@ -317,8 +317,8 @@ export const DOCTORS = [
     mobileFormatted: "+91 82002 40287",
     room: "Pulmonology Lab & OPD 404",
     roomGujarati: "પલ્મોનોલોજી લેબ અને OPD ૪૦૪",
-    experience: "15+ Years",
-    experienceGujarati: "૧૫+ વર્ષ અનુભવ",
+    experience: "12+ Years",
+    experienceGujarati: "૧૨+ વર્ષ અનુભવ",
     specialties: ["Pulmonology / Lungs", "Bronchoscopy", "Asthma & COPD", "Sleep Study (Polysomnography)"],
     specialtiesGujarati: ["ફેફસાં અને શ્વાસના રોગો", "બ્રોન્કોસ્કોપી ટેસ્ટ", "અસ્થમા અને દમ (COPD)", "સ્લીપ સ્ટડી (ઊંઘની તપાસ)"],
     whatTheyDo: [
@@ -362,8 +362,8 @@ export const DOCTORS = [
     mobileFormatted: "+91 95120 45641",
     room: "Cardiology Suite 405",
     roomGujarati: "કાર્ડિયોલોજી OPD ૪૦૫ (૪થો માળ)",
-    experience: "10+ Years",
-    experienceGujarati: "૧૦+ વર્ષ અનુભવ",
+    experience: "14+ Years",
+    experienceGujarati: "૧૪+ વર્ષ અનુભવ",
     specialties: ["Interventional Cardiology", "Angiography & Angioplasty", "Heart Failure & Arrhythmia", "Preventive Heart Care"],
     specialtiesGujarati: ["ઇન્ટરવેન્શનલ કાર્ડિયોલોજી", "એન્જિયોગ્રાફી અને એન્જિયોપ્લાસ્ટી", "હાર્ટ ફેલ્યોર & એરિથમિયા", "પ્રિવેન્ટિવ હૃદય રોગ સંભાળ"],
     whatTheyDo: [
